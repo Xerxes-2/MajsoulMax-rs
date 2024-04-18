@@ -1,0 +1,34 @@
+{
+    "SEND_METHOD": [
+        ".lq.Lobby.oauth2Login",
+        ".lq.Lobby.fetchFriendList",
+        ".lq.FastTest.authGame",
+        ".lq.NotifyPlayerLoadGameReady",
+        ".lq.ActionPrototype",
+        ".lq.Lobby.fetchGameRecordList",
+        ".lq.FastTest.syncGame",
+        ".lq.Lobby.login"
+    ],
+    "SEND_ACTION": [
+        "ActionNewRound",
+        "ActionDealTile",
+        "ActionAnGangAddGang",
+        "ActionChiPengGang",
+        "ActionNoTile",
+        "ActionHule",
+        "ActionBaBei",
+        "ActionLiuJu",
+        "ActionUnveilTile",
+        "ActionHuleXueZhanMid",
+        "ActionGangResult",
+        "ActionRevealTile",
+        "ActionChangeTile",
+        "ActionSelectGap",
+        "ActionLiqi",
+        "ActionDiscardTile",
+        "ActionHuleXueZhanEnd",
+        "ActionNewCard",
+        "ActionGangResultEnd"
+    ],
+    "API_URL": "https://localhost:12121/"
+}

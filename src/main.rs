@@ -5,7 +5,10 @@ use hudsucker::{
     *,
 };
 use std::net::SocketAddr;
+use std::sync::{Arc, Mutex};
 use tracing::*;
+mod lq;
+mod parser;
 
 async fn shutdown_signal() {
     tokio::signal::ctrl_c()
@@ -14,7 +17,7 @@ async fn shutdown_signal() {
 }
 
 #[derive(Clone)]
-struct ActionHandler;
+struct ActionHandler(Arc<Mutex<parser::Parser>>);
 
 impl WebSocketHandler for ActionHandler {
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
@@ -35,6 +38,8 @@ impl WebSocketHandler for ActionHandler {
                 })
                 .collect::<String>();
             event!(Level::DEBUG, "{} {}", direction, hex);
+            let mut parser = self.0.lock().unwrap();
+            let msg = parser.parse(&buf);
         }
         Some(msg)
     }
@@ -44,8 +49,8 @@ impl WebSocketHandler for ActionHandler {
 async fn main() {
     tracing_subscriber::fmt::init();
 
-    let key_pair = include_str!("ca/hudsucker.key");
-    let ca_cert = include_str!("ca/hudsucker.cer");
+    let key_pair = include_str!("./ca/hudsucker.key");
+    let ca_cert = include_str!("./ca/hudsucker.cer");
     let key_pair = KeyPair::from_pem(key_pair).expect("Failed to parse private key");
     let ca_cert = CertificateParams::from_ca_cert_pem(ca_cert)
         .expect("Failed to parse CA certificate")
@@ -54,11 +59,13 @@ async fn main() {
 
     let ca = RcgenAuthority::new(key_pair, ca_cert, 1_000);
 
+    let parser = parser::Parser::new();
+
     let proxy = Proxy::builder()
         .with_addr(SocketAddr::from(([127, 0, 0, 1], 23410)))
         .with_rustls_client()
         .with_ca(ca)
-        .with_websocket_handler(ActionHandler)
+        .with_websocket_handler(ActionHandler(Arc::new(Mutex::new(parser))))
         .with_graceful_shutdown(shutdown_signal())
         .build();
 

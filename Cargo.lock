@@ -785,8 +785,11 @@ dependencies = [
 name = "mahjong_helper_majsoul_hudsucker"
 version = "0.1.0"
 dependencies = [
+ "base64",
  "hudsucker",
  "prost",
+ "prost-reflect",
+ "serde_json",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -1077,6 +1080,26 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "prost-reflect"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6f5eec97d5d34bdd17ad2db2219aabf46b054c6c41bd5529767c9ce55be5898f"
+dependencies = [
+ "once_cell",
+ "prost",
+ "prost-types",
+]
+
+[[package]]
+name = "prost-types"
+version = "0.12.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3235c33eb02c1f1e212abdbe34c78b264b038fb58ca612664343271e36e55ffe"
+dependencies = [
+ "prost",
 ]
 
 [[package]]
