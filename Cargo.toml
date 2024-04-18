@@ -1,5 +1,5 @@
 [package]
-name = "mahjong-helper-majsoul-hudsucker"
+name = "mahjong_helper_majsoul_hudsucker"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 hudsucker = { git = "https://github.com/omjadas/hudsucker.git" }
+prost = "0.12.4"
 tokio = { version = "1.37.0", features = ["full"] }
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"

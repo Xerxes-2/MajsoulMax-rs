@@ -1,6 +1,5 @@
 use hudsucker::{
     certificate_authority::RcgenAuthority,
-    hyper::{Request, Response},
     rcgen::{CertificateParams, KeyPair},
     tokio_tungstenite::tungstenite::Message,
     *,
@@ -15,11 +14,28 @@ async fn shutdown_signal() {
 }
 
 #[derive(Clone)]
-struct LogHandler;
+struct ActionHandler;
 
-impl WebSocketHandler for LogHandler {
+impl WebSocketHandler for ActionHandler {
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
-        println!("{:?}", msg);
+        let direction = match _ctx {
+            WebSocketContext::ClientToServer { .. } => '\u{2191}',
+            WebSocketContext::ServerToClient { .. } => '\u{2193}',
+        };
+        if let Message::Binary(buf) = &msg {
+            // convert binary message to hex string
+            let hex = buf
+                .iter()
+                .map(|b| {
+                    if *b >= 0x20 && *b <= 0x7e {
+                        format!("{}", *b as char)
+                    } else {
+                        format!("{:02x} ", b)
+                    }
+                })
+                .collect::<String>();
+            event!(Level::DEBUG, "{} {}", direction, hex);
+        }
         Some(msg)
     }
 }
@@ -42,7 +58,7 @@ async fn main() {
         .with_addr(SocketAddr::from(([127, 0, 0, 1], 23410)))
         .with_rustls_client()
         .with_ca(ca)
-        .with_websocket_handler(LogHandler)
+        .with_websocket_handler(ActionHandler)
         .with_graceful_shutdown(shutdown_signal())
         .build();
 
