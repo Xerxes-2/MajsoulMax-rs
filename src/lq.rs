@@ -45,9 +45,7 @@ pub struct NotifyRoomPlayerReady {
     #[prost(bool, tag = "2")]
     pub ready: bool,
     #[prost(message, optional, tag = "3")]
-    pub account_list: ::core::option::Option<
-        notify_room_player_ready::AccountReadyState,
-    >,
+    pub account_list: ::core::option::Option<notify_room_player_ready::AccountReadyState>,
     #[prost(uint32, tag = "4")]
     pub seq: u32,
 }
@@ -70,9 +68,7 @@ pub struct NotifyRoomPlayerDressing {
     #[prost(bool, tag = "2")]
     pub dressing: bool,
     #[prost(message, optional, tag = "3")]
-    pub account_list: ::core::option::Option<
-        notify_room_player_dressing::AccountDressingState,
-    >,
+    pub account_list: ::core::option::Option<notify_room_player_dressing::AccountDressingState>,
     #[prost(uint32, tag = "4")]
     pub seq: u32,
 }
@@ -168,9 +164,7 @@ pub struct NotifyAccountLogout {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotifyAnnouncementUpdate {
     #[prost(message, repeated, tag = "1")]
-    pub update_list: ::prost::alloc::vec::Vec<
-        notify_announcement_update::AnnouncementUpdate,
-    >,
+    pub update_list: ::prost::alloc::vec::Vec<notify_announcement_update::AnnouncementUpdate>,
 }
 /// Nested message and enum types in `NotifyAnnouncementUpdate`.
 pub mod notify_announcement_update {
@@ -251,13 +245,9 @@ pub mod notify_activity_update {
         #[prost(uint32, tag = "2")]
         pub feed_count: u32,
         #[prost(message, optional, tag = "3")]
-        pub friend_receive_data: ::core::option::Option<
-            feed_activity_data::CountWithTimeData,
-        >,
+        pub friend_receive_data: ::core::option::Option<feed_activity_data::CountWithTimeData>,
         #[prost(message, optional, tag = "4")]
-        pub friend_send_data: ::core::option::Option<
-            feed_activity_data::CountWithTimeData,
-        >,
+        pub friend_send_data: ::core::option::Option<feed_activity_data::CountWithTimeData>,
         #[prost(message, repeated, tag = "5")]
         pub gift_inbox: ::prost::alloc::vec::Vec<feed_activity_data::GiftBoxData>,
     }
@@ -454,13 +444,9 @@ pub struct NotifyGameFinishRewardV2 {
     #[prost(message, optional, tag = "3")]
     pub match_chest: ::core::option::Option<notify_game_finish_reward_v2::MatchChest>,
     #[prost(message, optional, tag = "4")]
-    pub main_character: ::core::option::Option<
-        notify_game_finish_reward_v2::MainCharacter,
-    >,
+    pub main_character: ::core::option::Option<notify_game_finish_reward_v2::MainCharacter>,
     #[prost(message, optional, tag = "5")]
-    pub character_gift: ::core::option::Option<
-        notify_game_finish_reward_v2::CharacterGift,
-    >,
+    pub character_gift: ::core::option::Option<notify_game_finish_reward_v2::CharacterGift>,
 }
 /// Nested message and enum types in `NotifyGameFinishRewardV2`.
 pub mod notify_game_finish_reward_v2 {
@@ -515,9 +501,7 @@ pub mod notify_game_finish_reward_v2 {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotifyActivityRewardV2 {
     #[prost(message, repeated, tag = "1")]
-    pub activity_reward: ::prost::alloc::vec::Vec<
-        notify_activity_reward_v2::ActivityReward,
-    >,
+    pub activity_reward: ::prost::alloc::vec::Vec<notify_activity_reward_v2::ActivityReward>,
 }
 /// Nested message and enum types in `NotifyActivityRewardV2`.
 pub mod notify_activity_reward_v2 {
@@ -534,9 +518,7 @@ pub mod notify_activity_reward_v2 {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotifyActivityPointV2 {
     #[prost(message, repeated, tag = "1")]
-    pub activity_points: ::prost::alloc::vec::Vec<
-        notify_activity_point_v2::ActivityPoint,
-    >,
+    pub activity_points: ::prost::alloc::vec::Vec<notify_activity_point_v2::ActivityPoint>,
 }
 /// Nested message and enum types in `NotifyActivityPointV2`.
 pub mod notify_activity_point_v2 {
@@ -553,9 +535,7 @@ pub mod notify_activity_point_v2 {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotifyLeaderboardPointV2 {
     #[prost(message, repeated, tag = "1")]
-    pub leaderboard_points: ::prost::alloc::vec::Vec<
-        notify_leaderboard_point_v2::LeaderboardPoint,
-    >,
+    pub leaderboard_points: ::prost::alloc::vec::Vec<notify_leaderboard_point_v2::LeaderboardPoint>,
 }
 /// Nested message and enum types in `NotifyLeaderboardPointV2`.
 pub mod notify_leaderboard_point_v2 {
@@ -633,17 +613,11 @@ pub struct AccountMahjongStatistic {
     #[prost(message, optional, tag = "4")]
     pub highest_hu: ::core::option::Option<account_mahjong_statistic::HighestHuRecord>,
     #[prost(message, optional, tag = "6")]
-    pub recent_20_hu_summary: ::core::option::Option<
-        account_mahjong_statistic::Liqi20Summary,
-    >,
+    pub recent_20_hu_summary: ::core::option::Option<account_mahjong_statistic::Liqi20Summary>,
     #[prost(message, optional, tag = "7")]
-    pub recent_10_hu_summary: ::core::option::Option<
-        account_mahjong_statistic::LiQi10Summary,
-    >,
+    pub recent_10_hu_summary: ::core::option::Option<account_mahjong_statistic::LiQi10Summary>,
     #[prost(message, repeated, tag = "8")]
-    pub recent_10_game_result: ::prost::alloc::vec::Vec<
-        account_mahjong_statistic::GameResult,
-    >,
+    pub recent_10_game_result: ::prost::alloc::vec::Vec<account_mahjong_statistic::GameResult>,
 }
 /// Nested message and enum types in `AccountMahjongStatistic`.
 pub mod account_mahjong_statistic {
@@ -971,9 +945,7 @@ pub mod account_update {
         #[prost(bool, tag = "5")]
         pub rewarded: bool,
         #[prost(message, repeated, tag = "6")]
-        pub match_max_point: ::prost::alloc::vec::Vec<
-            account_ab_match_update::MatchPoint,
-        >,
+        pub match_max_point: ::prost::alloc::vec::Vec<account_ab_match_update::MatchPoint>,
         #[prost(bool, tag = "7")]
         pub quit: bool,
     }
@@ -1509,9 +1481,7 @@ pub struct AccountStatisticByGameMode {
     #[prost(float, tag = "7")]
     pub dadian_sum: f32,
     #[prost(message, repeated, tag = "8")]
-    pub round_end: ::prost::alloc::vec::Vec<
-        account_statistic_by_game_mode::RoundEndData,
-    >,
+    pub round_end: ::prost::alloc::vec::Vec<account_statistic_by_game_mode::RoundEndData>,
     #[prost(uint32, tag = "9")]
     pub ming_count_sum: u32,
     #[prost(uint32, tag = "10")]
@@ -1590,19 +1560,15 @@ pub struct AccountDetailStatisticV2 {
     #[prost(message, optional, tag = "1")]
     pub friend_room_statistic: ::core::option::Option<AccountDetailStatistic>,
     #[prost(message, optional, tag = "2")]
-    pub rank_statistic: ::core::option::Option<
-        account_detail_statistic_v2::RankStatistic,
-    >,
+    pub rank_statistic: ::core::option::Option<account_detail_statistic_v2::RankStatistic>,
     #[prost(message, optional, tag = "3")]
-    pub customized_contest_statistic: ::core::option::Option<
-        account_detail_statistic_v2::CustomizedContestStatistic,
-    >,
+    pub customized_contest_statistic:
+        ::core::option::Option<account_detail_statistic_v2::CustomizedContestStatistic>,
     #[prost(message, optional, tag = "4")]
     pub leisure_match_statistic: ::core::option::Option<AccountDetailStatistic>,
     #[prost(message, optional, tag = "5")]
-    pub challenge_match_statistic: ::core::option::Option<
-        account_detail_statistic_v2::ChallengeStatistic,
-    >,
+    pub challenge_match_statistic:
+        ::core::option::Option<account_detail_statistic_v2::ChallengeStatistic>,
     #[prost(message, optional, tag = "6")]
     pub activity_match_statistic: ::core::option::Option<AccountDetailStatistic>,
     #[prost(message, optional, tag = "7")]
@@ -1626,9 +1592,7 @@ pub mod account_detail_statistic_v2 {
         #[derive(Clone, PartialEq, ::prost::Message)]
         pub struct RankData {
             #[prost(message, optional, tag = "1")]
-            pub all_level_statistic: ::core::option::Option<
-                super::super::AccountDetailStatistic,
-            >,
+            pub all_level_statistic: ::core::option::Option<super::super::AccountDetailStatistic>,
             #[prost(message, repeated, tag = "2")]
             pub level_data_list: ::prost::alloc::vec::Vec<rank_data::RankLevelData>,
         }
@@ -1640,9 +1604,7 @@ pub mod account_detail_statistic_v2 {
                 #[prost(uint32, tag = "1")]
                 pub rank_level: u32,
                 #[prost(message, optional, tag = "2")]
-                pub statistic: ::core::option::Option<
-                    super::super::super::AccountDetailStatistic,
-                >,
+                pub statistic: ::core::option::Option<super::super::super::AccountDetailStatistic>,
             }
         }
     }
@@ -1812,9 +1774,7 @@ pub struct FeedActivityData {
     #[prost(uint32, tag = "2")]
     pub feed_count: u32,
     #[prost(message, optional, tag = "3")]
-    pub friend_receive_data: ::core::option::Option<
-        feed_activity_data::CountWithTimeData,
-    >,
+    pub friend_receive_data: ::core::option::Option<feed_activity_data::CountWithTimeData>,
     #[prost(message, optional, tag = "4")]
     pub friend_send_data: ::core::option::Option<feed_activity_data::CountWithTimeData>,
     #[prost(message, repeated, tag = "5")]
@@ -2105,9 +2065,7 @@ pub struct ActivityFeedData {
     #[prost(uint32, tag = "2")]
     pub feed_count: u32,
     #[prost(message, optional, tag = "3")]
-    pub friend_receive_data: ::core::option::Option<
-        activity_feed_data::CountWithTimeData,
-    >,
+    pub friend_receive_data: ::core::option::Option<activity_feed_data::CountWithTimeData>,
     #[prost(message, optional, tag = "4")]
     pub friend_send_data: ::core::option::Option<activity_feed_data::CountWithTimeData>,
     #[prost(message, repeated, tag = "5")]
@@ -2150,9 +2108,7 @@ pub struct ActivityFriendGiftData {
     #[prost(uint32, tag = "2")]
     pub max_inbox_id: u32,
     #[prost(message, optional, tag = "3")]
-    pub receive_data: ::core::option::Option<
-        activity_friend_gift_data::CountWithTimeData,
-    >,
+    pub receive_data: ::core::option::Option<activity_friend_gift_data::CountWithTimeData>,
     #[prost(message, optional, tag = "4")]
     pub send_data: ::core::option::Option<activity_friend_gift_data::CountWithTimeData>,
     #[prost(message, repeated, tag = "5")]
@@ -2587,9 +2543,7 @@ pub struct PaymentSettingV2 {
     #[prost(uint32, tag = "1")]
     pub open_payment: u32,
     #[prost(message, repeated, tag = "2")]
-    pub payment_platforms: ::prost::alloc::vec::Vec<
-        payment_setting_v2::PaymentSettingUnit,
-    >,
+    pub payment_platforms: ::prost::alloc::vec::Vec<payment_setting_v2::PaymentSettingUnit>,
 }
 /// Nested message and enum types in `PaymentSettingV2`.
 pub mod payment_setting_v2 {
@@ -3547,15 +3501,11 @@ pub struct AccountCharacterSnapshot {
     #[prost(message, repeated, tag = "3")]
     pub modified_characters: ::prost::alloc::vec::Vec<Character>,
     #[prost(message, optional, tag = "4")]
-    pub main_character: ::core::option::Option<
-        account_character_snapshot::MainCharacterSnapshot,
-    >,
+    pub main_character: ::core::option::Option<account_character_snapshot::MainCharacterSnapshot>,
     #[prost(message, optional, tag = "5")]
     pub skins: ::core::option::Option<account_character_snapshot::SkinsSnapshot>,
     #[prost(message, optional, tag = "6")]
-    pub hidden_characters: ::core::option::Option<
-        account_character_snapshot::HiddenCharacter,
-    >,
+    pub hidden_characters: ::core::option::Option<account_character_snapshot::HiddenCharacter>,
 }
 /// Nested message and enum types in `AccountCharacterSnapshot`.
 pub mod account_character_snapshot {
@@ -3613,13 +3563,9 @@ pub struct AccountAchievementSnapshot {
     #[prost(message, repeated, tag = "1")]
     pub achievements: ::prost::alloc::vec::Vec<AchievementProgress>,
     #[prost(message, optional, tag = "2")]
-    pub rewarded_group: ::core::option::Option<
-        account_achievement_snapshot::RewardedGroupSnapshot,
-    >,
+    pub rewarded_group: ::core::option::Option<account_achievement_snapshot::RewardedGroupSnapshot>,
     #[prost(message, optional, tag = "3")]
-    pub version: ::core::option::Option<
-        account_achievement_snapshot::AchievementVersion,
-    >,
+    pub version: ::core::option::Option<account_achievement_snapshot::AchievementVersion>,
 }
 /// Nested message and enum types in `AccountAchievementSnapshot`.
 pub mod account_achievement_snapshot {
@@ -3642,23 +3588,18 @@ pub struct AccountMiscSnapshot {
     #[prost(message, optional, tag = "1")]
     pub faith_data: ::core::option::Option<FaithData>,
     #[prost(message, optional, tag = "2")]
-    pub vip_reward_gained: ::core::option::Option<
-        account_misc_snapshot::AccountVipRewardSnapshot,
-    >,
+    pub vip_reward_gained: ::core::option::Option<account_misc_snapshot::AccountVipRewardSnapshot>,
     #[prost(message, optional, tag = "3")]
     pub vip: ::core::option::Option<account_misc_snapshot::AccountVip>,
     #[prost(message, optional, tag = "4")]
     pub shop_info: ::core::option::Option<ShopInfo>,
     #[prost(message, optional, tag = "5")]
-    pub month_ticket: ::core::option::Option<
-        account_misc_snapshot::AccountMonthTicketSnapshot,
-    >,
+    pub month_ticket: ::core::option::Option<account_misc_snapshot::AccountMonthTicketSnapshot>,
     #[prost(message, optional, tag = "6")]
     pub recharged: ::core::option::Option<account_misc_snapshot::AccountRechargeInfo>,
     #[prost(message, optional, tag = "7")]
-    pub month_ticket_v2: ::core::option::Option<
-        account_misc_snapshot::AccountMonthTicketSnapshotV2,
-    >,
+    pub month_ticket_v2:
+        ::core::option::Option<account_misc_snapshot::AccountMonthTicketSnapshotV2>,
 }
 /// Nested message and enum types in `AccountMiscSnapshot`.
 pub mod account_misc_snapshot {
@@ -4274,9 +4215,7 @@ pub struct ResAccountChallengeRankInfo {
     #[prost(message, optional, tag = "1")]
     pub error: ::core::option::Option<Error>,
     #[prost(message, repeated, tag = "2")]
-    pub season_info: ::prost::alloc::vec::Vec<
-        res_account_challenge_rank_info::ChallengeRank,
-    >,
+    pub season_info: ::prost::alloc::vec::Vec<res_account_challenge_rank_info::ChallengeRank>,
 }
 /// Nested message and enum types in `ResAccountChallengeRankInfo`.
 pub mod res_account_challenge_rank_info {
@@ -5190,9 +5129,8 @@ pub struct ResCreateWechatAppOrder {
     #[prost(message, optional, tag = "1")]
     pub error: ::core::option::Option<Error>,
     #[prost(message, optional, tag = "2")]
-    pub call_wechat_app_param: ::core::option::Option<
-        res_create_wechat_app_order::CallWechatAppParam,
-    >,
+    pub call_wechat_app_param:
+        ::core::option::Option<res_create_wechat_app_order::CallWechatAppParam>,
 }
 /// Nested message and enum types in `ResCreateWechatAppOrder`.
 pub mod res_create_wechat_app_order {
@@ -5975,9 +5913,7 @@ pub struct ResOpenChest {
     #[prost(uint32, tag = "4")]
     pub faith_count: u32,
     #[prost(message, repeated, tag = "5")]
-    pub chest_replace_up: ::prost::alloc::vec::Vec<
-        res_open_chest::ChestReplaceCountData,
-    >,
+    pub chest_replace_up: ::prost::alloc::vec::Vec<res_open_chest::ChestReplaceCountData>,
 }
 /// Nested message and enum types in `ResOpenChest`.
 pub mod res_open_chest {
@@ -6660,13 +6596,9 @@ pub struct ResAccountActivityData {
     #[prost(message, repeated, tag = "6")]
     pub flip_task_progress_list: ::prost::alloc::vec::Vec<TaskProgress>,
     #[prost(message, repeated, tag = "7")]
-    pub sign_in_data: ::prost::alloc::vec::Vec<
-        res_account_activity_data::ActivitySignInData,
-    >,
+    pub sign_in_data: ::prost::alloc::vec::Vec<res_account_activity_data::ActivitySignInData>,
     #[prost(message, repeated, tag = "8")]
-    pub richman_data: ::prost::alloc::vec::Vec<
-        res_account_activity_data::ActivityRichmanData,
-    >,
+    pub richman_data: ::prost::alloc::vec::Vec<res_account_activity_data::ActivityRichmanData>,
     #[prost(message, repeated, tag = "9")]
     pub period_task_progress_list: ::prost::alloc::vec::Vec<TaskProgress>,
     #[prost(message, repeated, tag = "10")]
@@ -7098,9 +7030,7 @@ pub struct ResReceiveAllActivityGift {
     #[prost(message, repeated, tag = "2")]
     pub rewards: ::prost::alloc::vec::Vec<ExecuteReward>,
     #[prost(message, repeated, tag = "3")]
-    pub receive_gift: ::prost::alloc::vec::Vec<
-        res_receive_all_activity_gift::ReceiveRewards,
-    >,
+    pub receive_gift: ::prost::alloc::vec::Vec<res_receive_all_activity_gift::ReceiveRewards>,
 }
 /// Nested message and enum types in `ResReceiveAllActivityGift`.
 pub mod res_receive_all_activity_gift {
@@ -7224,9 +7154,7 @@ pub struct ResChallengeSeasonInfo {
     #[prost(message, optional, tag = "2")]
     pub error: ::core::option::Option<Error>,
     #[prost(message, repeated, tag = "1")]
-    pub challenge_season_list: ::prost::alloc::vec::Vec<
-        res_challenge_season_info::ChallengeInfo,
-    >,
+    pub challenge_season_list: ::prost::alloc::vec::Vec<res_challenge_season_info::ChallengeInfo>,
 }
 /// Nested message and enum types in `ResChallengeSeasonInfo`.
 pub mod res_challenge_season_info {
@@ -7439,9 +7367,7 @@ pub struct ResFetchRpgBattleHistory {
     #[prost(message, optional, tag = "1")]
     pub error: ::core::option::Option<Error>,
     #[prost(message, repeated, tag = "2")]
-    pub battle_result: ::prost::alloc::vec::Vec<
-        res_fetch_rpg_battle_history::BattleResult,
-    >,
+    pub battle_result: ::prost::alloc::vec::Vec<res_fetch_rpg_battle_history::BattleResult>,
     #[prost(message, optional, tag = "3")]
     pub start_state: ::core::option::Option<RpgState>,
     #[prost(message, optional, tag = "4")]
@@ -7492,17 +7418,14 @@ pub struct ResFetchRpgBattleHistoryV2 {
     #[prost(message, optional, tag = "1")]
     pub error: ::core::option::Option<Error>,
     #[prost(message, repeated, tag = "2")]
-    pub battle_result: ::prost::alloc::vec::Vec<
-        res_fetch_rpg_battle_history_v2::BattleResultV2,
-    >,
+    pub battle_result: ::prost::alloc::vec::Vec<res_fetch_rpg_battle_history_v2::BattleResultV2>,
     #[prost(message, optional, tag = "3")]
     pub start_state: ::core::option::Option<RpgState>,
     #[prost(message, optional, tag = "4")]
     pub current_state: ::core::option::Option<RpgState>,
     #[prost(message, repeated, tag = "5")]
-    pub recent_battle_result: ::prost::alloc::vec::Vec<
-        res_fetch_rpg_battle_history_v2::BattleResultV2,
-    >,
+    pub recent_battle_result:
+        ::prost::alloc::vec::Vec<res_fetch_rpg_battle_history_v2::BattleResultV2>,
 }
 /// Nested message and enum types in `ResFetchRPGBattleHistoryV2`.
 pub mod res_fetch_rpg_battle_history_v2 {
@@ -9925,9 +9848,7 @@ pub mod notify_game_finish_reward {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotifyActivityReward {
     #[prost(message, repeated, tag = "1")]
-    pub activity_reward: ::prost::alloc::vec::Vec<
-        notify_activity_reward::ActivityReward,
-    >,
+    pub activity_reward: ::prost::alloc::vec::Vec<notify_activity_reward::ActivityReward>,
 }
 /// Nested message and enum types in `NotifyActivityReward`.
 pub mod notify_activity_reward {
@@ -9961,9 +9882,7 @@ pub mod notify_activity_point {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotifyLeaderboardPoint {
     #[prost(message, repeated, tag = "1")]
-    pub leaderboard_points: ::prost::alloc::vec::Vec<
-        notify_leaderboard_point::LeaderboardPoint,
-    >,
+    pub leaderboard_points: ::prost::alloc::vec::Vec<notify_leaderboard_point::LeaderboardPoint>,
 }
 /// Nested message and enum types in `NotifyLeaderboardPoint`.
 pub mod notify_leaderboard_point {
