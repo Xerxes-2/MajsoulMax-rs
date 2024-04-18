@@ -1,0 +1,12 @@
+[package]
+name = "mahjong-helper-majsoul-hudsucker"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+hudsucker = { git = "https://github.com/omjadas/hudsucker.git" }
+tokio = { version = "1.37.0", features = ["full"] }
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
