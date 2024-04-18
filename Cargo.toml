@@ -9,8 +9,10 @@ edition = "2021"
 base64 = "0.22.0"
 hudsucker = { git = "https://github.com/omjadas/hudsucker.git" }
 prost = "0.12.4"
-prost-reflect = "0.13.1"
+prost-reflect = { version = "0.13.1", features = ["serde"] }
+reqwest = { version = "0.12.3", features = ["json"] }
+serde = { version = "1.0.198", features = ["derive"] }
 serde_json = "1.0.116"
-tokio = { version = "1.37.0", features = ["full"] }
+tokio = { version = "1.37.0", features = ["rt-multi-thread"] }
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
