@@ -17,22 +17,6 @@ async fn shutdown_signal() {
 #[derive(Clone)]
 struct LogHandler;
 
-impl HttpHandler for LogHandler {
-    async fn handle_request(
-        &mut self,
-        _ctx: &HttpContext,
-        req: Request<Body>,
-    ) -> RequestOrResponse {
-        println!("{:?}", req);
-        req.into()
-    }
-
-    async fn handle_response(&mut self, _ctx: &HttpContext, res: Response<Body>) -> Response<Body> {
-        println!("{:?}", res);
-        res
-    }
-}
-
 impl WebSocketHandler for LogHandler {
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
         println!("{:?}", msg);
@@ -58,7 +42,6 @@ async fn main() {
         .with_addr(SocketAddr::from(([127, 0, 0, 1], 23410)))
         .with_rustls_client()
         .with_ca(ca)
-        .with_http_handler(LogHandler)
         .with_websocket_handler(LogHandler)
         .with_graceful_shutdown(shutdown_signal())
         .build();
