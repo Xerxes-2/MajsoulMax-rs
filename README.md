@@ -1,4 +1,4 @@
-# mahjong-helper-majsoul-mitmproxy
+# mahjong_helper_majsoul_hudsucker
 
 本项目启发自[mahjong-helper-majsoul-mitmproxy](https://github.com/Avenshy/mahjong-helper-majsoul-mitmproxy),用于将雀魂的牌局发到[日本麻将助手 mahjong-helper](https://github.com/EndlessCheng/mahjong-helper)，基于[hudsucker](https://github.com/omjadas/hudsucker)的中间人攻击方式，支持浏览器和客户端，不支持牌谱分析。
 
@@ -32,7 +32,7 @@
 3. 启动**带参数的**浏览器。
    - 将 Chrome 或者 Edge 的快捷方式 `复制->粘贴` 出现一个副本，对快捷方式副本 `右键->属性->目标` 的后面按一个空格后添加<br />`--proxy-server=127.0.0.1:23410 --ignore-certificate-errors https://game.maj-soul.com/1/`
    - 如果你使用的是其他浏览器，请自行搜索如何使用代理
-   - 如果你使用的是Mac/Linux，我相信你可以自行解决
+   - 如果你使用的是 Mac/Linux，我相信你可以自行解决
    - 可以修改最后的网址以访问雀魂的其他服
 4. 如果配置正确，小助手可以正常使用了
 
