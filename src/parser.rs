@@ -1,10 +1,12 @@
 use base64::prelude::*;
 use core::panic;
-use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, Value};
+use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor};
 use serde::Serialize;
 use serde_json::Value as JsonValue;
-use std::collections::HashMap;
+use std::{collections::HashMap, error::Error};
 use tracing::*;
+
+use crate::SERIALIZE_OPTIONS;
 
 #[derive(Debug)]
 pub enum MessageType {
@@ -18,7 +20,7 @@ pub struct LiqiMessage {
     pub id: usize,
     pub msg_type: MessageType,
     pub method_name: String,
-    pub data: DynamicMessage,
+    pub data: JsonValue,
 }
 
 #[derive(Serialize, Debug)]
@@ -34,6 +36,13 @@ pub struct Parser {
     pub pool: DescriptorPool,
 }
 
+pub fn my_serialize(msg: DynamicMessage) -> Result<JsonValue, Box<dyn Error>> {
+    let mut serializer = serde_json::Serializer::new(vec![]);
+    msg.serialize_with_options(&mut serializer, &SERIALIZE_OPTIONS)?;
+    let json_str = String::from_utf8(serializer.into_inner())?;
+    Ok(serde_json::from_str(&json_str)?)
+}
+
 impl Parser {
     pub fn new() -> Self {
         let json_str = include_str!("liqi.json");
@@ -47,10 +56,10 @@ impl Parser {
         }
     }
 
-    pub fn parse(&mut self, buf: &[u8]) -> Option<LiqiMessage> {
+    pub fn parse(&mut self, buf: &[u8]) -> Result<LiqiMessage, Box<dyn Error>> {
         let msg_type_byte = buf[0];
         if msg_type_byte < 1 || msg_type_byte > 3 {
-            return None;
+            return Err("Invalid message type".into());
         }
         let msg_type = match msg_type_byte {
             1 => MessageType::Notify,
@@ -59,49 +68,52 @@ impl Parser {
             _ => unreachable!(),
         };
         let method_name;
-        let data_obj: DynamicMessage;
+        let mut data_obj: JsonValue;
         let msg_id: usize;
         match msg_type {
             MessageType::Notify => {
-                let blks = buf_to_blocks(&buf[1..])?;
-                method_name = String::from_utf8(blks[0].data.clone()).expect("Invalid method name");
+                let blks = buf_to_blocks(&buf[1..]).ok_or("Failed to parse blocks")?;
+                method_name = String::from_utf8(blks[0].data.clone())?;
                 let method_name_list: Vec<&str> = method_name.split(".").collect();
                 let message_name = method_name_list[2];
                 let message_type = self
                     .pool
                     .get_message_by_name(&to_fqn(&message_name))
-                    .expect("Invalid message type");
-                let mut dyn_msg = DynamicMessage::decode(message_type, blks[1].data.as_ref())
-                    .expect("Failed to decode dynamic message");
-                if dyn_msg.has_field_by_name("data") {
-                    let b64_value = dyn_msg.get_field_by_name("data").unwrap();
-                    let b64 = b64_value.as_bytes().unwrap();
-                    let decoded = BASE64_STANDARD.decode(b64).unwrap();
+                    .ok_or("Invalid message type")?;
+                let dyn_msg = DynamicMessage::decode(message_type, blks[1].data.as_ref())?;
+                data_obj = my_serialize(dyn_msg)?;
+                if let Some(b64) = data_obj.get("data") {
+                    let action_name = data_obj
+                        .get("name")
+                        .ok_or("No name field")?
+                        .as_str()
+                        .ok_or("Name is not a string")?;
+                    let b64 = b64.as_str().unwrap_or_default();
+
+                    let decoded = BASE64_STANDARD.decode(b64)?;
                     let my_decoded = decode(&decoded);
-                    let action_name_value = dyn_msg.get_field_by_name("name").unwrap();
-                    let action_name_bytes = action_name_value.as_bytes().unwrap().to_vec();
-                    let action_name = String::from_utf8(action_name_bytes).unwrap();
                     let action_type = self
                         .pool
                         .get_message_by_name(&to_fqn(&action_name))
-                        .expect("Invalid action type");
-                    let action_msg = DynamicMessage::decode(action_type, my_decoded.as_ref());
-                    let action_msg_value = Value::Message(action_msg.unwrap());
-                    dyn_msg.set_field_by_name("data", action_msg_value);
+                        .ok_or("Invalid action type")?;
+                    let action_msg = DynamicMessage::decode(action_type, my_decoded.as_ref())?;
+                    let action_obj = my_serialize(action_msg)?;
+                    data_obj
+                        .as_object_mut()
+                        .ok_or("Data is not an object")?
+                        .insert("data".to_string(), action_obj);
                 }
-                data_obj = dyn_msg;
                 msg_id = self.total;
             }
             MessageType::Request => {
                 // little endian, msg_id = unpack("<H", buf[1:3])[0]
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
-                let blocks = buf_to_blocks(&buf[3..])?;
+                let blocks = buf_to_blocks(&buf[3..]).ok_or("Failed to parse blocks")?;
                 assert!(msg_id < 1 << 16);
                 assert!(blocks.len() == 2);
                 // ascii decode into method name, method_name = msg_block[0]["data"].decode()
                 let method_block = &blocks[0];
-                method_name =
-                    String::from_utf8(method_block.data.to_owned()).expect("Invalid method name");
+                method_name = String::from_utf8(method_block.data.to_owned())?;
                 let method_name_list: Vec<&str> = method_name.split(".").collect();
                 let lq = method_name_list[1];
                 let service = method_name_list[2];
@@ -113,15 +125,16 @@ impl Parser {
                     let req_type = self
                         .pool
                         .get_message_by_name(&to_fqn(name))
-                        .expect("Invalid request type");
-                    let dyn_msg = DynamicMessage::decode(req_type, blocks[1].data.as_ref())
-                        .expect("Failed to decode dynamic message");
-                    data_obj = dyn_msg;
-                    let res_type_name = proto_domain["responseType"].as_str().unwrap();
+                        .ok_or("Invalid request type")?;
+                    let dyn_msg = DynamicMessage::decode(req_type, blocks[1].data.as_ref())?;
+                    data_obj = my_serialize(dyn_msg)?;
+                    let res_type_name = proto_domain["responseType"]
+                        .as_str()
+                        .ok_or("Invalid response type")?;
                     let resp_type = self
                         .pool
                         .get_message_by_name(&to_fqn(res_type_name))
-                        .expect("Invalid response type");
+                        .ok_or("Invalid response type")?;
                     self.respond_type
                         .insert(msg_id, (method_name.to_owned(), resp_type));
                 } else {
@@ -130,20 +143,20 @@ impl Parser {
             }
             MessageType::Response => {
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
-                let blocks = buf_to_blocks(&buf[3..])?;
+                let blocks = buf_to_blocks(&buf[3..]).ok_or("Failed to parse blocks")?;
                 assert!(blocks[0].data.len() == 0);
                 let resp_type: MessageDescriptor;
                 (method_name, resp_type) = self
                     .respond_type
                     .remove(&msg_id)
-                    .expect("Invalid response type");
-                let dyn_msg = DynamicMessage::decode(resp_type.to_owned(), blocks[1].data.as_ref())
-                    .expect("Failed to decode dynamic message");
-                data_obj = dyn_msg;
+                    .ok_or("No response type found")?;
+                let dyn_msg =
+                    DynamicMessage::decode(resp_type.to_owned(), blocks[1].data.as_ref())?;
+                data_obj = my_serialize(dyn_msg)?;
             }
         }
         self.total += 1;
-        Some(LiqiMessage {
+        Ok(LiqiMessage {
             id: msg_id,
             msg_type,
             method_name,
