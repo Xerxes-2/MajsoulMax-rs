@@ -102,16 +102,13 @@ impl ActionHandler {
                 event!(Level::INFO, "Action {} not in send_action", name);
                 return Ok(());
             }
+            let data = parsed.data.get_mut("data").ok_or("No data field")?;
             if name.contains("ActionNewRound") {
-                parsed
-                    .data
-                    .get_mut("data")
-                    .ok_or("No data field")?
-                    .as_object_mut()
+                data.as_object_mut()
                     .ok_or("data is not an object")?
                     .insert("md5".to_string(), json!(RANDOM_MD5));
             }
-            json_body = serde_json::to_string(&parsed.data)?;
+            json_body = serde_json::to_string(data)?;
         } else if parsed.method_name.contains(".lq.FastTest.syncGame") {
             let game_restore = parsed
                 .data
