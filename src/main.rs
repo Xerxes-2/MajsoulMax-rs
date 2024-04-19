@@ -10,6 +10,7 @@ use serde_json::{json, Map, Value as JsonValue};
 use std::{
     error::Error,
     future::Future,
+    io::Read,
     sync::{Arc, Mutex},
 };
 use std::{format, net::SocketAddr};
@@ -220,6 +221,14 @@ async fn main() {
 
     let parser = parser::Parser::new();
     let settings = settings::Settings::new();
+    if let Err(e) = settings {
+        error!("{}", e);
+        // press any key to exit
+        println!("按任意键退出");
+        let _ = std::io::stdin().read(&mut [0u8]).unwrap();
+        return;
+    }
+    let settings = settings.unwrap();
     let client = reqwest::ClientBuilder::new()
         .danger_accept_invalid_certs(true)
         .build()

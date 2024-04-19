@@ -13,13 +13,13 @@ pub struct Settings {
 }
 
 impl Settings {
-    pub fn new() -> Self {
+    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
         // read settings from file
-        let settings =
-            std::fs::read_to_string("settings.json").expect("Failed to read settings.json");
+        let settings = std::fs::read_to_string("settings.json")
+            .map_err(|e| format!("无法读取settings.json: {}", e))?;
         let settings: Settings =
-            serde_json::from_str(&settings).expect("Failed to parse settings.json");
+            serde_json::from_str(&settings).map_err(|e| format!("无法解析settings.json: {}", e))?;
         event!(tracing::Level::INFO, "已载入配置: {:?}", settings);
-        settings
+        Ok(settings)
     }
 }
