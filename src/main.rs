@@ -149,8 +149,7 @@ impl ActionHandler {
                     if action_name.contains(".lq.ActionNewRound") {
                         action_obj.set_field_by_name("md5", Value::String(RANDOM_MD5.to_string()));
                     }
-                    let value: JsonValue =
-                        my_serialize(action_obj).ok_or("Failed to serialize action")?;
+                    let value: JsonValue = my_serialize(action_obj)?;
                     let action = Action {
                         name: action_name.to_string(),
                         data: value,
