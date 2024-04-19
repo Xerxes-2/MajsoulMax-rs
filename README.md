@@ -1,6 +1,6 @@
 # mahjong_helper_majsoul_hudsucker
 
-*本项目启发自[mahjong-helper-majsoul-mitmproxy](https://github.com/Avenshy/mahjong-helper-majsoul-mitmproxy)*
+**本项目启发自[mahjong-helper-majsoul-mitmproxy](https://github.com/Avenshy/mahjong-helper-majsoul-mitmproxy)**
 用于将雀魂的牌局发到[日本麻将助手 mahjong-helper](https://github.com/EndlessCheng/mahjong-helper)，基于[hudsucker](https://github.com/omjadas/hudsucker)的中间人攻击方式，支持浏览器和客户端，不支持牌谱分析。
 
 ## 当前雀魂各服版本（实时更新）
@@ -26,7 +26,7 @@
 1. 解压发布页下载的压缩包
 2. 确保可执行文件和`settings.json`在同一目录下
 
-使用方法
+### 使用方法
 
 1. 运行可执行文件
 2. 启动小助手，选择雀魂
