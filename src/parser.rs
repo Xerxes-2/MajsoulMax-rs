@@ -170,10 +170,10 @@ fn to_fqn(method_name: &str) -> String {
 }
 
 struct Block {
-    id: usize,
-    blk_type: usize,
+    _id: usize,
+    _blk_type: usize,
     data: Vec<u8>,
-    begin: usize,
+    _begin: usize,
 }
 
 fn buf_to_blocks(buf: &[u8]) -> Option<Vec<Block>> {
@@ -203,10 +203,10 @@ fn buf_to_blocks(buf: &[u8]) -> Option<Vec<Block>> {
             _ => return None,
         }
         blocks.push(Block {
-            id,
-            blk_type,
+            _id: id,
+            _blk_type: blk_type,
             data,
-            begin,
+            _begin: begin,
         });
     }
     Some(blocks)
