@@ -75,6 +75,9 @@ impl WebSocketHandler for ActionHandler {
                 parsed.msg_type,
                 parsed.method_name
             );
+            if direction_char == '\u{2193}' {
+                return Some(msg);
+            }
             if let Err(e) = self.send_message(parsed) {
                 event!(Level::ERROR, "Failed to send message: {:?}", e);
             }
