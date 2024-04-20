@@ -1,6 +1,6 @@
 use serde::Deserialize;
-use serde_json;
-use tracing::event;
+use std::collections::HashSet;
+use tracing::info;
 
 #[derive(Deserialize, Debug)]
 pub struct Settings {
@@ -10,6 +10,10 @@ pub struct Settings {
     pub send_action: Vec<String>,
     #[serde(rename(deserialize = "API_URL"))]
     pub api_url: String,
+    #[serde(skip)]
+    methods_set: HashSet<String>,
+    #[serde(skip)]
+    actions_set: HashSet<String>,
 }
 
 impl Settings {
@@ -28,9 +32,19 @@ impl Settings {
                 |_| std::fs::read_to_string("settings.json"),
             )
             .map_err(|e| format!("无法读取settings.json: {}", e))?;
-        let settings: Settings =
+        let mut settings: Settings =
             serde_json::from_str(&settings).map_err(|e| format!("无法解析settings.json: {}", e))?;
-        event!(tracing::Level::INFO, "已载入配置: {:?}", settings);
+        info!("已载入配置: {:?}", settings);
+        settings.methods_set = settings.send_method.iter().cloned().collect();
+        settings.actions_set = settings.send_action.iter().cloned().collect();
         Ok(settings)
+    }
+
+    pub fn is_method(&self, method: &str) -> bool {
+        self.methods_set.contains(method)
+    }
+
+    pub fn is_action(&self, action: &str) -> bool {
+        self.actions_set.contains(action)
     }
 }

@@ -3,7 +3,6 @@ use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor};
 use serde::Serialize;
 use serde_json::Value as JsonValue;
 use std::{collections::HashMap, error::Error};
-use tracing::*;
 
 use crate::SERIALIZE_OPTIONS;
 
@@ -46,7 +45,8 @@ impl Parser {
     pub fn new() -> Self {
         let json_str = include_str!("liqi.json");
         let proto_json = serde_json::from_str(json_str).expect("Failed to parse liqi.json");
-        let pool = DescriptorPool::decode(include_bytes!("liqi.desc").as_ref()).unwrap();
+        let pool = DescriptorPool::decode(include_bytes!("liqi.desc").as_ref())
+            .expect("Failed to decode liqi.desc");
         Self {
             total: 0,
             respond_type: HashMap::new(),
@@ -57,7 +57,7 @@ impl Parser {
 
     pub fn parse(&mut self, buf: &[u8]) -> Result<LiqiMessage, Box<dyn Error>> {
         let msg_type_byte = buf[0];
-        if msg_type_byte < 1 || msg_type_byte > 3 {
+        if !(1..=3).contains(&msg_type_byte) {
             return Err("Invalid message type".into());
         }
         let msg_type = match msg_type_byte {
@@ -73,11 +73,11 @@ impl Parser {
             MessageType::Notify => {
                 let blks = buf_to_blocks(&buf[1..]).ok_or("Failed to parse blocks")?;
                 method_name = String::from_utf8(blks[0].data.clone())?;
-                let method_name_list: Vec<&str> = method_name.split(".").collect();
+                let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let message_name = method_name_list[2];
                 let message_type = self
                     .pool
-                    .get_message_by_name(&to_fqn(&message_name))
+                    .get_message_by_name(&to_fqn(message_name))
                     .ok_or("Invalid message type")?;
                 let dyn_msg = DynamicMessage::decode(message_type, blks[1].data.as_ref())?;
                 data_obj = my_serialize(dyn_msg)?;
@@ -93,7 +93,7 @@ impl Parser {
                     let my_decoded = decode(&decoded);
                     let action_type = self
                         .pool
-                        .get_message_by_name(&to_fqn(&action_name))
+                        .get_message_by_name(&to_fqn(action_name))
                         .ok_or("Invalid action type")?;
                     let action_msg = DynamicMessage::decode(action_type, my_decoded.as_ref())?;
                     let action_obj = my_serialize(action_msg)?;
@@ -113,7 +113,7 @@ impl Parser {
                 // ascii decode into method name, method_name = msg_block[0]["data"].decode()
                 let method_block = &blocks[0];
                 method_name = String::from_utf8(method_block.data.to_owned())?;
-                let method_name_list: Vec<&str> = method_name.split(".").collect();
+                let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let lq = method_name_list[1];
                 let service = method_name_list[2];
                 let rpc = method_name_list[3];
@@ -143,7 +143,7 @@ impl Parser {
             MessageType::Response => {
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
                 let blocks = buf_to_blocks(&buf[3..]).ok_or("Failed to parse blocks")?;
-                assert!(blocks[0].data.len() == 0);
+                assert!(blocks[0].data.is_empty());
                 let resp_type: MessageDescriptor;
                 (method_name, resp_type) = self
                     .respond_type
@@ -176,8 +176,6 @@ struct Block {
 }
 
 fn buf_to_blocks(buf: &[u8]) -> Option<Vec<Block>> {
-    let hex_str = buf.iter().map(|b| format!("{:02x}", b)).collect::<String>();
-    event!(Level::DEBUG, "buf: {}", hex_str);
     let mut blocks = Vec::new();
     let mut i = 0;
     let l = buf.len();
@@ -228,13 +226,13 @@ fn parse_var_int(buf: &[u8], p: usize) -> (usize, usize) {
 }
 
 fn decode(data: &[u8]) -> Vec<u8> {
-    let keys = vec![0x84, 0x5E, 0x4E, 0x42, 0x39, 0xA2, 0x1F, 0x60, 0x1C];
+    let keys = [0x84, 0x5E, 0x4E, 0x42, 0x39, 0xA2, 0x1F, 0x60, 0x1C];
     let mut data = data.to_vec();
     let k = keys.len();
     let d = data.len();
     for i in 0..d {
-        let u = (23 ^ d) + 5 * i + keys[i % k] & 255;
+        let u = ((23 ^ d) + 5 * i + keys[i % k]) & 255;
         data[i] ^= u as u8;
     }
-    return data;
+    data
 }
