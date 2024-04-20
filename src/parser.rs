@@ -1,5 +1,4 @@
 use base64::prelude::*;
-use core::panic;
 use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor};
 use serde::Serialize;
 use serde_json::Value as JsonValue;
@@ -138,7 +137,7 @@ impl Parser {
                     self.respond_type
                         .insert(msg_id, (method_name.to_owned(), resp_type));
                 } else {
-                    panic!("Json value is not a string");
+                    return Err(format!("Invalid request type in json: {:?}", req_value).into());
                 }
             }
             MessageType::Response => {
