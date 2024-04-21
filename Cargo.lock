@@ -913,6 +913,7 @@ version = "0.1.8"
 dependencies = [
  "base64",
  "hudsucker",
+ "once_cell",
  "openssl",
  "prost-reflect",
  "reqwest",

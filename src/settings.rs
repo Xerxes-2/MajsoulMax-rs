@@ -17,27 +17,29 @@ pub struct Settings {
 }
 
 impl Settings {
-    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
-        let cur_exe =
-            std::env::current_exe().map_err(|e| format!("无法获取当前程序路径: {}", e))?;
+    pub fn new() -> Self {
+        let cur_exe = std::env::current_exe()
+            .expect("无法获取当前程序路径")
+            .canonicalize()
+            .expect("无法获取当前程序路径的绝对路径");
         let exe_dir = cur_exe
             .parent()
-            .ok_or("无法获取当前程序路径")?
+            .expect("无法获取当前程序路径的父目录")
             .to_str()
-            .ok_or("无法转换路径为字符串")?;
+            .expect("无法将目录转换为UTF-8字符串");
         // read settings from file
         let settings = std::fs::read_to_string(std::path::Path::new(exe_dir).join("settings.json"))
             .or_else(
                 // read pwd
                 |_| std::fs::read_to_string("settings.json"),
             )
-            .map_err(|e| format!("无法读取settings.json: {}", e))?;
+            .expect("无法读取settings.json");
         let mut settings: Settings =
-            serde_json::from_str(&settings).map_err(|e| format!("无法解析settings.json: {}", e))?;
+            serde_json::from_str(&settings).expect("无法解析settings.json");
         info!("已载入配置: {:?}", settings);
         settings.methods_set = settings.send_method.iter().cloned().collect();
         settings.actions_set = settings.send_action.iter().cloned().collect();
-        Ok(settings)
+        settings
     }
 
     pub fn is_method(&self, method: &str) -> bool {
