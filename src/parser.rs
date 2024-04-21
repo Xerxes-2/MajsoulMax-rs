@@ -58,7 +58,7 @@ impl Parser {
     pub fn parse(&mut self, buf: &[u8]) -> Result<LiqiMessage, Box<dyn Error>> {
         let msg_type_byte = buf[0];
         if !(1..=3).contains(&msg_type_byte) {
-            return Err("Invalid message type".into());
+            return Err(format!("Invalid message type: {}", msg_type_byte).into());
         }
         let msg_type = match msg_type_byte {
             1 => MessageType::Notify,
@@ -71,14 +71,14 @@ impl Parser {
         let msg_id: usize;
         match msg_type {
             MessageType::Notify => {
-                let blks = buf_to_blocks(&buf[1..]).ok_or("Failed to parse blocks")?;
+                let blks = buf_to_blocks(&buf[1..])?;
                 method_name = String::from_utf8(blks[0].data.clone())?;
                 let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let message_name = method_name_list[2];
                 let message_type = self
                     .pool
                     .get_message_by_name(&to_fqn(message_name))
-                    .ok_or("Invalid message type")?;
+                    .ok_or(format!("Invalid message type: {}", message_name))?;
                 let dyn_msg = DynamicMessage::decode(message_type, blks[1].data.as_ref())?;
                 data_obj = my_serialize(dyn_msg)?;
                 if let Some(b64) = data_obj.get("data") {
@@ -94,7 +94,7 @@ impl Parser {
                     let action_type = self
                         .pool
                         .get_message_by_name(&to_fqn(action_name))
-                        .ok_or("Invalid action type")?;
+                        .ok_or(format!("Invalid action type: {}", action_name))?;
                     let action_msg = DynamicMessage::decode(action_type, my_decoded.as_ref())?;
                     let action_obj = my_serialize(action_msg)?;
                     data_obj
@@ -107,7 +107,7 @@ impl Parser {
             MessageType::Request => {
                 // little endian, msg_id = unpack("<H", buf[1:3])[0]
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
-                let blocks = buf_to_blocks(&buf[3..]).ok_or("Failed to parse blocks")?;
+                let blocks = buf_to_blocks(&buf[3..])?;
                 assert!(msg_id < 1 << 16);
                 assert!(blocks.len() == 2);
                 // ascii decode into method name, method_name = msg_block[0]["data"].decode()
@@ -124,7 +124,7 @@ impl Parser {
                     let req_type = self
                         .pool
                         .get_message_by_name(&to_fqn(name))
-                        .ok_or("Invalid request type")?;
+                        .ok_or(format!("Invalid request type: {}", name))?;
                     let dyn_msg = DynamicMessage::decode(req_type, blocks[1].data.as_ref())?;
                     data_obj = my_serialize(dyn_msg)?;
                     let res_type_name = proto_domain["responseType"]
@@ -133,7 +133,7 @@ impl Parser {
                     let resp_type = self
                         .pool
                         .get_message_by_name(&to_fqn(res_type_name))
-                        .ok_or("Invalid response type")?;
+                        .ok_or(format!("Invalid response type: {}", res_type_name))?;
                     self.respond_type
                         .insert(msg_id, (method_name.to_owned(), resp_type));
                 } else {
@@ -142,7 +142,7 @@ impl Parser {
             }
             MessageType::Response => {
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
-                let blocks = buf_to_blocks(&buf[3..]).ok_or("Failed to parse blocks")?;
+                let blocks = buf_to_blocks(&buf[3..])?;
                 assert!(blocks[0].data.is_empty());
                 let resp_type: MessageDescriptor;
                 (method_name, resp_type) = self
@@ -164,7 +164,7 @@ impl Parser {
     }
 }
 
-fn to_fqn(method_name: &str) -> String {
+pub fn to_fqn(method_name: &str) -> String {
     format!("lq.{}", method_name)
 }
 
@@ -175,7 +175,7 @@ struct Block {
     _begin: usize,
 }
 
-fn buf_to_blocks(buf: &[u8]) -> Option<Vec<Block>> {
+fn buf_to_blocks(buf: &[u8]) -> Result<Vec<Block>, String> {
     let mut blocks = Vec::new();
     let mut i = 0;
     let l = buf.len();
@@ -197,7 +197,7 @@ fn buf_to_blocks(buf: &[u8]) -> Option<Vec<Block>> {
                 data = buf[p..p + len].to_vec();
                 i = p + len;
             }
-            _ => return None,
+            _ => return Err(format!("Unknown block type: {}", blk_type)),
         }
         blocks.push(Block {
             _id: id,
@@ -206,7 +206,7 @@ fn buf_to_blocks(buf: &[u8]) -> Option<Vec<Block>> {
             _begin: begin,
         });
     }
-    Some(blocks)
+    Ok(blocks)
 }
 
 fn parse_var_int(buf: &[u8], p: usize) -> (usize, usize) {

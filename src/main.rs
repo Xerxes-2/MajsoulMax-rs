@@ -6,14 +6,14 @@ use hudsucker::{
     *,
 };
 use once_cell::sync::Lazy;
-use prost_reflect::{DynamicMessage, SerializeOptions, Value};
+use prost_reflect::{DynamicMessage, SerializeOptions};
 use serde_json::{json, Map, Value as JsonValue};
 use std::{error::Error, future::Future};
 use std::{format, net::SocketAddr};
 use tracing::*;
 mod parser;
 mod settings;
-use parser::{Action, LiqiMessage, Parser};
+use parser::{to_fqn, Action, LiqiMessage, Parser};
 use reqwest::Client;
 use settings::Settings;
 use tokio::{
@@ -60,7 +60,7 @@ async fn worker(mut receiver: Receiver<(Vec<u8>, char)>, mut parser: Parser) {
         let (buf, direction_char) = match receiver.recv().await {
             Some((b, c)) => (b, c),
             None => {
-                error!("Failed to receive message from channel");
+                error!("Failed to receive message from channel, retrying...");
                 sleep(std::time::Duration::from_secs(1)).await;
                 continue;
             }
@@ -147,7 +147,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
                 .get("data")
                 .ok_or("No data field")?
                 .as_str()
-                .unwrap_or("data is not a string");
+                .unwrap_or_default();
             if action_data.is_empty() {
                 let action = Action {
                     name: action_name.to_string(),
@@ -158,13 +158,16 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
                 let b64 = BASE64_STANDARD.decode(action_data)?;
                 let action_type = parser
                     .pool
-                    .get_message_by_name(action_name)
-                    .ok_or("Invalid action type")?;
-                let mut action_obj = DynamicMessage::decode(action_type, b64.as_ref())?;
-                if action_name == ".lq.ActionNewRound" {
-                    action_obj.set_field_by_name("md5", Value::String(RANDOM_MD5.to_string()));
+                    .get_message_by_name(to_fqn(action_name).as_str())
+                    .ok_or(format!("Invalid action type: {}", action_name))?;
+                let action_obj = DynamicMessage::decode(action_type, b64.as_ref())?;
+                let mut value: JsonValue = my_serialize(action_obj)?;
+                if action_name == "ActionNewRound" {
+                    value
+                        .as_object_mut()
+                        .ok_or("value is not an object")?
+                        .insert("md5".to_string(), json!(RANDOM_MD5));
                 }
-                let value: JsonValue = my_serialize(action_obj)?;
                 let action = Action {
                     name: action_name.to_string(),
                     data: value,
@@ -172,7 +175,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
                 actions.push(action);
             }
         }
-        let mut map = Map::new();
+        let mut map = Map::with_capacity(1);
         map.insert(
             "sync_game_actions".to_string(),
             serde_json::to_value(actions)?,
