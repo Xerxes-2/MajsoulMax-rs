@@ -8,13 +8,18 @@ use hudsucker::{
 use once_cell::sync::Lazy;
 use prost_reflect::{DynamicMessage, SerializeOptions, Value};
 use serde_json::{json, Map, Value as JsonValue};
-use std::{error::Error, future::Future, sync::Mutex};
+use std::{error::Error, future::Future};
 use std::{format, net::SocketAddr};
 use tracing::*;
 mod parser;
 mod settings;
 use parser::{Action, LiqiMessage, Parser};
+use reqwest::Client;
 use settings::Settings;
+use tokio::{
+    sync::mpsc::{channel, Receiver, Sender},
+    time::sleep,
+};
 
 use crate::parser::my_serialize;
 
@@ -25,7 +30,7 @@ async fn shutdown_signal() {
 }
 
 #[derive(Clone)]
-struct ActionHandler;
+struct Handler(Sender<(Vec<u8>, char)>);
 
 pub const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
@@ -33,62 +38,68 @@ pub const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
 
 pub const RANDOM_MD5: &str = "0123456789abcdef0123456789abcdef";
 
-static PARSER: Mutex<Lazy<Parser>> = Mutex::new(Lazy::<Parser>::new(Parser::new));
-static CLIENT: Lazy<reqwest::Client> = Lazy::new(|| {
-    reqwest::ClientBuilder::new()
-        .danger_accept_invalid_certs(true)
-        .build()
-        .expect("Failed to create reqwest client")
-});
-static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
-
-impl WebSocketHandler for ActionHandler {
+impl WebSocketHandler for Handler {
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
         let direction_char = match _ctx {
             WebSocketContext::ClientToServer { .. } => '\u{2191}',
             WebSocketContext::ServerToClient { .. } => '\u{2193}',
         };
-        let msg_clone = msg.clone();
-        tokio::spawn(async move {
-            if let Message::Binary(buf) = msg_clone {
-                // convert binary message to hex string
-                let hex = buf
-                    .iter()
-                    .map(|b| {
-                        if *b >= 0x20 && *b <= 0x7e {
-                            format!("{}", *b as char)
-                        } else {
-                            format!("{:02x} ", b)
-                        }
-                    })
-                    .collect::<String>();
-                debug!("{} {}", direction_char, hex);
-                let mut parser = PARSER.lock().unwrap();
-                let parsed = parser.parse(&buf);
-                let parsed = match parsed {
-                    Ok(parsed) => parsed,
-                    Err(e) => {
-                        error!("Failed to parse message: {:?}", e);
-                        return;
-                    }
-                };
-                info!(
-                    "监听到: {}, {}, {:?}, {}",
-                    direction_char, parsed.id, parsed.msg_type, parsed.method_name
-                );
-                if direction_char == '\u{2193}' {
-                    return;
-                }
-                if let Err(e) = send_message(parsed) {
-                    error!("Failed to send message: {:?}", e);
-                }
+
+        if let Message::Binary(buf) = &msg {
+            if let Err(e) = self.0.send((buf.to_owned(), direction_char)).await {
+                error!("Failed to send message to channel: {:?}", e);
             }
-        });
+        }
+
         Some(msg)
     }
 }
 
-fn send_message(mut parsed: LiqiMessage) -> Result<(), Box<dyn Error>> {
+async fn worker(mut receiver: Receiver<(Vec<u8>, char)>, mut parser: Parser) {
+    loop {
+        let (buf, direction_char) = match receiver.recv().await {
+            Some((b, c)) => (b, c),
+            None => {
+                error!("Failed to receive message from channel");
+                sleep(std::time::Duration::from_secs(1)).await;
+                continue;
+            }
+        };
+        let hex = buf
+            .iter()
+            .map(|b| {
+                if *b >= 0x20 && *b <= 0x7e {
+                    format!("{}", *b as char)
+                } else {
+                    format!("{:02x} ", b)
+                }
+            })
+            .collect::<String>();
+        debug!("{} {}", direction_char, hex);
+        let parsed = parser.parse(&buf);
+        let parsed = match parsed {
+            Ok(parsed) => parsed,
+            Err(e) => {
+                error!("Failed to parse message: {:?}", e);
+                continue;
+            }
+        };
+        info!(
+            "监听到: {}, {}, {:?}, {}",
+            direction_char, parsed.id, parsed.msg_type, parsed.method_name
+        );
+        if direction_char == '\u{2193}' {
+            continue;
+        }
+        if let Err(e) = process_message(parsed, &mut parser) {
+            error!("Failed to process message: {:?}", e);
+        }
+    }
+}
+
+fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), Box<dyn Error>> {
+    static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
+    static CLIENT: Lazy<Client> = Lazy::new(Client::new);
     let json_data: JsonValue;
     if !SETTINGS.is_method(&parsed.method_name) {
         return Ok(());
@@ -140,7 +151,6 @@ fn send_message(mut parsed: LiqiMessage) -> Result<(), Box<dyn Error>> {
                 actions.push(action);
             } else {
                 let b64 = BASE64_STANDARD.decode(action_data)?;
-                let parser = PARSER.lock().unwrap();
                 let action_type = parser
                     .pool
                     .get_message_by_name(action_name)
@@ -168,14 +178,13 @@ fn send_message(mut parsed: LiqiMessage) -> Result<(), Box<dyn Error>> {
     }
 
     // post data to API, no verification
-    let client = CLIENT.clone();
-    let future = client.post(&SETTINGS.api_url).json(&json_data).send();
+    let future = CLIENT.post(&SETTINGS.api_url).json(&json_data).send();
 
     handle_future(future);
     info!("已发送: {}", json_data);
 
     if let Some(liqi_data) = json_data.get("liqi") {
-        let res = client.post(&SETTINGS.api_url).json(liqi_data).send();
+        let res = CLIENT.post(&SETTINGS.api_url).json(liqi_data).send();
         handle_future(res);
         info!("已发送: {:?}", liqi_data);
     }
@@ -224,14 +233,17 @@ async fn main() {
     \x1b[0m"
     );
 
+    let (tx, rx) = channel::<(Vec<u8>, char)>(100);
+    let parser = Parser::new();
     let proxy = Proxy::builder()
         .with_addr(SocketAddr::from(([127, 0, 0, 1], 23410)))
         .with_rustls_client()
         .with_ca(ca)
-        .with_websocket_handler(ActionHandler)
+        .with_websocket_handler(Handler(tx.clone()))
         .with_graceful_shutdown(shutdown_signal())
         .build();
 
+    tokio::spawn(worker(rx, parser));
     if let Err(e) = proxy.start().await {
         error!("{}", e);
     }
