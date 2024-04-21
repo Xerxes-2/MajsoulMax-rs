@@ -99,7 +99,12 @@ async fn worker(mut receiver: Receiver<(Vec<u8>, char)>, mut parser: Parser) {
 
 fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), Box<dyn Error>> {
     static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
-    static CLIENT: Lazy<Client> = Lazy::new(Client::new);
+    static CLIENT: Lazy<Client> = Lazy::new(|| {
+        reqwest::ClientBuilder::new()
+            .danger_accept_invalid_certs(true)
+            .build()
+            .expect("Failed to create reqwest client")
+    });
     let json_data: JsonValue;
     if !SETTINGS.is_method(&parsed.method_name) {
         return Ok(());
