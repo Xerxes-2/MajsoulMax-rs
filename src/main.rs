@@ -7,21 +7,19 @@ use hudsucker::{
 };
 use once_cell::sync::Lazy;
 use prost_reflect::{DynamicMessage, SerializeOptions};
-use serde_json::{json, Map, Value as JsonValue};
-use std::{error::Error, future::Future};
-use std::{format, net::SocketAddr};
-use tracing::*;
-mod parser;
-mod settings;
-use parser::{to_fqn, Action, LiqiMessage, Parser};
 use reqwest::Client;
-use settings::Settings;
+use serde_json::{json, Map, Value as JsonValue};
+use std::{error::Error, format, future::Future, net::SocketAddr};
 use tokio::{
     sync::mpsc::{channel, Receiver, Sender},
     time::sleep,
 };
+use tracing::*;
 
-use crate::parser::my_serialize;
+mod parser;
+mod settings;
+use parser::{my_serialize, to_fqn, Action, LiqiMessage, Parser};
+use settings::Settings;
 
 async fn shutdown_signal() {
     tokio::signal::ctrl_c()
@@ -36,7 +34,7 @@ pub const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
     .use_proto_field_name(true);
 
-pub const RANDOM_MD5: &str = "0123456789abcdef0123456789abcdef";
+const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
 
 impl WebSocketHandler for Handler {
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
@@ -124,7 +122,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
         if name == "ActionNewRound" {
             data.as_object_mut()
                 .ok_or("data is not an object")?
-                .insert("md5".to_string(), json!(RANDOM_MD5));
+                .insert("md5".to_string(), json!(ARBITRARY_MD5));
         }
         json_data = data.take();
     } else if parsed.method_name == ".lq.FastTest.syncGame" {
@@ -166,7 +164,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
                     value
                         .as_object_mut()
                         .ok_or("value is not an object")?
-                        .insert("md5".to_string(), json!(RANDOM_MD5));
+                        .insert("md5".to_string(), json!(ARBITRARY_MD5));
                 }
                 let action = Action {
                     name: action_name.to_string(),
@@ -203,7 +201,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
 fn handle_future(
     future: impl Future<Output = Result<reqwest::Response, reqwest::Error>> + Send + 'static,
 ) {
-    tokio::spawn(async move {
+    tokio::spawn(async {
         match future.await {
             Ok(res) => {
                 let body = res.text().await.unwrap_or_default();

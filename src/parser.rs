@@ -71,15 +71,15 @@ impl Parser {
         let msg_id: usize;
         match msg_type {
             MessageType::Notify => {
-                let blks = buf_to_blocks(&buf[1..])?;
-                method_name = String::from_utf8(blks[0].data.clone())?;
+                let blocks = buf_to_blocks(&buf[1..])?;
+                method_name = String::from_utf8(blocks[0].data.clone())?;
                 let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let message_name = method_name_list[2];
                 let message_type = self
                     .pool
                     .get_message_by_name(&to_fqn(message_name))
                     .ok_or(format!("Invalid message type: {}", message_name))?;
-                let dyn_msg = DynamicMessage::decode(message_type, blks[1].data.as_ref())?;
+                let dyn_msg = DynamicMessage::decode(message_type, blocks[1].data.as_ref())?;
                 data_obj = my_serialize(dyn_msg)?;
                 if let Some(b64) = data_obj.get("data") {
                     let action_name = data_obj
