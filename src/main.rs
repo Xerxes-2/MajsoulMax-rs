@@ -33,7 +33,7 @@ pub const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
 
 pub const RANDOM_MD5: &str = "0123456789abcdef0123456789abcdef";
 
-static PARSER: Mutex<Lazy<Parser>> = Mutex::new(Lazy::<Parser, _>::new(Parser::new));
+static PARSER: Mutex<Lazy<Parser>> = Mutex::new(Lazy::<Parser>::new(Parser::new));
 static CLIENT: Lazy<reqwest::Client> = Lazy::new(|| {
     reqwest::ClientBuilder::new()
         .danger_accept_invalid_certs(true)
