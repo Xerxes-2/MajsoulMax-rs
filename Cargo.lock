@@ -911,7 +911,9 @@ dependencies = [
 name = "mahjong_helper_majsoul_hudsucker"
 version = "0.2.3"
 dependencies = [
+ "anyhow",
  "base64",
+ "bytes",
  "hudsucker",
  "once_cell",
  "openssl",

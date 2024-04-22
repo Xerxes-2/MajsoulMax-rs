@@ -1,4 +1,6 @@
+use anyhow::{anyhow, Result};
 use base64::prelude::*;
+use bytes::Bytes;
 use hudsucker::{
     certificate_authority::RcgenAuthority,
     rcgen::{CertificateParams, KeyPair},
@@ -9,7 +11,7 @@ use once_cell::sync::Lazy;
 use prost_reflect::{DynamicMessage, SerializeOptions};
 use reqwest::Client;
 use serde_json::{json, Map, Value as JsonValue};
-use std::{error::Error, format, future::Future, net::SocketAddr};
+use std::{format, future::Future, net::SocketAddr};
 use tokio::{
     sync::mpsc::{channel, Receiver, Sender},
     time::sleep,
@@ -28,7 +30,7 @@ async fn shutdown_signal() {
 }
 
 #[derive(Clone)]
-struct Handler(Sender<(Vec<u8>, char)>);
+struct Handler(Sender<(Bytes, char)>);
 
 pub const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
@@ -44,7 +46,11 @@ impl WebSocketHandler for Handler {
         };
 
         if let Message::Binary(buf) = &msg {
-            if let Err(e) = self.0.send((buf.to_owned(), direction_char)).await {
+            if let Err(e) = self
+                .0
+                .send((Bytes::copy_from_slice(buf), direction_char))
+                .await
+            {
                 error!("Failed to send message to channel: {:?}", e);
             }
         }
@@ -53,7 +59,7 @@ impl WebSocketHandler for Handler {
     }
 }
 
-async fn worker(mut receiver: Receiver<(Vec<u8>, char)>, mut parser: Parser) {
+async fn worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Parser) {
     loop {
         let (buf, direction_char) = match receiver.recv().await {
             Some((b, c)) => (b, c),
@@ -95,7 +101,7 @@ async fn worker(mut receiver: Receiver<(Vec<u8>, char)>, mut parser: Parser) {
     }
 }
 
-fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), Box<dyn Error>> {
+fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
     static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
     static CLIENT: Lazy<Client> = Lazy::new(|| {
         reqwest::ClientBuilder::new()
@@ -111,17 +117,20 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
         let name = parsed
             .data
             .get("name")
-            .ok_or("No name field")?
+            .ok_or(anyhow!("No name field"))?
             .as_str()
-            .ok_or("name is not a string")?
+            .ok_or(anyhow!("name is not a string"))?
             .to_owned();
         if !SETTINGS.is_action(&name) {
             return Ok(());
         }
-        let data = parsed.data.get_mut("data").ok_or("No data field")?;
+        let data = parsed
+            .data
+            .get_mut("data")
+            .ok_or(anyhow!("No data field"))?;
         if name == "ActionNewRound" {
             data.as_object_mut()
-                .ok_or("data is not an object")?
+                .ok_or(anyhow!("data is not an object"))?
                 .insert("md5".to_string(), json!(ARBITRARY_MD5));
         }
         json_data = data.take();
@@ -129,21 +138,21 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
         let game_restore = parsed
             .data
             .get("game_restore")
-            .ok_or("No game_restore field")?
+            .ok_or(anyhow!("No game_restore field"))?
             .get("actions")
-            .ok_or("No actions field")?
+            .ok_or(anyhow!("No actions field"))?
             .as_array()
-            .ok_or("actions is not an array")?;
+            .ok_or(anyhow!("actions is not an array"))?;
         let mut actions: Vec<Action> = vec![];
         for item in game_restore.iter() {
             let action_name = item
                 .get("name")
-                .ok_or("No name field")?
+                .ok_or(anyhow!("No name field"))?
                 .as_str()
-                .ok_or("name is not a string")?;
+                .ok_or(anyhow!("name is not a string"))?;
             let action_data = item
                 .get("data")
-                .ok_or("No data field")?
+                .ok_or(anyhow!("No data field"))?
                 .as_str()
                 .unwrap_or_default();
             if action_data.is_empty() {
@@ -157,13 +166,13 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<(), B
                 let action_type = parser
                     .pool
                     .get_message_by_name(to_fqn(action_name).as_str())
-                    .ok_or(format!("Invalid action type: {}", action_name))?;
+                    .ok_or(anyhow!("Invalid action type: {}", action_name))?;
                 let action_obj = DynamicMessage::decode(action_type, b64.as_ref())?;
                 let mut value: JsonValue = my_serialize(action_obj)?;
                 if action_name == "ActionNewRound" {
                     value
                         .as_object_mut()
-                        .ok_or("value is not an object")?
+                        .ok_or(anyhow!("data is not an object"))?
                         .insert("md5".to_string(), json!(ARBITRARY_MD5));
                 }
                 let action = Action {
@@ -239,7 +248,7 @@ async fn main() {
     \x1b[0m"
     );
 
-    let (tx, rx) = channel::<(Vec<u8>, char)>(100);
+    let (tx, rx) = channel::<(Bytes, char)>(100);
     let parser = Parser::new();
     let proxy = Proxy::builder()
         .with_addr(SocketAddr::from(([127, 0, 0, 1], 23410)))
