@@ -7,7 +7,6 @@ use hudsucker::{
     *,
 };
 use once_cell::sync::Lazy;
-use prost_reflect::SerializeOptions;
 use reqwest::Client;
 use serde_json::{json, Map, Value as JsonValue};
 use std::{format, future::Future, net::SocketAddr};
@@ -30,10 +29,6 @@ async fn shutdown_signal() {
 
 #[derive(Clone)]
 struct Handler(Sender<(Bytes, char)>);
-
-pub const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
-    .skip_default_fields(false)
-    .use_proto_field_name(true);
 
 const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
 
