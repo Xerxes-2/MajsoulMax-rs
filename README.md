@@ -31,8 +31,9 @@
 
 ### 准备工作
 
-1. 解压发布页下载的压缩包
-2. 确保可执行文件和`settings.json`在同一目录下
+1. 从[release页面](https://github.com/Xerxes-2/mahjong_helper_majsoul_hudsucker/releases/latest)下载对应平台的压缩包
+2. 解压压缩包
+3. 确保可执行文件和`settings.json`在同一目录下
 
 ### 使用方法
 
