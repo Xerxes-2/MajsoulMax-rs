@@ -92,15 +92,7 @@ impl Parser {
                         .as_str()
                         .ok_or(anyhow!("name is not a string"))?;
                     let b64 = b64.as_str().unwrap_or_default();
-
-                    let decoded = BASE64_STANDARD.decode(b64)?;
-                    let my_decoded = decode(&decoded);
-                    let action_type = self
-                        .pool
-                        .get_message_by_name(&to_fqn(action_name))
-                        .ok_or(anyhow!("Invalid action type: {}", action_name))?;
-                    let action_msg = DynamicMessage::decode(action_type, my_decoded)?;
-                    let action_obj = my_serialize(action_msg)?;
+                    let action_obj = decode_action(action_name, b64, &self.pool)?;
                     data_obj
                         .as_object_mut()
                         .ok_or(anyhow!("data is not an object"))?
@@ -113,7 +105,6 @@ impl Parser {
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
                 let (method, data) = buf_to_blocks(&buf[3..])?;
                 assert!(msg_id < 1 << 16);
-                // ascii decode into method name, method_name = msg_block[0]["data"].decode()
                 method_name = String::from_utf8(method.into())?;
                 let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let lq = method_name_list[1];
@@ -172,6 +163,16 @@ struct Block {
     _blk_type: usize,
     data: Bytes,
     _begin: usize,
+}
+
+pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<JsonValue> {
+    let decoded = BASE64_STANDARD.decode(data)?;
+    let my_decoded = decode(&decoded);
+    let action_type = pool
+        .get_message_by_name(&to_fqn(name))
+        .ok_or(anyhow!("Invalid action type: {}", name))?;
+    let action_msg = DynamicMessage::decode(action_type, my_decoded)?;
+    my_serialize(action_msg)
 }
 
 fn buf_to_blocks(buf: &[u8]) -> Result<(Bytes, Bytes)> {

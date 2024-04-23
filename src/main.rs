@@ -1,5 +1,4 @@
 use anyhow::{anyhow, Result};
-use base64::prelude::*;
 use bytes::Bytes;
 use hudsucker::{
     certificate_authority::RcgenAuthority,
@@ -8,7 +7,7 @@ use hudsucker::{
     *,
 };
 use once_cell::sync::Lazy;
-use prost_reflect::{DynamicMessage, SerializeOptions};
+use prost_reflect::SerializeOptions;
 use reqwest::Client;
 use serde_json::{json, Map, Value as JsonValue};
 use std::{format, future::Future, net::SocketAddr};
@@ -20,7 +19,7 @@ use tracing::*;
 
 mod parser;
 mod settings;
-use parser::{my_serialize, to_fqn, Action, LiqiMessage, Parser};
+use parser::{decode_action, Action, LiqiMessage, Parser};
 use settings::Settings;
 
 async fn shutdown_signal() {
@@ -162,13 +161,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
                 };
                 actions.push(action);
             } else {
-                let b64 = BASE64_STANDARD.decode(action_data)?;
-                let action_type = parser
-                    .pool
-                    .get_message_by_name(to_fqn(action_name).as_str())
-                    .ok_or(anyhow!("Invalid action type: {}", action_name))?;
-                let action_obj = DynamicMessage::decode(action_type, b64.as_ref())?;
-                let mut value: JsonValue = my_serialize(action_obj)?;
+                let mut value = decode_action(action_name, action_data, &parser.pool)?;
                 if action_name == "ActionNewRound" {
                     value
                         .as_object_mut()
