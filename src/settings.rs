@@ -1,8 +1,9 @@
 use serde::Deserialize;
+use serde_json::Value;
 use std::collections::HashSet;
 use tracing::info;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Default)]
 pub struct Settings {
     #[serde(rename(deserialize = "SEND_METHOD"))]
     pub send_method: Vec<String>,
@@ -16,6 +17,10 @@ pub struct Settings {
     methods_set: HashSet<String>,
     #[serde(skip)]
     actions_set: HashSet<String>,
+    #[serde(skip)]
+    pub desc: Vec<u8>,
+    #[serde(skip)]
+    pub proto_json: Value,
 }
 
 impl Settings {
@@ -41,6 +46,25 @@ impl Settings {
         info!("已载入配置: {:?}", settings);
         settings.methods_set = settings.send_method.iter().cloned().collect();
         settings.actions_set = settings.send_action.iter().cloned().collect();
+
+        // read desc from file
+        settings.desc = std::fs::read(std::path::Path::new(exe_dir).join("liqi.desc"))
+            .or_else(
+                // read pwd
+                |_| std::fs::read("liqi.desc"),
+            )
+            .expect("无法读取liqi.desc");
+
+        // read liqi.json from file
+        settings.proto_json = serde_json::from_str(
+            &std::fs::read_to_string(std::path::Path::new(exe_dir).join("liqi.json"))
+                .or_else(
+                    // read pwd
+                    |_| std::fs::read_to_string("liqi.json"),
+                )
+                .expect("无法读取liqi.json"),
+        )
+        .expect("无法解析liqi.json");
         settings
     }
 

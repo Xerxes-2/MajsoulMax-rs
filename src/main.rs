@@ -1,4 +1,3 @@
-use anyhow::{anyhow, Result};
 use bytes::Bytes;
 use hudsucker::{
     certificate_authority::RcgenAuthority,
@@ -7,37 +6,32 @@ use hudsucker::{
     *,
 };
 use once_cell::sync::Lazy;
-use reqwest::Client;
-use serde_json::{json, Map, Value as JsonValue};
-use std::{format, future::Future, net::SocketAddr, str::FromStr};
-use tokio::{
-    sync::mpsc::{channel, Receiver, Sender},
-    time::sleep,
-};
+use std::{net::SocketAddr, str::FromStr};
+use tokio::sync::mpsc::{channel, Sender};
 use tracing::*;
 
+mod helper;
 mod parser;
 mod settings;
-use parser::{decode_action, Action, LiqiMessage, Parser};
+
+use helper::helper_worker;
+use parser::Parser;
 use settings::Settings;
 
-async fn shutdown_signal() {
-    tokio::signal::ctrl_c()
-        .await
-        .expect("Failed to install CTRL+C signal handler");
-}
+const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
+pub static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
 
 #[derive(Clone)]
 struct Handler(Sender<(Bytes, char)>);
 
-const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
-
 impl WebSocketHandler for Handler {
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
-        let direction_char = match _ctx {
-            WebSocketContext::ClientToServer { .. } => '\u{2191}',
-            WebSocketContext::ServerToClient { .. } => '\u{2193}',
+        let (direction_char, uri) = match _ctx {
+            WebSocketContext::ClientToServer { dst, .. } => ('\u{2193}', dst),
+            WebSocketContext::ServerToClient { src, .. } => ('\u{2191}', src),
         };
+
+        debug!("{} {}", direction_char, uri);
 
         if let Message::Binary(ref buf) = msg {
             if let Err(e) = self
@@ -49,169 +43,16 @@ impl WebSocketHandler for Handler {
             }
         }
 
+        // TODO: MajSoul Mod
+
         Some(msg)
     }
 }
 
-async fn worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Parser) {
-    loop {
-        let (buf, direction_char) = match receiver.recv().await {
-            Some((b, c)) => (b, c),
-            None => {
-                error!("Failed to receive message from channel, retrying...");
-                sleep(std::time::Duration::from_secs(1)).await;
-                continue;
-            }
-        };
-        let hex = buf
-            .iter()
-            .map(|b| {
-                if *b >= 0x20 && *b <= 0x7e {
-                    format!("{}", *b as char)
-                } else {
-                    format!("{:02x} ", b)
-                }
-            })
-            .collect::<String>();
-        debug!("{} {}", direction_char, hex);
-        let parsed = parser.parse(&buf);
-        let parsed = match parsed {
-            Ok(parsed) => parsed,
-            Err(e) => {
-                error!("Failed to parse message: {:?}", e);
-                continue;
-            }
-        };
-        info!(
-            "监听到: {}, {}, {:?}, {}",
-            direction_char, parsed.id, parsed.msg_type, parsed.method_name
-        );
-        if direction_char == '\u{2193}' {
-            continue;
-        }
-        if let Err(e) = process_message(parsed, &mut parser) {
-            error!("Failed to process message: {:?}", e);
-        }
-    }
-}
-
-static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
-fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
-    static CLIENT: Lazy<Client> = Lazy::new(|| {
-        reqwest::ClientBuilder::new()
-            .danger_accept_invalid_certs(true)
-            .build()
-            .expect("Failed to create reqwest client")
-    });
-    let json_data: JsonValue;
-    if !SETTINGS.is_method(&parsed.method_name) {
-        return Ok(());
-    }
-    if parsed.method_name.as_ref() == ".lq.ActionPrototype" {
-        let name = parsed
-            .data
-            .get("name")
-            .ok_or(anyhow!("No name field"))?
-            .as_str()
-            .ok_or(anyhow!("name is not a string"))?;
-        if !SETTINGS.is_action(name) {
-            return Ok(());
-        }
-        if name == "ActionNewRound" {
-            parsed
-                .data
-                .get_mut("data")
-                .ok_or(anyhow!("No data field"))?
-                .as_object_mut()
-                .ok_or(anyhow!("data is not an object"))?
-                .insert("md5".to_string(), json!(ARBITRARY_MD5));
-        }
-        json_data = parsed
-            .data
-            .get_mut("data")
-            .ok_or(anyhow!("No data field"))?
-            .take();
-    } else if parsed.method_name.as_ref() == ".lq.FastTest.syncGame" {
-        let game_restore = parsed
-            .data
-            .get("game_restore")
-            .ok_or(anyhow!("No game_restore field"))?
-            .get("actions")
-            .ok_or(anyhow!("No actions field"))?
-            .as_array()
-            .ok_or(anyhow!("actions is not an array"))?;
-        let mut actions: Vec<Action> = vec![];
-        for item in game_restore.iter() {
-            let action_name = item
-                .get("name")
-                .ok_or(anyhow!("No name field"))?
-                .as_str()
-                .ok_or(anyhow!("name is not a string"))?;
-            let action_data = item
-                .get("data")
-                .ok_or(anyhow!("No data field"))?
-                .as_str()
-                .unwrap_or_default();
-            if action_data.is_empty() {
-                let action = Action {
-                    name: action_name.to_string(),
-                    data: JsonValue::Object(Map::new()),
-                };
-                actions.push(action);
-            } else {
-                let mut value = decode_action(action_name, action_data, &parser.pool)?;
-                if action_name == "ActionNewRound" {
-                    value
-                        .as_object_mut()
-                        .ok_or(anyhow!("data is not an object"))?
-                        .insert("md5".to_string(), json!(ARBITRARY_MD5));
-                }
-                let action = Action {
-                    name: action_name.to_string(),
-                    data: value,
-                };
-                actions.push(action);
-            }
-        }
-        let mut map = Map::with_capacity(1);
-        map.insert(
-            "sync_game_actions".to_string(),
-            serde_json::to_value(actions)?,
-        );
-        json_data = JsonValue::Object(map);
-    } else {
-        json_data = parsed.data;
-    }
-
-    // post data to API, no verification
-    let future = CLIENT.post(&SETTINGS.api_url).json(&json_data).send();
-
-    handle_future(future);
-    info!("已发送: {}", json_data);
-
-    if let Some(liqi_data) = json_data.get("liqi") {
-        let res = CLIENT.post(&SETTINGS.api_url).json(liqi_data).send();
-        handle_future(res);
-        info!("已发送: {:?}", liqi_data);
-    }
-
-    Ok(())
-}
-
-fn handle_future(
-    future: impl Future<Output = Result<reqwest::Response, reqwest::Error>> + Send + 'static,
-) {
-    tokio::spawn(async {
-        match future.await {
-            Ok(res) => {
-                let body = res.text().await.unwrap_or_default();
-                info!("小助手已接收: {}", body);
-            }
-            Err(e) => {
-                error!("请求失败: {:?}", e);
-            }
-        }
-    });
+async fn shutdown_signal() {
+    tokio::signal::ctrl_c()
+        .await
+        .expect("Failed to install CTRL+C signal handler");
 }
 
 #[tokio::main]
@@ -258,7 +99,8 @@ async fn main() {
         .with_graceful_shutdown(shutdown_signal())
         .build();
 
-    tokio::spawn(worker(rx, parser));
+    tokio::spawn(helper_worker(rx, parser));
+
     if let Err(e) = proxy.start().await {
         error!("{}", e);
     }

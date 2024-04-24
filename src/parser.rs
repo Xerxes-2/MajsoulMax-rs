@@ -2,9 +2,10 @@ use anyhow::{anyhow, bail, ensure, Result};
 use base64::prelude::*;
 use bytes::Bytes;
 use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, SerializeOptions};
-use serde::Serialize;
 use serde_json::{value::Serializer, Value as JsonValue};
 use std::{collections::HashMap, sync::Arc};
+
+use crate::SETTINGS;
 
 const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
@@ -25,16 +26,10 @@ pub struct LiqiMessage {
     pub data: JsonValue,
 }
 
-#[derive(Serialize, Debug)]
-pub struct Action {
-    pub name: String,
-    pub data: JsonValue,
-}
-
 pub struct Parser {
     total: usize,
     respond_type: HashMap<usize, (Arc<str>, MessageDescriptor)>,
-    proto_json: JsonValue,
+    proto_json: &'static JsonValue,
     pub pool: DescriptorPool,
 }
 
@@ -44,15 +39,12 @@ pub fn dyn_to_json(msg: DynamicMessage) -> Result<JsonValue> {
 
 impl Parser {
     pub fn new() -> Self {
-        let json_str = include_str!("liqi.json");
-        let proto_json = serde_json::from_str(json_str).expect("Failed to parse liqi.json");
-        let pool = DescriptorPool::decode(include_bytes!("liqi.desc").as_ref())
-            .expect("Failed to decode liqi.desc");
         Self {
             total: 0,
             respond_type: HashMap::new(),
-            proto_json,
-            pool,
+            proto_json: &SETTINGS.proto_json,
+            pool: DescriptorPool::decode(SETTINGS.desc.as_slice())
+                .expect("Failed to decode liqi.desc"),
         }
     }
 
@@ -88,9 +80,8 @@ impl Parser {
                 if let Some(b64) = data_obj.get("data") {
                     let action_name = data_obj
                         .get("name")
-                        .ok_or(anyhow!("No name field"))?
-                        .as_str()
-                        .ok_or(anyhow!("name is not a string"))?;
+                        .and_then(|n| n.as_str())
+                        .ok_or(anyhow!("name field invalid"))?;
                     let b64 = b64.as_str().unwrap_or_default();
                     let action_obj = decode_action(action_name, b64, &self.pool)?;
                     data_obj
