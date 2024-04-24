@@ -1,10 +1,10 @@
 use anyhow::{anyhow, bail, ensure, Result};
 use base64::prelude::*;
-use bytes::{Bytes, BytesMut};
+use bytes::Bytes;
 use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, SerializeOptions};
 use serde::Serialize;
 use serde_json::{value::Serializer, Value as JsonValue};
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 
 const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
@@ -21,7 +21,7 @@ pub enum MessageType {
 pub struct LiqiMessage {
     pub id: usize,
     pub msg_type: MessageType,
-    pub method_name: String,
+    pub method_name: Arc<str>,
     pub data: JsonValue,
 }
 
@@ -33,7 +33,7 @@ pub struct Action {
 
 pub struct Parser {
     total: usize,
-    respond_type: HashMap<usize, (String, MessageDescriptor)>,
+    respond_type: HashMap<usize, (Arc<str>, MessageDescriptor)>,
     proto_json: JsonValue,
     pub pool: DescriptorPool,
 }
@@ -69,13 +69,14 @@ impl Parser {
             3 => MessageType::Response,
             _ => unreachable!(),
         };
-        let method_name;
+        let method_name: Arc<str>;
         let mut data_obj: JsonValue;
         let msg_id: usize;
         match msg_type {
             MessageType::Notify => {
                 let (method, data) = buf_to_method_data(&buf[1..])?;
-                method_name = String::from_utf8(method.into())?;
+                let method_name_str = String::from_utf8(method.into())?;
+                method_name = Arc::from(method_name_str);
                 let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let message_name = method_name_list[2];
                 let message_type = self
@@ -104,7 +105,8 @@ impl Parser {
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
                 let (method, data) = buf_to_method_data(&buf[3..])?;
                 assert!(msg_id < 1 << 16);
-                method_name = String::from_utf8(method.into())?;
+                let method_name_str = String::from_utf8(method.into())?;
+                method_name = Arc::from(method_name_str);
                 let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let lq = method_name_list[1];
                 let service = method_name_list[2];
@@ -128,7 +130,7 @@ impl Parser {
                     .get_message_by_name(&to_fqn(res_type_name))
                     .ok_or(anyhow!("Invalid response type: {}", res_type_name))?;
                 self.respond_type
-                    .insert(msg_id, (method_name.to_owned(), resp_type));
+                    .insert(msg_id, (method_name.clone(), resp_type));
             }
             MessageType::Response => {
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
@@ -165,12 +167,12 @@ struct Block {
 }
 
 pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<JsonValue> {
-    let decoded = BASE64_STANDARD.decode(data)?;
-    let my_decoded = decode(&decoded);
+    let mut decoded = BASE64_STANDARD.decode(data)?;
+    wtf_decode(&mut decoded);
     let action_type = pool
         .get_message_by_name(&to_fqn(name))
         .ok_or(anyhow!("Invalid action type: {}", name))?;
-    let action_msg = DynamicMessage::decode(action_type, my_decoded)?;
+    let action_msg = DynamicMessage::decode(action_type, Bytes::from(decoded))?;
     dyn_to_json(action_msg)
 }
 
@@ -186,15 +188,14 @@ fn buf_to_method_data(buf: &[u8]) -> Result<(Bytes, Bytes)> {
         let data: Bytes;
         match blk_type {
             0 => {
-                let (int, p) = parse_var_int(buf, i);
+                let int = parse_var_int(buf, &mut i);
                 // convert int to bytes
                 data = int.to_be_bytes().to_vec().into();
-                i = p;
             }
             2 => {
-                let (len, p) = parse_var_int(buf, i);
-                data = Bytes::copy_from_slice(&buf[p..p + len]);
-                i = p + len;
+                let len = parse_var_int(buf, &mut i);
+                data = Bytes::copy_from_slice(&buf[i..i + len]);
+                i += len;
             }
             _ => bail!("Invalid block type: {}", blk_type),
         }
@@ -215,30 +216,27 @@ fn buf_to_method_data(buf: &[u8]) -> Result<(Bytes, Bytes)> {
     Ok((method_block.data, data_block.data))
 }
 
-fn parse_var_int(buf: &[u8], p: usize) -> (usize, usize) {
+fn parse_var_int(buf: &[u8], p: &mut usize) -> usize {
     let mut data = 0;
     let mut shift = 0;
-    let l = buf.len();
-    let mut i = p;
-    while i < l {
-        data += ((buf[i] & 0x7f) as usize) << shift;
+    for b in buf.iter().skip(*p) {
+        data += ((*b & 0x7f) as usize) << shift;
+        *p += 1;
         shift += 7;
-        i += 1;
-        if buf[i - 1] >> 7 == 0 {
+        if b >> 7 == 0 {
             break;
         }
     }
-    (data, i)
+    data
 }
 
-fn decode(data: &[u8]) -> Bytes {
-    let keys = [0x84, 0x5E, 0x4E, 0x42, 0x39, 0xA2, 0x1F, 0x60, 0x1C];
-    let mut data = BytesMut::from(data);
-    let k = keys.len();
+fn wtf_decode(data: &mut [u8]) {
+    const KEYS: [usize; 9] = [0x84, 0x5E, 0x4E, 0x42, 0x39, 0xA2, 0x1F, 0x60, 0x1C];
     let d = data.len();
-    for i in 0..d {
-        let u = ((23 ^ d) + 5 * i + keys[i % k]) & 255;
-        data[i] ^= u as u8;
-    }
-    data.into()
+    KEYS.iter()
+        .cycle()
+        .zip(data.iter_mut())
+        .enumerate()
+        .map(|(i, (key, b))| (((23 ^ d) + 5 * i + key) & 255, b))
+        .for_each(|(k, b)| *b ^= k as u8);
 }

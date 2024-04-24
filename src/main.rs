@@ -39,7 +39,7 @@ impl WebSocketHandler for Handler {
             WebSocketContext::ServerToClient { .. } => '\u{2193}',
         };
 
-        if let Message::Binary(buf) = &msg {
+        if let Message::Binary(ref buf) = msg {
             if let Err(e) = self
                 .0
                 .send((Bytes::copy_from_slice(buf), direction_char))
@@ -107,28 +107,31 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
     if !SETTINGS.is_method(&parsed.method_name) {
         return Ok(());
     }
-    if parsed.method_name == ".lq.ActionPrototype" {
+    if parsed.method_name.as_ref() == ".lq.ActionPrototype" {
         let name = parsed
             .data
             .get("name")
             .ok_or(anyhow!("No name field"))?
             .as_str()
-            .ok_or(anyhow!("name is not a string"))?
-            .to_owned();
-        if !SETTINGS.is_action(&name) {
+            .ok_or(anyhow!("name is not a string"))?;
+        if !SETTINGS.is_action(name) {
             return Ok(());
         }
-        let data = parsed
-            .data
-            .get_mut("data")
-            .ok_or(anyhow!("No data field"))?;
         if name == "ActionNewRound" {
-            data.as_object_mut()
+            parsed
+                .data
+                .get_mut("data")
+                .ok_or(anyhow!("No data field"))?
+                .as_object_mut()
                 .ok_or(anyhow!("data is not an object"))?
                 .insert("md5".to_string(), json!(ARBITRARY_MD5));
         }
-        json_data = data.take();
-    } else if parsed.method_name == ".lq.FastTest.syncGame" {
+        json_data = parsed
+            .data
+            .get_mut("data")
+            .ok_or(anyhow!("No data field"))?
+            .take();
+    } else if parsed.method_name.as_ref() == ".lq.FastTest.syncGame" {
         let game_restore = parsed
             .data
             .get("game_restore")
