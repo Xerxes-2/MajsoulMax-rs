@@ -8,6 +8,8 @@ pub struct Settings {
     pub send_method: Vec<String>,
     #[serde(rename(deserialize = "SEND_ACTION"))]
     pub send_action: Vec<String>,
+    #[serde(rename(deserialize = "PROXY_ADDR"))]
+    pub proxy_addr: String,
     #[serde(rename(deserialize = "API_URL"))]
     pub api_url: String,
     #[serde(skip)]

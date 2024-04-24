@@ -9,7 +9,7 @@ use hudsucker::{
 use once_cell::sync::Lazy;
 use reqwest::Client;
 use serde_json::{json, Map, Value as JsonValue};
-use std::{format, future::Future, net::SocketAddr};
+use std::{format, future::Future, net::SocketAddr, str::FromStr};
 use tokio::{
     sync::mpsc::{channel, Receiver, Sender},
     time::sleep,
@@ -95,8 +95,8 @@ async fn worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Parser) {
     }
 }
 
+static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
 fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
-    static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
     static CLIENT: Lazy<Client> = Lazy::new(|| {
         reqwest::ClientBuilder::new()
             .danger_accept_invalid_certs(true)
@@ -238,11 +238,20 @@ async fn main() {
     请遵守当地法律法规，对于使用本程序所产生的任何后果，作者概不负责！
     \x1b[0m"
     );
-
+    let proxy_addr = match SocketAddr::from_str(SETTINGS.proxy_addr.as_str()) {
+        Ok(addr) => addr,
+        Err(e) => {
+            error!(
+                "Failed to parse proxy address: {:?}, url: {}",
+                e, SETTINGS.proxy_addr
+            );
+            return;
+        }
+    };
     let (tx, rx) = channel::<(Bytes, char)>(100);
     let parser = Parser::new();
     let proxy = Proxy::builder()
-        .with_addr(SocketAddr::from(([127, 0, 0, 1], 23410)))
+        .with_addr(proxy_addr)
         .with_rustls_client()
         .with_ca(ca)
         .with_websocket_handler(Handler(tx.clone()))

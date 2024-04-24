@@ -30,5 +30,6 @@
         "ActionNewCard",
         "ActionGangResultEnd"
     ],
+    "PROXY_ADDR": "127.0.0.1:23410",
     "API_URL": "https://localhost:12121/"
 }
