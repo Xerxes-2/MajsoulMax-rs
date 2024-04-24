@@ -31,7 +31,7 @@ pub struct Parser {
     total: usize,
     respond_type: HashMap<usize, (Arc<str>, MessageDescriptor)>,
     proto_json: &'static JsonValue,
-    pool: &'static DescriptorPool,
+    pub pool: &'static DescriptorPool,
 }
 
 pub fn dyn_to_json(msg: DynamicMessage) -> Result<JsonValue> {
