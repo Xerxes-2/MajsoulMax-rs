@@ -10,7 +10,7 @@ use serde::Serialize;
 use serde_json::{json, Map, Value as JsonValue};
 use std::future::Future;
 use tokio::{sync::mpsc::Receiver, time::sleep};
-use tracing::{debug, error, info};
+use tracing::{debug, error, info, instrument};
 
 #[derive(Serialize, Debug)]
 struct Action {
@@ -18,6 +18,7 @@ struct Action {
     pub data: JsonValue,
 }
 
+#[instrument]
 pub async fn helper_worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Parser) {
     loop {
         let (buf, direction_char) = match receiver.recv().await {
@@ -47,8 +48,8 @@ pub async fn helper_worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Pa
                 continue;
             }
         };
-        info!(
-            "监听到: {}, {}, {:?}, {}",
+        debug!(
+            "Method: {}, {}, {:?}, {}",
             direction_char, parsed.id, parsed.msg_type, parsed.method_name
         );
         if direction_char == '\u{2191}' {

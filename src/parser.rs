@@ -26,11 +26,12 @@ pub struct LiqiMessage {
     pub data: JsonValue,
 }
 
+#[derive(Debug)]
 pub struct Parser {
     total: usize,
     respond_type: HashMap<usize, (Arc<str>, MessageDescriptor)>,
     proto_json: &'static JsonValue,
-    pub pool: DescriptorPool,
+    pool: &'static DescriptorPool,
 }
 
 pub fn dyn_to_json(msg: DynamicMessage) -> Result<JsonValue> {
@@ -43,8 +44,7 @@ impl Parser {
             total: 0,
             respond_type: HashMap::new(),
             proto_json: &SETTINGS.proto_json,
-            pool: DescriptorPool::decode(SETTINGS.desc.as_slice())
-                .expect("Failed to decode liqi.desc"),
+            pool: &SETTINGS.desc,
         }
     }
 

@@ -33,17 +33,21 @@ impl WebSocketHandler for Handler {
 
         debug!("{} {}", direction_char, uri);
 
-        if let Message::Binary(ref buf) = msg {
-            if let Err(e) = self
-                .0
-                .send((Bytes::copy_from_slice(buf), direction_char))
-                .await
-            {
-                error!("Failed to send message to channel: {:?}", e);
+        if SETTINGS.helper_on() {
+            if let Message::Binary(ref buf) = msg {
+                if let Err(e) = self
+                    .0
+                    .send((Bytes::copy_from_slice(buf), direction_char))
+                    .await
+                {
+                    error!("Failed to send message to channel: {:?}", e);
+                }
             }
         }
 
-        // TODO: MajSoul Mod
+        if SETTINGS.mod_on() {
+            // TODO: MajSoul Mod
+        }
 
         Some(msg)
     }
@@ -89,8 +93,8 @@ async fn main() {
             return;
         }
     };
+
     let (tx, rx) = channel::<(Bytes, char)>(100);
-    let parser = Parser::new();
     let proxy = Proxy::builder()
         .with_addr(proxy_addr)
         .with_rustls_client()
@@ -99,7 +103,10 @@ async fn main() {
         .with_graceful_shutdown(shutdown_signal())
         .build();
 
-    tokio::spawn(helper_worker(rx, parser));
+    if SETTINGS.helper_on() {
+        // start helper worker
+        tokio::spawn(helper_worker(rx, Parser::new()));
+    }
 
     if let Err(e) = proxy.start().await {
         error!("{}", e);

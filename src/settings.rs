@@ -1,3 +1,4 @@
+use prost_reflect::DescriptorPool;
 use serde::Deserialize;
 use serde_json::Value;
 use std::collections::HashSet;
@@ -13,12 +14,16 @@ pub struct Settings {
     pub proxy_addr: String,
     #[serde(rename(deserialize = "API_URL"))]
     pub api_url: String,
+    #[serde(rename(deserialize = "HELPER_SWITCH"))]
+    helper_switch: i32,
+    #[serde(rename(deserialize = "MOD_SWITCH"))]
+    mod_switch: i32,
     #[serde(skip)]
     methods_set: HashSet<String>,
     #[serde(skip)]
     actions_set: HashSet<String>,
     #[serde(skip)]
-    pub desc: Vec<u8>,
+    pub desc: DescriptorPool,
     #[serde(skip)]
     pub proto_json: Value,
 }
@@ -48,12 +53,14 @@ impl Settings {
         settings.actions_set = settings.send_action.iter().cloned().collect();
 
         // read desc from file
-        settings.desc = std::fs::read(std::path::Path::new(exe_dir).join("liqi.desc"))
+        let bytes = std::fs::read(std::path::Path::new(exe_dir).join("liqi.desc"))
             .or_else(
                 // read pwd
                 |_| std::fs::read("liqi.desc"),
             )
             .expect("无法读取liqi.desc");
+
+        settings.desc = DescriptorPool::decode(bytes.as_slice()).expect("无法解析liqi.desc");
 
         // read liqi.json from file
         settings.proto_json = serde_json::from_str(
@@ -74,5 +81,13 @@ impl Settings {
 
     pub fn is_action(&self, action: &str) -> bool {
         self.actions_set.contains(action)
+    }
+
+    pub fn helper_on(&self) -> bool {
+        self.helper_switch != 0
+    }
+
+    pub fn mod_on(&self) -> bool {
+        self.mod_switch != 0
     }
 }

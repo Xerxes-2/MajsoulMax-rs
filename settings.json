@@ -31,5 +31,7 @@
         "ActionGangResultEnd"
     ],
     "PROXY_ADDR": "127.0.0.1:23410",
-    "API_URL": "https://localhost:12121/"
+    "API_URL": "https://localhost:12121/",
+    "HELPER_SWITCH": 1,
+    "MOD_SWITCH": 1
 }
