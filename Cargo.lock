@@ -890,7 +890,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mahjong_helper_majsoul_hudsucker"
+name = "majsoul_max_rs"
 version = "0.2.3"
 dependencies = [
  "anyhow",

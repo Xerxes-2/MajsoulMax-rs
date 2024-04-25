@@ -119,7 +119,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
                 };
                 actions.push(action);
             } else {
-                let mut value = decode_action(action_name, action_data, &parser.pool)?;
+                let mut value = decode_action(action_name, action_data, parser.pool)?;
                 if action_name == "ActionNewRound" {
                     value
                         .as_object_mut()

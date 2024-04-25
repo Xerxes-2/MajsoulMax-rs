@@ -12,9 +12,9 @@ use tokio::sync::mpsc::{channel, Sender};
 use tracing::*;
 
 mod helper;
+mod modder;
 mod parser;
 mod settings;
-mod modder;
 
 use helper::helper_worker;
 use parser::Parser;
@@ -104,15 +104,18 @@ async fn main() {
         }
     };
 
-    let mut new_settings = SETTINGS.clone();
-    match new_settings.update().await {
-        Err(e) => warn!("更新liqi失败: {}", e),
-        Ok(true) => {
-            info!("liqi更新成功, 请重启程序");
-            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-            return;
+    if SETTINGS.auto_update() {
+        info!("自动更新liqi已开启");
+        let mut new_settings = SETTINGS.clone();
+        match new_settings.update().await {
+            Err(e) => warn!("更新liqi失败: {}", e),
+            Ok(true) => {
+                info!("liqi更新成功, 请重启程序");
+                tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+                return;
+            }
+            Ok(false) => (),
         }
-        Ok(false) => (),
     }
 
     let (tx, rx) = channel::<(Bytes, char)>(100);

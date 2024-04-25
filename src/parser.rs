@@ -83,7 +83,7 @@ impl Parser {
                         .and_then(|n| n.as_str())
                         .ok_or(anyhow!("name field invalid"))?;
                     let b64 = b64.as_str().unwrap_or_default();
-                    let action_obj = decode_action(action_name, b64, &self.pool)?;
+                    let action_obj = decode_action(action_name, b64, self.pool)?;
                     data_obj
                         .as_object_mut()
                         .ok_or(anyhow!("data is not an object"))?

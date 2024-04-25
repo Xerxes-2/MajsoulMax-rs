@@ -101,7 +101,7 @@ impl Settings {
 
     pub async fn update(&mut self) -> Result<bool> {
         let version = get_version().await?;
-        let prefix = get_prefix(&version).await?;
+        let prefix = get_proto_prefix(&version).await?;
         if self.liqi_version == prefix {
             info!("无需更新liqi, 当前版本: {}", version);
             return Ok(false);
@@ -171,7 +171,7 @@ impl Settings {
                 info!("下载完成: {}", name);
                 Ok(())
             }
-            Err(e) => return Err(anyhow!("Failed to download asset: {:?}", e)),
+            Err(e) => Err(anyhow!("Failed to download asset: {:?}", e)),
         }
     }
 }
@@ -194,7 +194,7 @@ async fn get_version() -> Result<String> {
     }
 }
 
-async fn get_prefix(version: &str) -> Result<String> {
+async fn get_proto_prefix(version: &str) -> Result<String> {
     let req = REQUEST_CLIENT
         .get(format!("https://game.maj-soul.com/1/resversion{}.json", version).as_str())
         .timeout(std::time::Duration::from_secs(10))
@@ -204,6 +204,24 @@ async fn get_prefix(version: &str) -> Result<String> {
         Ok(resp) => {
             let json: Value = resp.json().await?;
             let prefix = json["res"]["res/proto/liqi.json"]["prefix"]
+                .as_str()
+                .ok_or(anyhow!("No prefix found"))?;
+            Ok(prefix.to_string())
+        }
+        Err(e) => Err(anyhow!("Failed to get prefix: {:?}", e)),
+    }
+}
+
+pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
+    let req = REQUEST_CLIENT
+        .get(format!("https://game.maj-soul.com/1/resversion{}.json", version).as_str())
+        .timeout(std::time::Duration::from_secs(10))
+        .send()
+        .await;
+    match req {
+        Ok(resp) => {
+            let json: Value = resp.json().await?;
+            let prefix = json["res"]["res/config/lqc.lqbin"]["prefix"]
                 .as_str()
                 .ok_or(anyhow!("No prefix found"))?;
             Ok(prefix.to_string())

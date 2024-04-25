@@ -1,4 +1,4 @@
-# mahjong_helper_majsoul_hudsucker
+# MajsoulMax-rs
 
 **本项目启发自[mahjong-helper-majsoul-mitmproxy](https://github.com/Avenshy/mahjong-helper-majsoul-mitmproxy)**
 
