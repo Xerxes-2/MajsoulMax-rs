@@ -14,6 +14,7 @@ use tracing::*;
 mod helper;
 mod parser;
 mod settings;
+mod modder;
 
 use helper::helper_worker;
 use parser::Parser;
@@ -123,8 +124,14 @@ async fn main() {
         .with_graceful_shutdown(shutdown_signal())
         .build();
 
+    if SETTINGS.mod_on() {
+        // start mod worker
+        info!("Mod worker started");
+    }
+
     if SETTINGS.helper_on() {
         // start helper worker
+        info!("Helper worker started");
         tokio::spawn(helper_worker(rx, Parser::new()));
     }
 
