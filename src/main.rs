@@ -91,6 +91,7 @@ async fn main() {
     请遵守当地法律法规，对于使用本程序所产生的任何后果，作者概不负责！
     \x1b[0m"
     );
+
     let proxy_addr = match SocketAddr::from_str(SETTINGS.proxy_addr.as_str()) {
         Ok(addr) => addr,
         Err(e) => {
@@ -101,6 +102,17 @@ async fn main() {
             return;
         }
     };
+
+    let mut new_settings = SETTINGS.clone();
+    match new_settings.update().await {
+        Err(e) => warn!("更新liqi失败: {}", e),
+        Ok(true) => {
+            info!("liqi更新成功, 请重启程序");
+            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+            return;
+        }
+        Ok(false) => (),
+    }
 
     let (tx, rx) = channel::<(Bytes, char)>(100);
     let proxy = Proxy::builder()
