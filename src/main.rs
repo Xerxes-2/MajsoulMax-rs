@@ -1,4 +1,5 @@
 use bytes::Bytes;
+use clap::Parser as ArgParser;
 use hudsucker::{
     certificate_authority::RcgenAuthority,
     rcgen::{CertificateParams, KeyPair},
@@ -20,6 +21,7 @@ use settings::Settings;
 
 const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
 pub static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
+pub static ARG: Lazy<Arg> = Lazy::new(Arg::parse);
 
 #[derive(Clone)]
 struct Handler(Sender<(Bytes, char)>);
@@ -57,6 +59,12 @@ async fn shutdown_signal() {
     tokio::signal::ctrl_c()
         .await
         .expect("Failed to install CTRL+C signal handler");
+}
+
+#[derive(ArgParser, Debug)]
+pub struct Arg {
+    #[clap(short, long, default_value = "./liqi_config/")]
+    config_dir: String,
 }
 
 #[tokio::main]

@@ -1,3 +1,4 @@
+use crate::ARG;
 use prost_reflect::DescriptorPool;
 use serde::Deserialize;
 use serde_json::Value;
@@ -30,22 +31,18 @@ pub struct Settings {
 
 impl Settings {
     pub fn new() -> Self {
-        let cur_exe = std::env::current_exe()
-            .expect("无法获取当前程序路径")
-            .canonicalize()
-            .expect("无法获取当前程序路径的绝对路径");
-        let exe_dir = cur_exe
-            .parent()
-            .expect("无法获取当前程序路径的父目录")
-            .to_str()
-            .expect("无法将目录转换为UTF-8字符串");
-        // read settings from file
-        let settings = std::fs::read_to_string(std::path::Path::new(exe_dir).join("settings.json"))
-            .or_else(
-                // read pwd
-                |_| std::fs::read_to_string("settings.json"),
-            )
-            .expect("无法读取settings.json");
+        let arg_dir = std::path::Path::new(&ARG.config_dir);
+        let exe = std::env::current_exe().expect("无法获取当前可执行文件路径");
+        let dir = if arg_dir.is_dir() {
+            arg_dir.to_path_buf()
+        } else {
+            // current executable path
+            exe.parent()
+                .expect("无法获取当前可执行文件路径的父目录")
+                .join("liqi_config")
+        };
+        let settings =
+            std::fs::read_to_string(dir.join("settings.json")).expect("无法读取settings.json");
         let mut settings: Settings =
             serde_json::from_str(&settings).expect("无法解析settings.json");
         info!("已载入配置: {:?}", settings);
@@ -53,23 +50,13 @@ impl Settings {
         settings.actions_set = settings.send_action.iter().cloned().collect();
 
         // read desc from file
-        let bytes = std::fs::read(std::path::Path::new(exe_dir).join("liqi.desc"))
-            .or_else(
-                // read pwd
-                |_| std::fs::read("liqi.desc"),
-            )
-            .expect("无法读取liqi.desc");
+        let bytes = std::fs::read(dir.join("liqi.desc")).expect("无法读取liqi.desc");
 
         settings.desc = DescriptorPool::decode(bytes.as_slice()).expect("无法解析liqi.desc");
 
         // read liqi.json from file
         settings.proto_json = serde_json::from_str(
-            &std::fs::read_to_string(std::path::Path::new(exe_dir).join("liqi.json"))
-                .or_else(
-                    // read pwd
-                    |_| std::fs::read_to_string("liqi.json"),
-                )
-                .expect("无法读取liqi.json"),
+            &std::fs::read_to_string(dir.join("liqi.json")).expect("无法读取liqi.json"),
         )
         .expect("无法解析liqi.json");
         settings
