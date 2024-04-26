@@ -893,6 +893,7 @@ dependencies = [
  "clap",
  "hudsucker",
  "once_cell",
+ "prost",
  "prost-reflect",
  "reqwest",
  "serde",

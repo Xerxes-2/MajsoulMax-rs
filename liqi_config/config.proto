@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package lq.config;
+
+message Field {
+  string field_name = 1;
+  uint32 array_length = 2; // 数组长度（数组有效）
+  string pb_type = 3;      // 类型
+  uint32 pb_index = 4;     // 存储的pb下标
+}
+
+message SheetMeta {
+  string category = 1;
+  string key = 2;
+}
+
+message SheetSchema {
+  string name = 1;
+  SheetMeta meta = 2;
+  repeated Field fields = 3;
+}
+
+message TableSchema {
+  string name = 1;
+  repeated SheetSchema sheets = 2;
+}
+
+// 单张表结构的数据内容
+message SheetData {
+  string table = 1;
+  string sheet = 2;
+  repeated bytes data = 3;
+}
+
+message ConfigTables {
+
+  // 版本 x.y.z
+  string version = 1;
+
+  // 结构hash值
+  string header_hash = 2;
+
+  // 所有表结构
+  repeated TableSchema schemas = 3;
+
+  // 所有表数据
+  repeated SheetData datas = 4;
+}

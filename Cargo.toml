@@ -3,6 +3,11 @@ name = "majsoul_max_rs"
 version = "0.2.3"
 edition = "2021"
 
+[lib]
+
+[[bin]]
+name = "majsoul_max_rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -22,3 +27,4 @@ tokio = { version = "1.37.0", features = ["rt-multi-thread"] }
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
 clap = { version = "4.5.4", features = ["derive"] }
+prost = "0.12.4"

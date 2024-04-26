@@ -1,29 +1,15 @@
 use bytes::Bytes;
-use clap::Parser as ArgParser;
 use hudsucker::{
     certificate_authority::RcgenAuthority,
     rcgen::{CertificateParams, KeyPair},
     tokio_tungstenite::tungstenite::Message,
     *,
 };
-use once_cell::sync::Lazy;
 use std::{net::SocketAddr, str::FromStr};
 use tokio::sync::mpsc::{channel, Sender};
 use tracing::*;
 
-mod helper;
-mod modder;
-mod parser;
-mod settings;
-
-use helper::helper_worker;
-use modder::MOD_SETTINGS;
-use parser::Parser;
-use settings::Settings;
-
-const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
-pub static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
-pub static ARG: Lazy<Arg> = Lazy::new(Arg::parse);
+use majsoul_max_rs::{helper::helper_worker, modder::MOD_SETTINGS, parser::Parser, SETTINGS};
 
 #[derive(Clone)]
 struct Handler(Sender<(Bytes, char)>);
@@ -61,12 +47,6 @@ async fn shutdown_signal() {
     tokio::signal::ctrl_c()
         .await
         .expect("Failed to install CTRL+C signal handler");
-}
-
-#[derive(ArgParser, Debug)]
-pub struct Arg {
-    #[clap(short, long, default_value = "./liqi_config/")]
-    config_dir: String,
 }
 
 #[tokio::main]
@@ -131,12 +111,13 @@ async fn main() {
     if SETTINGS.mod_on() {
         // start mod worker
         info!("Mod worker started");
-        if MOD_SETTINGS.auto_update() {
+        if MOD_SETTINGS.read().await.auto_update() {
             info!("自动更新mod已开启");
-            let mut new_mod_settings = MOD_SETTINGS.clone();
+            let mut new_mod_settings = MOD_SETTINGS.read().await.clone();
             match new_mod_settings.get_lqc().await {
                 Err(e) => warn!("更新mod失败: {}", e),
-                Ok(_) => {
+                Ok(false) => (),
+                Ok(true) => {
                     info!("mod更新成功, 请重启程序");
                     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
                     return;
@@ -148,7 +129,7 @@ async fn main() {
     if SETTINGS.helper_on() {
         // start helper worker
         info!("Helper worker started");
-        tokio::spawn(helper_worker(rx, Parser::new()));
+        tokio::spawn(helper_worker(rx, Parser::default()));
     }
 
     if let Err(e) = proxy.start().await {

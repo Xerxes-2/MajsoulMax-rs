@@ -234,7 +234,7 @@ pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ModSettings {
     #[serde(default)]
     pub character: i32,
@@ -266,17 +266,38 @@ pub struct ModSettings {
     pub res: Bytes,
 }
 
+impl Default for ModSettings {
+    fn default() -> Self {
+        ModSettings {
+            character: 200001,
+            characters: HashMap::new(),
+            nickname: String::new(),
+            star_character: Vec::new(),
+            hint_switch: 0,
+            title: 0,
+            loading_bg: Vec::new(),
+            emoji_switch: 0,
+            views: Default::default(),
+            view: 0,
+            show_server: 1,
+            auto_update: 1,
+            version: String::new(),
+            res: Bytes::new(),
+        }
+    }
+}
+
 impl ModSettings {
     pub fn new() -> Self {
         // read settings.mod.json, if not exist, create a new one
         let dir = SETTINGS.dir.join("settings.mod.json");
-        let settings = std::fs::read_to_string(&dir);
+        let settings = std::fs::read_to_string(dir);
         let settings = match settings {
             Ok(settings) => settings,
             Err(_) => {
-                let default = serde_json::to_string_pretty(&ModSettings::default()).unwrap();
-                std::fs::write(&dir, &default).expect("无法写入settings.mod.json");
-                default
+                let default = ModSettings::default();
+                default.write().expect("无法写入settings.mod.json");
+                return default;
             }
         };
         let mut settings: ModSettings =
@@ -304,14 +325,14 @@ impl ModSettings {
         self.auto_update != 0
     }
 
-    pub async fn get_lqc(&mut self) -> Result<()> {
+    pub async fn get_lqc(&mut self) -> Result<bool> {
         // get lqc.lqbin prefix from https://game.maj-soul.com/1/{prefix}/res/config/lqc.lqbin
         let version = get_version().await?;
         let prefix = get_lqbin_prefix(&version).await?;
 
         if self.version == prefix {
             info!("无需更新lqc.lqbin, 当前版本: {}", version);
-            return Ok(());
+            return Ok(false);
         }
         info!(
             "lqc.lqbin需要更新, 当前版本: {}, 最新版本: {}",
@@ -339,9 +360,15 @@ impl ModSettings {
                 // write settings.mod.json
                 let dir = SETTINGS.dir.join("settings.mod.json");
                 std::fs::write(dir, serde_json::to_string_pretty(self)?)?;
-                Ok(())
+                Ok(true)
             }
             Err(e) => Err(anyhow!("Failed to download lqc.lqbin: {:?}", e)),
         }
+    }
+
+    pub fn write(&self) -> Result<()> {
+        let dir = SETTINGS.dir.join("settings.mod.json");
+        std::fs::write(dir, serde_json::to_string_pretty(self)?)?;
+        Ok(())
     }
 }

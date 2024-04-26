@@ -1,0 +1,2148 @@
+syntax = "proto3";
+
+message AbMatchMatchInfo {
+   uint32 id = 1;
+   uint32 ab_match_activity_id = 2;
+   uint32 match_activity_id = 3;
+   string desktop_id_list = 4;
+   uint32 consume_id = 5;
+   string buy_in_condition = 6;
+   uint32 mail_template_id = 7;
+   uint32 max_match_count = 8;
+   uint32 reward_id = 9;
+   uint32 point_id = 10;
+   uint32 match_level = 11;
+   uint32 priority = 12;
+}
+
+message AbMatchPoint {
+   uint32 id = 1;
+   uint32 rank = 2;
+   string desktop_id_list = 3;
+   uint32 point = 4;
+}
+
+message AbMatchRewardSeq {
+   uint32 id = 1;
+   uint32 point_lower = 2;
+   uint32 point_upper = 3;
+   string reward = 4;
+   uint32 chest_mark = 5;
+}
+
+message AbMatchConsumeSeq {
+   uint32 id = 1;
+   uint32 match_count = 2;
+   uint32 item_id = 3;
+   uint32 item_count = 4;
+}
+
+message AchievementAchievement {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   string desc_chs = 7;
+   string desc_chs_t = 8;
+   string desc_jp = 9;
+   string desc_en = 10;
+   string desc_kr = 11;
+   uint32 rare = 12;
+   uint32 locked = 13;
+   uint32 group_id = 14;
+   uint32 sort = 15;
+   uint32 segment_id = 16;
+   uint32 base_task = 17;
+   string reward = 18;
+   uint32 hidden = 19;
+   uint32 deprecated = 20;
+}
+
+message AchievementAchievementGroup {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   string img = 7;
+   string reward = 8;
+   uint32 percentage = 9;
+   uint32 deprecated = 10;
+   uint32 sort = 11;
+}
+
+message ActivityActivity {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   string type = 9;
+   uint32 need_popout = 10;
+}
+
+message ActivityTask {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 day = 3;
+   uint32 base_task_id = 4;
+   uint32 reward_id = 5;
+   uint32 reward_count = 6;
+   string hidden_reward = 7;
+   uint32 limit_id = 8;
+   uint32 deprecated = 9;
+}
+
+message ActivityExchange {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 reward_id = 3;
+   uint32 reward_count = 4;
+   uint32 consume_id = 5;
+   uint32 consume_count = 6;
+   int32 exchange_limit = 7;
+   uint32 item_limit_id = 8;
+   uint32 item_limit_count = 9;
+}
+
+message ActivityChestUp {
+   uint32 activity_id = 1;
+   uint32 chest_id = 2;
+   uint32 title_str_id = 4;
+   string str_id = 5;
+   uint32 chara_str_id = 6;
+   uint32 item_str_id = 7;
+   string img = 8;
+   string title_img = 9;
+   uint32 typeset = 10;
+   uint32 up_items_type = 11;
+  repeated uint32 up_items = 12;
+}
+
+message ActivityGameTask {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 base_task_id = 3;
+   uint32 reward_id = 4;
+   uint32 reward_count = 5;
+   string hidden_reward = 6;
+   uint32 limit_id = 7;
+   uint32 deprecated = 8;
+}
+
+message ActivityGamePoint {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 point_id = 3;
+   uint32 point = 4;
+   uint32 res_id = 5;
+   uint32 res_count = 6;
+   int32 unlock_day = 7;
+   uint32 node_mark = 8;
+   uint32 image_mark = 9;
+}
+
+message ActivityRank {
+   uint32 activity_id = 1;
+   uint32 leaderboard_id = 2;
+   uint32 rank_reward_id = 3;
+   uint32 require_point = 4;
+}
+
+message ActivityRankReward {
+   uint32 id = 1;
+   uint32 lower_rank_bound = 2;
+   string reward = 3;
+}
+
+message ActivityFlipTask {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 base_task_id = 3;
+   string reward = 4;
+   uint32 matrix_x = 5;
+   uint32 matrix_y = 6;
+   uint32 is_reward = 7;
+}
+
+message ActivityFlipInfo {
+   uint32 id = 1;
+   uint32 flip_count = 2;
+   string init_task_list = 3;
+   string start_time = 4;
+   string end_time = 5;
+}
+
+message ActivityDailySign {
+   uint32 activity_id = 1;
+   uint32 reward_id = 2;
+   uint32 reward_count = 3;
+   uint32 day = 4;
+}
+
+message ActivityRichmanInfo {
+   uint32 activity_id = 1;
+   uint32 map_id = 2;
+   uint32 map_distance = 3;
+   uint32 chest_id = 4;
+   uint32 consume_item_id = 5;
+   uint32 special_item_id = 6;
+   uint32 step_bank_save = 7;
+   uint32 finish_bank_save = 8;
+   uint32 finish_reward_seq = 9;
+   uint32 step_exp = 10;
+   uint32 finish_exp = 11;
+   uint32 item_worth_pool = 12;
+   uint32 min_avg_worth = 13;
+   uint32 max_avg_worth = 14;
+   uint32 chest_pool_seq = 15;
+}
+
+message ActivityRichmanMap {
+   uint32 map_id = 1;
+   uint32 location = 2;
+   uint32 pos_x = 3;
+   uint32 pos_y = 4;
+   uint32 piece_face = 5;
+   uint32 type = 6;
+   uint32 param = 7;
+   uint32 bonus_type = 8;
+   uint32 worth = 9;
+}
+
+message ActivityRichmanLevel {
+   uint32 activity_id = 1;
+   string name = 2;
+   uint32 id = 3;
+   uint32 exp = 4;
+   uint32 buff = 5;
+}
+
+message ActivityRichmanEvent {
+   uint32 event_id = 1;
+   uint32 activity_id = 2;
+   uint32 event_type = 3;
+   uint32 weight = 4;
+  repeated uint32 param = 5;
+}
+
+message ActivityPeriodTask {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 base_task_id = 3;
+   string reward = 4;
+   uint32 interval = 5;
+   uint32 progress_limit = 6;
+   uint32 progress_limit_interval = 7;
+   uint32 reward_limit_day = 8;
+   string accessible_days = 9;
+   uint32 unlock_day = 10;
+   uint32 deprecated = 11;
+   uint32 node_mark = 12;
+}
+
+message ActivityRandomTaskPool {
+   uint32 pool_id = 1;
+   uint32 task_id = 2;
+   uint32 activity_id = 3;
+   uint32 base_task_id = 4;
+   uint32 reward_id = 5;
+   uint32 reward_count = 6;
+   uint32 weight = 7;
+   string hidden_reward = 8;
+   uint32 limit_id = 9;
+}
+
+message ActivityRandomTaskInfo {
+   uint32 activity_id = 1;
+  repeated uint32 pool_id = 2;
+}
+
+message ActivityRichmanRewardSeq {
+   uint32 id = 1;
+   uint32 count = 2;
+   string reward = 3;
+}
+
+message ActivityActivityBuff {
+   uint32 buff_id = 1;
+   uint32 activity_id = 2;
+   uint32 buff_level = 3;
+   uint32 buff_type = 4;
+   uint32 upgrade_resource_id = 5;
+   uint32 upgrade_resource_count = 6;
+   uint32 effect = 7;
+  repeated uint32 unlock_params = 8;
+   uint32 effect_desc = 9;
+}
+
+message ActivityBuffCondition {
+}
+
+message ActivityGamePointInfo {
+   uint32 activity_id = 1;
+   uint32 filter_id = 2;
+   uint32 reward_mail_template = 3;
+   int32 max_point_limit_day = 4;
+   uint32 should_rank = 5;
+}
+
+message ActivityGamePointRank {
+   uint32 activity_id = 1;
+   uint32 rank_rate_lower = 2;
+   uint32 rank_rate_upper = 3;
+   string reward = 4;
+}
+
+message ActivityGamePointFilter {
+   uint32 id = 1;
+   string has_robot = 2;
+   string category = 3;
+   string room = 4;
+   string mode = 5;
+   uint32 point_coe = 6;
+}
+
+message ActivityActivityRoom {
+   uint32 activity_id = 1;
+   uint32 sort = 2;
+   string str_name = 3;
+   string str_rule = 4;
+   uint32 dora3_mode = 5;
+   uint32 begin_open_mode = 6;
+   uint32 muyu_mode = 7;
+   uint32 xuezhan_mode = 8;
+   uint32 huanzhang_mode = 9;
+   uint32 chuanma_mode = 10;
+   uint32 jiuchao_mode = 11;
+   uint32 reveal_discard = 12;
+   uint32 field_spell_mode = 13;
+   uint32 zhanxing_mode = 14;
+   uint32 tianming_mode = 15;
+   uint32 yongchang_mode = 16;
+   uint32 hunzhiyiji_mode = 17;
+}
+
+message ActivitySnsActivity {
+   uint32 id = 1;
+   uint32 disable = 2;
+   uint32 pm = 3;
+   uint32 period = 4;
+   uint32 activity_id = 5;
+   uint32 content_str_id = 6;
+   uint32 parent_id = 7;
+   uint32 char_id = 8;
+   uint32 char_str_id = 9;
+   uint32 reply_char_id = 10;
+   uint32 reply_char_str_id = 11;
+   uint32 choice_id = 12;
+   uint32 like = 13;
+   string unlock_time = 14;
+   uint32 unlock_item_id = 15;
+   uint32 unlock_item_count = 16;
+  repeated string content_image = 17;
+}
+
+message ActivityMineActivity {
+   uint32 activity_id = 1;
+   uint32 reward_group = 2;
+   string cost_item = 3;
+   uint32 map_size_x = 4;
+   uint32 map_size_y = 5;
+}
+
+message ActivityMineReward {
+   uint32 group_id = 1;
+   uint32 reward_id = 2;
+   string reward = 3;
+   uint32 type = 4;
+   uint32 x = 5;
+   uint32 y = 6;
+}
+
+message ActivityRpgActivity {
+   uint32 activity_id = 1;
+   uint32 base_hp = 2;
+   uint32 base_atk = 3;
+   uint32 base_dex = 4;
+   uint32 base_luk = 5;
+   uint32 ds_atk = 6;
+   uint32 special_heal = 7;
+  repeated uint32 chain_atk = 8;
+   uint32 monster_group = 9;
+   uint32 sanma_debuff = 10;
+   uint32 has_robot = 11;
+   string category = 12;
+   string mode = 13;
+   string room = 14;
+   uint32 daily_limit = 15;
+}
+
+message ActivityRpgMonsterGroup {
+   uint32 group_id = 1;
+   uint32 seq = 2;
+   uint32 type = 3;
+   uint32 hp = 4;
+   uint32 atk = 5;
+   string reward = 6;
+   uint32 season = 7;
+   string chapters = 8;
+   string imaget_path = 9;
+   string background = 10;
+   uint32 name_str_id = 11;
+}
+
+message ActivityArenaActivity {
+   uint32 activity_id = 1;
+   string match_time = 2;
+   string ticket_time_limit = 3;
+   uint32 ticket_item_id = 4;
+   string ticket_price = 5;
+   uint32 desktop_id = 6;
+   uint32 max_win_count = 7;
+   uint32 max_lose_count = 8;
+   uint32 reward_group = 9;
+   uint32 daily_ticket_limit = 10;
+   uint32 mail_template = 11;
+   uint32 arena_reward_display_group = 12;
+   uint32 level_limit = 13;
+}
+
+message ActivityArenaReward {
+   uint32 group_id = 1;
+   uint32 win_count = 2;
+   string reward = 3;
+}
+
+message ActivityArenaRewardDisplay {
+   uint32 group_id = 1;
+   uint32 win_count_min = 2;
+   uint32 win_count_max = 3;
+   uint32 reward_1 = 4;
+   string reward_1_remark = 5;
+   uint32 reward_2 = 6;
+   string reward_2_remark = 7;
+   uint32 reward_3 = 8;
+   string reward_3_remark = 9;
+   uint32 reward_4 = 10;
+   string reward_4_remark = 11;
+}
+
+message ActivitySegmentTask {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 base_task_id = 3;
+   uint32 max_finish_count = 4;
+   string reward = 5;
+   uint32 interval = 6;
+}
+
+message ActivityFeedActivityInfo {
+   uint32 activity_id = 1;
+   uint32 max_feed_count = 2;
+   uint32 feed_reward_id = 3;
+   uint32 friend_send_limit = 4;
+   uint32 friend_recv_limit = 5;
+  repeated uint32 food_item_id = 6;
+}
+
+message ActivityFeedActivityReward {
+   uint32 id = 1;
+   uint32 count = 2;
+   string reward = 3;
+   uint32 img_stage = 4;
+}
+
+message ActivityVoteActivity {
+   uint32 id = 1;
+   uint32 vote_item = 2;
+   string choice_id_list = 3;
+   string vote_end_time = 4;
+}
+
+message ActivityRpgV2Activity {
+   uint32 activity_id = 1;
+   uint32 base_atk = 2;
+   uint32 monster_group = 3;
+   uint32 sanma_debuff = 4;
+   uint32 special_debuff = 5;
+   uint32 has_robot = 6;
+   string category = 7;
+   string mode = 8;
+   string room = 9;
+   uint32 daily_limit = 10;
+   uint32 mail_template_id = 11;
+}
+
+message ActivitySpotActivity {
+   uint32 unique_id = 1;
+   uint32 activity_id = 2;
+   uint32 dep = 3;
+   uint32 limit_day = 4;
+   uint32 spot_group = 5;
+   string unlock_spot_item = 6;
+   string content_path = 7;
+   string unlock_item = 8;
+   uint32 unlock_by_ending_id = 9;
+  repeated string unlock_ending_id = 10;
+  repeated uint32 ending_id = 11;
+  repeated uint32 ending_id_dep = 12;
+   string reward = 13;
+}
+
+message ActivityActivityItem {
+   uint32 activity_id = 1;
+   string item_list = 2;
+}
+
+message ActivityUpgradeActivity {
+   uint32 activity_id = 1;
+   uint32 mail_id = 2;
+   string consume_item = 3;
+   uint32 total_reward_id = 4;
+  repeated uint32 reward_id = 5;
+}
+
+message ActivityUpgradeActivityReward {
+   uint32 id = 1;
+   uint32 level = 2;
+   string reward = 3;
+   uint32 unlock_day = 4;
+   uint32 highlight = 5;
+}
+
+message ActivityFriendGiftActivity {
+   uint32 activity_id = 1;
+   uint32 friend_send_limit = 2;
+   uint32 friend_send_consume = 3;
+   uint32 friend_recv_limit = 4;
+   uint32 extra_gift = 5;
+  repeated uint32 gift_item_id = 6;
+}
+
+message ActivityUpgradeActivityDisplay {
+   uint32 id = 1;
+   uint32 level = 2;
+   uint32 display = 3;
+}
+
+message ActivityActivityDesktop {
+   uint32 activity_id = 1;
+   uint32 desktop_id = 2;
+   uint32 interval = 3;
+   uint32 interval_type = 4;
+}
+
+message ActivityGachaActivityInfo {
+   uint32 activity_id = 1;
+   uint32 gacha_pool = 2;
+   uint32 gacha_control = 3;
+   uint32 sp_trigger_times = 4;
+   string sp_rewards = 5;
+   string consume = 6;
+}
+
+message ActivityGachaPool {
+   uint32 pool_id = 1;
+   uint32 reward_id = 2;
+   uint32 count = 3;
+   uint32 rare = 4;
+   string item = 5;
+}
+
+message ActivityGachaControl {
+}
+
+message ActivityTaskDisplay {
+   uint32 activity_id = 1;
+   uint32 day = 2;
+   uint32 task_serial_number = 3;
+   uint32 task_type = 4;
+   uint32 period_task_id = 5;
+   uint32 answer = 6;
+   uint32 right_str = 7;
+   uint32 wrong_str = 8;
+}
+
+message ActivitySimulationActivityInfo {
+   uint32 activity_id = 1;
+   uint32 stamina_item_id = 2;
+}
+
+message ActivityRewardMail {
+   uint32 activity_id = 1;
+   uint32 mail_template_id = 2;
+}
+
+message ActivityCombiningActivityInfo {
+   uint32 activity_id = 1;
+  repeated uint32 craft_bin = 2;
+  repeated string craft_bin_price = 3;
+  repeated uint32 craft_bin_unlock = 4;
+   uint32 point_item = 5;
+}
+
+message ActivityCombiningCraftPool {
+   uint32 bin_id = 1;
+   uint32 craft_id = 2;
+}
+
+message ActivityCombiningMap {
+   uint32 activity_id = 1;
+   uint32 point_item_id = 2;
+   uint32 point_item_count = 3;
+   uint32 workbench_count = 4;
+}
+
+message ActivityCombiningOrder {
+}
+
+message ActivityCombiningCraft {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 group = 3;
+   uint32 level = 5;
+   uint32 upgrade_craft_id = 6;
+   string order_price = 8;
+   uint32 if_bonus = 9;
+   string img_name = 10;
+}
+
+message ActivityChestReplaceUp {
+   uint32 chest_id = 2;
+}
+
+message ActivityVillageActivityInfo {
+   uint32 activity_id = 1;
+   uint32 worker_item_id = 2;
+   string round_consume = 3;
+   string random_building = 4;
+   uint32 food_item_id = 5;
+   uint32 trip_consume = 6;
+   uint32 trip_cold_down = 7;
+   uint32 trip_round = 8;
+  repeated string trip_reward = 9;
+  repeated string stage_require = 10;
+}
+
+message ActivityVillageBuilding {
+   uint32 activity_id = 1;
+   uint32 building_id = 2;
+   uint32 initial = 3;
+   uint32 building_name = 4;
+   uint32 level = 5;
+   uint32 next_level_id = 6;
+   string produce_item = 7;
+   string base_produce = 8;
+   string upgrade_item = 9;
+   uint32 max_worker_count = 10;
+   string upgrade_reward = 11;
+   uint32 building_stage = 12;
+   uint32 worker_consume = 13;
+   string func = 14;
+  repeated uint32 args = 15;
+   uint32 type = 16;
+}
+
+message ActivityVillageTask {
+   uint32 activity_id = 1;
+   uint32 mission_id = 2;
+   uint32 mission_str = 3;
+   string fruit_type = 4;
+   string consume = 5;
+   string reward = 6;
+   uint32 unlock_day = 7;
+   string unlock_point = 8;
+   uint32 if_loop = 9;
+}
+
+message ActivityLiverEventInfo {
+   uint32 activity_id = 1;
+   uint32 follower_amount = 2;
+   uint32 daily_follower_plus = 3;
+   uint32 intro_text = 4;
+   uint32 text_max_amount = 5;
+   string text_create_timer = 6;
+   string text_create_weight = 7;
+   uint32 rolltext_speed = 8;
+   string gift_weight = 9;
+   string rolltext_gift_time = 10;
+   uint32 key_item_id = 11;
+   string face_time_block = 12;
+   string face_weight = 13;
+}
+
+message ActivityLiverTextInfo {
+   uint32 activity_id = 1;
+   uint32 type = 2;
+   uint32 chara_id = 3;
+   uint32 mob_str_id = 4;
+   string normal_text = 5;
+   string gift_text = 6;
+}
+
+message ActivityFestivalActivity {
+   uint32 activity_id = 1;
+   uint32 funds_id = 2;
+   uint32 proposal_id = 3;
+   uint32 proposal_consume = 4;
+   uint32 daily_buy_limit = 5;
+   uint32 arrow_amount = 10;
+   uint32 max_amount = 11;
+   uint32 max_proposal_pos = 12;
+}
+
+message ActivityFestivalLevel {
+   uint32 activity_id = 1;
+   uint32 level = 2;
+   uint32 level_name = 3;
+   string level_require = 4;
+   string level_res = 5;
+   uint32 unlock_event_count = 6;
+}
+
+message ActivityFestivalProposal {
+   uint32 activity_id = 1;
+   uint32 proposal_id = 2;
+   uint32 unlock_level = 3;
+  repeated uint32 ending_group = 4;
+   uint32 client_name = 5;
+   string client_icon = 6;
+   uint32 proposal_text = 7;
+   uint32 option_text_a = 8;
+   uint32 option_text_b = 9;
+}
+
+message ActivityFestivalEvent {
+   uint32 activity_id = 1;
+   uint32 event_id = 2;
+   uint32 position = 3;
+   uint32 unlock_level = 4;
+  repeated uint32 ending_group = 5;
+   uint32 event_title = 6;
+   uint32 client_name = 7;
+   string client_icon = 8;
+   uint32 event_text = 9;
+   uint32 option_text_a = 10;
+   uint32 option_text_b = 11;
+}
+
+message ActivityFestivalEnding {
+   uint32 group_id = 1;
+   uint32 ending_id = 2;
+   uint32 ending_type = 3;
+   uint32 weight = 4;
+   string item_plus = 5;
+   string item_minus = 6;
+   int32 funds = 7;
+   uint32 ending_text = 8;
+}
+
+message AnimationAnimation {
+   uint32 id = 1;
+   string name = 2;
+   string type = 3;
+   uint32 lifetime = 4;
+   float speed = 5;
+  repeated uint32 keypoint = 6;
+}
+
+message AudioAudio {
+   uint32 id = 1;
+   string path = 2;
+   float time_length = 3;
+   string type = 4;
+}
+
+message AudioBgm {
+   uint32 id = 1;
+   uint32 auto_hide = 2;
+   string name_chs = 3;
+   string name_chs_t = 4;
+   string name_jp = 5;
+   string name_en = 6;
+   string name_kr = 7;
+   string path = 8;
+   float time_length = 9;
+   string type = 10;
+   string unlock_desc_chs = 11;
+   string unlock_desc_chs_t = 12;
+   string unlock_desc_jp = 13;
+   string unlock_desc_en = 14;
+   string unlock_desc_kr = 15;
+   uint32 unlock_item = 16;
+}
+
+message CharacterEmoji {
+   uint32 charid = 1;
+   uint32 sub_id = 2;
+   string unlock_desc_chs = 3;
+   string unlock_desc_chs_t = 4;
+   string unlock_desc_jp = 5;
+   string unlock_desc_en = 6;
+   string unlock_desc_kr = 7;
+   uint32 type = 8;
+   string view = 9;
+   uint32 audio = 10;
+   string after_unlock_desc_chs = 11;
+   string after_unlock_desc_chs_t = 12;
+   string after_unlock_desc_jp = 13;
+   string after_unlock_desc_en = 14;
+   string after_unlock_desc_kr = 15;
+   uint32 unlock_type = 16;
+  repeated uint32 unlock_param = 17;
+}
+
+message CharacterCutin {
+   uint32 skinid = 1;
+   string cutin_name = 2;
+   string effect = 3;
+   string atlas = 4;
+   int32 char_x = 5;
+   int32 char_y = 6;
+   uint32 char_width = 7;
+   uint32 char_height = 8;
+}
+
+message CharacterSkin {
+   uint32 skinid = 1;
+   uint32 spine_layers = 2;
+  repeated string effects = 3;
+   string audio_celebrate = 4;
+   string audio_idle = 5;
+   string audio_greeting = 6;
+   string audio_click = 7;
+}
+
+message ChestChest {
+   uint32 id = 1;
+   uint32 type = 2;
+   string name_chs = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string desc_chs = 6;
+   string desc_jp = 7;
+   string desc_en = 8;
+   string desc_kr = 9;
+   string img = 10;
+   uint32 gift = 11;
+   uint32 currency = 12;
+   uint32 price = 13;
+   uint32 price10 = 14;
+   uint32 ticket_id = 15;
+   uint32 ticket_10_id = 16;
+   uint32 faith_id = 22;
+   uint32 zone = 23;
+   uint32 sort = 24;
+}
+
+message ChestPool {
+}
+
+message ChestPoolSeq {
+}
+
+message ChestItemPool {
+}
+
+message ChestChestShop {
+   uint32 id = 1;
+   uint32 chest_id = 2;
+   string icon = 3;
+   string name_chs = 4;
+   string name_chs_t = 5;
+   string name_jp = 6;
+   string name_en = 7;
+   uint32 item_id = 8;
+   uint32 price = 9;
+   uint32 need_amount = 10;
+   uint32 check_activity = 11;
+   string launch_time = 12;
+   uint32 remove_limit_mark = 13;
+   uint32 sort = 14;
+}
+
+message ChestPreview {
+   uint32 chest_id = 1;
+   uint32 item_id = 2;
+   string type = 3;
+   uint32 check_activity = 4;
+}
+
+message ChestUp {
+}
+
+message ChestItemPrice {
+}
+
+message ChestReplaceUp {
+   uint32 id = 1;
+   uint32 replace_pool_id = 2;
+   uint32 count = 3;
+   uint32 activity_id = 5;
+   uint32 count_id = 6;
+   uint32 type = 7;
+}
+
+message ChestReplacePool {
+   uint32 id = 1;
+   uint32 resource_id = 2;
+   uint32 is_replace = 4;
+   uint32 add_count = 5;
+}
+
+message ComposeCharacompose {
+   uint32 id = 1;
+   uint32 item_id = 2;
+   uint32 item_num = 3;
+   uint32 chara_id = 4;
+}
+
+message ContestContest {
+   string id = 1;
+   int32 int_value = 2;
+}
+
+message DesktopMatchmode {
+   uint32 id = 1;
+   uint32 is_open = 2;
+   uint32 match_group = 3;
+   uint32 type = 4;
+   uint32 activity_id = 5;
+   uint32 open_guyi = 6;
+   uint32 dora3_mode = 7;
+   uint32 begin_open_mode = 8;
+   uint32 muyu_mode = 9;
+   uint32 xuezhan_mode = 10;
+   uint32 chuanma_mode = 11;
+   uint32 huanzhang_mode = 12;
+   uint32 jiuchao_mode = 13;
+   uint32 reveal_discard = 14;
+   uint32 field_spell_mode = 15;
+   uint32 zhanxing_mode = 16;
+   uint32 tianming_mode = 17;
+   uint32 yongchang_mode = 18;
+   uint32 hunzhiyiji_mode = 19;
+   uint32 room = 20;
+   uint32 mode = 21;
+   uint32 can_sumup = 22;
+   string room_name_chs = 23;
+   string room_name_chs_t = 24;
+   string room_name_jp = 25;
+   string room_name_en = 26;
+   string room_name_kr = 27;
+   int32 glimit_floor = 28;
+   int32 glimit_ceil = 29;
+   int32 gcarry = 30;
+   int32 exchange_rate = 31;
+   int32 levelpoint1 = 32;
+   int32 levelpoint2 = 33;
+   int32 levelpoint3 = 34;
+   int32 levelpoint4 = 35;
+   int32 fish_point = 36;
+   int32 init_point = 37;
+   int32 back_point = 38;
+   int32 count_point = 39;
+  repeated int32 buchang = 40;
+   uint32 level_limit = 41;
+   uint32 level_limit_ceil = 42;
+   int32 tip = 43;
+   int32 friendship = 44;
+   uint32 chest_id = 45;
+  repeated uint32 chest_exp_add = 46;
+   uint32 level_match = 47;
+   uint32 level_match_range = 48;
+   uint32 level_match_max = 49;
+}
+
+message DesktopChest {
+   uint32 id = 1;
+   uint32 exp_step = 2;
+   string name_chs = 3;
+   string name_chs_t = 4;
+   string name_jp = 5;
+   string name_en = 6;
+   string name_kr = 7;
+   string icon = 8;
+   uint32 reward_pool = 9;
+   uint32 select_count = 10;
+   uint32 repeated = 11;
+}
+
+message DesktopSettings {
+   string key = 1;
+   int32 int_value = 2;
+}
+
+message DesktopFieldSpell {
+   uint32 field = 1;
+   uint32 id = 2;
+   string cardname = 4;
+   uint32 sord_card_id = 5;
+}
+
+message EventsSoscoin {
+   uint32 id = 1;
+   uint32 level_limit = 2;
+   uint32 level3_limit = 3;
+   uint32 gold_limit = 4;
+   uint32 gold_num = 5;
+   string desc_chs = 6;
+   string desc_chs_t = 7;
+   string desc_jp = 8;
+   string desc_en = 9;
+   string desc_kr = 10;
+}
+
+message EventsDailyevent {
+   uint32 id = 1;
+   uint32 reward_type = 2;
+   uint32 reward_num = 3;
+   string desc_chs = 4;
+   string desc_chs_t = 5;
+   string desc_jp = 6;
+   string desc_en = 7;
+   string desc_kr = 8;
+   uint32 active_type = 9;
+   uint32 type = 11;
+   uint32 target = 12;
+  repeated string param = 13;
+   string level_limit = 14;
+}
+
+message EventsBaseTask {
+   uint32 id = 1;
+   string desc_chs = 2;
+   string desc_chs_t = 3;
+   string desc_jp = 4;
+   string desc_en = 5;
+   string desc_kr = 6;
+   uint32 type = 7;
+   uint32 target = 8;
+  repeated string param = 9;
+}
+
+message ExchangeExchange {
+   uint32 id = 1;
+   uint32 source_currency = 2;
+   int32 source_value = 3;
+   uint32 target_currency = 4;
+   int32 target_value = 5;
+   string icon = 6;
+   string name_chs = 7;
+   string name_chs_t = 8;
+   string name_jp = 9;
+   string name_en = 10;
+   string name_kr = 11;
+   string desc_chs = 12;
+   string desc_chs_t = 13;
+   string desc_jp = 14;
+   string desc_en = 15;
+   string desc_kr = 16;
+}
+
+message ExchangeSearchexchange {
+   uint32 id = 1;
+   uint32 source_currency = 2;
+   int32 source_value = 3;
+   uint32 target_currency = 4;
+   int32 target_value = 5;
+   string icon = 6;
+   string name_chs = 7;
+   string name_chs_t = 8;
+   string name_jp = 9;
+   string name_en = 10;
+   string name_kr = 11;
+   string desc_chs = 12;
+   string desc_chs_t = 13;
+   string desc_jp = 14;
+   string desc_en = 15;
+   string desc_kor = 16;
+}
+
+message ExchangeFushiquanexchange {
+   uint32 id = 1;
+   uint32 source_currency = 2;
+   int32 source_value = 3;
+   uint32 target_currency = 4;
+   int32 target_value = 5;
+   string icon = 6;
+   string name_chs = 7;
+   string name_chs_t = 8;
+   string name_jp = 9;
+   string name_en = 10;
+   string name_kr = 11;
+   string desc_chs = 12;
+   string desc_chs_t = 13;
+   string desc_jp = 14;
+   string desc_en = 15;
+   string desc_kr = 16;
+}
+
+message FanFan {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   uint32 xuanshang = 7;
+   uint32 yiman = 8;
+   uint32 fan_menqing = 9;
+   uint32 fan_fulu = 10;
+   uint32 show_index = 11;
+   string sound = 12;
+   uint32 is_guyi = 13;
+   uint32 rarity = 14;
+   uint32 show_range_1 = 15;
+   string show_range_2 = 16;
+   uint32 merge_id = 17;
+}
+
+message FandescFandesc {
+   uint32 id = 1;
+   uint32 tag = 2;
+   string name_chs = 3;
+   string name_chs_t = 4;
+   string name_jp = 5;
+   string name_en = 6;
+   string name_kr = 7;
+   string desc_chs = 8;
+   string desc_chs_t = 9;
+   string desc_jp = 10;
+   string desc_en = 11;
+   string desc_kr = 12;
+   string desc2_chs = 13;
+   string desc2_jp = 14;
+   string desc2_en = 15;
+   string desc2_chs_t = 16;
+   string desc2_kr = 17;
+   string case = 18;
+   uint32 show = 19;
+   uint32 mode = 20;
+}
+
+message GameLiveSelectFilters {
+   uint32 id = 1;
+   uint32 category = 2;
+   uint32 mode_id = 3;
+   uint32 mode = 4;
+   uint32 tournament_id = 5;
+   uint32 open = 6;
+   uint32 initial = 7;
+   string name1_chs = 8;
+   string name1_chs_t = 9;
+   string name1_jp = 10;
+   string name1_en = 11;
+   string name1_kr = 12;
+   string name2_chs = 13;
+   string name2_chs_t = 14;
+   string name2_jp = 15;
+   string name2_en = 16;
+   string name2_kr = 17;
+}
+
+message InfoError {
+   uint32 id = 1;
+   string chs = 2;
+   string chs_t = 3;
+   string jp = 4;
+   string en = 5;
+   string kr = 6;
+}
+
+message InfoForbidden {
+   string word = 1;
+   uint32 type_chs = 2;
+   uint32 near_chs = 3;
+   uint32 chs = 4;
+   uint32 type_us = 5;
+   uint32 near_us = 6;
+   uint32 us = 7;
+   uint32 type_jp = 8;
+   uint32 near_jp = 9;
+   uint32 jp = 10;
+}
+
+message InfoNear {
+   string word1 = 1;
+   string word2 = 2;
+   string word3 = 3;
+   string word4 = 4;
+   string word5 = 5;
+}
+
+message InfoTranslate {
+   string original = 1;
+   string chs = 2;
+   string chs_t = 3;
+   string jp = 4;
+   string en = 5;
+   string kr = 6;
+}
+
+message ItemDefinitionCurrency {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   string desc_chs = 7;
+   string desc_chs_t = 8;
+   string desc_jp = 9;
+   string desc_en = 10;
+   string desc_kr = 11;
+   string icon = 12;
+   string icon_jpg = 13;
+}
+
+message ItemDefinitionItem {
+   uint32 id = 1;
+   uint32 sort = 2;
+   string name_chs = 3;
+   string name_chs_t = 4;
+   string name_chs_t2 = 5;
+   string name_jp = 6;
+   string name_en = 7;
+   string name_kr = 8;
+   string desc_func_chs = 9;
+   string desc_chs = 10;
+   string desc_func_chs_t = 11;
+   string desc_chs_t = 12;
+   string desc_chs_t2 = 13;
+   string desc_func_jp = 14;
+   string desc_jp = 15;
+   string desc_func_en = 16;
+   string desc_en = 17;
+   string desc_func_kr = 18;
+   string desc_kr = 19;
+   string icon = 20;
+   string icon_transparent = 21;
+   uint32 category = 22;
+   uint32 type = 23;
+   uint32 is_unique = 24;
+   uint32 max_stack = 25;
+   string access = 26;
+   uint32 accessinfo = 27;
+   string func = 28;
+  repeated uint32 iargs = 29;
+  repeated string sargs = 30;
+   uint32 can_sell = 31;
+   uint32 sell_reward_id = 32;
+   uint32 sell_reward_count = 33;
+   string item_expire = 35;
+   string expire_desc_chs = 36;
+   string expire_desc_chs_t = 37;
+   string expire_desc_jp = 38;
+   string expire_desc_en = 39;
+   string expire_desc_kr = 40;
+   uint32 region_limit = 41;
+   uint32 cross_view = 42;
+   uint32 database_cache = 43;
+}
+
+message ItemDefinitionTitle {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   string desc_chs = 7;
+   string desc_chs_t = 8;
+   string desc_jp = 9;
+   string desc_en = 10;
+   string desc_kr = 11;
+   string icon = 12;
+   string icon_item = 13;
+   uint32 priority = 14;
+   uint32 unlock_type = 15;
+  repeated uint32 unlock_param = 16;
+   uint32 cross_view = 17;
+}
+
+message ItemDefinitionCharacter {
+   uint32 id = 1;
+   uint32 sort = 2;
+   string launch_time = 3;
+   string name_chs = 4;
+   string name_chs2 = 5;
+   string name_chs_t = 6;
+   string name_chs_t2 = 7;
+   string name_jp = 8;
+   string name_jp2 = 9;
+   string name_en = 10;
+   string name_kr = 11;
+   uint32 open = 12;
+   uint32 init_skin = 13;
+   uint32 full_fetter_skin = 14;
+   uint32 hand = 15;
+   uint32 favorite = 16;
+   string star_5_material = 17;
+   uint32 star_5_cost = 18;
+   uint32 can_marry = 19;
+   uint32 exchange_item_id = 20;
+   int32 exchange_item_num = 21;
+   string emo = 22;
+   uint32 sound = 23;
+   float sound_volume = 24;
+   uint32 sex = 25;
+   string desc_stature_chs = 26;
+   string desc_stature_chs_t = 27;
+   string desc_stature_jp = 28;
+   string desc_stature_en = 29;
+   string desc_stature_kr = 30;
+   string desc_birth_chs = 31;
+   string desc_birth_chs_t = 32;
+   string desc_birth_jp = 33;
+   string desc_birth_en = 34;
+   string desc_birth_kr = 35;
+   string desc_age_chs = 36;
+   string desc_age_chs_t = 37;
+   string desc_age_jp = 38;
+   string desc_age_en = 39;
+   string desc_age_kr = 40;
+   string desc_bloodtype_chs = 41;
+   string desc_bloodtype_chs_t = 42;
+   string desc_bloodtype_jp = 43;
+   string desc_bloodtype_en = 44;
+   string desc_bloodtype_kr = 45;
+   string desc_cv_chs = 46;
+   string desc_cv_chs_t = 47;
+   string desc_cv_jp = 48;
+   string desc_cv_en = 49;
+   string desc_cv_kr = 50;
+   string desc_hobby_chs = 51;
+   string desc_hobby_chs_t = 52;
+   string desc_hobby_jp = 53;
+   string desc_hobby_en = 54;
+   string desc_hobby_kr = 55;
+   string desc_chs = 56;
+   string desc_item_chs = 57;
+   string desc_chs_t = 58;
+   string desc_item_chs_t = 59;
+   string desc_jp = 60;
+   string desc_item_jp = 61;
+   string desc_en = 62;
+   string desc_item_en = 63;
+   string desc_kr = 64;
+   string desc_item_kr = 65;
+   uint32 collaboration = 66;
+   uint32 region_limit = 67;
+  repeated uint32 skin_lib = 68;
+   uint32 ur = 69;
+   uint32 ur_ron = 70;
+   uint32 ur_liqi = 71;
+   string ur_cutin = 72;
+   uint32 limited = 73;
+   uint32 treasure_sp = 74;
+}
+
+message ItemDefinitionView {
+   uint32 id = 1;
+   string res_name = 2;
+   uint32 audio_id = 3;
+   uint32 character_id = 4;
+  repeated string sargs = 5;
+}
+
+message ItemDefinitionSkin {
+   uint32 id = 1;
+   uint32 type = 2;
+   string name_chs = 3;
+   string name_chs_t = 4;
+   string name_jp = 5;
+   string name_en = 6;
+   string name_kr = 7;
+   string desc_chs = 8;
+   string desc_chs_t = 9;
+   string desc_jp = 10;
+   string desc_en = 11;
+   string desc_kr = 12;
+   uint32 character_id = 13;
+   string lock_tips_chs = 14;
+   string lock_tips_chs_t = 15;
+   string lock_tips_jp = 16;
+   string lock_tips_en = 17;
+   string lock_tips_kr = 18;
+   string path = 19;
+   uint32 exchange_item_id = 20;
+   int32 exchange_item_num = 21;
+   uint32 direction = 22;
+   uint32 no_reverse = 23;
+   uint32 lock_reverse = 24;
+   int32 offset_x = 25;
+   int32 offset_y = 26;
+   string spot_scale = 27;
+   string effective_time = 28;
+   string lobby_offset = 29;
+   string liaoshe_offset = 30;
+   string shop_offset = 31;
+   string win_offset = 32;
+   string gameend_offset = 33;
+   string starup_offset = 34;
+   string treasure_offset = 35;
+   string ck_full_0_offset = 36;
+   string ck_full_1_offset = 37;
+   string ck_full_2_offset = 38;
+   string ck_full_3_offset = 39;
+   string ck_full_single_offset = 40;
+   string ck_half_0_offset = 41;
+   string ck_half_1_offset = 42;
+   string ck_half_2_offset = 43;
+   string ck_half_3_offset = 44;
+   string ck_half_single_offset = 45;
+   int32 smallhead_x = 46;
+   int32 smallhead_y = 47;
+   int32 smallhead_width = 48;
+   int32 full_x = 49;
+   int32 full_y = 50;
+   int32 full_width = 51;
+   int32 full_height = 52;
+   int32 half_x = 53;
+   int32 half_y = 54;
+   int32 half_width = 55;
+   int32 half_height = 56;
+   int32 spine_type = 57;
+   int32 spine_width = 58;
+   int32 spine_height = 59;
+   int32 pivot_x = 60;
+   int32 pivot_y = 61;
+   int32 idle = 62;
+   int32 greeting = 63;
+   int32 celebrate = 64;
+   int32 click = 65;
+   int32 greeting_init = 66;
+   int32 click2 = 67;
+   int32 celebrate_idle = 68;
+}
+
+message ItemDefinitionItemRecovery {
+}
+
+message ItemDefinitionItemManualPool {
+   uint32 id = 1;
+   uint32 res_id = 2;
+   uint32 res_count = 3;
+}
+
+message ItemDefinitionSourceLimit {
+   uint32 id = 1;
+   uint32 item_id = 2;
+   uint32 item_limit = 3;
+}
+
+message ItemDefinitionItemPackage {
+   uint32 id = 1;
+   uint32 res_id = 2;
+   uint32 res_count = 3;
+}
+
+message ItemDefinitionFakeRandomPool {
+   uint32 id = 1;
+  repeated uint32 stage_count = 2;
+  repeated uint32 stage_weight = 3;
+}
+
+message ItemDefinitionLoadingImage {
+   uint32 id = 1;
+   string img_path = 2;
+   string thumb_path = 3;
+   uint32 sort = 4;
+  repeated uint32 unlock_items = 5;
+}
+
+message ItemDefinitionFunctionItem {
+   uint32 id = 1;
+   uint32 type = 2;
+  repeated uint32 args = 3;
+   uint32 name = 4;
+   uint32 desc_func = 5;
+   uint32 desc = 6;
+   string icon = 7;
+   string icon_transparent = 8;
+}
+
+message LeaderboardLeaderboard {
+   uint32 id = 1;
+   string start_time = 2;
+   string end_time = 3;
+   uint32 refresh_cd = 4;
+   uint32 max_count = 5;
+   string show_list = 6;
+}
+
+message LevelDefinitionLevelDefinition {
+   uint32 id = 1;
+   int32 type = 2;
+   uint32 primary_level = 3;
+   uint32 secondary_level = 4;
+   uint32 init_point = 5;
+   uint32 end_point = 6;
+   string primary_icon = 7;
+   string name_chs = 8;
+   string name_chs_t = 9;
+   string name_jp = 10;
+   string name_en = 11;
+   string name_kr = 12;
+   string full_name_chs = 13;
+   string full_name_chs_t = 14;
+   string full_name_jp = 15;
+   string full_name_en = 16;
+   string full_name_kr = 17;
+   uint32 can_degrade = 18;
+   uint32 can_upgrade = 19;
+   uint32 can_getpoint = 20;
+   int32 rankpt1 = 21;
+   int32 rankpt2 = 22;
+   uint32 top_rank_id = 23;
+}
+
+message LevelDefinitionCharacter {
+   uint32 level = 1;
+   uint32 character_id = 2;
+   uint32 exp = 3;
+   string reward = 4;
+   uint32 unlock_says = 5;
+   string unlock_desc_chs = 6;
+   string unlock_desc_chs_t = 7;
+   string unlock_desc_jp = 8;
+   string unlock_desc_en = 9;
+   string unlock_desc_kr = 10;
+}
+
+message LevelDefinitionTrail {
+   uint32 id = 1;
+   uint32 init_level = 2;
+   uint32 end_level = 3;
+   uint32 trail_icon = 4;
+   int32 trail_fire = 5;
+}
+
+message LevelDefinitionTopRank {
+   uint32 id = 1;
+  repeated int32 rank_pt = 2;
+  repeated int32 top_rank_pt = 3;
+   uint32 mode = 4;
+}
+
+message MallGoods {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   string desc = 7;
+   string desc_chs = 8;
+   string desc_chs_t = 9;
+   string desc_jp = 10;
+   string desc_en = 11;
+   string desc_kr = 12;
+   string icon = 13;
+   uint32 resource_id = 14;
+   uint32 resource_count = 15;
+   uint32 vip_exp = 16;
+   uint32 cny = 17;
+   string price = 18;
+   string first_desc_chs = 19;
+   string first_desc_chs_t = 20;
+   string first_desc_jp = 21;
+   string first_desc_en = 22;
+   string first_desc_kr = 23;
+   uint32 first_extend_add = 24;
+   string normal_desc_chs = 25;
+   string normal_desc_chs_t = 26;
+   string normal_desc_jp = 27;
+   string normal_desc_en = 28;
+   string normal_desc_kr = 29;
+   uint32 normal_extend_add = 30;
+   uint32 type = 31;
+}
+
+message MallProduct {
+   uint32 payment_platform = 1;
+   uint32 goods_id = 2;
+   uint32 product_type = 3;
+   string product_id = 4;
+   string currency_code = 5;
+   uint32 currency_price = 6;
+   string actual_code = 7;
+   uint32 actual_price = 8;
+   string brief_desc = 9;
+   string detail_desc = 10;
+}
+
+message MallGoodsShelves {
+   string id = 1;
+   uint32 goods_id = 2;
+   string currency_code = 3;
+   uint32 currency_price = 4;
+   string price = 5;
+   uint32 is_monthcard = 6;
+}
+
+message MallZoneParams {
+   string zone_id = 1;
+   string key = 2;
+   string string_value = 3;
+}
+
+message MallMonthTicket {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   uint32 resource_id = 7;
+   uint32 resource_count = 8;
+   uint32 vip_exp = 9;
+   uint32 effective_time = 10;
+   string icon = 11;
+   string desc_chs = 12;
+   string desc_chs_t = 13;
+   string desc_jp = 14;
+   string desc_en = 15;
+   string desc_kr = 16;
+   string desc_detail_chs = 17;
+   string desc_detail_chs_t = 18;
+   string desc_detail_jp = 19;
+   string desc_detail_en = 20;
+   string desc_detail_kr = 21;
+   string desc_detail2_chs = 22;
+   string desc_detail2_chs_t = 23;
+   string desc_detail2_jp = 24;
+   string desc_detail2_en = 25;
+   string desc_detail2_kr = 26;
+}
+
+message MallChannelConfig {
+   uint32 id = 1;
+   string currency_platforms = 2;
+   string free_jade_ids = 3;
+   string paid_jade_ids = 4;
+   string free_voucher_ids = 5;
+   string paid_voucher_ids = 6;
+   uint32 goods_id = 7;
+   string shelves_id = 8;
+   string name = 9;
+}
+
+message MallMonthTicketInfo {
+   uint32 id = 1;
+}
+
+message MatchShilianShilian {
+   uint32 id = 1;
+   string name = 2;
+   uint32 ticket_id = 3;
+   uint32 currency_id = 4;
+   uint32 currency_count = 5;
+   uint32 mode = 6;
+   uint32 mode1 = 7;
+   uint32 mode2 = 8;
+   int32 init_point = 9;
+   int32 back_point = 10;
+}
+
+message MatchShilianShilianReward {
+   uint32 id = 1;
+   uint32 reward_id = 2;
+   uint32 reward_count = 3;
+}
+
+message MatchShilianShilianTime {
+   uint32 id = 1;
+   string start = 2;
+   string end = 3;
+}
+
+message MiscFunctionDailySignIn {
+   uint32 id = 1;
+   uint32 reward_id = 2;
+   uint32 reward_count = 3;
+}
+
+message RankIntroduceRank {
+   uint32 id = 1;
+  repeated string info = 2;
+}
+
+message RankIntroduceRank3 {
+   uint32 id = 1;
+  repeated string info = 2;
+}
+
+message SeasonSeason {
+   uint32 id = 1;
+   string start_time = 2;
+   string end_time = 3;
+   string disappear_time = 4;
+   uint32 match_mode = 5;
+   uint32 level_ticket_pool = 6;
+   uint32 ticket_retry = 7;
+   uint32 point_item_id = 8;
+   uint32 point_consume = 9;
+   string desc_chs = 10;
+   string desc_jp = 11;
+   string desc_en = 12;
+   string desc_chs_t = 13;
+   uint32 desktop_type = 14;
+}
+
+message SeasonLevelTicket {
+   uint32 id = 1;
+   uint32 level = 2;
+   uint32 game_count = 3;
+   uint32 weight = 4;
+  repeated uint32 task = 5;
+   string reward = 6;
+}
+
+message SeasonLevelTicketPool {
+   uint32 pool_id = 1;
+   uint32 level_lower = 2;
+   uint32 level_upper = 3;
+   uint32 ticket_level = 4;
+}
+
+message SeasonTicketRetry {
+   uint32 group_id = 1;
+   uint32 count = 2;
+   uint32 cost = 3;
+}
+
+message SeasonSeasonReward {
+   uint32 season_id = 1;
+   uint32 rank_lower = 2;
+   uint32 rank_upper = 3;
+   string rewards = 4;
+}
+
+message ShopsZhpGoods {
+   uint32 id = 1;
+   string icon = 2;
+   string name_chs = 3;
+   string name_chs_t = 4;
+   string name_jp = 5;
+   string name_en = 6;
+   uint32 item_id = 7;
+   string name_kr = 8;
+   int32 buy_limit = 9;
+   uint32 currency = 10;
+   uint32 price = 11;
+   uint32 need_amount = 12;
+   int32 show_has = 15;
+}
+
+message ShopsZhpRefreshGroup {
+}
+
+message ShopsZhpRefreshPrice {
+   uint32 id = 1;
+   uint32 refresh_price = 2;
+}
+
+message ShopsGoods {
+   uint32 id = 1;
+   uint32 category = 2;
+   uint32 category_goods = 3;
+   string icon = 4;
+   string name_chs = 5;
+   string name_chs_t = 6;
+   string name_jp = 7;
+   string name_en = 8;
+   string name_kr = 9;
+   string desc_chs = 10;
+   string desc_chs_t = 11;
+   string desc_jp = 12;
+   string desc_en = 13;
+   string desc_kr = 14;
+   uint32 item_id = 15;
+   string price = 16;
+   uint32 need_amount = 17;
+   int32 buy_limit = 18;
+   int32 show_has = 19;
+   uint32 sort = 20;
+   uint32 discount = 21;
+   uint32 sell_activity = 22;
+   string launch_time = 23;
+   string func = 24;
+   uint32 discount_activity = 25;
+   string zone = 26;
+}
+
+message ShopsGoodsPackage {
+   uint32 id = 1;
+   uint32 good_id = 2;
+   uint32 good_count = 3;
+}
+
+message ShopsIntervalRefreshGoods {
+   uint32 group_id = 1;
+   uint32 goods_id = 2;
+   uint32 interval = 3;
+   uint32 interval_type = 4;
+}
+
+message ShopsItemPackage {
+   uint32 id = 1;
+   string item_info = 2;
+}
+
+message SpotSpot {
+   uint32 id = 1;
+   uint32 unique_id = 2;
+   uint32 type = 3;
+   string name_chs = 4;
+   string name_chs_t = 5;
+   string name_jp = 6;
+   string name_en = 7;
+   string name_kr = 8;
+   uint32 level_limit = 9;
+   uint32 is_married = 10;
+   string lock_tips_chs = 11;
+   string lock_tips_chs_t = 12;
+   string lock_tips_jp = 13;
+   string lock_tips_en = 14;
+   string lock_tips_kr = 15;
+   uint32 queque = 16;
+   string content_chs = 17;
+   string content_chs_t = 18;
+   string content_jp = 19;
+   string content_en = 20;
+   string content_kr = 21;
+   string content_path = 22;
+  repeated uint32 jieju = 23;
+}
+
+message SpotRewards {
+   uint32 id = 1;
+   uint32 type = 2;
+   string content_chs = 3;
+   string content_chs_t = 4;
+   string content_jp = 5;
+   string content_en = 6;
+   string content_kr = 7;
+   string reward = 8;
+}
+
+message SpotEvent {
+   uint32 id = 1;
+   uint32 activity_id = 2;
+   uint32 key_item_id = 3;
+   uint32 key_amount = 4;
+   uint32 sort = 5;
+   string unlock_time = 6;
+   string content_path = 7;
+   string title_chs = 8;
+   string title_chs_t = 9;
+   string title_jp = 10;
+   string title_en = 11;
+   string title_kr = 12;
+   string subtitle_chs = 13;
+   string subtitle_chs_t = 14;
+   string subtitle_jp = 15;
+   string subtitle_en = 16;
+   string subtitle_kr = 17;
+   string content_chs = 18;
+   string content_chs_t = 19;
+   string content_jp = 20;
+   string content_en = 21;
+   string content_kr = 22;
+}
+
+message SpotCharacterSpot {
+   uint32 id = 1;
+   uint32 sort = 2;
+   string name_chs = 3;
+   string name_chs2 = 4;
+   string name_chs_t = 5;
+   string name_chs_t2 = 6;
+   string name_jp = 7;
+   string name_jp2 = 8;
+   string name_en = 9;
+   string name_kr = 10;
+   uint32 open = 11;
+   uint32 init_skin = 12;
+   uint32 full_fetter_skin = 13;
+   uint32 hand = 14;
+   uint32 favorite = 15;
+   string star_5_material = 16;
+   uint32 star_5_cost = 17;
+   uint32 can_marry = 18;
+   uint32 exchange_item_id = 19;
+   int32 exchange_item_num = 20;
+   string emo = 21;
+   uint32 sound = 22;
+   float sound_volume = 23;
+   uint32 sex = 24;
+   string desc_stature_chs = 25;
+   string desc_stature_chs_t = 26;
+   string desc_stature_jp = 27;
+   string desc_stature_en = 28;
+   string desc_stature_kr = 29;
+   string desc_birth_chs = 30;
+   string desc_birth_chs_t = 31;
+   string desc_birth_jp = 32;
+   string desc_birth_en = 33;
+   string desc_birth_kr = 34;
+   string desc_age_chs = 35;
+   string desc_age_chs_t = 36;
+   string desc_age_jp = 37;
+   string desc_age_en = 38;
+   string desc_age_kr = 39;
+   string desc_bloodtype_chs = 40;
+   string desc_bloodtype_chs_t = 41;
+   string desc_bloodtype_jp = 42;
+   string desc_bloodtype_en = 43;
+   string desc_bloodtype_kr = 44;
+   string desc_cv_chs = 45;
+   string desc_cv_chs_t = 46;
+   string desc_cv_jp = 47;
+   string desc_cv_en = 48;
+   string desc_cv_kr = 49;
+   string desc_hobby_chs = 50;
+   string desc_hobby_chs_t = 51;
+   string desc_hobby_jp = 52;
+   string desc_hobby_en = 53;
+   string desc_hobby_kr = 54;
+   string desc_chs = 55;
+   string desc_item_chs = 56;
+   string desc_chs_t = 57;
+   string desc_item_chs_t = 58;
+   string desc_jp = 59;
+   string desc_item_jp = 60;
+   string desc_en = 61;
+   string desc_item_en = 62;
+   string desc_kr = 63;
+   string desc_item_kr = 64;
+   uint32 collaboration = 65;
+  repeated uint32 skin_lib = 66;
+   uint32 ur = 67;
+   uint32 ur_ron = 68;
+   uint32 ur_liqi = 69;
+   string ur_cutin = 70;
+   uint32 limited = 71;
+   uint32 treasure_sp = 72;
+}
+
+message SpotSkinSpot {
+   uint32 id = 1;
+   uint32 type = 2;
+   string name_chs = 3;
+   string name_chs_t = 4;
+   string name_jp = 5;
+   string name_en = 6;
+   string name_kr = 7;
+   string desc_chs = 8;
+   string desc_chs_t = 9;
+   string desc_jp = 10;
+   string desc_en = 11;
+   string desc_kr = 12;
+   uint32 character_id = 13;
+   string lock_tips_chs = 14;
+   string lock_tips_chs_t = 15;
+   string lock_tips_jp = 16;
+   string lock_tips_en = 17;
+   string lock_tips_kr = 18;
+   string path = 19;
+   uint32 exchange_item_id = 20;
+   int32 exchange_item_num = 21;
+   uint32 direction = 22;
+   uint32 no_reverse = 23;
+   uint32 lock_reverse = 24;
+   int32 offset_x = 25;
+   int32 offset_y = 26;
+   string spot_scale = 27;
+   string effective_time = 28;
+   string lobby_offset = 29;
+   string liaoshe_offset = 30;
+   string shop_offset = 31;
+   string win_offset = 32;
+   string gameend_offset = 33;
+   string starup_offset = 34;
+   string treasure_offset = 35;
+   string ck_full_0_offset = 36;
+   string ck_full_1_offset = 37;
+   string ck_full_2_offset = 38;
+   string ck_full_3_offset = 39;
+   string ck_full_single_offset = 40;
+   string ck_half_0_offset = 41;
+   string ck_half_1_offset = 42;
+   string ck_half_2_offset = 43;
+   string ck_half_3_offset = 44;
+   string ck_half_single_offset = 45;
+   int32 smallhead_x = 46;
+   int32 smallhead_y = 47;
+   int32 smallhead_width = 48;
+   int32 full_x = 49;
+   int32 full_y = 50;
+   int32 full_width = 51;
+   int32 full_height = 52;
+   int32 half_x = 53;
+   int32 half_y = 54;
+   int32 half_width = 55;
+   int32 half_height = 56;
+   int32 spine_type = 57;
+   int32 spine_width = 58;
+   int32 spine_height = 59;
+   int32 pivot_x = 60;
+   int32 pivot_y = 61;
+   string idle = 62;
+   int32 greeting = 63;
+   int32 celebrate = 64;
+   int32 click = 65;
+   int32 greeting_init = 66;
+   int32 click2 = 67;
+   int32 celebrate_idle = 68;
+}
+
+message SpotAudioSpot {
+   uint32 id = 1;
+   string path = 2;
+   float time_length = 3;
+   string str = 4;
+   uint32 type = 5;
+}
+
+message StrStr {
+   uint32 id = 1;
+   string type = 2;
+   string chs = 3;
+   string chs_t = 4;
+   string jp = 5;
+   string en = 6;
+   string kr = 7;
+}
+
+message StrEvent {
+   uint32 id = 1;
+   string type = 2;
+   string chs = 3;
+   string chs_t = 4;
+   string jp = 5;
+   string en = 6;
+   string kr = 7;
+}
+
+message TournamentTournaments {
+   uint32 id = 1;
+   string name = 2;
+   uint32 game_ticket_id = 3;
+}
+
+message TutorialInit {
+   uint32 episode_id = 1;
+   string dora = 2;
+   string rival = 3;
+   string init_score = 4;
+   string paihe = 5;
+   uint32 chang = 6;
+   uint32 ju = 7;
+   uint32 benchang = 8;
+   uint32 first_position = 9;
+   uint32 view_position = 10;
+   string start_shoupai = 11;
+   string start_ming = 12;
+   string end_shoupai = 13;
+   string end_ming = 14;
+   string end_yaku = 15;
+   string ura_dora = 16;
+   uint32 end_fu = 17;
+   uint32 hu_score = 18;
+   string flow_score = 19;
+}
+
+message TutorialStep {
+   uint32 episode_id = 1;
+   uint32 id = 2;
+   uint32 seat = 3;
+   uint32 act_type = 4;
+   string act_param = 5;
+   string tingpai_param = 6;
+   uint32 is_zhenting = 7;
+   uint32 str_type = 8;
+   uint32 str_id = 9;
+   uint32 view_ui_hand = 10;
+   string pic_path = 11;
+   string button_show = 12;
+   string button_pai = 13;
+   uint32 player_act = 14;
+   string player_param = 15;
+}
+
+message VipVip {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   string img = 7;
+   string desc_chs = 8;
+   string desc_chs_t = 9;
+   string desc_jp = 10;
+   string desc_en = 11;
+   string desc_kr = 12;
+   uint32 charge = 13;
+   uint32 gift_limit = 14;
+   uint32 friend_added = 15;
+   uint32 shop_free_refresh = 16;
+   uint32 shop_refresh_limit = 17;
+   uint32 buddy_bonus = 18;
+   uint32 favourite_limit = 19;
+   uint32 title_id = 20;
+  repeated string rewards = 21;
+}
+
+message VoiceSound {
+   uint32 id = 1;
+   string name_chs = 2;
+   string name_chs_t = 3;
+   string name_jp = 4;
+   string name_en = 5;
+   string name_kr = 6;
+   string words_chs = 7;
+   string words_chs_t = 8;
+   string words_jp = 9;
+   string words_en = 10;
+   string words_kr = 11;
+   uint32 category = 12;
+   string type = 13;
+   uint32 level_limit = 14;
+   uint32 bond_limit = 15;
+   float time_length = 16;
+   string path = 17;
+   uint32 hide = 18;
+   string date_limit = 19;
+}
+
+message VoiceEvent {
+   uint32 id = 1;
+   string words_chs = 2;
+   string words_chs_t = 3;
+   string words_jp = 4;
+   string words_en = 5;
+   string words_kr = 6;
+   uint32 category = 7;
+   string type = 8;
+   uint32 stage = 9;
+   float time_length = 10;
+   string path = 11;
+   float volume_fix = 12;
+}
+
+message VoiceSpot {
+   uint32 id = 1;
+   uint32 character = 2;
+   uint32 type = 3;
+   string path = 4;
+}
+

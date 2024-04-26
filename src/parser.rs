@@ -38,8 +38,8 @@ pub fn dyn_to_json(msg: DynamicMessage) -> Result<JsonValue> {
     Ok(msg.serialize_with_options(Serializer, &SERIALIZE_OPTIONS)?)
 }
 
-impl Parser {
-    pub fn new() -> Self {
+impl Default for Parser {
+    fn default() -> Self {
         Self {
             total: 0,
             respond_type: HashMap::new(),
@@ -47,7 +47,9 @@ impl Parser {
             pool: &SETTINGS.desc,
         }
     }
+}
 
+impl Parser {
     pub fn parse(&mut self, buf: &[u8]) -> Result<LiqiMessage> {
         let msg_type_byte = buf[0];
         ensure!(
