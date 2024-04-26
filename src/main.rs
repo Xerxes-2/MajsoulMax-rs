@@ -17,6 +17,7 @@ mod parser;
 mod settings;
 
 use helper::helper_worker;
+use modder::MOD_SETTINGS;
 use parser::Parser;
 use settings::Settings;
 
@@ -130,6 +131,18 @@ async fn main() {
     if SETTINGS.mod_on() {
         // start mod worker
         info!("Mod worker started");
+        if MOD_SETTINGS.auto_update() {
+            info!("自动更新mod已开启");
+            let mut new_mod_settings = MOD_SETTINGS.clone();
+            match new_mod_settings.get_lqc().await {
+                Err(e) => warn!("更新mod失败: {}", e),
+                Ok(_) => {
+                    info!("mod更新成功, 请重启程序");
+                    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+                    return;
+                }
+            }
+        }
     }
 
     if SETTINGS.helper_on() {

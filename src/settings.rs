@@ -1,10 +1,14 @@
-use crate::ARG;
+use crate::{ARG, SETTINGS};
 use anyhow::{anyhow, Result};
+use bytes::Bytes;
 use once_cell::sync::Lazy;
 use prost_reflect::DescriptorPool;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::{collections::HashSet, path::PathBuf};
+use std::{
+    collections::{HashMap, HashSet},
+    path::PathBuf,
+};
 use tracing::info;
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
@@ -227,5 +231,117 @@ pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
             Ok(prefix.to_string())
         }
         Err(e) => Err(anyhow!("Failed to get prefix: {:?}", e)),
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+pub struct ModSettings {
+    #[serde(default)]
+    pub character: i32,
+    #[serde(default)]
+    pub characters: HashMap<i32, i32>,
+    #[serde(default)]
+    pub nickname: String,
+    #[serde(rename = "starCharacter")]
+    pub star_character: Vec<i32>,
+    #[serde(rename = "hintSwitch")]
+    hint_switch: i32,
+    #[serde(default)]
+    pub title: i32,
+    #[serde(rename = "loadingBg")]
+    pub loading_bg: Vec<i32>,
+    #[serde(rename = "emojiSwitch")]
+    emoji_switch: i32,
+    #[serde(default)]
+    pub views: [Vec<i32>; 10],
+    #[serde(default)]
+    pub view: i32,
+    #[serde(rename = "showServer")]
+    show_server: i32,
+    #[serde(rename = "autoUpdate")]
+    auto_update: i32,
+    #[serde(default)]
+    version: String,
+    #[serde(skip)]
+    pub res: Bytes,
+}
+
+impl ModSettings {
+    pub fn new() -> Self {
+        // read settings.mod.json, if not exist, create a new one
+        let dir = SETTINGS.dir.join("settings.mod.json");
+        let settings = std::fs::read_to_string(&dir);
+        let settings = match settings {
+            Ok(settings) => settings,
+            Err(_) => {
+                let default = serde_json::to_string_pretty(&ModSettings::default()).unwrap();
+                std::fs::write(&dir, &default).expect("无法写入settings.mod.json");
+                default
+            }
+        };
+        let mut settings: ModSettings =
+            serde_json::from_str(&settings).expect("无法解析settings.mod.json");
+        info!("已载入Mod配置: {:?}", settings);
+        // read res from lqc.lqbin
+        let res = std::fs::read(SETTINGS.dir.join("lqc.lqbin")).expect("无法读取lqc.lqbin");
+        settings.res = Bytes::from(res);
+        settings
+    }
+
+    pub fn hint_on(&self) -> bool {
+        self.hint_switch != 0
+    }
+
+    pub fn emoji_on(&self) -> bool {
+        self.emoji_switch != 0
+    }
+
+    pub fn show_server(&self) -> bool {
+        self.show_server != 0
+    }
+
+    pub fn auto_update(&self) -> bool {
+        self.auto_update != 0
+    }
+
+    pub async fn get_lqc(&mut self) -> Result<()> {
+        // get lqc.lqbin prefix from https://game.maj-soul.com/1/{prefix}/res/config/lqc.lqbin
+        let version = get_version().await?;
+        let prefix = get_lqbin_prefix(&version).await?;
+
+        if self.version == prefix {
+            info!("无需更新lqc.lqbin, 当前版本: {}", version);
+            return Ok(());
+        }
+        info!(
+            "lqc.lqbin需要更新, 当前版本: {}, 最新版本: {}",
+            self.version, prefix
+        );
+
+        let req = REQUEST_CLIENT
+            .get(
+                format!(
+                    "https://game.maj-soul.com/1/{}/res/config/lqc.lqbin",
+                    prefix
+                )
+                .as_str(),
+            )
+            .timeout(std::time::Duration::from_secs(10))
+            .send()
+            .await;
+        match req {
+            Ok(resp) => {
+                let bytes = resp.bytes().await?;
+                let file_dir = SETTINGS.dir.join("lqc.lqbin");
+                std::fs::write(file_dir, bytes).expect("无法写入lqc.lqbin文件");
+                info!("lqc.lqbin更新完成");
+                self.version = prefix;
+                // write settings.mod.json
+                let dir = SETTINGS.dir.join("settings.mod.json");
+                std::fs::write(dir, serde_json::to_string_pretty(self)?)?;
+                Ok(())
+            }
+            Err(e) => Err(anyhow!("Failed to download lqc.lqbin: {:?}", e)),
+        }
     }
 }

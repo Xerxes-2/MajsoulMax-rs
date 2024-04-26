@@ -1,0 +1,26 @@
+{
+  "character": 0,
+  "characters": {},
+  "nickname": "",
+  "starCharacter": [],
+  "hintSwitch": 0,
+  "title": 0,
+  "loadingBg": [],
+  "emojiSwitch": 0,
+  "views": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "view": 0,
+  "showServer": 0,
+  "autoUpdate": 1,
+  "version": "v0.11.39.w"
+}
