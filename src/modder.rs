@@ -1,6 +1,7 @@
-use crate::{lq_config::ConfigTables, settings::ModSettings, sheets};
+use crate::{lq_config::ConfigTables, parser::Parser, settings::ModSettings, sheets};
+use bytes::Bytes;
 use once_cell::sync::Lazy;
-use prost::Message;
+use prost::Message as ProtoBufMessage;
 use std::collections::HashMap;
 use tokio::sync::RwLock;
 
@@ -15,6 +16,7 @@ pub struct Modder {
     loading_images: Vec<sheets::ItemDefinitionLoadingImage>,
     emojis: HashMap<u32, Vec<sheets::CharacterEmoji>>,
     endings: Vec<sheets::SpotRewards>,
+    parser: Parser,
 }
 
 pub fn capitalize(s: &str) -> String {
@@ -25,13 +27,18 @@ pub fn capitalize(s: &str) -> String {
     }
 }
 
-fn to_vec<T: Message + std::default::Default>(buf: &[Vec<u8>]) -> Vec<T> {
+fn to_vec<T: ProtoBufMessage + std::default::Default>(buf: &[Vec<u8>]) -> Vec<T> {
     buf.iter()
         .map(|d| {
             T::decode(d.as_ref())
                 .unwrap_or_else(|_| panic!("Failed to decode {}", std::any::type_name::<T>()))
         })
         .collect()
+}
+
+pub struct ModifyResult {
+    pub msg: Option<Bytes>,
+    pub injected_msg: Option<Bytes>,
 }
 
 impl Modder {
@@ -83,5 +90,23 @@ impl Modder {
             }
         }
         modder
+    }
+
+    pub fn modify(&self, buf: Bytes, from_client: bool) -> ModifyResult {
+        let msg_type = buf[0];
+        match msg_type {
+            0x01 => self.modify_notify(buf),
+            _ => ModifyResult {
+                msg: Some(buf),
+                injected_msg: None,
+            },
+        }
+    }
+
+    pub fn modify_notify(&self, buf: Bytes) -> ModifyResult {
+        ModifyResult {
+            msg: Some(buf),
+            injected_msg: None,
+        }
     }
 }

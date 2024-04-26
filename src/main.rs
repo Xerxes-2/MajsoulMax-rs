@@ -5,14 +5,22 @@ use hudsucker::{
     tokio_tungstenite::tungstenite::Message,
     *,
 };
-use std::{net::SocketAddr, str::FromStr};
+use std::{net::SocketAddr, str::FromStr, sync::Arc};
 use tokio::sync::mpsc::{channel, Sender};
 use tracing::*;
 
-use majsoul_max_rs::{helper::helper_worker, modder::MOD_SETTINGS, parser::Parser, SETTINGS};
+use majsoul_max_rs::{
+    helper::helper_worker,
+    modder::{Modder, MOD_SETTINGS},
+    parser::Parser,
+    SETTINGS,
+};
 
 #[derive(Clone)]
-struct Handler(Sender<(Bytes, char)>);
+struct Handler {
+    sender: Sender<(Bytes, char)>,
+    modder: Option<Arc<Modder>>,
+}
 
 impl WebSocketHandler for Handler {
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
@@ -21,12 +29,17 @@ impl WebSocketHandler for Handler {
             WebSocketContext::ServerToClient { src, .. } => ('\u{2191}', src),
         };
 
+        if uri.path() == "/ob" {
+            // ignore ob messages
+            return Some(msg);
+        }
+
         debug!("{} {}", direction_char, uri);
 
         if SETTINGS.helper_on() {
             if let Message::Binary(ref buf) = msg {
                 if let Err(e) = self
-                    .0
+                    .sender
                     .send((Bytes::copy_from_slice(buf), direction_char))
                     .await
                 {
@@ -35,8 +48,8 @@ impl WebSocketHandler for Handler {
             }
         }
 
-        if SETTINGS.mod_on() {
-            // TODO: MajSoul Mod
+        if let Some(ref modder) = self.modder {
+            // TODO: handle modder
         }
 
         Some(msg)
@@ -99,15 +112,7 @@ async fn main() {
         }
     }
 
-    let (tx, rx) = channel::<(Bytes, char)>(100);
-    let proxy = Proxy::builder()
-        .with_addr(proxy_addr)
-        .with_rustls_client()
-        .with_ca(ca)
-        .with_websocket_handler(Handler(tx.clone()))
-        .with_graceful_shutdown(shutdown_signal())
-        .build();
-
+    let mut modder = None;
     if SETTINGS.mod_on() {
         // start mod worker
         info!("Mod worker started");
@@ -123,8 +128,21 @@ async fn main() {
                     return;
                 }
             }
+            modder = Some(Arc::new(Modder::new().await));
         }
     }
+
+    let (tx, rx) = channel::<(Bytes, char)>(100);
+    let proxy = Proxy::builder()
+        .with_addr(proxy_addr)
+        .with_rustls_client()
+        .with_ca(ca)
+        .with_websocket_handler(Handler {
+            sender: tx.clone(),
+            modder,
+        })
+        .with_graceful_shutdown(shutdown_signal())
+        .build();
 
     if SETTINGS.helper_on() {
         // start helper worker

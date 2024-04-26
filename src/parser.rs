@@ -1,11 +1,12 @@
-use anyhow::{anyhow, bail, ensure, Result};
+use anyhow::{anyhow, ensure, Result};
 use base64::prelude::*;
 use bytes::Bytes;
+use prost::Message;
 use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, SerializeOptions};
 use serde_json::{value::Serializer, Value as JsonValue};
 use std::{collections::HashMap, sync::Arc};
 
-use crate::SETTINGS;
+use crate::{base::BaseMessage, SETTINGS};
 
 const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
@@ -68,16 +69,16 @@ impl Parser {
         let msg_id: usize;
         match msg_type {
             MessageType::Notify => {
-                let (method, data) = buf_to_method_data(&buf[1..])?;
-                let method_name_str = String::from_utf8(method.into())?;
-                method_name = Arc::from(method_name_str);
+                let msg_block = BaseMessage::decode(&buf[1..])?;
+                let data = msg_block.data;
+                method_name = Arc::from(msg_block.method_name);
                 let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let message_name = method_name_list[2];
                 let message_type = self
                     .pool
                     .get_message_by_name(&to_fqn(message_name))
                     .ok_or(anyhow!("Invalid message type: {}", message_name))?;
-                let dyn_msg = DynamicMessage::decode(message_type, data)?;
+                let dyn_msg = DynamicMessage::decode(message_type, data.as_ref())?;
                 data_obj = dyn_to_json(dyn_msg)?;
                 if let Some(b64) = data_obj.get("data") {
                     let action_name = data_obj
@@ -96,10 +97,9 @@ impl Parser {
             MessageType::Request => {
                 // little endian, msg_id = unpack("<H", buf[1:3])[0]
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
-                let (method, data) = buf_to_method_data(&buf[3..])?;
-                assert!(msg_id < 1 << 16);
-                let method_name_str = String::from_utf8(method.into())?;
-                method_name = Arc::from(method_name_str);
+                let msg_block = BaseMessage::decode(&buf[3..])?;
+                let data = msg_block.data;
+                method_name = Arc::from(msg_block.method_name);
                 let method_name_list: Vec<&str> = method_name.split('.').collect();
                 let lq = method_name_list[1];
                 let service = method_name_list[2];
@@ -113,7 +113,7 @@ impl Parser {
                     .pool
                     .get_message_by_name(&to_fqn(req_type_name))
                     .ok_or(anyhow!("Invalid request type: {}", req_type_name))?;
-                let dyn_msg = DynamicMessage::decode(req_type, data)?;
+                let dyn_msg = DynamicMessage::decode(req_type, data.as_ref())?;
                 data_obj = dyn_to_json(dyn_msg)?;
                 let res_type_name = proto_domain["responseType"]
                     .as_str()
@@ -127,14 +127,16 @@ impl Parser {
             }
             MessageType::Response => {
                 msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
-                let (method, data) = buf_to_method_data(&buf[3..])?;
+                let msg_block = BaseMessage::decode(&buf[3..])?;
+                let data = msg_block.data;
+                let method = msg_block.method_name;
                 assert!(method.is_empty());
                 let resp_type: MessageDescriptor;
                 (method_name, resp_type) = self
                     .respond_type
                     .remove(&msg_id)
                     .ok_or(anyhow!("No corresponding request"))?;
-                let dyn_msg = DynamicMessage::decode(resp_type, data)?;
+                let dyn_msg = DynamicMessage::decode(resp_type, data.as_ref())?;
                 data_obj = dyn_to_json(dyn_msg)?;
             }
         }
@@ -152,13 +154,6 @@ pub fn to_fqn(method_name: &str) -> String {
     format!("lq.{}", method_name)
 }
 
-struct Block {
-    _id: usize,
-    _blk_type: usize,
-    data: Bytes,
-    _begin: usize,
-}
-
 pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<JsonValue> {
     let mut decoded = BASE64_STANDARD.decode(data)?;
     wtf_decode(&mut decoded);
@@ -167,60 +162,6 @@ pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<Js
         .ok_or(anyhow!("Invalid action type: {}", name))?;
     let action_msg = DynamicMessage::decode(action_type, Bytes::from(decoded))?;
     dyn_to_json(action_msg)
-}
-
-fn buf_to_method_data(buf: &[u8]) -> Result<(Bytes, Bytes)> {
-    let mut blocks = Vec::new();
-    let mut i = 0;
-    let l = buf.len();
-    while i < l {
-        let begin = i;
-        let blk_type = (buf[i] & 0x07) as usize;
-        let id = (buf[i] >> 3) as usize;
-        i += 1;
-        let data: Bytes;
-        match blk_type {
-            0 => {
-                let int = parse_var_int(buf, &mut i);
-                // convert int to bytes
-                data = int.to_be_bytes().to_vec().into();
-            }
-            2 => {
-                let len = parse_var_int(buf, &mut i);
-                data = Bytes::copy_from_slice(&buf[i..i + len]);
-                i += len;
-            }
-            _ => bail!("Invalid block type: {}", blk_type),
-        }
-        blocks.push(Block {
-            _id: id,
-            _blk_type: blk_type,
-            data,
-            _begin: begin,
-        });
-    }
-    ensure!(
-        blocks.len() == 2,
-        "Invalid number of blocks: {}",
-        blocks.len()
-    );
-    let data_block = blocks.pop().ok_or(anyhow!("No data block"))?;
-    let method_block = blocks.pop().ok_or(anyhow!("No method block"))?;
-    Ok((method_block.data, data_block.data))
-}
-
-fn parse_var_int(buf: &[u8], p: &mut usize) -> usize {
-    let mut data = 0;
-    let mut shift = 0;
-    for b in buf.iter().skip(*p) {
-        data += ((*b & 0x7f) as usize) << shift;
-        *p += 1;
-        shift += 7;
-        if b >> 7 == 0 {
-            break;
-        }
-    }
-    data
 }
 
 fn wtf_decode(data: &mut [u8]) {
