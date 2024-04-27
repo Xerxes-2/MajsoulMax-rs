@@ -1,4 +1,4 @@
-# 雀魂MAX-rs
+# 雀魂Max-rs
 
 **本项目启发自[MajsoulMax](https://github.com/Avenshy/MajsoulMax)**
 
