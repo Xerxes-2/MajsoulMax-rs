@@ -9,6 +9,7 @@ pub mod parser;
 pub mod settings;
 pub mod sheets;
 pub mod base;
+pub mod lq;
 
 pub static SETTINGS: Lazy<Settings> = Lazy::new(Settings::new);
 pub const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";

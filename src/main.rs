@@ -1,8 +1,11 @@
 use bytes::Bytes;
+use hudsucker::futures::SinkExt;
+use hudsucker::futures::StreamExt;
 use hudsucker::{
     certificate_authority::RcgenAuthority,
+    futures::{Sink, Stream},
     rcgen::{CertificateParams, KeyPair},
-    tokio_tungstenite::tungstenite::Message,
+    tokio_tungstenite::tungstenite::{self, Message},
     *,
 };
 use std::{net::SocketAddr, str::FromStr, sync::Arc};
@@ -20,9 +23,44 @@ use majsoul_max_rs::{
 struct Handler {
     sender: Sender<(Bytes, char)>,
     modder: Option<Arc<Modder>>,
+    inject_msg: Option<Arc<Message>>,
 }
 
 impl WebSocketHandler for Handler {
+    async fn handle_websocket(
+        mut self,
+        ctx: WebSocketContext,
+        mut stream: impl Stream<Item = Result<Message, tungstenite::Error>> + Unpin + Send + 'static,
+        mut sink: impl Sink<Message, Error = tungstenite::Error> + Unpin + Send + 'static,
+    ) {
+        while let Some(message) = stream.next().await {
+            match message {
+                Ok(message) => {
+                    let Some(message) = self.handle_message(&ctx, message).await else {
+                        continue;
+                    };
+
+                    match sink.send(message).await {
+                        Err(tungstenite::Error::ConnectionClosed) => (),
+                        Err(e) => error!("WebSocket send error: {}", e),
+                        _ => (),
+                    }
+                }
+                Err(e) => {
+                    error!("WebSocket message error: {}", e);
+
+                    match sink.send(Message::Close(None)).await {
+                        Err(tungstenite::Error::ConnectionClosed) => (),
+                        Err(e) => error!("WebSocket close error: {}", e),
+                        _ => (),
+                    };
+
+                    break;
+                }
+            }
+        }
+    }
+
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
         let (direction_char, uri) = match _ctx {
             WebSocketContext::ClientToServer { dst, .. } => ('\u{2193}', dst),
@@ -47,12 +85,19 @@ impl WebSocketHandler for Handler {
                 }
             }
         }
-
         if let Some(ref modder) = self.modder {
-            // TODO: handle modder
+            if let Message::Binary(buf) = msg {
+                let res = modder.modify(buf, direction_char == '\u{2191}').await;
+                if let Some(inj) = res.inject_msg {
+                    self.inject_msg = Some(Arc::new(Message::Binary(inj)));
+                }
+                res.msg.map(|buf| Message::Binary(buf))
+            } else {
+                Some(msg)
+            }
+        } else {
+            Some(msg)
         }
-
-        Some(msg)
     }
 }
 
@@ -140,6 +185,7 @@ async fn main() {
         .with_websocket_handler(Handler {
             sender: tx.clone(),
             modder,
+            inject_msg: None,
         })
         .with_graceful_shutdown(shutdown_signal())
         .build();

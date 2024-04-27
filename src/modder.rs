@@ -1,11 +1,26 @@
-use crate::{lq_config::ConfigTables, parser::Parser, settings::ModSettings, sheets};
-use bytes::Bytes;
+use crate::{
+    base::BaseMessage, lq, lq_config::ConfigTables, parser::Parser, settings::ModSettings, sheets,
+};
+use anyhow::{anyhow, Result};
 use once_cell::sync::Lazy;
-use prost::Message as ProtoBufMessage;
+use prost::Message;
 use std::collections::HashMap;
 use tokio::sync::RwLock;
+use tracing::error;
 
 pub static MOD_SETTINGS: Lazy<RwLock<ModSettings>> = Lazy::new(|| RwLock::new(ModSettings::new()));
+pub static SAFE: Lazy<RwLock<Safe>> = Lazy::new(|| RwLock::new(Safe::default()));
+
+#[derive(Debug, Default)]
+pub struct Safe {
+    pub account_id: u32,
+    pub characters: Vec<lq::Character>,
+    pub main_character_id: u32,
+    pub nickname: String,
+    pub skin: u32,
+    pub title: sheets::ItemDefinitionTitle,
+    pub loading_image: sheets::ItemDefinitionLoadingImage,
+}
 
 #[derive(Debug, Default)]
 pub struct Modder {
@@ -27,7 +42,7 @@ pub fn capitalize(s: &str) -> String {
     }
 }
 
-fn to_vec<T: ProtoBufMessage + std::default::Default>(buf: &[Vec<u8>]) -> Vec<T> {
+fn to_vec<T: Message + std::default::Default>(buf: &[Vec<u8>]) -> Vec<T> {
     buf.iter()
         .map(|d| {
             T::decode(d.as_ref())
@@ -37,8 +52,8 @@ fn to_vec<T: ProtoBufMessage + std::default::Default>(buf: &[Vec<u8>]) -> Vec<T>
 }
 
 pub struct ModifyResult {
-    pub msg: Option<Bytes>,
-    pub injected_msg: Option<Bytes>,
+    pub msg: Option<Vec<u8>>,
+    pub inject_msg: Option<Vec<u8>>,
 }
 
 impl Modder {
@@ -92,21 +107,104 @@ impl Modder {
         modder
     }
 
-    pub fn modify(&self, buf: Bytes, from_client: bool) -> ModifyResult {
+    pub async fn modify(&self, buf: Vec<u8>, from_client: bool) -> ModifyResult {
         let msg_type = buf[0];
-        match msg_type {
-            0x01 => self.modify_notify(buf),
-            _ => ModifyResult {
+        let res = match msg_type {
+            0x01 => self.modify_notify(&buf).await,
+            _ => Err(anyhow!("Unimplemented message type: {}", msg_type)),
+        };
+        match res {
+            Ok(r) => r,
+            Err(_) => ModifyResult {
                 msg: Some(buf),
-                injected_msg: None,
+                inject_msg: None,
             },
         }
     }
 
-    pub fn modify_notify(&self, buf: Bytes) -> ModifyResult {
-        ModifyResult {
-            msg: Some(buf),
-            injected_msg: None,
+    pub async fn modify_notify(&self, buf: &[u8]) -> Result<ModifyResult> {
+        let mut msg_block = BaseMessage::decode(&buf[1..])?;
+        let method_name = &msg_block.method_name;
+        let mut modified_data: Option<Vec<u8>> = None;
+        match method_name.as_str() {
+            ".lq.NotifyAccountUpdate" => {
+                let msg = lq::NotifyAccountUpdate::decode(msg_block.data.as_ref())?;
+                if let Some(ref update) = msg.update {
+                    if update.character.is_some() {
+                        // drop message if character is updated
+                        return Ok(ModifyResult {
+                            msg: None,
+                            inject_msg: None,
+                        });
+                    }
+                }
+            }
+            ".lq.NotifyRoomPlayerUpdate" => {
+                let mut msg = lq::NotifyRoomPlayerUpdate::decode(msg_block.data.as_ref())?;
+                for player in msg.player_list.iter_mut().chain(msg.update_list.iter_mut()) {
+                    if player.account_id == SAFE.read().await.account_id {
+                        player.avatar_id = MOD_SETTINGS.read().await.characters
+                            [&MOD_SETTINGS.read().await.character];
+                        if !MOD_SETTINGS.read().await.nickname.is_empty() {
+                            player.nickname = MOD_SETTINGS.read().await.nickname.to_owned();
+                        }
+                        player.title = MOD_SETTINGS.read().await.title;
+                    }
+                    if MOD_SETTINGS.read().await.show_server() {
+                        player.nickname = add_zone_id(player.account_id, &player.nickname);
+                    }
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.NotifyGameFinishRewardV2" => {
+                let mut msg = Box::new(lq::NotifyGameFinishRewardV2::decode(
+                    msg_block.data.as_ref(),
+                )?);
+                let main = SAFE.read().await.main_character_id;
+                for char in SAFE.write().await.characters.iter_mut() {
+                    if char.charid == main {
+                        if let Some(ref main_char) = msg.main_character {
+                            char.exp = main_char.exp;
+                            char.level = main_char.level;
+                        }
+                        break;
+                    }
+                }
+                if let Some(ref mut main_char) = msg.main_character {
+                    main_char.add = 0;
+                    main_char.exp = 0;
+                    main_char.level = 5;
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            _ => {}
+        }
+        if let Some(data) = modified_data {
+            // add 0x01 to the beginning of the message
+            msg_block.data = data;
+            let mut buf = vec![0x01];
+            buf.extend(msg_block.encode_to_vec());
+            Ok(ModifyResult {
+                msg: Some(buf),
+                inject_msg: None,
+            })
+        } else {
+            Ok(ModifyResult {
+                msg: Some(buf.to_owned()),
+                inject_msg: None,
+            })
         }
     }
+}
+
+fn add_zone_id(id: u32, name: &str) -> String {
+    let zone_code = id >> 23;
+    let zone = match zone_code {
+        code if code <= 6 => "[CN]",
+        code if (7..=12).contains(&code) => "[JP]",
+        code if (13..=15).contains(&code) => "[EN]",
+        _ => "[??]",
+    }
+    .to_string();
+    zone + name
 }
