@@ -5,6 +5,7 @@ on:
     tags:
       # Regex for a version number such as 0.2.1
       - "[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
@@ -62,7 +63,7 @@ jobs:
         shell: bash
         run: |
           # Replace with the name of your binary
-          binary_name="mahjong_helper_majsoul_hudsucker"
+          binary_name="majsoul_max_rs"
       
           dirname="$binary_name-${{ env.VERSION }}-${{ matrix.target }}"
           mkdir "$dirname"
