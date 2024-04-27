@@ -65,7 +65,7 @@ impl Settings {
             std::fs::read_to_string(dir.join("settings.json")).expect("无法读取settings.json");
         let mut settings: Settings =
             serde_json::from_str(&settings).expect("无法解析settings.json");
-        info!("已载入配置: {:?}", settings);
+        info!("已载入配置");
         settings.methods_set = settings.send_method.iter().cloned().collect();
         settings.actions_set = settings.send_action.iter().cloned().collect();
 
@@ -302,7 +302,7 @@ impl ModSettings {
         };
         let mut settings: ModSettings =
             serde_json::from_str(&settings).expect("无法解析settings.mod.json");
-        info!("已载入Mod配置: {:?}", settings);
+        info!("已载入Mod配置");
         // read res from lqc.lqbin
         let res = std::fs::read(SETTINGS.dir.join("lqc.lqbin")).expect("无法读取lqc.lqbin");
         settings.res = Bytes::from(res);

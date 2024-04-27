@@ -164,6 +164,15 @@ async fn main() {
         }
     }
 
+    // show mod and helper switch status, green for on, red for off
+    println!(
+        "\n\x1b[{}mmod: {}\x1b[0m\n\x1b[{}mhelper: {}\x1b[0m\n",
+        if SETTINGS.mod_on() { 32 } else { 31 },
+        if SETTINGS.mod_on() { "on" } else { "off" },
+        if SETTINGS.helper_on() { 32 } else { 31 },
+        if SETTINGS.helper_on() { "on" } else { "off" }
+    );
+
     let mut modder = None;
     if SETTINGS.mod_on() {
         // start mod worker
