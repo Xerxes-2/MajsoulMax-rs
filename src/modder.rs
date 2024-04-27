@@ -144,7 +144,7 @@ impl Modder {
         }
     }
 
-    pub async fn modify_res(&self, buf: &[u8], from_client: bool) -> Result<ModifyResult> {
+    async fn modify_res(&self, buf: &[u8], from_client: bool) -> Result<ModifyResult> {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         assert!(!from_client);
@@ -165,7 +165,7 @@ impl Modder {
                     .keys()
                     .cloned()
                     .collect::<Vec<_>>();
-                let characters = MOD_SETTINGS.read().await.characters.to_owned();
+                let characters = &MOD_SETTINGS.read().await.characters;
                 for char in characters.keys() {
                     let character = self.perfect_character(*char, &char_keys).await;
                     msg.characters.push(character);
@@ -260,29 +260,7 @@ impl Modder {
                 if let Some(ref mut bag) = msg.bag {
                     SAFE.write().await.items = bag.items.clone();
                     bag.items.clear();
-                    for item in SAFE.read().await.items.iter() {
-                        if !self.items.iter().any(|i| i.id == item.item_id) {
-                            let new_item = lq::Item {
-                                item_id: item.item_id,
-                                stack: item.stack,
-                            };
-                            bag.items.push(new_item);
-                        }
-                    }
-                    for item in self.items.iter() {
-                        let new_item = lq::Item {
-                            item_id: item.id,
-                            stack: 1,
-                        };
-                        bag.items.push(new_item);
-                    }
-                    for item in self.loading_images.iter() {
-                        let new_item = lq::Item {
-                            item_id: item.id,
-                            stack: 1,
-                        };
-                        bag.items.push(new_item);
-                    }
+                    self.fill_bag(bag).await;
                 }
                 modified_data = Some(msg.encode_to_vec());
             }
@@ -346,29 +324,7 @@ impl Modder {
                     if let Some(ref mut bag_info) = msg.bag_info {
                         if let Some(ref mut bag) = bag_info.bag {
                             bag.items.clear();
-                            for item in SAFE.read().await.items.iter() {
-                                if !self.items.iter().any(|i| i.id == item.item_id) {
-                                    let new_item = lq::Item {
-                                        item_id: item.item_id,
-                                        stack: item.stack,
-                                    };
-                                    bag.items.push(new_item);
-                                }
-                            }
-                            for item in self.items.iter() {
-                                let new_item = lq::Item {
-                                    item_id: item.id,
-                                    stack: 1,
-                                };
-                                bag.items.push(new_item);
-                            }
-                            for item in self.loading_images.iter() {
-                                let new_item = lq::Item {
-                                    item_id: item.id,
-                                    stack: 1,
-                                };
-                                bag.items.push(new_item);
-                            }
+                            self.fill_bag(bag).await;
                         }
                     }
                     if let Some(ref mut views) = msg.all_common_views {
@@ -403,32 +359,49 @@ impl Modder {
         }
     }
 
+    async fn fill_bag(&self, bag: &mut lq::Bag) {
+        for item in SAFE.read().await.items.iter() {
+            if !self.items.iter().any(|i| i.id == item.item_id) {
+                let new_item = lq::Item {
+                    item_id: item.item_id,
+                    stack: item.stack,
+                };
+                bag.items.push(new_item);
+            }
+        }
+        for item in self.items.iter() {
+            let new_item = lq::Item {
+                item_id: item.id,
+                stack: 1,
+            };
+            bag.items.push(new_item);
+        }
+        for item in self.loading_images.iter() {
+            let new_item = lq::Item {
+                item_id: item.id,
+                stack: 1,
+            };
+            bag.items.push(new_item);
+        }
+    }
+
     async fn change_player(&self, p: &mut PlayerGameView) {
         if let Some(ref mut character) = p.character {
             character.is_upgraded = true;
             character.level = 5;
             if p.account_id == SAFE.read().await.account_id {
-                p.avatar_id =
-                    MOD_SETTINGS.read().await.characters[&MOD_SETTINGS.read().await.character];
-                character.charid = MOD_SETTINGS.read().await.character;
-                character.exp = 0;
-                character.rewarded_level.extend(vec![1, 2, 3, 4, 5]);
-                character.skin =
-                    MOD_SETTINGS.read().await.characters[&MOD_SETTINGS.read().await.character];
+                *character = self.perfect_character(character.charid, &vec![]).await;
                 if MOD_SETTINGS.read().await.emoji_on() {
                     character
                         .extra_emoji
                         .extend(self.emojis.get(&character.charid).unwrap_or(&vec![]))
                 }
+                p.avatar_id =
+                    MOD_SETTINGS.read().await.characters[&MOD_SETTINGS.read().await.character];
                 if !MOD_SETTINGS.read().await.nickname.is_empty() {
                     p.nickname = MOD_SETTINGS.read().await.nickname.clone();
                 }
                 p.title = MOD_SETTINGS.read().await.title;
-                character.views.clear();
-                character.views.extend(
-                    MOD_SETTINGS.read().await.views[MOD_SETTINGS.read().await.view_index as usize]
-                        .clone(),
-                );
             }
         }
         if MOD_SETTINGS.read().await.show_server() {
@@ -458,10 +431,13 @@ impl Modder {
                 .extra_emoji
                 .extend(self.emojis.get(&id).unwrap_or(&vec![]))
         }
+        character.views.extend(
+            MOD_SETTINGS.read().await.views[MOD_SETTINGS.read().await.view_index as usize].clone(),
+        );
         character
     }
 
-    pub async fn modify_req(&self, buf: &[u8], from_client: bool) -> Result<ModifyResult> {
+    async fn modify_req(&self, buf: &[u8], from_client: bool) -> Result<ModifyResult> {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         // Request message must be from client
@@ -491,20 +467,7 @@ impl Modder {
                 if let Err(e) = MOD_SETTINGS.read().await.write() {
                     error!("Failed to write settings.mod.json : {}", e);
                 }
-                let mut character = lq::Character {
-                    charid: msg.character_id,
-                    skin: msg.skin,
-                    exp: 0,
-                    is_upgraded: true,
-                    level: 5,
-                    ..Default::default()
-                };
-                character.rewarded_level.extend(vec![1, 2, 3, 4, 5]);
-                if MOD_SETTINGS.read().await.emoji_on() {
-                    character
-                        .extra_emoji
-                        .extend(self.emojis.get(&character.charid).unwrap_or(&vec![]))
-                }
+                let character = self.perfect_character(msg.character_id, &vec![]).await;
                 let mut character_update = lq::account_update::CharacterUpdate::default();
                 character_update.characters.push(character);
                 let account_update = lq::AccountUpdate {
@@ -607,7 +570,7 @@ impl Modder {
         }
     }
 
-    pub async fn modify_notify(&self, buf: &[u8]) -> Result<ModifyResult> {
+    async fn modify_notify(&self, buf: &[u8]) -> Result<ModifyResult> {
         let mut msg_block = BaseMessage::decode(&buf[1..])?;
         let method_name = &msg_block.method_name;
         let mut modified_data: Option<Vec<u8>> = None;
