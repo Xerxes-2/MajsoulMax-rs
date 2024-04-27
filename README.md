@@ -46,6 +46,8 @@
 1. 启动程序，直接运行可执行文件
 2. 关闭程序，修改配置
     - 根据程序提示和自身需求修改
+    - 在liqi_config/settings.json可以设置通用设置，包括Helper和Mod的开关——"modSwitch"与"helperSwitch"，0为关1为开
+    - 在liqi_config/settings.mod.json可以设置Mod专有设置
 3. 再次启动程序
 4. 启动游戏，分为网页版和客户端/Steam端。
     - 如果要启动网页版：

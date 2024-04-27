@@ -273,7 +273,7 @@ impl Default for ModSettings {
             characters: HashMap::new(),
             nickname: String::new(),
             star_character: Vec::new(),
-            hint_switch: 0,
+            hint_switch: 1,
             title: 0,
             loading_bg: Vec::new(),
             emoji_switch: 0,
