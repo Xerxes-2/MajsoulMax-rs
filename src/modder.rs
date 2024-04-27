@@ -11,7 +11,7 @@ use once_cell::sync::Lazy;
 use prost::Message;
 use std::collections::HashMap;
 use tokio::sync::RwLock;
-use tracing::error;
+use tracing::{error, info};
 
 pub static MOD_SETTINGS: Lazy<RwLock<ModSettings>> = Lazy::new(|| RwLock::new(ModSettings::new()));
 static SAFE: Lazy<RwLock<Safe>> = Lazy::new(|| RwLock::new(Safe::default()));
@@ -31,7 +31,7 @@ static ANNOUNCEMENT: Lazy<String> = Lazy::new(|| {
     )
 });
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Safe {
     pub account_id: u32,
     pub characters: Vec<lq::Character>,
@@ -43,7 +43,7 @@ pub struct Safe {
     pub items: Vec<lq::Item>,
 }
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Modder {
     characters: Vec<sheets::ItemDefinitionCharacter>,
     skins: Vec<sheets::ItemDefinitionSkin>,
@@ -273,6 +273,7 @@ impl Modder {
             ".lq.Lobby.fetchAllCommonViews" => {
                 let mut msg = lq::ResAllcommonViews::decode(msg_block.data.as_ref())?;
                 msg.r#use = MOD_SETTINGS.read().await.view_index;
+                msg.views.clear();
                 for (i, view) in MOD_SETTINGS.read().await.views.iter().enumerate() {
                     let new_view = lq::res_allcommon_views::Views {
                         index: i as u32,
@@ -350,6 +351,7 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
+            info!("Respond method: {}", method_name);
             msg_block.data = data;
             let mut buf = vec![buf[0], buf[1], buf[2]];
             buf.extend(msg_block.encode_to_vec());
@@ -396,6 +398,7 @@ impl Modder {
             character.is_upgraded = true;
             character.level = 5;
             if p.account_id == SAFE.read().await.account_id {
+                character.charid = MOD_SETTINGS.read().await.character;
                 *character = self.perfect_character(character.charid, &[]).await;
                 if MOD_SETTINGS.read().await.emoji_on() {
                     character
@@ -453,6 +456,7 @@ impl Modder {
         let mut fake = false;
         let method_name = &msg_block.method_name;
         let mut inject_data: Option<Vec<u8>> = None;
+        info!("Request method: {}", method_name);
         match method_name.as_str() {
             ".lq.Lobby.changeMainCharacter" => {
                 fake = true;
@@ -580,6 +584,7 @@ impl Modder {
         let mut msg_block = BaseMessage::decode(&buf[1..])?;
         let method_name = &msg_block.method_name;
         let mut modified_data: Option<Vec<u8>> = None;
+        info!("Notify method: {}", method_name);
         match method_name.as_str() {
             ".lq.NotifyAccountUpdate" => {
                 let msg = lq::NotifyAccountUpdate::decode(msg_block.data.as_ref())?;

@@ -8,9 +8,12 @@ use hudsucker::{
     tokio_tungstenite::tungstenite::{self, Message},
     *,
 };
+use metadata::LevelFilter;
 use std::{net::SocketAddr, str::FromStr, sync::Arc};
 use tokio::sync::mpsc::{channel, Sender};
 use tracing::*;
+use tracing_subscriber::fmt::time::ChronoLocal;
+use tracing_subscriber::EnvFilter;
 
 use majsoul_max_rs::{
     helper::helper_worker,
@@ -116,7 +119,18 @@ async fn shutdown_signal() {
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt::init();
+    // chrono formatted timer
+    let timer = ChronoLocal::default();
+    let filter = EnvFilter::builder()
+        .with_default_directive(LevelFilter::WARN.into())
+        .from_env()
+        .unwrap_or_default()
+        .add_directive("majsoul_max_rs=info".parse().unwrap_or_default());
+    tracing_subscriber::fmt()
+        .with_env_filter(filter)
+        .with_timer(timer)
+        .compact()
+        .init();
 
     let key_pair = include_str!("./ca/hudsucker.key");
     let ca_cert = include_str!("./ca/hudsucker.cer");
