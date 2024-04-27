@@ -158,22 +158,16 @@ impl Modder {
         assert!(PARSER.read().await.respond_type.contains_key(&msg_id));
         let method_name = PARSER.read().await.respond_type[&msg_id].0.clone();
         let mut modified_data: Option<Vec<u8>> = None;
+        info!("Respond method: {}", method_name);
         match method_name.as_ref() {
             ".lq.Lobby.fetchCharacterInfo" => {
                 let mut msg = lq::ResCharacterInfo::decode(msg_block.data.as_ref())?;
                 SAFE.write().await.main_character_id = msg.main_character_id;
                 SAFE.write().await.characters = msg.characters.to_owned();
                 msg.characters.clear();
-                let char_keys = MOD_SETTINGS
-                    .read()
-                    .await
-                    .characters
-                    .keys()
-                    .cloned()
-                    .collect::<Vec<_>>();
                 let characters = &MOD_SETTINGS.read().await.characters;
                 for char in characters.keys() {
-                    let character = self.perfect_character(*char, &char_keys).await;
+                    let character = self.perfect_character(*char).await;
                     msg.characters.push(character);
                 }
                 msg.skins.clear();
@@ -233,13 +227,10 @@ impl Modder {
             ".lq.FastTest.authGame" => {
                 let mut msg = lq::ResAuthGame::decode(msg_block.data.as_ref())?;
                 if MOD_SETTINGS.read().await.hint_on() {
-                    if let Some(ref mut cfg) = msg.game_config {
-                        if let Some(ref mut mode) = cfg.mode {
-                            if let Some(ref mut detail) = mode.detail_rule {
-                                detail.bianjietishi = true;
-                            }
-                        }
-                    }
+                    msg.game_config
+                        .as_mut()
+                        .and_then(|c| c.mode.as_mut()?.detail_rule.as_mut())
+                        .map(|r| r.bianjietishi = true);
                 }
                 for p in &mut msg.players {
                     self.change_player(p).await;
@@ -300,15 +291,8 @@ impl Modder {
                     SAFE.write().await.main_character_id = char_info.main_character_id;
                     SAFE.write().await.characters = char_info.characters.to_owned();
                     char_info.characters.clear();
-                    let char_keys = MOD_SETTINGS
-                        .read()
-                        .await
-                        .characters
-                        .keys()
-                        .cloned()
-                        .collect::<Vec<_>>();
                     for charid in self.characters.iter().map(|c| c.id) {
-                        let character = self.perfect_character(charid, &char_keys).await;
+                        let character = self.perfect_character(charid).await;
                         char_info.characters.push(character);
                     }
                     char_info.skins.clear();
@@ -327,23 +311,22 @@ impl Modder {
                     char_info
                         .rewarded_endings
                         .extend(self.endings.iter().map(|e| e.id));
-
-                    if let Some(ref mut bag_info) = msg.bag_info {
-                        if let Some(ref mut bag) = bag_info.bag {
-                            bag.items.clear();
-                            self.fill_bag(bag).await;
-                        }
+                }
+                if let Some(ref mut bag_info) = msg.bag_info {
+                    if let Some(ref mut bag) = bag_info.bag {
+                        bag.items.clear();
+                        self.fill_bag(bag).await;
                     }
-                    if let Some(ref mut views) = msg.all_common_views {
-                        views.views.clear();
-                        views.r#use = MOD_SETTINGS.read().await.view_index;
-                        for (i, view) in MOD_SETTINGS.read().await.views.iter().enumerate() {
-                            let new_view = lq::res_allcommon_views::Views {
-                                index: i as u32,
-                                values: view.clone(),
-                            };
-                            views.views.push(new_view);
-                        }
+                }
+                if let Some(ref mut views) = msg.all_common_views {
+                    views.views.clear();
+                    views.r#use = MOD_SETTINGS.read().await.view_index;
+                    for (i, view) in MOD_SETTINGS.read().await.views.iter().enumerate() {
+                        let new_view = lq::res_allcommon_views::Views {
+                            index: i as u32,
+                            values: view.clone(),
+                        };
+                        views.views.push(new_view);
                     }
                 }
                 modified_data = Some(msg.encode_to_vec());
@@ -351,7 +334,6 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
-            info!("Respond method: {}", method_name);
             msg_block.data = data;
             let mut buf = vec![buf[0], buf[1], buf[2]];
             buf.extend(msg_block.encode_to_vec());
@@ -399,12 +381,7 @@ impl Modder {
             character.level = 5;
             if p.account_id == SAFE.read().await.account_id {
                 character.charid = MOD_SETTINGS.read().await.character;
-                *character = self.perfect_character(character.charid, &[]).await;
-                if MOD_SETTINGS.read().await.emoji_on() {
-                    character
-                        .extra_emoji
-                        .extend(self.emojis.get(&character.charid).unwrap_or(&vec![]))
-                }
+                *character = self.perfect_character(character.charid).await;
                 p.avatar_id =
                     MOD_SETTINGS.read().await.characters[&MOD_SETTINGS.read().await.character];
                 if !MOD_SETTINGS.read().await.nickname.is_empty() {
@@ -418,7 +395,7 @@ impl Modder {
         }
     }
 
-    async fn perfect_character(&self, id: u32, keys: &[u32]) -> Character {
+    async fn perfect_character(&self, id: u32) -> Character {
         let mut character = Character {
             charid: id,
             exp: 0,
@@ -427,19 +404,18 @@ impl Modder {
             ..Default::default()
         };
         character.rewarded_level.extend(vec![1, 2, 3, 4, 5]);
-        if !keys.contains(&id) {
-            MOD_SETTINGS
-                .write()
-                .await
-                .characters
-                .insert(id, 400001 + (id % 100) * 100);
-        }
-        character.skin = MOD_SETTINGS.read().await.characters[&id];
+        character.skin = *MOD_SETTINGS
+            .write()
+            .await
+            .characters
+            .entry(id)
+            .or_insert(400001 + (id % 100) * 100);
         if MOD_SETTINGS.read().await.emoji_on() {
             character
                 .extra_emoji
                 .extend(self.emojis.get(&id).unwrap_or(&vec![]))
         }
+        character.views.clear();
         character.views.extend(
             MOD_SETTINGS.read().await.views[MOD_SETTINGS.read().await.view_index as usize].clone(),
         );
@@ -456,7 +432,6 @@ impl Modder {
         let mut fake = false;
         let method_name = &msg_block.method_name;
         let mut inject_data: Option<Vec<u8>> = None;
-        info!("Request method: {}", method_name);
         match method_name.as_str() {
             ".lq.Lobby.changeMainCharacter" => {
                 fake = true;
@@ -477,7 +452,7 @@ impl Modder {
                 if let Err(e) = MOD_SETTINGS.read().await.write() {
                     error!("Failed to write settings.mod.json : {}", e);
                 }
-                let character = self.perfect_character(msg.character_id, &[]).await;
+                let character = self.perfect_character(msg.character_id).await;
                 let mut character_update = lq::account_update::CharacterUpdate::default();
                 character_update.characters.push(character);
                 let account_update = lq::AccountUpdate {
@@ -560,6 +535,7 @@ impl Modder {
             _ => {}
         }
         if fake {
+            info!("Request method: {}", method_name);
             let data = lq::ReqLoginBeat {
                 contract: CONTRACT.read().await.clone(),
             };
@@ -584,7 +560,6 @@ impl Modder {
         let mut msg_block = BaseMessage::decode(&buf[1..])?;
         let method_name = &msg_block.method_name;
         let mut modified_data: Option<Vec<u8>> = None;
-        info!("Notify method: {}", method_name);
         match method_name.as_str() {
             ".lq.NotifyAccountUpdate" => {
                 let msg = lq::NotifyAccountUpdate::decode(msg_block.data.as_ref())?;
@@ -639,6 +614,7 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
+            info!("Notify method: {}", method_name);
             // add 0x01 to the beginning of the message
             msg_block.data = data;
             let mut buf = vec![0x01];
