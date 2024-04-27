@@ -1,4 +1,4 @@
-use crate::{ARG, SETTINGS};
+use crate::{lq::ViewSlot, ARG, SETTINGS};
 use anyhow::{anyhow, Result};
 use bytes::Bytes;
 use once_cell::sync::Lazy;
@@ -253,9 +253,9 @@ pub struct ModSettings {
     #[serde(rename = "emojiSwitch")]
     emoji_switch: i32,
     #[serde(default)]
-    pub views: [Vec<u32>; 10],
+    pub views: [Vec<ViewSlot>; 10],
     #[serde(default)]
-    pub view: u32,
+    pub view_index: u32,
     #[serde(rename = "showServer")]
     show_server: i32,
     #[serde(rename = "autoUpdate")]
@@ -278,7 +278,7 @@ impl Default for ModSettings {
             loading_bg: Vec::new(),
             emoji_switch: 0,
             views: Default::default(),
-            view: 0,
+            view_index: 0,
             show_server: 1,
             auto_update: 1,
             version: String::new(),

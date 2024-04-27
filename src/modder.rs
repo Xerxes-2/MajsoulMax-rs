@@ -1,5 +1,10 @@
 use crate::{
-    base::BaseMessage, lq, lq_config::ConfigTables, parser::Parser, settings::ModSettings, sheets,
+    base::BaseMessage,
+    lq::{self, Character, PlayerGameView},
+    lq_config::ConfigTables,
+    parser::Parser,
+    settings::ModSettings,
+    sheets,
 };
 use anyhow::{anyhow, Result};
 use once_cell::sync::Lazy;
@@ -9,7 +14,16 @@ use tokio::sync::RwLock;
 use tracing::error;
 
 pub static MOD_SETTINGS: Lazy<RwLock<ModSettings>> = Lazy::new(|| RwLock::new(ModSettings::new()));
-pub static SAFE: Lazy<RwLock<Safe>> = Lazy::new(|| RwLock::new(Safe::default()));
+static SAFE: Lazy<RwLock<Safe>> = Lazy::new(|| RwLock::new(Safe::default()));
+static CONTRACT: Lazy<RwLock<String>> = Lazy::new(|| RwLock::new(String::new()));
+static PARSER: Lazy<RwLock<Parser>> = Lazy::new(|| RwLock::new(Parser::default()));
+const ANNOUNCEMENT: &str = "<color=#f9963b>作者: Xerxes-2        版本: 0.3.0</color>\n
+<b>本工具完全免费、开源，如果您为此付费，说明您被骗了！</b>\n
+<b>本工具仅供学习交流, 请在下载后24小时内删除, 不得用于商业用途, 否则后果自负！</b>\n
+<b>本工具有可能导致账号被封禁，给猫粮充钱才是正道！</b>\n\n
+<color=#f9963b>开源地址：</color>\n
+<href=https://github.com/Xerxes-2/MajsoulMax-rs>https://github.com/Xerxes-2/MajsoulMax-rs</href>\n\n
+<color=#f9963b>再次重申：脚本完全免费使用，没有收费功能！</color>";
 
 #[derive(Debug, Default)]
 pub struct Safe {
@@ -18,8 +32,9 @@ pub struct Safe {
     pub main_character_id: u32,
     pub nickname: String,
     pub skin: u32,
-    pub title: sheets::ItemDefinitionTitle,
-    pub loading_image: sheets::ItemDefinitionLoadingImage,
+    pub title: u32,
+    pub loading_image: Vec<u32>,
+    pub items: Vec<lq::Item>,
 }
 
 #[derive(Debug, Default)]
@@ -29,9 +44,8 @@ pub struct Modder {
     titles: Vec<sheets::ItemDefinitionTitle>,
     items: Vec<sheets::ItemDefinitionItem>,
     loading_images: Vec<sheets::ItemDefinitionLoadingImage>,
-    emojis: HashMap<u32, Vec<sheets::CharacterEmoji>>,
+    emojis: HashMap<u32, Vec<u32>>,
     endings: Vec<sheets::SpotRewards>,
-    parser: Parser,
 }
 
 pub fn capitalize(s: &str) -> String {
@@ -95,7 +109,7 @@ impl Modder {
                             .emojis
                             .entry(emoji.charid)
                             .or_insert_with(Vec::new)
-                            .push(emoji);
+                            .push(emoji.sub_id);
                     });
                 }
                 "SpotRewards" => {
@@ -111,14 +125,506 @@ impl Modder {
         let msg_type = buf[0];
         let res = match msg_type {
             0x01 => self.modify_notify(&buf).await,
+            0x02 => self.modify_req(&buf, from_client).await,
+            0x03 => self.modify_res(&buf, from_client).await,
             _ => Err(anyhow!("Unimplemented message type: {}", msg_type)),
         };
+        if let Err(e) = PARSER.write().await.parse(&buf) {
+            error!("Mod: Failed to parse message: {:?}", e);
+        }
         match res {
             Ok(r) => r,
-            Err(_) => ModifyResult {
+            Err(e) => {
+                error!("Failed to modify message: {}", e);
+                ModifyResult {
+                    msg: Some(buf),
+                    inject_msg: None,
+                }
+            }
+        }
+    }
+
+    pub async fn modify_res(&self, buf: &[u8], from_client: bool) -> Result<ModifyResult> {
+        let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
+        let mut msg_block = BaseMessage::decode(&buf[3..])?;
+        assert!(!from_client);
+        assert!(msg_block.method_name.is_empty());
+        assert!(PARSER.read().await.respond_type.contains_key(&msg_id));
+        let method_name = PARSER.read().await.respond_type[&msg_id].0.clone();
+        let mut modified_data: Option<Vec<u8>> = None;
+        match method_name.as_ref() {
+            ".lq.Lobby.fetchCharacterInfo" => {
+                let mut msg = lq::ResCharacterInfo::decode(msg_block.data.as_ref())?;
+                SAFE.write().await.main_character_id = msg.main_character_id;
+                SAFE.write().await.characters = msg.characters.to_owned();
+                msg.characters.clear();
+                let char_keys = MOD_SETTINGS
+                    .read()
+                    .await
+                    .characters
+                    .keys()
+                    .cloned()
+                    .collect::<Vec<_>>();
+                let characters = MOD_SETTINGS.read().await.characters.to_owned();
+                for char in characters.keys() {
+                    let mut character = lq::Character {
+                        charid: *char,
+                        exp: 0,
+                        is_upgraded: true,
+                        level: 5,
+                        ..Default::default()
+                    };
+                    character.rewarded_level.extend(vec![1, 2, 3, 4, 5]);
+                    if !char_keys.contains(char) {
+                        //self.settings['config']['characters'][c] = int('40'+str(c)[4:6]+'01')
+                        MOD_SETTINGS
+                            .write()
+                            .await
+                            .characters
+                            .insert(*char, 400001 + (char % 100) * 100);
+                    }
+                    character.skin = MOD_SETTINGS.read().await.characters[char];
+                    if MOD_SETTINGS.read().await.emoji_on() {
+                        character
+                            .extra_emoji
+                            .extend(self.emojis.get(char).unwrap_or(&vec![]))
+                    }
+                    msg.characters.push(character);
+                }
+                msg.skins.clear();
+                msg.skins.extend(self.skins.iter().map(|s| s.id));
+                msg.main_character_id = MOD_SETTINGS.read().await.character;
+                msg.character_sort.clear();
+                msg.character_sort
+                    .extend(MOD_SETTINGS.read().await.star_character.iter());
+                msg.hidden_characters.clear();
+                msg.finished_endings.clear();
+                msg.rewarded_endings.clear();
+                msg.finished_endings
+                    .extend(self.endings.iter().map(|e| e.id));
+                msg.rewarded_endings
+                    .extend(self.endings.iter().map(|e| e.id));
+                modified_data = Some(msg.encode_to_vec());
+            }
+            name if name == ".lq.Lobby.login" || name == ".lq.Lobby.oauth2Login" => {
+                let mut msg = lq::ResLogin::decode(msg_block.data.as_ref())?;
+                SAFE.write().await.account_id = msg.account_id;
+                if let Some(ref mut account) = msg.account {
+                    SAFE.write().await.nickname = account.nickname.clone();
+                    SAFE.write().await.skin = account.avatar_id;
+                    SAFE.write().await.title = account.title;
+                    SAFE.write().await.loading_image = account.loading_image.clone();
+                    if let Some(av) = MOD_SETTINGS
+                        .read()
+                        .await
+                        .characters
+                        .get(&MOD_SETTINGS.read().await.character)
+                    {
+                        account.avatar_id = *av;
+                    } else {
+                        account.avatar_id =
+                            400001 + (MOD_SETTINGS.read().await.character % 100) * 100;
+                    }
+                    if !MOD_SETTINGS.read().await.nickname.is_empty() {
+                        account.nickname = MOD_SETTINGS.read().await.nickname.clone();
+                    }
+                    account.title = MOD_SETTINGS.read().await.title;
+                    account.loading_image.clear();
+                    account
+                        .loading_image
+                        .extend(MOD_SETTINGS.read().await.loading_bg.iter());
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.Lobby.createRoom" => {
+                let mut msg = lq::ResCreateRoom::decode(msg_block.data.as_ref())?;
+                if let Some(ref mut room) = msg.room {
+                    for p in &mut room.persons {
+                        self.change_player(p).await;
+                    }
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.FastTest.authGame" => {
+                let mut msg = lq::ResAuthGame::decode(msg_block.data.as_ref())?;
+                if MOD_SETTINGS.read().await.hint_on() {
+                    if let Some(ref mut cfg) = msg.game_config {
+                        if let Some(ref mut mode) = cfg.mode {
+                            if let Some(ref mut detail) = mode.detail_rule {
+                                detail.bianjietishi = true;
+                            }
+                        }
+                    }
+                }
+                for p in &mut msg.players {
+                    self.change_player(p).await;
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.Lobby.fetchTitleList" => {
+                let mut msg = lq::ResTitleList::decode(msg_block.data.as_ref())?;
+                msg.title_list.clear();
+                msg.title_list.extend(self.titles.iter().map(|t| t.id));
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.Lobby.fetchRoom" => {
+                let mut msg = lq::ResSelfRoom::decode(msg_block.data.as_ref())?;
+                if let Some(ref mut room) = msg.room {
+                    for p in &mut room.persons {
+                        self.change_player(p).await;
+                    }
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.Lobby.fetchBagInfo" => {
+                let mut msg = lq::ResBagInfo::decode(msg_block.data.as_ref())?;
+                if let Some(ref mut bag) = msg.bag {
+                    SAFE.write().await.items = bag.items.clone();
+                    bag.items.clear();
+                    for item in SAFE.read().await.items.iter() {
+                        if !self.items.iter().any(|i| i.id == item.item_id) {
+                            let new_item = lq::Item {
+                                item_id: item.item_id,
+                                stack: item.stack,
+                            };
+                            bag.items.push(new_item);
+                        }
+                    }
+                    for item in self.items.iter() {
+                        let new_item = lq::Item {
+                            item_id: item.id,
+                            stack: 1,
+                        };
+                        bag.items.push(new_item);
+                    }
+                    for item in self.loading_images.iter() {
+                        let new_item = lq::Item {
+                            item_id: item.id,
+                            stack: 1,
+                        };
+                        bag.items.push(new_item);
+                    }
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.Lobby.fetchAllCommonViews" => {
+                let mut msg = lq::ResAllcommonViews::decode(msg_block.data.as_ref())?;
+                msg.r#use = MOD_SETTINGS.read().await.view_index;
+                for (i, view) in MOD_SETTINGS.read().await.views.iter().enumerate() {
+                    let new_view = lq::res_allcommon_views::Views {
+                        index: i as u32,
+                        values: view.clone(),
+                    };
+                    msg.views.push(new_view);
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.Lobby.fetchAnnouncement" => {
+                let mut msg = lq::ResAnnouncement::decode(msg_block.data.as_ref())?;
+                let my_announcement = lq::Announcement {
+                    title: "雀魂Max-rs载入成功".to_string(),
+                    id: 1145141919,
+                    header_image: "internal://2.jpg".to_string(),
+                    content: ANNOUNCEMENT.to_string(),
+                };
+                msg.announcements.insert(0, my_announcement);
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.Lobby.fetchInfo" => {
+                let mut msg = lq::ResFetchInfo::decode(msg_block.data.as_ref())?;
+                if let Some(ref mut char_info) = msg.character_info {
+                    SAFE.write().await.main_character_id = char_info.main_character_id;
+                    SAFE.write().await.characters = char_info.characters.to_owned();
+                    char_info.characters.clear();
+                    let char_keys = MOD_SETTINGS
+                        .read()
+                        .await
+                        .characters
+                        .keys()
+                        .cloned()
+                        .collect::<Vec<_>>();
+                    for charid in self.characters.iter().map(|c| c.id) {
+                        let character = self.perfect_character(charid, &char_keys).await;
+                        char_info.characters.push(character);
+                    }
+                    char_info.skins.clear();
+                    char_info.skins.extend(self.skins.iter().map(|s| s.id));
+                    char_info.main_character_id = MOD_SETTINGS.read().await.character;
+                    char_info.character_sort.clear();
+                    char_info
+                        .character_sort
+                        .extend(MOD_SETTINGS.read().await.star_character.iter());
+                    char_info.hidden_characters.clear();
+                    char_info.finished_endings.clear();
+                    char_info.rewarded_endings.clear();
+                    char_info
+                        .finished_endings
+                        .extend(self.endings.iter().map(|e| e.id));
+                    char_info
+                        .rewarded_endings
+                        .extend(self.endings.iter().map(|e| e.id));
+
+                    if let Some(ref mut bag_info) = msg.bag_info {
+                        if let Some(ref mut bag) = bag_info.bag {
+                            bag.items.clear();
+                            for item in SAFE.read().await.items.iter() {
+                                if !self.items.iter().any(|i| i.id == item.item_id) {
+                                    let new_item = lq::Item {
+                                        item_id: item.item_id,
+                                        stack: item.stack,
+                                    };
+                                    bag.items.push(new_item);
+                                }
+                            }
+                            for item in self.items.iter() {
+                                let new_item = lq::Item {
+                                    item_id: item.id,
+                                    stack: 1,
+                                };
+                                bag.items.push(new_item);
+                            }
+                            for item in self.loading_images.iter() {
+                                let new_item = lq::Item {
+                                    item_id: item.id,
+                                    stack: 1,
+                                };
+                                bag.items.push(new_item);
+                            }
+                        }
+                    }
+                    if let Some(ref mut views) = msg.all_common_views {
+                        views.views.clear();
+                        views.r#use = MOD_SETTINGS.read().await.view_index;
+                        for (i, view) in MOD_SETTINGS.read().await.views.iter().enumerate() {
+                            let new_view = lq::res_allcommon_views::Views {
+                                index: i as u32,
+                                values: view.clone(),
+                            };
+                            views.views.push(new_view);
+                        }
+                    }
+                }
+                modified_data = Some(msg.encode_to_vec());
+            }
+            _ => {}
+        }
+        if let Some(data) = modified_data {
+            msg_block.data = data;
+            let mut buf = vec![buf[0], buf[1], buf[2]];
+            buf.extend(msg_block.encode_to_vec());
+            Ok(ModifyResult {
                 msg: Some(buf),
                 inject_msg: None,
-            },
+            })
+        } else {
+            Ok(ModifyResult {
+                msg: Some(buf.to_owned()),
+                inject_msg: None,
+            })
+        }
+    }
+
+    async fn change_player(&self, p: &mut PlayerGameView) {
+        if let Some(ref mut character) = p.character {
+            character.is_upgraded = true;
+            character.level = 5;
+            if p.account_id == SAFE.read().await.account_id {
+                p.avatar_id =
+                    MOD_SETTINGS.read().await.characters[&MOD_SETTINGS.read().await.character];
+                character.charid = MOD_SETTINGS.read().await.character;
+                character.exp = 0;
+                character.rewarded_level.extend(vec![1, 2, 3, 4, 5]);
+                character.skin =
+                    MOD_SETTINGS.read().await.characters[&MOD_SETTINGS.read().await.character];
+                if MOD_SETTINGS.read().await.emoji_on() {
+                    character
+                        .extra_emoji
+                        .extend(self.emojis.get(&character.charid).unwrap_or(&vec![]))
+                }
+                if !MOD_SETTINGS.read().await.nickname.is_empty() {
+                    p.nickname = MOD_SETTINGS.read().await.nickname.clone();
+                }
+                p.title = MOD_SETTINGS.read().await.title;
+                character.views.clear();
+                character.views.extend(
+                    MOD_SETTINGS.read().await.views[MOD_SETTINGS.read().await.view_index as usize]
+                        .clone(),
+                );
+            }
+        }
+        if MOD_SETTINGS.read().await.show_server() {
+            p.nickname = add_zone_id(p.account_id, &p.nickname);
+        }
+    }
+
+    async fn perfect_character(&self, id: u32, keys: &[u32]) -> Character {
+        let mut character = Character {
+            charid: id,
+            exp: 0,
+            is_upgraded: true,
+            level: 5,
+            ..Default::default()
+        };
+        character.rewarded_level.extend(vec![1, 2, 3, 4, 5]);
+        if !keys.contains(&id) {
+            MOD_SETTINGS
+                .write()
+                .await
+                .characters
+                .insert(id, 400001 + (id % 100) * 100);
+        }
+        character.skin = MOD_SETTINGS.read().await.characters[&id];
+        if MOD_SETTINGS.read().await.emoji_on() {
+            character
+                .extra_emoji
+                .extend(self.emojis.get(&id).unwrap_or(&vec![]))
+        }
+        character
+    }
+
+    pub async fn modify_req(&self, buf: &[u8], from_client: bool) -> Result<ModifyResult> {
+        let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
+        let mut msg_block = BaseMessage::decode(&buf[3..])?;
+        // Request message must be from client
+        assert!(from_client);
+        assert!(msg_id < 1 << 16);
+        assert!(!PARSER.read().await.respond_type.contains_key(&msg_id));
+        let mut fake = false;
+        let method_name = &msg_block.method_name;
+        let mut inject_data: Option<Vec<u8>> = None;
+        match method_name.as_str() {
+            ".lq.Lobby.changeMainCharacter" => {
+                fake = true;
+                let msg = lq::ReqChangeMainCharacter::decode(msg_block.data.as_ref())?;
+                MOD_SETTINGS.write().await.character = msg.character_id;
+                if let Err(e) = MOD_SETTINGS.read().await.write() {
+                    error!("Failed to write settings.mod.json : {}", e);
+                }
+            }
+            ".lq.Lobby.changeCharacterSkin" => {
+                fake = true;
+                let msg = lq::ReqChangeCharacterSkin::decode(msg_block.data.as_ref())?;
+                MOD_SETTINGS
+                    .write()
+                    .await
+                    .characters
+                    .insert(msg.character_id, msg.skin);
+                if let Err(e) = MOD_SETTINGS.read().await.write() {
+                    error!("Failed to write settings.mod.json : {}", e);
+                }
+                let mut character = lq::Character {
+                    charid: msg.character_id,
+                    skin: msg.skin,
+                    exp: 0,
+                    is_upgraded: true,
+                    level: 5,
+                    ..Default::default()
+                };
+                character.rewarded_level.extend(vec![1, 2, 3, 4, 5]);
+                if MOD_SETTINGS.read().await.emoji_on() {
+                    character
+                        .extra_emoji
+                        .extend(self.emojis.get(&character.charid).unwrap_or(&vec![]))
+                }
+                let mut character_update = lq::account_update::CharacterUpdate::default();
+                character_update.characters.push(character);
+                let account_update = lq::AccountUpdate {
+                    character: Some(character_update),
+                    ..Default::default()
+                };
+                let update_data = lq::NotifyAccountUpdate {
+                    update: Some(account_update),
+                };
+                let blocks = vec![
+                    Block::String(1, ".lq.NotifyAccountUpdate".as_bytes().to_vec()),
+                    Block::String(2, update_data.encode_to_vec()),
+                ];
+                let mut inject_buf = vec![0x01];
+                inject_buf.extend(blocks_to_pb(blocks));
+                inject_data = Some(inject_buf);
+            }
+            ".lq.Lobby.addFinishedEnding" => {
+                // drop
+                return Ok(ModifyResult {
+                    msg: None,
+                    inject_msg: None,
+                });
+            }
+            ".lq.Lobby.updateCharacterSort" => {
+                fake = true;
+                let msg = lq::ReqUpdateCharacterSort::decode(msg_block.data.as_ref())?;
+                MOD_SETTINGS.write().await.star_character = msg.sort;
+                if let Err(e) = MOD_SETTINGS.read().await.write() {
+                    error!("Failed to write settings.mod.json : {}", e);
+                }
+            }
+            ".lq.Lobby.useTitle" => {
+                fake = true;
+                let msg = lq::ReqUseTitle::decode(msg_block.data.as_ref())?;
+                MOD_SETTINGS.write().await.title = msg.title;
+                if let Err(e) = MOD_SETTINGS.read().await.write() {
+                    error!("Failed to write settings.mod.json : {}", e);
+                }
+            }
+            ".lq.Lobby.setLoadingImage" => {
+                fake = true;
+                let msg = lq::ReqSetLoadingImage::decode(msg_block.data.as_ref())?;
+                MOD_SETTINGS.write().await.loading_bg = msg.images;
+                if let Err(e) = MOD_SETTINGS.read().await.write() {
+                    error!("Failed to write settings.mod.json : {}", e);
+                }
+            }
+            ".lq.Lobby.saveCommonViews" => {
+                fake = true;
+                let msg = lq::ReqSaveCommonViews::decode(msg_block.data.as_ref())?;
+                MOD_SETTINGS.write().await.views[msg.save_index as usize] = msg.views.clone();
+                if msg.is_use == 1 {
+                    MOD_SETTINGS.write().await.view_index = msg.save_index;
+                }
+                if let Err(e) = MOD_SETTINGS.read().await.write() {
+                    error!("Failed to write settings.mod.json : {}", e);
+                }
+            }
+            ".lq.Lobby.useCommonView" => {
+                let msg = lq::ReqUseCommonView::decode(msg_block.data.as_ref())?;
+                MOD_SETTINGS.write().await.view_index = msg.index;
+                if let Err(e) = MOD_SETTINGS.read().await.write() {
+                    error!("Failed to write settings.mod.json : {}", e);
+                }
+            }
+            ".lq.Lobby.loginBeat" => {
+                let msg = lq::ReqLoginBeat::decode(msg_block.data.as_ref())?;
+                *CONTRACT.write().await = msg.contract;
+            }
+            ".lq.Lobby.readAnnouncement" => {
+                let msg = lq::ReqReadAnnouncement::decode(msg_block.data.as_ref())?;
+                if msg.announcement_id == 1145141919 {
+                    fake = true;
+                }
+            }
+            ".lq.Lobby.receiveCharacterRewards" => {
+                fake = true;
+            }
+            _ => {}
+        }
+        if fake {
+            let data = lq::ReqLoginBeat {
+                contract: CONTRACT.read().await.clone(),
+            };
+            msg_block.method_name = ".lq.Lobby.loginBeat".to_string();
+            msg_block.data = data.encode_to_vec();
+            let mut buf = vec![buf[0], buf[1], buf[2]];
+            buf.extend(msg_block.encode_to_vec());
+            Ok(ModifyResult {
+                msg: Some(buf),
+                inject_msg: inject_data,
+            })
+        } else {
+            // return original message
+            Ok(ModifyResult {
+                msg: Some(buf.to_owned()),
+                inject_msg: inject_data,
+            })
         }
     }
 
@@ -207,4 +713,51 @@ fn add_zone_id(id: u32, name: &str) -> String {
     }
     .to_string();
     zone + name
+}
+
+enum Block {
+    _VarInt(u32, u64),
+    String(u32, Vec<u8>),
+}
+
+fn blocks_to_pb(blocks: Vec<Block>) -> Vec<u8> {
+    let mut pb = Vec::new();
+    for block in blocks {
+        match block {
+            Block::_VarInt(id, data) => {
+                // ((d['id'] << 3)+0).to_bytes(length=1, byteorder='little')
+                let bytes = (id << 3).to_le_bytes();
+                let byte = bytes[0];
+                pb.push(byte);
+                pb.extend(to_var_int(data));
+            }
+            Block::String(id, data) => {
+                let bytes = ((id << 3) + 2).to_le_bytes();
+                let byte = bytes[0];
+                pb.push(byte);
+                pb.extend(to_var_int(data.len() as u64));
+                pb.extend(data);
+            }
+        }
+    }
+    pb
+}
+
+fn to_var_int(mut x: u64) -> Vec<u8> {
+    if x == 0 {
+        return vec![0];
+    }
+    let mut data: u64 = 0;
+    let mut base = 0;
+    let mut length = 0;
+    while x > 0 {
+        length += 1;
+        data += (x & 127) << base;
+        x >>= 7;
+        if x > 0 {
+            data += 1 << (base + 7);
+        }
+        base += 8;
+    }
+    data.to_le_bytes()[..length].to_vec()
 }

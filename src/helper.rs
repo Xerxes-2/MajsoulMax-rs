@@ -10,7 +10,7 @@ use serde::Serialize;
 use serde_json::{json, Map, Value as JsonValue};
 use std::future::Future;
 use tokio::{sync::mpsc::Receiver, time::sleep};
-use tracing::{debug, error, info, instrument};
+use tracing::{debug, error, info};
 
 #[derive(Serialize, Debug)]
 struct Action {
@@ -18,7 +18,6 @@ struct Action {
     pub data: JsonValue,
 }
 
-#[instrument]
 pub async fn helper_worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Parser) {
     loop {
         let (buf, direction_char) = match receiver.recv().await {
@@ -147,12 +146,12 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
     let future = CLIENT.post(&SETTINGS.api_url).json(&json_data).send();
 
     handle_future(future);
-    info!("已发送: {}", json_data);
+    info!("已发送至助手");
 
     if let Some(liqi_data) = json_data.get("liqi") {
         let res = CLIENT.post(&SETTINGS.api_url).json(liqi_data).send();
         handle_future(res);
-        info!("已发送: {:?}", liqi_data);
+        info!("已发送立直至助手");
     }
 
     Ok(())
@@ -163,9 +162,8 @@ fn handle_future(
 ) {
     tokio::spawn(async {
         match future.await {
-            Ok(res) => {
-                let body = res.text().await.unwrap_or_default();
-                info!("小助手已接收: {}", body);
+            Ok(_) => {
+                info!("小助手已接收");
             }
             Err(e) => {
                 error!("请求失败: {:?}", e);

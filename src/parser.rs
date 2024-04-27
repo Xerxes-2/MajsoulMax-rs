@@ -30,7 +30,7 @@ pub struct LiqiMessage {
 #[derive(Debug)]
 pub struct Parser {
     total: usize,
-    respond_type: HashMap<usize, (Arc<str>, MessageDescriptor)>,
+    pub respond_type: HashMap<usize, (Arc<str>, MessageDescriptor)>,
     proto_json: &'static JsonValue,
     pub pool: &'static DescriptorPool,
 }

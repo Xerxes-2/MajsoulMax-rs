@@ -23,7 +23,7 @@ use majsoul_max_rs::{
 struct Handler {
     sender: Sender<(Bytes, char)>,
     modder: Option<Arc<Modder>>,
-    inject_msg: Option<Arc<Message>>,
+    inject_msg: Option<Message>,
 }
 
 impl WebSocketHandler for Handler {
@@ -33,6 +33,13 @@ impl WebSocketHandler for Handler {
         mut stream: impl Stream<Item = Result<Message, tungstenite::Error>> + Unpin + Send + 'static,
         mut sink: impl Sink<Message, Error = tungstenite::Error> + Unpin + Send + 'static,
     ) {
+        if let WebSocketContext::ClientToServer { .. } = ctx {
+            if let Some(msg) = self.inject_msg.take() {
+                if let Err(e) = sink.send(msg).await {
+                    error!("Failed to send injected message: {:?}", e);
+                }
+            }
+        }
         while let Some(message) = stream.next().await {
             match message {
                 Ok(message) => {
@@ -89,9 +96,9 @@ impl WebSocketHandler for Handler {
             if let Message::Binary(buf) = msg {
                 let res = modder.modify(buf, direction_char == '\u{2191}').await;
                 if let Some(inj) = res.inject_msg {
-                    self.inject_msg = Some(Arc::new(Message::Binary(inj)));
+                    self.inject_msg = Some(Message::Binary(inj));
                 }
-                res.msg.map(|buf| Message::Binary(buf))
+                res.msg.map(Message::Binary)
             } else {
                 Some(msg)
             }
