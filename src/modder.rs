@@ -167,28 +167,7 @@ impl Modder {
                     .collect::<Vec<_>>();
                 let characters = MOD_SETTINGS.read().await.characters.to_owned();
                 for char in characters.keys() {
-                    let mut character = lq::Character {
-                        charid: *char,
-                        exp: 0,
-                        is_upgraded: true,
-                        level: 5,
-                        ..Default::default()
-                    };
-                    character.rewarded_level.extend(vec![1, 2, 3, 4, 5]);
-                    if !char_keys.contains(char) {
-                        //self.settings['config']['characters'][c] = int('40'+str(c)[4:6]+'01')
-                        MOD_SETTINGS
-                            .write()
-                            .await
-                            .characters
-                            .insert(*char, 400001 + (char % 100) * 100);
-                    }
-                    character.skin = MOD_SETTINGS.read().await.characters[char];
-                    if MOD_SETTINGS.read().await.emoji_on() {
-                        character
-                            .extra_emoji
-                            .extend(self.emojis.get(char).unwrap_or(&vec![]))
-                    }
+                    let character = self.perfect_character(*char, &char_keys).await;
                     msg.characters.push(character);
                 }
                 msg.skins.clear();
