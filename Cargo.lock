@@ -885,7 +885,7 @@ dependencies = [
 
 [[package]]
 name = "majsoul_max_rs"
-version = "0.3.1"
+version = "0.3.3"
 dependencies = [
  "anyhow",
  "base64",
