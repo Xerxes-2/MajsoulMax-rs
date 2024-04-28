@@ -237,7 +237,6 @@ impl Modder {
                 for p in &mut msg.players {
                     self.change_player(p).await;
                 }
-                info!("Respond authGame: {:?}", msg);
                 modified_data = Some(msg.encode_to_vec());
             }
             ".lq.Lobby.fetchTitleList" => {
@@ -398,6 +397,10 @@ impl Modder {
                         [MOD_SETTINGS.read().await.preset_index as usize]
                         .clone(),
                 );
+                // avatar_frame id is view.item_id which view.slot is 5
+                if let Some(frame) = p.views.iter().find(|v| v.slot == 5) {
+                    p.avatar_frame = frame.item_id;
+                }
             }
         }
         if MOD_SETTINGS.read().await.show_server() {
