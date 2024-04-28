@@ -144,13 +144,16 @@ async fn main() {
 
     // print red declaimer text
     println!(
-        "\x1b[31m
+        "
+    MajsoulMax-rs {}
+    \x1b[31m
     本项目完全免费开源，如果您购买了此程序，请立即退款！
     项目地址: https://github.com/Xerxes-2/mahjong_helper_majsoul_hudsucker/
     
     本程序仅供学习交流使用，严禁用于商业用途！
     请遵守当地法律法规，对于使用本程序所产生的任何后果，作者概不负责！
-    \x1b[0m"
+    \x1b[0m",
+        env!("CARGO_PKG_VERSION")
     );
 
     let proxy_addr = match SocketAddr::from_str(SETTINGS.proxy_addr.as_str()) {

@@ -158,7 +158,24 @@ impl Modder {
         assert!(PARSER.read().await.respond_type.contains_key(&msg_id));
         let method_name = PARSER.read().await.respond_type[&msg_id].0.clone();
         let mut modified_data: Option<Vec<u8>> = None;
+        info!("Respond method: {}", method_name);
         match method_name.as_ref() {
+            ".lq.Lobby.fetchAccountInfo" => {
+                let mut msg = lq::ResAccountInfo::decode(msg_block.data.as_ref())?;
+                if let Some(ref mut acc) = msg.account {
+                    if acc.account_id == SAFE.read().await.account_id {
+                        acc.avatar_frame = MOD_SETTINGS.read().await.views_presets
+                            [MOD_SETTINGS.read().await.preset_index as usize]
+                            .iter()
+                            .find(|v| v.slot == 5)
+                            .map(|v| v.item_id)
+                            .unwrap_or_default();
+                        acc.avatar_id = MOD_SETTINGS.read().await.char_skin
+                            [&MOD_SETTINGS.read().await.main_char];
+                        modified_data = Some(msg.encode_to_vec());
+                    }
+                }
+            }
             ".lq.Lobby.fetchCharacterInfo" => {
                 let mut msg = lq::ResCharacterInfo::decode(msg_block.data.as_ref())?;
                 SAFE.write().await.main_character_id = msg.main_character_id;
@@ -336,7 +353,6 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
-            info!("Respond method: {}", method_name);
             msg_block.data = data;
             let mut buf = vec![buf[0], buf[1], buf[2]];
             buf.extend(msg_block.encode_to_vec());
