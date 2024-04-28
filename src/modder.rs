@@ -79,7 +79,7 @@ pub struct ModifyResult {
 impl Modder {
     pub async fn new() -> Self {
         let mod_settings = MOD_SETTINGS.read().await;
-        let config_tables = ConfigTables::decode(mod_settings.res.as_ref())
+        let config_tables = ConfigTables::decode(mod_settings.resource.as_ref())
             .expect("Failed to decode config tables");
         let mut modder = Modder::default();
         for data in config_tables.datas {
@@ -165,14 +165,14 @@ impl Modder {
                 SAFE.write().await.main_character_id = msg.main_character_id;
                 SAFE.write().await.characters = msg.characters.to_owned();
                 msg.characters.clear();
-                let characters = &MOD_SETTINGS.read().await.characters;
+                let characters = &MOD_SETTINGS.read().await.char_skin;
                 for char in characters.keys() {
                     let character = self.perfect_character(*char).await;
                     msg.characters.push(character);
                 }
                 msg.skins.clear();
                 msg.skins.extend(self.skins.iter().map(|s| s.id));
-                msg.main_character_id = MOD_SETTINGS.read().await.character;
+                msg.main_character_id = MOD_SETTINGS.read().await.main_char;
                 msg.character_sort.clear();
                 msg.character_sort
                     .extend(MOD_SETTINGS.read().await.star_character.iter());
@@ -196,13 +196,13 @@ impl Modder {
                     if let Some(av) = MOD_SETTINGS
                         .read()
                         .await
-                        .characters
-                        .get(&MOD_SETTINGS.read().await.character)
+                        .char_skin
+                        .get(&MOD_SETTINGS.read().await.main_char)
                     {
                         account.avatar_id = *av;
                     } else {
                         account.avatar_id =
-                            400001 + (MOD_SETTINGS.read().await.character % 100) * 100;
+                            400001 + (MOD_SETTINGS.read().await.main_char % 100) * 100;
                     }
                     if !MOD_SETTINGS.read().await.nickname.is_empty() {
                         account.nickname = MOD_SETTINGS.read().await.nickname.clone();
@@ -263,9 +263,9 @@ impl Modder {
             }
             ".lq.Lobby.fetchAllCommonViews" => {
                 let mut msg = lq::ResAllcommonViews::decode(msg_block.data.as_ref())?;
-                msg.r#use = MOD_SETTINGS.read().await.view_index;
+                msg.r#use = MOD_SETTINGS.read().await.preset_index;
                 msg.views.clear();
-                for (i, view) in MOD_SETTINGS.read().await.views.iter().enumerate() {
+                for (i, view) in MOD_SETTINGS.read().await.views_presets.iter().enumerate() {
                     let new_view = lq::res_allcommon_views::Views {
                         index: i as u32,
                         values: view.clone(),
@@ -297,7 +297,7 @@ impl Modder {
                     }
                     char_info.skins.clear();
                     char_info.skins.extend(self.skins.iter().map(|s| s.id));
-                    char_info.main_character_id = MOD_SETTINGS.read().await.character;
+                    char_info.main_character_id = MOD_SETTINGS.read().await.main_char;
                     char_info.character_sort.clear();
                     char_info
                         .character_sort
@@ -320,8 +320,8 @@ impl Modder {
                 }
                 if let Some(ref mut views) = msg.all_common_views {
                     views.views.clear();
-                    views.r#use = MOD_SETTINGS.read().await.view_index;
-                    for (i, view) in MOD_SETTINGS.read().await.views.iter().enumerate() {
+                    views.r#use = MOD_SETTINGS.read().await.preset_index;
+                    for (i, view) in MOD_SETTINGS.read().await.views_presets.iter().enumerate() {
                         let new_view = lq::res_allcommon_views::Views {
                             index: i as u32,
                             values: view.clone(),
@@ -380,10 +380,10 @@ impl Modder {
             character.is_upgraded = true;
             character.level = 5;
             if p.account_id == SAFE.read().await.account_id {
-                character.charid = MOD_SETTINGS.read().await.character;
+                character.charid = MOD_SETTINGS.read().await.main_char;
                 *character = self.perfect_character(character.charid).await;
                 p.avatar_id =
-                    MOD_SETTINGS.read().await.characters[&MOD_SETTINGS.read().await.character];
+                    MOD_SETTINGS.read().await.char_skin[&MOD_SETTINGS.read().await.main_char];
                 if !MOD_SETTINGS.read().await.nickname.is_empty() {
                     p.nickname = MOD_SETTINGS.read().await.nickname.clone();
                 }
@@ -407,7 +407,7 @@ impl Modder {
         character.skin = *MOD_SETTINGS
             .write()
             .await
-            .characters
+            .char_skin
             .entry(id)
             .or_insert(400001 + (id % 100) * 100);
         if MOD_SETTINGS.read().await.emoji_on() {
@@ -417,7 +417,7 @@ impl Modder {
         }
         character.views.clear();
         character.views.extend(
-            MOD_SETTINGS.read().await.views[MOD_SETTINGS.read().await.view_index as usize].clone(),
+            MOD_SETTINGS.read().await.views_presets[MOD_SETTINGS.read().await.preset_index as usize].clone(),
         );
         character
     }
@@ -436,7 +436,7 @@ impl Modder {
             ".lq.Lobby.changeMainCharacter" => {
                 fake = true;
                 let msg = lq::ReqChangeMainCharacter::decode(msg_block.data.as_ref())?;
-                MOD_SETTINGS.write().await.character = msg.character_id;
+                MOD_SETTINGS.write().await.main_char = msg.character_id;
                 if let Err(e) = MOD_SETTINGS.read().await.write() {
                     error!("Failed to write settings.mod.json : {}", e);
                 }
@@ -447,7 +447,7 @@ impl Modder {
                 MOD_SETTINGS
                     .write()
                     .await
-                    .characters
+                    .char_skin
                     .insert(msg.character_id, msg.skin);
                 if let Err(e) = MOD_SETTINGS.read().await.write() {
                     error!("Failed to write settings.mod.json : {}", e);
@@ -504,9 +504,9 @@ impl Modder {
             ".lq.Lobby.saveCommonViews" => {
                 fake = true;
                 let msg = lq::ReqSaveCommonViews::decode(msg_block.data.as_ref())?;
-                MOD_SETTINGS.write().await.views[msg.save_index as usize] = msg.views.clone();
+                MOD_SETTINGS.write().await.views_presets[msg.save_index as usize] = msg.views.clone();
                 if msg.is_use == 1 {
-                    MOD_SETTINGS.write().await.view_index = msg.save_index;
+                    MOD_SETTINGS.write().await.preset_index = msg.save_index;
                 }
                 if let Err(e) = MOD_SETTINGS.read().await.write() {
                     error!("Failed to write settings.mod.json : {}", e);
@@ -514,7 +514,7 @@ impl Modder {
             }
             ".lq.Lobby.useCommonView" => {
                 let msg = lq::ReqUseCommonView::decode(msg_block.data.as_ref())?;
-                MOD_SETTINGS.write().await.view_index = msg.index;
+                MOD_SETTINGS.write().await.preset_index = msg.index;
                 if let Err(e) = MOD_SETTINGS.read().await.write() {
                     error!("Failed to write settings.mod.json : {}", e);
                 }
@@ -577,8 +577,8 @@ impl Modder {
                 let mut msg = lq::NotifyRoomPlayerUpdate::decode(msg_block.data.as_ref())?;
                 for player in msg.player_list.iter_mut().chain(msg.update_list.iter_mut()) {
                     if player.account_id == SAFE.read().await.account_id {
-                        player.avatar_id = MOD_SETTINGS.read().await.characters
-                            [&MOD_SETTINGS.read().await.character];
+                        player.avatar_id = MOD_SETTINGS.read().await.char_skin
+                            [&MOD_SETTINGS.read().await.main_char];
                         if !MOD_SETTINGS.read().await.nickname.is_empty() {
                             player.nickname = MOD_SETTINGS.read().await.nickname.to_owned();
                         }

@@ -120,7 +120,7 @@ async fn shutdown_signal() {
 #[tokio::main]
 async fn main() {
     // chrono formatted timer
-    let timer = ChronoLocal::default();
+    let timer = ChronoLocal::new("%H:%M:%S%.3f".to_string());
     let filter = EnvFilter::builder()
         .with_default_directive(LevelFilter::WARN.into())
         .from_env()

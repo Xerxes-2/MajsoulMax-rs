@@ -237,9 +237,9 @@ pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ModSettings {
     #[serde(default)]
-    pub character: u32,
+    pub main_char: u32,
     #[serde(default)]
-    pub characters: HashMap<u32, u32>,
+    pub char_skin: HashMap<u32, u32>,
     #[serde(default)]
     pub nickname: String,
     #[serde(rename = "starCharacter")]
@@ -253,9 +253,9 @@ pub struct ModSettings {
     #[serde(rename = "emojiSwitch")]
     emoji_switch: i32,
     #[serde(default)]
-    pub views: [Vec<ViewSlot>; 10],
+    pub views_presets: [Vec<ViewSlot>; 10],
     #[serde(default)]
-    pub view_index: u32,
+    pub preset_index: u32,
     #[serde(rename = "showServer")]
     show_server: i32,
     #[serde(rename = "autoUpdate")]
@@ -263,26 +263,26 @@ pub struct ModSettings {
     #[serde(default)]
     version: String,
     #[serde(skip)]
-    pub res: Bytes,
+    pub resource: Bytes,
 }
 
 impl Default for ModSettings {
     fn default() -> Self {
         ModSettings {
-            character: 200001,
-            characters: HashMap::new(),
+            main_char: 200001,
+            char_skin: HashMap::new(),
             nickname: String::new(),
             star_character: Vec::new(),
             hint_switch: 1,
             title: 0,
             loading_bg: Vec::new(),
             emoji_switch: 0,
-            views: Default::default(),
-            view_index: 0,
+            views_presets: Default::default(),
+            preset_index: 0,
             show_server: 1,
             auto_update: 1,
             version: String::new(),
-            res: Bytes::new(),
+            resource: Bytes::new(),
         }
     }
 }
@@ -305,7 +305,7 @@ impl ModSettings {
         info!("已载入Mod配置");
         // read res from lqc.lqbin
         let res = std::fs::read(SETTINGS.dir.join("lqc.lqbin")).expect("无法读取lqc.lqbin");
-        settings.res = Bytes::from(res);
+        settings.resource = Bytes::from(res);
         settings
     }
 
