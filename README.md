@@ -49,26 +49,10 @@
     - 在liqi_config/settings.json可以设置通用设置，包括Helper和Mod的开关——"modSwitch"与"helperSwitch"，0为关1为开
     - 在liqi_config/settings.mod.json可以设置Mod专有设置
 3. 再次启动程序
-4. 启动游戏，分为网页版和客户端/Steam端。
-    - 如果要启动网页版：
+4. 启动游戏。
+    - 目前只支持网页版：
        - 关闭所有浏览器窗口，用任务管理器查看后台确保无进程残留
        - 将Chrome或者Edge的快捷方式 `复制->粘贴` 出现一个副本，对快捷方式副本 `右键->属性->目标` 的后面按一个空格后添加` --proxy-server=127.0.0.1:23410 --ignore-certificate-errors https://game.maj-soul.com/1/` （如果要玩其他服务器则修改对应网址）
-    - 如果要启动客户端/Steam端：
-       - 启动到登录界面，不要登录
-       - 如果已经自动登录进入，点击游戏右上角设置登出账号，回到登录界面
-       - 运行[Proxifier](https://www.proxifier.com/)并配置
-          - `Profile` > `Proxy Servers` > `Add`
-          - `Address`: `127.0.0.1`
-          - `Port`: `23410`
-          - `Protocol`: `HTTPS`
-          - 填写完后点击Check，确保看到`Test 1`下显示绿色的`Test passed`，其他的不用管
-          - `OK`
-       - `Profile` > `Proxification Rules` > `Add`
-          - `Name`: 随便起个名字
-          - `Enabled`: ✅
-          - `Applications`: 根据你运行游戏的应用填写，例如Steam客户端填写`jantama_mahjongsoul.exe`
-          - `Action`: `Proxy HTTPS 127.0.0.1`
-          - `OK`
 5. 登录游戏开始享受
 
 ## 🤔Q&A
