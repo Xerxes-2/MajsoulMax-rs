@@ -236,9 +236,9 @@ pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ModSettings {
-    #[serde(default)]
+    #[serde(rename = "mainChar")]
     pub main_char: u32,
-    #[serde(default)]
+    #[serde(rename = "charSkin")]
     pub char_skin: HashMap<u32, u32>,
     #[serde(default)]
     pub nickname: String,
@@ -252,9 +252,9 @@ pub struct ModSettings {
     pub loading_bg: Vec<u32>,
     #[serde(rename = "emojiSwitch")]
     emoji_switch: i32,
-    #[serde(default)]
+    #[serde(rename = "viewsPresets")]
     pub views_presets: [Vec<ViewSlot>; 10],
-    #[serde(default)]
+    #[serde(rename = "presetIndex")]
     pub preset_index: u32,
     #[serde(rename = "showServer")]
     show_server: i32,

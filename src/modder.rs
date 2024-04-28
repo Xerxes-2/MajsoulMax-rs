@@ -158,7 +158,6 @@ impl Modder {
         assert!(PARSER.read().await.respond_type.contains_key(&msg_id));
         let method_name = PARSER.read().await.respond_type[&msg_id].0.clone();
         let mut modified_data: Option<Vec<u8>> = None;
-        info!("Respond method: {}", method_name);
         match method_name.as_ref() {
             ".lq.Lobby.fetchCharacterInfo" => {
                 let mut msg = lq::ResCharacterInfo::decode(msg_block.data.as_ref())?;
@@ -227,14 +226,18 @@ impl Modder {
             ".lq.FastTest.authGame" => {
                 let mut msg = lq::ResAuthGame::decode(msg_block.data.as_ref())?;
                 if MOD_SETTINGS.read().await.hint_on() {
-                    msg.game_config
+                    if let Some(r) = msg
+                        .game_config
                         .as_mut()
                         .and_then(|c| c.mode.as_mut()?.detail_rule.as_mut())
-                        .map(|r| r.bianjietishi = true);
+                    {
+                        r.bianjietishi = true;
+                    }
                 }
                 for p in &mut msg.players {
                     self.change_player(p).await;
                 }
+                info!("Respond authGame: {:?}", msg);
                 modified_data = Some(msg.encode_to_vec());
             }
             ".lq.Lobby.fetchTitleList" => {
@@ -334,6 +337,7 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
+            info!("Respond method: {}", method_name);
             msg_block.data = data;
             let mut buf = vec![buf[0], buf[1], buf[2]];
             buf.extend(msg_block.encode_to_vec());
@@ -388,6 +392,12 @@ impl Modder {
                     p.nickname = MOD_SETTINGS.read().await.nickname.clone();
                 }
                 p.title = MOD_SETTINGS.read().await.title;
+                p.views.clear();
+                p.views.extend(
+                    MOD_SETTINGS.read().await.views_presets
+                        [MOD_SETTINGS.read().await.preset_index as usize]
+                        .clone(),
+                );
             }
         }
         if MOD_SETTINGS.read().await.show_server() {
@@ -417,7 +427,9 @@ impl Modder {
         }
         character.views.clear();
         character.views.extend(
-            MOD_SETTINGS.read().await.views_presets[MOD_SETTINGS.read().await.preset_index as usize].clone(),
+            MOD_SETTINGS.read().await.views_presets
+                [MOD_SETTINGS.read().await.preset_index as usize]
+                .clone(),
         );
         character
     }
@@ -504,7 +516,7 @@ impl Modder {
             ".lq.Lobby.saveCommonViews" => {
                 fake = true;
                 let msg = lq::ReqSaveCommonViews::decode(msg_block.data.as_ref())?;
-                MOD_SETTINGS.write().await.views_presets[msg.save_index as usize] = msg.views.clone();
+                MOD_SETTINGS.write().await.views_presets[msg.save_index as usize] = msg.views;
                 if msg.is_use == 1 {
                     MOD_SETTINGS.write().await.preset_index = msg.save_index;
                 }
