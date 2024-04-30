@@ -2,7 +2,7 @@
 
 **本项目启发自[MajsoulMax](https://github.com/Avenshy/MajsoulMax)**
 
-雀魂解锁全角色、皮肤、装扮等，基于[hudsucker](https://github.com/omjadas/hudsucker)的中间人攻击方式，支持网页版和客户端/Steam端。
+雀魂解锁全角色、皮肤、装扮等，基于[hudsucker](https://github.com/omjadas/hudsucker)的中间人攻击方式，支持网页版。
 
 同时支持将雀魂的牌局发到[日本麻将助手mahjong-helper](https://github.com/EndlessCheng/mahjong-helper)，不支持牌谱分析。
 
