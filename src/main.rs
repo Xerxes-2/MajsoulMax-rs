@@ -36,7 +36,7 @@ impl WebSocketHandler for Handler {
         mut stream: impl Stream<Item = Result<Message, tungstenite::Error>> + Unpin + Send + 'static,
         mut sink: impl Sink<Message, Error = tungstenite::Error> + Unpin + Send + 'static,
     ) {
-        if let WebSocketContext::ClientToServer { .. } = ctx {
+        if let WebSocketContext::ServerToClient { .. } = ctx {
             if let Some(msg) = self.inject_msg.take() {
                 if let Err(e) = sink.send(msg).await {
                     error!("Failed to send injected message: {:?}", e);
@@ -73,8 +73,8 @@ impl WebSocketHandler for Handler {
 
     async fn handle_message(&mut self, _ctx: &WebSocketContext, msg: Message) -> Option<Message> {
         let (direction_char, uri) = match _ctx {
-            WebSocketContext::ClientToServer { dst, .. } => ('\u{2193}', dst),
-            WebSocketContext::ServerToClient { src, .. } => ('\u{2191}', src),
+            WebSocketContext::ServerToClient { src, .. } => ('\u{2193}', src),
+            WebSocketContext::ClientToServer { dst, .. } => ('\u{2191}', dst),
         };
 
         if uri.path() == "/ob" {

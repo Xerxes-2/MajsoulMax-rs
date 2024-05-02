@@ -11,7 +11,7 @@ name = "majsoul_max_rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-hudsucker = { git = "https://github.com/omjadas/hudsucker.git", rev = "800a2fe" }
+hudsucker = { git = "https://github.com/omjadas/hudsucker.git" }
 anyhow = "1.0.82"
 base64 = "0.22.0"
 bytes = "1.6.0"
