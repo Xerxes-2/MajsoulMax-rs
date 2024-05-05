@@ -67,80 +67,81 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
             .build()
             .expect("Failed to create reqwest client")
     });
-    let json_data: JsonValue;
     if !SETTINGS.is_method(&parsed.method_name) {
         return Ok(());
     }
-    if parsed.method_name.as_ref() == ".lq.ActionPrototype" {
-        let name = parsed
-            .data
-            .get("name")
-            .and_then(|n| n.as_str())
-            .ok_or(anyhow!("name field invalid"))?;
-        if !SETTINGS.is_action(name) {
-            return Ok(());
-        }
-        if name == "ActionNewRound" {
-            parsed
+    let json_data = match parsed.method_name.as_ref() {
+        ".lq.ActionPrototype" => {
+            let name = parsed
                 .data
-                .get_mut("data")
-                .and_then(|d| d.as_object_mut())
-                .ok_or(anyhow!("data field invalid"))?
-                .insert("md5".to_string(), json!(ARBITRARY_MD5));
-        }
-        json_data = parsed
-            .data
-            .get_mut("data")
-            .ok_or(anyhow!("No data field"))?
-            .take();
-    } else if parsed.method_name.as_ref() == ".lq.FastTest.syncGame" {
-        let game_restore = parsed
-            .data
-            .get("game_restore")
-            .and_then(|n| n.get("actions"))
-            .and_then(|n| n.as_array())
-            .ok_or(anyhow!("actions field invalid"))?;
-        let mut actions: Vec<Action> = vec![];
-        for item in game_restore.iter() {
-            let action_name = item
                 .get("name")
                 .and_then(|n| n.as_str())
                 .ok_or(anyhow!("name field invalid"))?;
-            let action_data = item
-                .get("data")
-                .ok_or(anyhow!("No data field"))?
-                .as_str()
-                .unwrap_or_default();
-            if action_data.is_empty() {
-                let action = Action {
-                    name: action_name.to_string(),
-                    data: JsonValue::Object(Map::new()),
-                };
-                actions.push(action);
-            } else {
-                let mut value = decode_action(action_name, action_data, parser.pool)?;
-                if action_name == "ActionNewRound" {
-                    value
-                        .as_object_mut()
-                        .ok_or(anyhow!("data is not an object"))?
-                        .insert("md5".to_string(), json!(ARBITRARY_MD5));
-                }
-                let action = Action {
-                    name: action_name.to_string(),
-                    data: value,
-                };
-                actions.push(action);
+            if !SETTINGS.is_action(name) {
+                return Ok(());
             }
+            if name == "ActionNewRound" {
+                parsed
+                    .data
+                    .get_mut("data")
+                    .and_then(|d| d.as_object_mut())
+                    .ok_or(anyhow!("data field invalid"))?
+                    .insert("md5".to_string(), json!(ARBITRARY_MD5));
+            }
+            parsed
+                .data
+                .get_mut("data")
+                .ok_or(anyhow!("No data field"))?
+                .take()
         }
-        let mut map = Map::with_capacity(1);
-        map.insert(
-            "sync_game_actions".to_string(),
-            serde_json::to_value(actions)?,
-        );
-        json_data = JsonValue::Object(map);
-    } else {
-        json_data = parsed.data;
-    }
+        ".lq.FastTest.syncGame" => {
+            let game_restore = parsed
+                .data
+                .get("game_restore")
+                .and_then(|n| n.get("actions"))
+                .and_then(|n| n.as_array())
+                .ok_or(anyhow!("actions field invalid"))?;
+            let mut actions: Vec<Action> = vec![];
+            for item in game_restore.iter() {
+                let action_name = item
+                    .get("name")
+                    .and_then(|n| n.as_str())
+                    .ok_or(anyhow!("name field invalid"))?;
+                let action_data = item
+                    .get("data")
+                    .ok_or(anyhow!("No data field"))?
+                    .as_str()
+                    .unwrap_or_default();
+                if action_data.is_empty() {
+                    let action = Action {
+                        name: action_name.to_string(),
+                        data: JsonValue::Object(Map::new()),
+                    };
+                    actions.push(action);
+                } else {
+                    let mut value = decode_action(action_name, action_data, parser.pool)?;
+                    if action_name == "ActionNewRound" {
+                        value
+                            .as_object_mut()
+                            .ok_or(anyhow!("data is not an object"))?
+                            .insert("md5".to_string(), json!(ARBITRARY_MD5));
+                    }
+                    let action = Action {
+                        name: action_name.to_string(),
+                        data: value,
+                    };
+                    actions.push(action);
+                }
+            }
+            let mut map = Map::with_capacity(1);
+            map.insert(
+                "sync_game_actions".to_string(),
+                serde_json::to_value(actions)?,
+            );
+            JsonValue::Object(map)
+        }
+        _ => parsed.data,
+    };
 
     // post data to API, no verification
     let future = CLIENT.post(&SETTINGS.api_url).json(&json_data).send();
