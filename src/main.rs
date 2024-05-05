@@ -1,9 +1,7 @@
 use bytes::Bytes;
-use hudsucker::futures::SinkExt;
-use hudsucker::futures::StreamExt;
 use hudsucker::{
     certificate_authority::RcgenAuthority,
-    futures::{Sink, Stream},
+    futures::{Sink, SinkExt, Stream, StreamExt},
     rcgen::{CertificateParams, KeyPair},
     tokio_tungstenite::tungstenite::{self, Message},
     *,
