@@ -99,13 +99,10 @@ impl WebSocketHandler for Handler {
                 if let Some(inj) = res.inject_msg {
                     self.inject_msg = Some(Message::Binary(inj));
                 }
-                res.msg.map(Message::Binary)
-            } else {
-                Some(msg)
+                return res.msg.map(Message::Binary);
             }
-        } else {
-            Some(msg)
         }
+        Some(msg)
     }
 }
 
