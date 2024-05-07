@@ -10,8 +10,7 @@ use metadata::LevelFilter;
 use std::{net::SocketAddr, str::FromStr, sync::Arc};
 use tokio::sync::mpsc::{channel, Sender};
 use tracing::*;
-use tracing_subscriber::fmt::time::ChronoLocal;
-use tracing_subscriber::EnvFilter;
+use tracing_subscriber::{fmt::time::ChronoLocal, EnvFilter};
 
 use majsoul_max_rs::{
     helper::helper_worker,
