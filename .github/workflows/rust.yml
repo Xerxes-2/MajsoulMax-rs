@@ -25,6 +25,10 @@ jobs:
             os: ubuntu-latest
             target: x86_64-unknown-linux-musl
 
+          - build: android-arm64
+            os: ubuntu-latest
+            target: aarch64-linux-android
+
           - build: macos
             os: macos-latest
             target: x86_64-apple-darwin
@@ -36,6 +40,7 @@ jobs:
           - build: windows-msvc
             os: windows-latest
             target: x86_64-pc-windows-msvc
+
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
@@ -52,12 +57,28 @@ jobs:
         shell: bash
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
+      - name: Prepare Android NDK
+        if: ${{ matrix.target  == 'aarch64-linux-android' }}
+        run: |
+          sudo apt-get update
+          wget https://dl.google.com/android/repository/android-ndk-r26d-linux.zip?hl=zh-cn -O android-ndk.zip
+          unzip android-ndk.zip
+          export ANDROID_NDK_HOME=$PWD/android-ndk-r26d
+          export PATH=$ANDROID_NDK_HOME:$PATH
+          rustup target add aarch64-linux-android
+          cargo install cargo-ndk
+
       - name: Build
+        if: ${{ matrix.target  != 'aarch64-linux-android' }}
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
           args: --verbose --release --target ${{ matrix.target }}
+
+      - name: Build Android
+        if: ${{ matrix.target  == 'aarch64-linux-android' }}
+        run: cargo ndk -t arm64-v8a build --verbose --release
 
       - name: Build archive
         shell: bash
