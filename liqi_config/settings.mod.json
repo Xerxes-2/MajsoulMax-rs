@@ -120,5 +120,6 @@
   "presetIndex": 0,
   "showServer": 1,
   "autoUpdate": 1,
+  "verified": 0,
   "version": "v0.11.39.w"
 }

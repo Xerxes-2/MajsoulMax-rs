@@ -172,6 +172,7 @@ impl Modder {
                             .unwrap_or_default();
                         acc.avatar_id = MOD_SETTINGS.read().await.char_skin
                             [&MOD_SETTINGS.read().await.main_char];
+                        acc.verified = MOD_SETTINGS.read().await.verified;
                         modified_data = Some(msg.encode_to_vec());
                     }
                 }
@@ -228,6 +229,7 @@ impl Modder {
                     account
                         .loading_image
                         .extend(MOD_SETTINGS.read().await.loading_bg.iter());
+                    account.verified = MOD_SETTINGS.read().await.verified;
                 }
                 modified_data = Some(msg.encode_to_vec());
             }
@@ -417,6 +419,7 @@ impl Modder {
                 if let Some(frame) = p.views.iter().find(|v| v.slot == 5) {
                     p.avatar_frame = frame.item_id;
                 }
+                p.verified = MOD_SETTINGS.read().await.verified;
             }
         }
         if MOD_SETTINGS.read().await.show_server() {

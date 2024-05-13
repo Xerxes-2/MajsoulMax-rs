@@ -262,6 +262,7 @@ pub struct ModSettings {
     auto_update: i32,
     #[serde(default)]
     version: String,
+    pub verified: u32,
     #[serde(skip)]
     pub resource: Bytes,
 }
@@ -281,6 +282,7 @@ impl Default for ModSettings {
             preset_index: 0,
             show_server: 1,
             auto_update: 1,
+            verified: 0,
             version: String::new(),
             resource: Bytes::new(),
         }
