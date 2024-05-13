@@ -158,7 +158,6 @@ impl Modder {
         assert!(PARSER.read().await.respond_type.contains_key(&msg_id));
         let method_name = PARSER.read().await.respond_type[&msg_id].0.clone();
         let mut modified_data: Option<Vec<u8>> = None;
-        info!("Respond method: {}", method_name);
         match method_name.as_ref() {
             ".lq.Lobby.fetchAccountInfo" => {
                 let mut msg = lq::ResAccountInfo::decode(msg_block.data.as_ref())?;
@@ -355,6 +354,7 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
+            info!("Respond method: {}", method_name);
             msg_block.data = data;
             let mut buf = vec![buf[0], buf[1], buf[2]];
             buf.extend(msg_block.encode_to_vec());
