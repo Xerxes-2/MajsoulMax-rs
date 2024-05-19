@@ -119,6 +119,7 @@
   ],
   "presetIndex": 0,
   "showServer": 1,
+  "antiNicknameCensorship": 1,
   "autoUpdate": 1,
   "version": "v0.11.43.w",
   "verified": 2

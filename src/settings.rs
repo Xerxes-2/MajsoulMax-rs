@@ -12,22 +12,15 @@ use std::{
 use tracing::info;
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Settings {
-    #[serde(rename = "sendMethod")]
     pub send_method: Vec<String>,
-    #[serde(rename = "sendAction")]
     pub send_action: Vec<String>,
-    #[serde(rename = "proxyAddr")]
     pub proxy_addr: String,
-    #[serde(rename = "apiUrl")]
     pub api_url: String,
-    #[serde(rename = "helperSwitch")]
     helper_switch: i32,
-    #[serde(rename = "modSwitch")]
     mod_switch: i32,
-    #[serde(rename = "autoUpdate")]
     auto_update: i32,
-    #[serde(rename = "liqiVersion")]
     liqi_version: String,
     #[serde(skip)]
     methods_set: HashSet<String>,
@@ -235,32 +228,21 @@ pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct ModSettings {
-    #[serde(rename = "mainChar")]
     pub main_char: u32,
-    #[serde(rename = "charSkin")]
     pub char_skin: HashMap<u32, u32>,
-    #[serde(default)]
     pub nickname: String,
-    #[serde(rename = "starCharacter")]
     pub star_character: Vec<u32>,
-    #[serde(rename = "hintSwitch")]
     hint_switch: i32,
-    #[serde(default)]
     pub title: u32,
-    #[serde(rename = "loadingBg")]
     pub loading_bg: Vec<u32>,
-    #[serde(rename = "emojiSwitch")]
     emoji_switch: i32,
-    #[serde(rename = "viewsPresets")]
     pub views_presets: [Vec<ViewSlot>; 10],
-    #[serde(rename = "presetIndex")]
     pub preset_index: u32,
-    #[serde(rename = "showServer")]
     show_server: i32,
-    #[serde(rename = "autoUpdate")]
+    anti_nickname_censorship: i32,
     auto_update: i32,
-    #[serde(default)]
     version: String,
     pub verified: u32,
     #[serde(skip)]
@@ -281,6 +263,7 @@ impl Default for ModSettings {
             views_presets: Default::default(),
             preset_index: 0,
             show_server: 1,
+            anti_nickname_censorship: 1,
             auto_update: 1,
             verified: 0,
             version: String::new(),
@@ -325,6 +308,10 @@ impl ModSettings {
 
     pub fn auto_update(&self) -> bool {
         self.auto_update != 0
+    }
+
+    pub fn anti_nickname_censorship(&self) -> bool {
+        self.anti_nickname_censorship != 0
     }
 
     pub async fn get_lqc(&mut self) -> Result<bool> {

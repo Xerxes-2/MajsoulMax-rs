@@ -351,12 +351,24 @@ impl Modder {
                 }
                 modified_data = Some(msg.encode_to_vec());
             }
+            ".lq.Lobby.fetchServerSettings" => {
+                let mut msg = lq::ResServerSettings::decode(msg_block.data.as_ref())?;
+                if MOD_SETTINGS.read().await.anti_nickname_censorship() {
+                    if let Some(ref mut settings) = msg.settings {
+                        if let Some(ref mut nick_setting) = settings.nickname_setting {
+                            nick_setting.enable = 0;
+                            nick_setting.nicknames.clear();
+                            modified_data = Some(msg.encode_to_vec());
+                        }
+                    }
+                }
+            }
             _ => {}
         }
         if let Some(data) = modified_data {
             info!("Respond method: {}", method_name);
             msg_block.data = data;
-            let mut buf = vec![buf[0], buf[1], buf[2]];
+            let mut buf = buf[..3].to_vec();
             buf.extend(msg_block.encode_to_vec());
             Ok(ModifyResult {
                 msg: Some(buf),
@@ -575,7 +587,7 @@ impl Modder {
             };
             msg_block.method_name = ".lq.Lobby.loginBeat".to_string();
             msg_block.data = data.encode_to_vec();
-            let mut buf = vec![buf[0], buf[1], buf[2]];
+            let mut buf = buf[..3].to_vec();
             buf.extend(msg_block.encode_to_vec());
             Ok(ModifyResult {
                 msg: Some(buf),
@@ -645,6 +657,18 @@ impl Modder {
                 }
                 modified_data = Some(msg.encode_to_vec());
             }
+            ".lq.NotifyCustomContestSystemMsg" => {
+                if MOD_SETTINGS.read().await.show_server() {
+                    let mut msg =
+                        lq::NotifyCustomContestSystemMsg::decode(msg_block.data.as_ref())?;
+                    if let Some(ref mut game) = msg.game_start {
+                        game.players.iter_mut().for_each(|p| {
+                            p.nickname = add_zone_id(p.account_id, &p.nickname);
+                        });
+                        modified_data = Some(msg.encode_to_vec());
+                    }
+                }
+            }
             _ => {}
         }
         if let Some(data) = modified_data {
@@ -667,9 +691,10 @@ impl Modder {
 }
 
 fn add_zone_id(id: u32, name: &str) -> String {
+    const CN: &str = "[C\u{feff}N]";
     let zone_code = id >> 23;
     let zone = match zone_code {
-        code if code <= 6 => "[CN]",
+        code if code <= 6 => CN,
         code if (7..=12).contains(&code) => "[JP]",
         code if (13..=15).contains(&code) => "[EN]",
         _ => "[??]",
