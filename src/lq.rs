@@ -709,7 +709,7 @@ pub struct AccountLevel {
     pub score: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message, ::serde::Serialize, ::serde::Deserialize)]
 pub struct ViewSlot {
     #[prost(uint32, tag = "1")]
     pub slot: u32,
@@ -858,6 +858,8 @@ pub struct AccountUpdate {
     pub activity: ::core::option::Option<AccountActivityUpdate>,
     #[prost(message, optional, tag = "16")]
     pub activity_segment_task: ::core::option::Option<account_update::SegmentTaskUpdate>,
+    #[prost(message, optional, tag = "17")]
+    pub month_ticket: ::core::option::Option<account_update::MonthTicketUpdate>,
 }
 /// Nested message and enum types in `AccountUpdate`.
 pub mod account_update {
@@ -967,6 +969,14 @@ pub mod account_update {
         pub progresses: ::prost::alloc::vec::Vec<super::SegmentTaskProgress>,
         #[prost(uint32, repeated, tag = "2")]
         pub task_list: ::prost::alloc::vec::Vec<u32>,
+    }
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct MonthTicketUpdate {
+        #[prost(uint32, tag = "1")]
+        pub end_time: u32,
+        #[prost(uint32, tag = "2")]
+        pub last_pay_time: u32,
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1266,6 +1276,8 @@ pub struct Room {
     pub tournament_id: u32,
     #[prost(uint32, tag = "11")]
     pub seq: u32,
+    #[prost(string, tag = "12")]
+    pub pre_rule: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -4135,6 +4147,8 @@ pub struct ReqCreateRoom {
     pub public_live: bool,
     #[prost(string, tag = "4")]
     pub client_version_string: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub pre_rule: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -5022,6 +5036,8 @@ pub struct ReqRollingNotice {
 pub struct ResServerTime {
     #[prost(uint32, tag = "1")]
     pub server_time: u32,
+    #[prost(message, optional, tag = "2")]
+    pub error: ::core::option::Option<Error>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

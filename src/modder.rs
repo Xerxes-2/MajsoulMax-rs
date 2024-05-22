@@ -179,7 +179,8 @@ impl Modder {
             ".lq.Lobby.fetchCharacterInfo" => {
                 let mut msg = lq::ResCharacterInfo::decode(msg_block.data.as_ref())?;
                 SAFE.write().await.main_character_id = msg.main_character_id;
-                SAFE.write().await.characters = msg.characters.to_owned();
+                msg.characters
+                    .clone_into(&mut SAFE.write().await.characters);
                 msg.characters.clear();
                 let characters = &MOD_SETTINGS.read().await.char_skin;
                 for char in characters.keys() {
@@ -205,10 +206,13 @@ impl Modder {
                 let mut msg = lq::ResLogin::decode(msg_block.data.as_ref())?;
                 SAFE.write().await.account_id = msg.account_id;
                 if let Some(ref mut account) = msg.account {
-                    SAFE.write().await.nickname = account.nickname.clone();
+                    SAFE.write().await.nickname.clone_from(&account.nickname);
                     SAFE.write().await.skin = account.avatar_id;
                     SAFE.write().await.title = account.title;
-                    SAFE.write().await.loading_image = account.loading_image.clone();
+                    SAFE.write()
+                        .await
+                        .loading_image
+                        .clone_from(&account.loading_image);
                     if let Some(av) = MOD_SETTINGS
                         .read()
                         .await
@@ -221,7 +225,9 @@ impl Modder {
                             400001 + (MOD_SETTINGS.read().await.main_char % 100) * 100;
                     }
                     if !MOD_SETTINGS.read().await.nickname.is_empty() {
-                        account.nickname = MOD_SETTINGS.read().await.nickname.clone();
+                        account
+                            .nickname
+                            .clone_from(&MOD_SETTINGS.read().await.nickname);
                     }
                     account.title = MOD_SETTINGS.read().await.title;
                     account.loading_image.clear();
@@ -275,7 +281,7 @@ impl Modder {
             ".lq.Lobby.fetchBagInfo" => {
                 let mut msg = lq::ResBagInfo::decode(msg_block.data.as_ref())?;
                 if let Some(ref mut bag) = msg.bag {
-                    SAFE.write().await.items = bag.items.clone();
+                    SAFE.write().await.items.clone_from(&bag.items);
                     bag.items.clear();
                     self.fill_bag(bag).await;
                 }
@@ -309,7 +315,9 @@ impl Modder {
                 let mut msg = lq::ResFetchInfo::decode(msg_block.data.as_ref())?;
                 if let Some(ref mut char_info) = msg.character_info {
                     SAFE.write().await.main_character_id = char_info.main_character_id;
-                    SAFE.write().await.characters = char_info.characters.to_owned();
+                    char_info
+                        .characters
+                        .clone_into(&mut SAFE.write().await.characters);
                     char_info.characters.clear();
                     for charid in self.characters.iter().map(|c| c.id) {
                         let character = self.perfect_character(charid).await;
@@ -418,7 +426,7 @@ impl Modder {
                 p.avatar_id =
                     MOD_SETTINGS.read().await.char_skin[&MOD_SETTINGS.read().await.main_char];
                 if !MOD_SETTINGS.read().await.nickname.is_empty() {
-                    p.nickname = MOD_SETTINGS.read().await.nickname.clone();
+                    p.nickname.clone_from(&MOD_SETTINGS.read().await.nickname);
                 }
                 p.title = MOD_SETTINGS.read().await.title;
                 p.views.clear();
@@ -626,7 +634,12 @@ impl Modder {
                         player.avatar_id = MOD_SETTINGS.read().await.char_skin
                             [&MOD_SETTINGS.read().await.main_char];
                         if !MOD_SETTINGS.read().await.nickname.is_empty() {
-                            player.nickname = MOD_SETTINGS.read().await.nickname.to_owned();
+                            MOD_SETTINGS
+                                .read()
+                                .await
+                                .nickname
+                                .to_owned()
+                                .clone_into(&mut player.nickname);
                         }
                         player.title = MOD_SETTINGS.read().await.title;
                     }

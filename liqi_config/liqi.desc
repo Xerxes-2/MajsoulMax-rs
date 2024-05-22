@@ -1,5 +1,5 @@
 
-ÆŒ	
+¹Ž	
 
 liqi.protolq"|
 NotifyCaptcha
@@ -379,7 +379,7 @@ skinTicketP
 rare (Rrare
 count (Rcount"?
 AccountOwnerData+
-unlock_characters (RunlockCharacters"Ó
+unlock_characters (RunlockCharacters"ï
 AccountUpdate?
 	numerical (2!.lq.AccountUpdate.NumericalUpdateR	numerical?
 	character (2!.lq.AccountUpdate.CharacterUpdateR	character
@@ -398,7 +398,8 @@ daily_task (2!.lq.AccountUpdate.DailyTaskUpdateR	dailyTask3
 	challenge (2(.lq.AccountUpdate.AccountChallengeUpdateR	challengeA
 ab_match (2&.lq.AccountUpdate.AccountABMatchUpdateRabMatch5
 activity (2.lq.AccountActivityUpdateRactivityW
-activity_segment_task (2#.lq.AccountUpdate.SegmentTaskUpdateRactivitySegmentTask7
+activity_segment_task (2#.lq.AccountUpdate.SegmentTaskUpdateRactivitySegmentTaskF
+month_ticket (2#.lq.AccountUpdate.MonthTicketUpdateRmonthTicket7
 NumericalUpdate
 id (Rid
 final (Rfinal¬
@@ -458,7 +459,10 @@ MatchPoint
 
 progresses (2.lq.SegmentTaskProgressR
 progresses
-	task_list (RtaskList"a
+	task_list (RtaskListR
+MonthTicketUpdate
+end_time (RendTime"
+last_pay_time (RlastPayTime"a
 GameMetaData
 room_id (RroomId
 mode_id (RmodeId
@@ -607,7 +611,7 @@ dora3_mode+ (R	dora3Mode&
 enable_renheD (RenableRenheA
 enable_baopai_extend_settingsE (RenableBaopaiExtendSettings%
 yongchang_modeF (RyongchangMode'
-hunzhiyiji_modeG (RhunzhiyijiMode"ë
+hunzhiyiji_modeG (RhunzhiyijiMode"†
 Room
 room_id (RroomId
 owner_id (RownerId 
@@ -624,7 +628,8 @@ publicLive
 robotCount#
 tournament_id
  (RtournamentId
-seq (Rseq"ˆ
+seq (Rseq
+pre_rule (	RpreRule"ˆ
 GameEndResult6
 players (2.lq.GameEndResult.PlayerItemRplayers¾
 
@@ -1966,13 +1971,14 @@ account_id (R	accountId"v
 room (2.lq.RoomRroom"g
 ResFetchGamingInfo
 error (2	.lq.ErrorRerror0
-	game_info (2.lq.GameConnectInfoRgameInfo"©
+	game_info (2.lq.GameConnectInfoRgameInfo"Ä
 ReqCreateRoom!
 player_count (RplayerCount 
 mode (2.lq.GameModeRmode
 public_live (R
 publicLive2
-client_version_string (	RclientVersionString"N
+client_version_string (	RclientVersionString
+pre_rule (	RpreRule"N
 ResCreateRoom
 error (2	.lq.ErrorRerror
 room (2.lq.RoomRroom"Z
@@ -2322,10 +2328,11 @@ deleteList"/
 ReqUpdateReadComment
 read_id (RreadId"=
 ReqRollingNotice)
-notice (2.lq.RollingNoticeRnotice"0
+notice (2.lq.RollingNoticeRnotice"Q
 ResServerTime
 server_time (R
-serverTime";
+serverTime
+error (2	.lq.ErrorRerror";
 ReqPlatformBillingProducts
 
 shelves_id (R	shelvesId"m
