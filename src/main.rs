@@ -96,9 +96,9 @@ impl WebSocketHandler for Handler {
             if let Message::Binary(buf) = msg {
                 let res = modder.modify(buf, direction_char == '\u{2191}').await;
                 if let Some(inj) = res.inject_msg {
-                    self.inject_msg = Some(Message::Binary(inj));
+                    self.inject_msg = Some(Message::Binary(inj.into()));
                 }
-                return res.msg.map(Message::Binary);
+                return res.msg.map(|msg| Message::Binary(msg.into()));
             }
         }
         Some(msg)

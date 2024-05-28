@@ -51,7 +51,7 @@ impl Default for Parser {
 }
 
 impl Parser {
-    pub fn parse(&mut self, buf: &[u8]) -> Result<LiqiMessage> {
+    pub fn parse(&mut self, buf: Bytes) -> Result<LiqiMessage> {
         let msg_type_byte = buf[0];
         ensure!(
             (1..=3).contains(&msg_type_byte),

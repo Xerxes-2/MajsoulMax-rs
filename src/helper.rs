@@ -39,7 +39,7 @@ pub async fn helper_worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Pa
             })
             .collect::<String>();
         debug!("{} {}", direction_char, hex);
-        let parsed = parser.parse(&buf);
+        let parsed = parser.parse(buf.clone());
         let parsed = match parsed {
             Ok(parsed) => parsed,
             Err(e) => {

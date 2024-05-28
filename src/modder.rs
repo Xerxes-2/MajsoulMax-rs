@@ -7,6 +7,7 @@ use crate::{
     sheets,
 };
 use anyhow::{anyhow, Result};
+use bytes::Bytes;
 use once_cell::sync::Lazy;
 use prost::Message;
 use std::collections::HashMap;
@@ -72,8 +73,8 @@ fn to_vec<T: Message + std::default::Default>(buf: &[Vec<u8>]) -> Vec<T> {
 }
 
 pub struct ModifyResult {
-    pub msg: Option<Vec<u8>>,
-    pub inject_msg: Option<Vec<u8>>,
+    pub msg: Option<Bytes>,
+    pub inject_msg: Option<Bytes>,
 }
 
 impl Modder {
@@ -128,14 +129,15 @@ impl Modder {
     }
 
     pub async fn modify(&self, buf: Vec<u8>, from_client: bool) -> ModifyResult {
+        let buf = Bytes::from(buf);
         let msg_type = buf[0];
         let res = match msg_type {
-            0x01 => self.modify_notify(&buf).await,
-            0x02 => self.modify_req(&buf, from_client).await,
-            0x03 => self.modify_res(&buf, from_client).await,
+            0x01 => self.modify_notify(buf.clone()).await,
+            0x02 => self.modify_req(buf.clone(), from_client).await,
+            0x03 => self.modify_res(buf.clone(), from_client).await,
             _ => Err(anyhow!("Unimplemented message type: {}", msg_type)),
         };
-        if let Err(e) = PARSER.write().await.parse(&buf) {
+        if let Err(e) = PARSER.write().await.parse(buf.clone()) {
             error!("Mod: Failed to parse message: {:?}", e);
         }
         match res {
@@ -150,7 +152,7 @@ impl Modder {
         }
     }
 
-    async fn modify_res(&self, buf: &[u8], from_client: bool) -> Result<ModifyResult> {
+    async fn modify_res(&self, buf: Bytes, from_client: bool) -> Result<ModifyResult> {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         assert!(!from_client);
@@ -379,7 +381,7 @@ impl Modder {
             let mut buf = buf[..3].to_vec();
             buf.extend(msg_block.encode_to_vec());
             Ok(ModifyResult {
-                msg: Some(buf),
+                msg: Some(buf.into()),
                 inject_msg: None,
             })
         } else {
@@ -476,7 +478,7 @@ impl Modder {
         character
     }
 
-    async fn modify_req(&self, buf: &[u8], from_client: bool) -> Result<ModifyResult> {
+    async fn modify_req(&self, buf: Bytes, from_client: bool) -> Result<ModifyResult> {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         // Request message must be from client
@@ -517,8 +519,8 @@ impl Modder {
                     update: Some(account_update),
                 };
                 let blocks = vec![
-                    Block::String(1, ".lq.NotifyAccountUpdate".as_bytes().to_vec()),
-                    Block::String(2, update_data.encode_to_vec()),
+                    Block::String(1, ".lq.NotifyAccountUpdate".into()),
+                    Block::String(2, update_data.encode_to_vec().into()),
                 ];
                 let mut inject_buf = vec![0x01];
                 inject_buf.extend(blocks_to_pb(blocks));
@@ -598,19 +600,19 @@ impl Modder {
             let mut buf = buf[..3].to_vec();
             buf.extend(msg_block.encode_to_vec());
             Ok(ModifyResult {
-                msg: Some(buf),
-                inject_msg: inject_data,
+                msg: Some(buf.into()),
+                inject_msg: inject_data.map(|d| d.into()),
             })
         } else {
             // return original message
             Ok(ModifyResult {
                 msg: Some(buf.to_owned()),
-                inject_msg: inject_data,
+                inject_msg: inject_data.map(|d| d.into()),
             })
         }
     }
 
-    async fn modify_notify(&self, buf: &[u8]) -> Result<ModifyResult> {
+    async fn modify_notify(&self, buf: Bytes) -> Result<ModifyResult> {
         let mut msg_block = BaseMessage::decode(&buf[1..])?;
         let method_name = &msg_block.method_name;
         let mut modified_data: Option<Vec<u8>> = None;
@@ -691,12 +693,12 @@ impl Modder {
             let mut buf = vec![0x01];
             buf.extend(msg_block.encode_to_vec());
             Ok(ModifyResult {
-                msg: Some(buf),
+                msg: Some(buf.into()),
                 inject_msg: None,
             })
         } else {
             Ok(ModifyResult {
-                msg: Some(buf.to_owned()),
+                msg: Some(buf),
                 inject_msg: None,
             })
         }
@@ -718,10 +720,10 @@ fn add_zone_id(id: u32, name: &str) -> String {
 
 enum Block {
     _VarInt(u32, u64),
-    String(u32, Vec<u8>),
+    String(u32, Bytes),
 }
 
-fn blocks_to_pb(blocks: Vec<Block>) -> Vec<u8> {
+fn blocks_to_pb(blocks: Vec<Block>) -> Bytes {
     let mut pb = Vec::new();
     for block in blocks {
         match block {
@@ -741,12 +743,12 @@ fn blocks_to_pb(blocks: Vec<Block>) -> Vec<u8> {
             }
         }
     }
-    pb
+    pb.into()
 }
 
-fn to_var_int(mut x: u64) -> Vec<u8> {
+fn to_var_int(mut x: u64) -> Bytes {
     if x == 0 {
-        return vec![0];
+        return Bytes::from_static(&[0]);
     }
     let mut data: u64 = 0;
     let mut base = 0;
@@ -760,5 +762,5 @@ fn to_var_int(mut x: u64) -> Vec<u8> {
         }
         base += 8;
     }
-    data.to_le_bytes()[..length].to_vec()
+    data.to_le_bytes()[..length].to_vec().into()
 }
