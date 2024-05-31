@@ -156,8 +156,12 @@ impl Modder {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         assert!(!from_client);
-        assert!(msg_block.method_name.is_empty());
-        assert!(PARSER.read().await.respond_type.contains_key(&msg_id));
+        if !msg_block.method_name.is_empty() {
+            return Err(anyhow!("Non-empty respond method name"));
+        }
+        if !PARSER.read().await.respond_type.contains_key(&msg_id) {
+            return Err(anyhow!("No request message with id: {}", msg_id));
+        }
         let method_name = PARSER.read().await.respond_type[&msg_id].0.clone();
         let mut modified_data: Option<Vec<u8>> = None;
         match method_name.as_ref() {
@@ -483,8 +487,12 @@ impl Modder {
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         // Request message must be from client
         assert!(from_client);
-        assert!(msg_id < 1 << 16);
-        assert!(!PARSER.read().await.respond_type.contains_key(&msg_id));
+        if msg_id >= 1 << 16 {
+            return Err(anyhow!("Invalid request message id: {}", msg_id));
+        }
+        if PARSER.read().await.respond_type.contains_key(&msg_id) {
+            return Err(anyhow!("Duplicate request message id: {}", msg_id));
+        }
         let mut fake = false;
         let method_name = &msg_block.method_name;
         let mut inject_data: Option<Vec<u8>> = None;
