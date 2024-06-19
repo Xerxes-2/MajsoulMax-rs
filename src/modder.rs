@@ -8,6 +8,7 @@ use crate::{
 };
 use anyhow::{anyhow, Result};
 use bytes::Bytes;
+use const_format::formatcp;
 use once_cell::sync::Lazy;
 use prost::Message;
 use std::collections::HashMap;
@@ -19,18 +20,16 @@ static SAFE: Lazy<RwLock<Safe>> = Lazy::new(|| RwLock::new(Safe::default()));
 static CONTRACT: Lazy<RwLock<String>> = Lazy::new(|| RwLock::new(String::new()));
 static PARSER: Lazy<RwLock<Parser>> = Lazy::new(|| RwLock::new(Parser::default()));
 const VERSION: &str = env!("CARGO_PKG_VERSION");
-static ANNOUNCEMENT: Lazy<String> = Lazy::new(|| {
-    format!(
-        "<color=#f9963b>作者: Xerxes-2        版本: {}</color>\n
+const ANNOUNCEMENT: &str = formatcp!(
+    "<color=#f9963b>作者: Xerxes-2        版本: {}</color>\n
 <b>本工具完全免费、开源，如果您为此付费，说明您被骗了！</b>\n
 <b>本工具仅供学习交流, 请在下载后24小时内删除, 不得用于商业用途, 否则后果自负！</b>\n
 <b>本工具有可能导致账号被封禁，给猫粮充钱才是正道！</b>\n\n
 <color=#f9963b>开源地址：</color>\n
 <href=https://github.com/Xerxes-2/MajsoulMax-rs>https://github.com/Xerxes-2/MajsoulMax-rs</href>\n\n
 <color=#f9963b>再次重申：脚本完全免费使用，没有收费功能！</color>",
-        VERSION
-    )
-});
+    VERSION
+);
 
 #[derive(Default)]
 pub struct Safe {
