@@ -1872,6 +1872,8 @@ pub struct AccountActivityUpdate {
     pub village_data: ::prost::alloc::vec::Vec<ActivityVillageData>,
     #[prost(message, repeated, tag = "11")]
     pub festival_data: ::prost::alloc::vec::Vec<ActivityFestivalData>,
+    #[prost(message, repeated, tag = "12")]
+    pub island_data: ::prost::alloc::vec::Vec<ActivityIslandData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2047,6 +2049,14 @@ pub struct TimeCounterData {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SignedTimeCounterData {
+    #[prost(int32, tag = "1")]
+    pub count: i32,
+    #[prost(uint32, tag = "2")]
+    pub update_time: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FestivalProposalData {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -2067,7 +2077,63 @@ pub struct ActivityFestivalData {
     #[prost(uint32, repeated, tag = "4")]
     pub event_list: ::prost::alloc::vec::Vec<u32>,
     #[prost(message, optional, tag = "5")]
-    pub buy_record: ::core::option::Option<TimeCounterData>,
+    pub buy_record: ::core::option::Option<SignedTimeCounterData>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IslandBagItemData {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(uint32, repeated, tag = "2")]
+    pub pos: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, tag = "3")]
+    pub rotate: u32,
+    #[prost(uint32, tag = "4")]
+    pub goods_id: u32,
+    #[prost(uint32, tag = "5")]
+    pub price: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IslandBagData {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(string, tag = "2")]
+    pub matrix: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub items: ::prost::alloc::vec::Vec<IslandBagItemData>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IslandGoodsData {
+    #[prost(uint32, tag = "1")]
+    pub goods_id: u32,
+    #[prost(int32, tag = "2")]
+    pub count: i32,
+    #[prost(uint32, tag = "3")]
+    pub update_time: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IslandZoneData {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(message, optional, tag = "2")]
+    pub currency_used: ::core::option::Option<SignedTimeCounterData>,
+    #[prost(message, repeated, tag = "3")]
+    pub goods_records: ::prost::alloc::vec::Vec<IslandGoodsData>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ActivityIslandData {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub zone: u32,
+    #[prost(message, repeated, tag = "3")]
+    pub bags: ::prost::alloc::vec::Vec<IslandBagData>,
+    #[prost(message, repeated, tag = "4")]
+    pub zones: ::prost::alloc::vec::Vec<IslandZoneData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2696,6 +2762,12 @@ pub struct CustomizedContestBase {
     pub open: bool,
     #[prost(uint32, tag = "10")]
     pub contest_type: u32,
+    #[prost(string, tag = "11")]
+    pub public_notice: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "12")]
+    pub check_state: u32,
+    #[prost(string, tag = "13")]
+    pub checking_name: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2766,6 +2838,12 @@ pub struct CustomizedContestDetail {
     pub contest_type: u32,
     #[prost(uint32, tag = "16")]
     pub disable_broadcast: u32,
+    #[prost(uint32, tag = "17")]
+    pub signup_start_time: u32,
+    #[prost(uint32, tag = "18")]
+    pub signup_end_time: u32,
+    #[prost(uint32, tag = "19")]
+    pub signup_type: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -4828,6 +4906,8 @@ pub struct ReqUserComplain {
 pub struct ReqReadAnnouncement {
     #[prost(uint32, tag = "1")]
     pub announcement_id: u32,
+    #[prost(uint32, repeated, tag = "2")]
+    pub announcement_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6437,6 +6517,8 @@ pub struct ReqFetchCustomizedContestList {
     pub start: u32,
     #[prost(uint32, tag = "2")]
     pub count: u32,
+    #[prost(string, tag = "3")]
+    pub lang: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6447,20 +6529,6 @@ pub struct ResFetchCustomizedContestList {
     pub contests: ::prost::alloc::vec::Vec<CustomizedContestBase>,
     #[prost(message, repeated, tag = "3")]
     pub follow_contests: ::prost::alloc::vec::Vec<CustomizedContestBase>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReqFetchCustomizedContestExtendInfo {
-    #[prost(uint32, repeated, tag = "1")]
-    pub uid_list: ::prost::alloc::vec::Vec<u32>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ResFetchCustomizedContestExtendInfo {
-    #[prost(message, optional, tag = "1")]
-    pub error: ::core::option::Option<Error>,
-    #[prost(message, repeated, tag = "2")]
-    pub extend_list: ::prost::alloc::vec::Vec<CustomizedContestExtend>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6481,6 +6549,8 @@ pub struct ResFetchCustomizedContestAuthInfo {
 pub struct ReqEnterCustomizedContest {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
+    #[prost(string, tag = "2")]
+    pub lang: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6493,6 +6563,8 @@ pub struct ResEnterCustomizedContest {
     pub player_report: ::core::option::Option<CustomizedContestPlayerReport>,
     #[prost(bool, tag = "4")]
     pub is_followed: bool,
+    #[prost(uint32, tag = "5")]
+    pub state: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6513,6 +6585,8 @@ pub struct ResFetchCustomizedContestOnlineInfo {
 pub struct ReqFetchCustomizedContestByContestId {
     #[prost(uint32, tag = "1")]
     pub contest_id: u32,
+    #[prost(string, tag = "2")]
+    pub lang: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6524,11 +6598,33 @@ pub struct ResFetchCustomizedContestByContestId {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqSignupCustomizedContest {
+    #[prost(uint32, tag = "1")]
+    pub unique_id: u32,
+    #[prost(string, tag = "2")]
+    pub client_version_string: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResSignupCustomizedContest {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(uint32, tag = "2")]
+    pub state: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReqStartCustomizedContest {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
     #[prost(string, tag = "2")]
     pub client_version_string: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqStopCustomizedContest {
+    #[prost(uint32, tag = "1")]
+    pub unique_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6541,14 +6637,16 @@ pub struct ReqJoinCustomizedContestChatRoom {
 pub struct ResJoinCustomizedContestChatRoom {
     #[prost(message, optional, tag = "1")]
     pub error: ::core::option::Option<Error>,
-    #[prost(bytes = "vec", repeated, tag = "2")]
-    pub chat_history: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    #[prost(string, tag = "2")]
+    pub token: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReqSayChatMessage {
     #[prost(string, tag = "1")]
     pub content: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub unique_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6571,6 +6669,8 @@ pub struct ReqFetchCustomizedContestGameRecords {
     pub unique_id: u32,
     #[prost(uint32, tag = "2")]
     pub last_index: u32,
+    #[prost(uint32, tag = "3")]
+    pub season_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6651,6 +6751,8 @@ pub struct ResAccountActivityData {
     pub village_data: ::prost::alloc::vec::Vec<ActivityVillageData>,
     #[prost(message, repeated, tag = "26")]
     pub festival_data: ::prost::alloc::vec::Vec<ActivityFestivalData>,
+    #[prost(message, repeated, tag = "27")]
+    pub island_data: ::prost::alloc::vec::Vec<ActivityIslandData>,
 }
 /// Nested message and enum types in `ResAccountActivityData`.
 pub mod res_account_activity_data {
@@ -6748,6 +6850,12 @@ pub struct ResExchangeActivityItem {
 pub struct ReqCompleteActivityTask {
     #[prost(uint32, tag = "1")]
     pub task_id: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqCompleteActivityTaskBatch {
+    #[prost(uint32, repeated, tag = "1")]
+    pub task_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -8312,6 +8420,190 @@ pub struct ResBuyFestivalProposal {
     pub error: ::core::option::Option<Error>,
     #[prost(message, optional, tag = "2")]
     pub new_proposal: ::core::option::Option<FestivalProposalData>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqIslandActivityMove {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub zone_id: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqIslandActivityBuy {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(message, repeated, tag = "2")]
+    pub items: ::prost::alloc::vec::Vec<req_island_activity_buy::BuyItems>,
+}
+/// Nested message and enum types in `ReqIslandActivityBuy`.
+pub mod req_island_activity_buy {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct BuyItems {
+        #[prost(uint32, tag = "2")]
+        pub goods_id: u32,
+        #[prost(uint32, repeated, tag = "3")]
+        pub pos: ::prost::alloc::vec::Vec<u32>,
+        #[prost(uint32, tag = "4")]
+        pub rotate: u32,
+        #[prost(uint32, tag = "5")]
+        pub bag_id: u32,
+        #[prost(uint32, tag = "6")]
+        pub price: u32,
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqIslandActivitySell {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(message, repeated, tag = "2")]
+    pub items: ::prost::alloc::vec::Vec<req_island_activity_sell::SellItem>,
+}
+/// Nested message and enum types in `ReqIslandActivitySell`.
+pub mod req_island_activity_sell {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct SellItem {
+        #[prost(uint32, tag = "2")]
+        pub bag_id: u32,
+        #[prost(uint32, tag = "3")]
+        pub id: u32,
+        #[prost(uint32, tag = "4")]
+        pub price: u32,
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqIslandActivityTidyBag {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(message, repeated, tag = "2")]
+    pub bag_data: ::prost::alloc::vec::Vec<req_island_activity_tidy_bag::BagData>,
+}
+/// Nested message and enum types in `ReqIslandActivityTidyBag`.
+pub mod req_island_activity_tidy_bag {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct BagData {
+        #[prost(uint32, tag = "2")]
+        pub bag_id: u32,
+        #[prost(message, repeated, tag = "3")]
+        pub items: ::prost::alloc::vec::Vec<bag_data::ITemData>,
+        #[prost(uint32, repeated, tag = "4")]
+        pub drops: ::prost::alloc::vec::Vec<u32>,
+    }
+    /// Nested message and enum types in `BagData`.
+    pub mod bag_data {
+        #[allow(clippy::derive_partial_eq_without_eq)]
+        #[derive(Clone, PartialEq, ::prost::Message)]
+        pub struct ITemData {
+            #[prost(uint32, tag = "1")]
+            pub id: u32,
+            #[prost(uint32, repeated, tag = "2")]
+            pub pos: ::prost::alloc::vec::Vec<u32>,
+            #[prost(uint32, tag = "3")]
+            pub rotate: u32,
+        }
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqIslandActivityUnlockBagGrid {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub bag_id: u32,
+    #[prost(uint32, repeated, tag = "3")]
+    pub pos: ::prost::alloc::vec::Vec<u32>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqCreateCustomizedContest {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub open_show: u32,
+    #[prost(message, optional, tag = "3")]
+    pub game_rule_setting: ::core::option::Option<GameMode>,
+    #[prost(uint32, tag = "4")]
+    pub start_time: u32,
+    #[prost(uint32, tag = "5")]
+    pub end_time: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResCreateCustomizedContest {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(uint32, tag = "2")]
+    pub unique_id: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqFetchmanagerCustomizedContestList {
+    #[prost(string, tag = "1")]
+    pub lang: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResFetchManagerCustomizedContestList {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, repeated, tag = "2")]
+    pub contests: ::prost::alloc::vec::Vec<CustomizedContestBase>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqFetchManagerCustomizedContest {
+    #[prost(uint32, tag = "1")]
+    pub unique_id: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResFetchManagerCustomizedContest {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "3")]
+    pub open_show: u32,
+    #[prost(message, optional, tag = "4")]
+    pub game_rule_setting: ::core::option::Option<GameMode>,
+    #[prost(uint32, tag = "5")]
+    pub start_time: u32,
+    #[prost(uint32, tag = "6")]
+    pub end_time: u32,
+    #[prost(uint32, tag = "7")]
+    pub auto_match: u32,
+    #[prost(uint32, tag = "8")]
+    pub rank_rule: u32,
+    #[prost(uint32, tag = "9")]
+    pub check_state: u32,
+    #[prost(string, tag = "10")]
+    pub checking_name: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqUpdateManagerCustomizedContest {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub open_show: u32,
+    #[prost(message, optional, tag = "3")]
+    pub game_rule_setting: ::core::option::Option<GameMode>,
+    #[prost(uint32, tag = "4")]
+    pub start_time: u32,
+    #[prost(uint32, tag = "5")]
+    pub end_time: u32,
+    #[prost(uint32, tag = "6")]
+    pub unique_id: u32,
+    #[prost(uint32, tag = "7")]
+    pub auto_match: u32,
+    #[prost(uint32, tag = "8")]
+    pub rank_rule: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

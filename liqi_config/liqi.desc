@@ -1,5 +1,5 @@
 
-¹Ž	
+“°	
 
 liqi.protolq"|
 NotifyCaptcha
@@ -887,7 +887,7 @@ gift_inbox (2 .lq.FeedActivityData.GiftBoxDataR	giftInboxS
 MineActivityData&
 	dig_point (2	.lq.PointRdigPoint 
 map (2.lq.MineRewardRmap
-id (Rid"ž
+id (Rid"×
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -901,7 +901,9 @@ gacha_data (2.lq.ActivityGachaUpdateDataR	gachaDataC
 combining_data	 (2.lq.ActivityCombiningLQDataRcombiningData:
 village_data
  (2.lq.ActivityVillageDataRvillageData=
-festival_data (2.lq.ActivityFestivalDataRfestivalData"I
+festival_data (2.lq.ActivityFestivalDataRfestivalData7
+island_data (2.lq.ActivityIslandDataR
+islandData"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
 pos (Rpos"¾
@@ -982,21 +984,50 @@ activityId5
 TimeCounterData
 count (Rcount
 update_time (R
+updateTime"N
+SignedTimeCounterData
+count (Rcount
+update_time (R
 updateTime"Y
 FestivalProposalData
 id (Rid
 proposal_id (R
 proposalId
-pos (Rpos"ß
+pos (Rpos"å
 ActivityFestivalData
 activity_id (R
 activityId
 level (Rlevel=
 proposal_list (2.lq.FestivalProposalDataRproposalList
 
-event_list (R	eventList2
+event_list (R	eventList8
 
-buy_record (2.lq.TimeCounterDataR	buyRecord"Û
+buy_record (2.lq.SignedTimeCounterDataR	buyRecord"~
+IslandBagItemData
+id (Rid
+pos (Rpos
+rotate (Rrotate
+goods_id (RgoodsId
+price (Rprice"d
+IslandBagData
+id (Rid
+matrix (	Rmatrix+
+items (2.lq.IslandBagItemDataRitems"c
+IslandGoodsData
+goods_id (RgoodsId
+count (Rcount
+update_time (R
+updateTime"š
+IslandZoneData
+id (Rid>
+currency_used (2.lq.SignedTimeCounterDataRcurrencyUsed8
+goods_records (2.lq.IslandGoodsDataRgoodsRecords"š
+ActivityIslandData
+activity_id (R
+activityId
+zone (Rzone%
+bags (2.lq.IslandBagDataRbags(
+zones (2.lq.IslandZoneDataRzones"Û
 ActivityFeedData
 activity_id (R
 activityId
@@ -1275,7 +1306,7 @@ AlipayData%
 faith_id (RfaithId(
 total_open_count (RtotalOpenCount#
 consume_count (RconsumeCount!
-modify_count (RmodifyCount"Ã
+modify_count (RmodifyCount"®
 CustomizedContestBase
 	unique_id (RuniqueId
 
@@ -1292,7 +1323,11 @@ start_time (R	startTime
 finishTime
 open	 (Ropen!
 contest_type
- (RcontestType"[
+ (RcontestType#
+public_notice (	RpublicNotice
+check_state (R
+checkState#
+checking_name (	RcheckingName"[
 CustomizedContestExtend
 	unique_id (RuniqueId#
 public_notice (	RpublicNotice"ì
@@ -1313,7 +1348,7 @@ finishTime
 open	 (Ropen#
 public_notice
  (	RpublicNotice!
-contest_type (RcontestType"­
+contest_type (RcontestType"¢
 CustomizedContestDetail
 	unique_id (RuniqueId
 
@@ -1336,7 +1371,11 @@ finishTime
 observer_switch (RobserverSwitch!
 emoji_switch (RemojiSwitch!
 contest_type (RcontestType+
-disable_broadcast (RdisableBroadcast"¯
+disable_broadcast (RdisableBroadcast*
+signup_start_time (RsignupStartTime&
+signup_end_time (RsignupEndTime
+signup_type (R
+signupType"¯
 CustomizedContestPlayerReport
 	rank_rule (RrankRule
 rank (Rrank
@@ -2243,9 +2282,10 @@ title_list (R	titleList"#
 playing_count (RplayingCount"B
 ReqUserComplain
 	target_id (RtargetId
-type (Rtype">
+type (Rtype"k
 ReqReadAnnouncement'
-announcement_id (RannouncementId"S
+announcement_id (RannouncementId+
+announcement_list (RannouncementList"S
 ResReviveCoinInfo
 error (2	.lq.ErrorRerror
 
@@ -2987,64 +3027,72 @@ resourceId%
 cleared (Rcleared
 order_id (	RorderId"/
 ReqGainVipReward
-	vip_level (RvipLevel"K
+	vip_level (RvipLevel"_
 ReqFetchCustomizedContestList
 start (Rstart
-count (Rcount"»
+count (Rcount
+lang (	Rlang"»
 ResFetchCustomizedContestList
 error (2	.lq.ErrorRerror5
 contests (2.lq.CustomizedContestBaseRcontestsB
 follow_contests (2.lq.CustomizedContestBaseRfollowContests"@
-#ReqFetchCustomizedContestExtendInfo
-uid_list (RuidList"„
-#ResFetchCustomizedContestExtendInfo
-error (2	.lq.ErrorRerror<
-extend_list (2.lq.CustomizedContestExtendR
-extendList"@
 !ReqFetchCustomizedContestAuthInfo
 	unique_id (RuniqueId"k
 !ResFetchCustomizedContestAuthInfo
 error (2	.lq.ErrorRerror%
-observer_level (RobserverLevel"8
+observer_level (RobserverLevel"L
 ReqEnterCustomizedContest
-	unique_id (RuniqueId"ã
+	unique_id (RuniqueId
+lang (	Rlang"ù
 ResEnterCustomizedContest
 error (2	.lq.ErrorRerror<
 detail_info (2.lq.CustomizedContestDetailR
 detailInfoF
 player_report (2!.lq.CustomizedContestPlayerReportRplayerReport
 is_followed (R
-isFollowed"B
+isFollowed
+state (Rstate"B
 #ReqFetchCustomizedContestOnlineInfo
 	unique_id (RuniqueId"k
 #ResFetchCustomizedContestOnlineInfo
 error (2	.lq.ErrorRerror#
-online_player (RonlinePlayer"E
+online_player (RonlinePlayer"Y
 $ReqFetchCustomizedContestByContestId
 
-contest_id (R	contestId"‰
+contest_id (R	contestId
+lang (	Rlang"‰
 $ResFetchCustomizedContestByContestId
 error (2	.lq.ErrorRerror@
-contest_info (2.lq.CustomizedContestAbstractRcontestInfo"l
+contest_info (2.lq.CustomizedContestAbstractRcontestInfo"m
+ReqSignupCustomizedContest
+	unique_id (RuniqueId2
+client_version_string (	RclientVersionString"S
+ResSignupCustomizedContest
+error (2	.lq.ErrorRerror
+state (Rstate"l
 ReqStartCustomizedContest
 	unique_id (RuniqueId2
-client_version_string (	RclientVersionString"?
+client_version_string (	RclientVersionString"7
+ReqStopCustomizedContest
+	unique_id (RuniqueId"?
  ReqJoinCustomizedContestChatRoom
-	unique_id (RuniqueId"f
+	unique_id (RuniqueId"Y
  ResJoinCustomizedContestChatRoom
-error (2	.lq.ErrorRerror!
-chat_history (RchatHistory"-
+error (2	.lq.ErrorRerror
+token (	Rtoken"J
 ReqSayChatMessage
-content (	Rcontent"D
+content (	Rcontent
+	unique_id (RuniqueId"D
 %ReqFetchCustomizedContestGameLiveList
 	unique_id (RuniqueId"w
 %ResFetchCustomizedContestGameLiveList
 error (2	.lq.ErrorRerror-
-	live_list (2.lq.GameLiveHeadRliveList"b
+	live_list (2.lq.GameLiveHeadRliveList"
 $ReqFetchCustomizedContestGameRecords
 	unique_id (RuniqueId
 
-last_index (R	lastIndex"—
+last_index (R	lastIndex
+	season_id (RseasonId"—
 $ResFetchCustomizedContestGameRecords
 error (2	.lq.ErrorRerror
 
@@ -3057,7 +3105,7 @@ recordList"9
 error (2	.lq.ErrorRerror,
 
 activities (2.lq.ActivityR
-activities"¹
+activities"ò
 ResAccountActivityData
 error (2	.lq.ErrorRerror=
 exchange_records (2.lq.ExchangeRecordRexchangeRecords>
@@ -3088,7 +3136,9 @@ gacha_data (2.lq.ActivityGachaUpdateDataR	gachaDataC
 simulation_data (2.lq.ActivitySimulationDataRsimulationDataB
 combining_data (2.lq.ActivityCombiningLQDataRcombiningData:
 village_data (2.lq.ActivityVillageDataRvillageData=
-festival_data (2.lq.ActivityFestivalDataRfestivalData„
+festival_data (2.lq.ActivityFestivalDataRfestivalData7
+island_data (2.lq.ActivityIslandDataR
+islandData„
 ActivitySignInData
 activity_id (R
 activityId"
@@ -3129,7 +3179,9 @@ exchangeId
 error (2	.lq.ErrorRerror8
 execute_reward (2.lq.ExecuteRewardRexecuteReward"2
 ReqCompleteActivityTask
-task_id (RtaskId"A
+task_id (RtaskId";
+ReqCompleteActivityTaskBatch
+	task_list (RtaskList"A
 "ReqCompletePeriodActivityTaskBatch
 	task_list (RtaskList"5
 ReqReceiveActivityFlipTask
@@ -3814,7 +3866,89 @@ activityId
 activityId"v
 ResBuyFestivalProposal
 error (2	.lq.ErrorRerror;
-new_proposal (2.lq.FestivalProposalDataRnewProposal"
+new_proposal (2.lq.FestivalProposalDataRnewProposal"Q
+ReqIslandActivityMove
+activity_id (R
+activityId
+zone_id (RzoneId"î
+ReqIslandActivityBuy
+activity_id (R
+activityId7
+items (2!.lq.ReqIslandActivityBuy.BuyItemsRitems|
+BuyItems
+goods_id (RgoodsId
+pos (Rpos
+rotate (Rrotate
+bag_id (RbagId
+price (Rprice"»
+ReqIslandActivitySell
+activity_id (R
+activityId8
+items (2".lq.ReqIslandActivitySell.SellItemRitemsG
+SellItem
+bag_id (RbagId
+id (Rid
+price (Rprice"À
+ReqIslandActivityTidyBag
+activity_id (R
+activityId?
+bag_data (2$.lq.ReqIslandActivityTidyBag.BagDataRbagDataÁ
+BagData
+bag_id (RbagIdC
+items (2-.lq.ReqIslandActivityTidyBag.BagData.ITemDataRitems
+drops (RdropsD
+ITemData
+id (Rid
+pos (Rpos
+rotate (Rrotate"j
+ReqIslandActivityUnlockBagGrid
+activity_id (R
+activityId
+bag_id (RbagId
+pos (Rpos"Á
+ReqCreateCustomizedContest
+name (	Rname
+	open_show (RopenShow8
+game_rule_setting (2.lq.GameModeRgameRuleSetting
+
+start_time (R	startTime
+end_time (RendTime"Z
+ResCreateCustomizedContest
+error (2	.lq.ErrorRerror
+	unique_id (RuniqueId":
+$ReqFetchmanagerCustomizedContestList
+lang (	Rlang"~
+$ResFetchManagerCustomizedContestList
+error (2	.lq.ErrorRerror5
+contests (2.lq.CustomizedContestBaseRcontests"?
+ ReqFetchManagerCustomizedContest
+	unique_id (RuniqueId"ê
+ ResFetchManagerCustomizedContest
+error (2	.lq.ErrorRerror
+name (	Rname
+	open_show (RopenShow8
+game_rule_setting (2.lq.GameModeRgameRuleSetting
+
+start_time (R	startTime
+end_time (RendTime
+
+auto_match (R	autoMatch
+	rank_rule (RrankRule
+check_state	 (R
+checkState#
+checking_name
+ (	RcheckingName"¡
+!ReqUpdateManagerCustomizedContest
+name (	Rname
+	open_show (RopenShow8
+game_rule_setting (2.lq.GameModeRgameRuleSetting
+
+start_time (R	startTime
+end_time (RendTime
+	unique_id (RuniqueId
+
+auto_match (R	autoMatch
+	rank_rule (RrankRule"
 ActionMJStart"U
 NewRoundOpenedTiles
 seat (Rseat
@@ -4607,7 +4741,7 @@ account_id (R	accountId
 NULL 
 AUTH
 SYNCING	
-READY2õ¤
+READY2¦«
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -4816,15 +4950,15 @@ buyFromZHP.lq.ReqBuyFromZHP.lq.ResCommon;
 fetchVipReward.lq.ReqCommon.lq.ResVipReward4
 gainVipReward.lq.ReqGainVipReward.lq.ResCommon:
 fetchRefundOrder.lq.ReqCommon.lq.ResFetchRefundOrderb
-fetchCustomizedContestList!.lq.ReqFetchCustomizedContestList!.lq.ResFetchCustomizedContestListt
- fetchCustomizedContestExtendInfo'.lq.ReqFetchCustomizedContestExtendInfo'.lq.ResFetchCustomizedContestExtendInfon
+fetchCustomizedContestList!.lq.ReqFetchCustomizedContestList!.lq.ResFetchCustomizedContestListn
 fetchCustomizedContestAuthInfo%.lq.ReqFetchCustomizedContestAuthInfo%.lq.ResFetchCustomizedContestAuthInfoV
 enterCustomizedContest.lq.ReqEnterCustomizedContest.lq.ResEnterCustomizedContest6
 leaveCustomizedContest.lq.ReqCommon.lq.ResCommont
  fetchCustomizedContestOnlineInfo'.lq.ReqFetchCustomizedContestOnlineInfo'.lq.ResFetchCustomizedContestOnlineInfow
-!fetchCustomizedContestByContestId(.lq.ReqFetchCustomizedContestByContestId(.lq.ResFetchCustomizedContestByContestIdF
-startCustomizedContest.lq.ReqStartCustomizedContest.lq.ResCommon5
-stopCustomizedContest.lq.ReqCommon.lq.ResCommonk
+!fetchCustomizedContestByContestId(.lq.ReqFetchCustomizedContestByContestId(.lq.ResFetchCustomizedContestByContestIdY
+signupCustomizedContest.lq.ReqSignupCustomizedContest.lq.ResSignupCustomizedContestF
+startCustomizedContest.lq.ReqStartCustomizedContest.lq.ResCommonD
+stopCustomizedContest.lq.ReqStopCustomizedContest.lq.ResCommonk
 joinCustomizedContestChatRoom$.lq.ReqJoinCustomizedContestChatRoom$.lq.ResJoinCustomizedContestChatRoom>
 leaveCustomizedContestChatRoom.lq.ReqCommon.lq.ResCommon6
 sayChatMessage.lq.ReqSayChatMessage.lq.ResCommonw
@@ -4835,7 +4969,8 @@ buyFromZHP.lq.ReqBuyFromZHP.lq.ResCommon;
 fetchActivityList.lq.ReqCommon.lq.ResActivityListE
 fetchAccountActivityData.lq.ReqCommon.lq.ResAccountActivityDataP
 exchangeActivityItem.lq.ReqExchangeActivityItem.lq.ResExchangeActivityItemB
-completeActivityTask.lq.ReqCompleteActivityTask.lq.ResCommonF
+completeActivityTask.lq.ReqCompleteActivityTask.lq.ResCommonL
+completeActivityTaskBatch .lq.ReqCompleteActivityTaskBatch.lq.ResCommonF
 completeActivityFlipTask.lq.ReqCompleteActivityTask.lq.ResCommonH
 completePeriodActivityTask.lq.ReqCompleteActivityTask.lq.ResCommonX
 completePeriodActivityTaskBatch&.lq.ReqCompletePeriodActivityTaskBatch.lq.ResCommonH
@@ -4929,7 +5064,16 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 nextRoundVillage.lq.ReqNextRoundVillage.lq.ResNextRoundVillageq
 resolveFestivalActivityProposal&.lq.ReqResolveFestivalActivityProposal&.lq.ResResolveFestivalActivityProposalh
 resolveFestivalActivityEvent#.lq.ReqResolveFestivalActivityEvent#.lq.ResResolveFestivalActivityEventM
-buyFestivalProposal.lq.ReqBuyFestivalProposal.lq.ResBuyFestivalProposal2õ
+buyFestivalProposal.lq.ReqBuyFestivalProposal.lq.ResBuyFestivalProposal>
+islandActivityMove.lq.ReqIslandActivityMove.lq.ResCommon<
+islandActivityBuy.lq.ReqIslandActivityBuy.lq.ResCommon>
+islandActivitySell.lq.ReqIslandActivitySell.lq.ResCommonD
+islandActivityTidyBag.lq.ReqIslandActivityTidyBag.lq.ResCommonP
+islandActivityUnlockBagGrid".lq.ReqIslandActivityUnlockBagGrid.lq.ResCommonY
+createCustomizedContest.lq.ReqCreateCustomizedContest.lq.ResCreateCustomizedContestw
+!fetchManagerCustomizedContestList(.lq.ReqFetchmanagerCustomizedContestList(.lq.ResFetchManagerCustomizedContestListk
+fetchManagerCustomizedContest$.lq.ReqFetchManagerCustomizedContest$.lq.ResFetchManagerCustomizedContestV
+updateManagerCustomizedContest%.lq.ReqUpdateManagerCustomizedContest.lq.ResCommon2õ
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,
