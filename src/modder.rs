@@ -1,6 +1,6 @@
 use crate::{
     base::BaseMessage,
-    lq::{self, Character, PlayerGameView},
+    lq::{self, Character, PlayerGameView, ResTitleList},
     lq_config::ConfigTables,
     parser::Parser,
     settings::ModSettings,
@@ -255,12 +255,17 @@ impl Modder {
             ".lq.FastTest.authGame" => {
                 let mut msg = lq::ResAuthGame::decode(msg_block.data.as_ref())?;
                 if MOD_SETTINGS.read().await.hint_on() {
-                    if let Some(r) = msg
-                        .game_config
-                        .as_mut()
-                        .and_then(|c| c.mode.as_mut()?.detail_rule.as_mut())
-                    {
-                        r.bianjietishi = true;
+                    if let Some(c) = msg.game_config.as_mut() {
+                        if let Some(r) = c.mode.as_mut().and_then(|m| m.detail_rule.as_mut()) {
+                            r.bianjietishi = true;
+                        }
+                        if let Some(ref mut id) = c.meta.as_mut().map(|m| m.mode_id) {
+                            match *id {
+                                a if (15..=16).contains(&a) => *id -= 4,
+                                b if (25..=26).contains(&b) => *id -= 2,
+                                _ => {}
+                            }
+                        }
                     }
                 }
                 for p in &mut msg.players {
@@ -362,6 +367,10 @@ impl Modder {
                         views.views.push(new_view);
                     }
                 }
+                msg.title_list = Some(ResTitleList {
+                    title_list: self.titles.iter().map(|t| t.id).collect(),
+                    ..Default::default()
+                });
                 modified_data = Some(msg.encode_to_vec());
             }
             ".lq.Lobby.fetchServerSettings" => {
@@ -374,6 +383,30 @@ impl Modder {
                             modified_data = Some(msg.encode_to_vec());
                         }
                     }
+                }
+            }
+            ".lq.Lobby.fetchGameRecord" => {
+                let msg = lq::ResGameRecord::decode(msg_block.data.as_ref())?;
+                if let Some(head) = msg.head.as_ref() {
+                    let uuid = head.uuid.as_str();
+                    const LOG_HEAD: &str = "发现读入牌谱！\n";
+                    const LOG_TAIL: &str = "注意：只有在同一服务器才能添加好友！";
+                    let mut logs = String::new();
+                    for acc in &head.accounts {
+                        if acc.account_id == SAFE.read().await.account_id {
+                            logs += "（自己）";
+                        }
+                        logs += &format!(
+                            "{}\n账号id: {}\t加好友id: {}\n主视角牌谱链接: {uuid}_a{}\n主视角牌谱链接(匿名): {}_a{}_2\n\n",
+                            add_zone_id(acc.account_id, &acc.nickname),
+                            acc.account_id,
+                            encode_account_id2(acc.account_id),
+                            encode_account_id(acc.account_id),
+                            encode_uuid(uuid),
+                            encode_account_id(acc.account_id),
+                        );
+                    }
+                    info!("{}{}{}", LOG_HEAD, logs, LOG_TAIL);
                 }
             }
             _ => {}
@@ -723,6 +756,47 @@ fn add_zone_id(id: u32, name: &str) -> String {
     }
     .to_string();
     zone + name
+}
+
+fn encode_uuid(uuid: &str) -> String {
+    let mut buf = "".to_string();
+    const CODE_0: u32 = '0' as u32;
+    const CODE_A: u32 = 'a' as u32;
+    for (i, c) in uuid.chars().enumerate() {
+        let code = c as u32;
+        let mut tmp = 0xFF;
+        if (CODE_0..CODE_0 + 10).contains(&code) {
+            tmp = code - CODE_0;
+        } else if (CODE_A..CODE_A + 26).contains(&code) {
+            tmp = code - CODE_A + 10;
+        }
+        if tmp != 0xFF {
+            tmp = (tmp + 17 + i as u32) % 36;
+            if tmp < 10 {
+                buf.push((CODE_0 + tmp) as u8 as char);
+            } else {
+                buf.push((CODE_A + tmp - 10) as u8 as char);
+            }
+        } else {
+            buf.push(c);
+        }
+    }
+    buf
+}
+
+fn encode_account_id(id: u32) -> u32 {
+    ((7 * id + 1117113) ^ 86216345) + 1358437
+}
+
+fn encode_account_id2(id: u32) -> u32 {
+    let p = 6139246 ^ id;
+    const H: u32 = 67108863;
+    let s = p & !H;
+    let mut z = p & H;
+    for _ in 0..5 {
+        z = (511 & z) << 17 | z >> 9;
+    }
+    z + s + 1e7 as u32
 }
 
 enum Block {
