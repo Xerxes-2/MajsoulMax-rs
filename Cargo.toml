@@ -26,6 +26,6 @@ tokio = { version = "1.38.0", features = ["rt-multi-thread"] }
 tracing-subscriber = { version = "0.3.18", features = ["env-filter", "chrono"] }
 tracing = { version = "0.1.40" }
 clap = { version = "4.5.9", features = ["derive"] }
-prost = "0.13.0"
+prost = "0.13.1"
 hudsucker = "0.22.0"
 const_format = "0.2.32"
