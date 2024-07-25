@@ -1,14 +1,14 @@
 use crate::{
     parser::{decode_action, LiqiMessage, Parser},
-    ARBITRARY_MD5, SETTINGS,
+    settings::SETTINGS,
+    ARBITRARY_MD5,
 };
 use anyhow::{anyhow, Result};
 use bytes::Bytes;
-use once_cell::sync::Lazy;
 use reqwest::Client;
 use serde::Serialize;
 use serde_json::{json, Map, Value as JsonValue};
-use std::future::Future;
+use std::{future::Future, sync::LazyLock};
 use tokio::{sync::mpsc::Receiver, time::sleep};
 use tracing::{debug, error, info};
 
@@ -61,7 +61,7 @@ pub async fn helper_worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Pa
 }
 
 fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
-    static CLIENT: Lazy<Client> = Lazy::new(|| {
+    static CLIENT: LazyLock<Client> = LazyLock::new(|| {
         reqwest::ClientBuilder::new()
             .danger_accept_invalid_certs(true)
             .build()

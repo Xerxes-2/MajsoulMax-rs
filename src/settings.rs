@@ -1,13 +1,14 @@
-use crate::{lq::ViewSlot, ARG, SETTINGS};
+use crate::{lq::ViewSlot, Arg};
 use anyhow::{anyhow, Result};
 use bytes::Bytes;
-use once_cell::sync::Lazy;
+use clap::Parser;
 use prost_reflect::DescriptorPool;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{
     collections::{HashMap, HashSet},
     path::PathBuf,
+    sync::LazyLock,
 };
 use tracing::info;
 
@@ -34,8 +35,9 @@ pub struct Settings {
     dir: PathBuf,
 }
 
+pub static SETTINGS: LazyLock<Settings> = LazyLock::new(Settings::new);
 static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-static REQUEST_CLIENT: Lazy<reqwest::Client> = Lazy::new(|| {
+static REQUEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
     reqwest::Client::builder()
         .user_agent(APP_USER_AGENT)
         .build()
@@ -44,7 +46,8 @@ static REQUEST_CLIENT: Lazy<reqwest::Client> = Lazy::new(|| {
 
 impl Settings {
     pub fn new() -> Self {
-        let arg_dir = std::path::Path::new(&ARG.config_dir);
+        let arg = Arg::parse();
+        let arg_dir = std::path::Path::new(&arg.config_dir);
         let exe = std::env::current_exe().expect("无法获取当前可执行文件路径");
         let dir = if arg_dir.is_dir() {
             arg_dir.to_path_buf()

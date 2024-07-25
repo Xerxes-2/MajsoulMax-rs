@@ -1,5 +1,5 @@
 
-“°	
+»Ã	
 
 liqi.protolq"|
 NotifyCaptcha
@@ -1348,7 +1348,7 @@ finishTime
 open	 (Ropen#
 public_notice
  (	RpublicNotice!
-contest_type (RcontestType"¢
+contest_type (RcontestType"Á
 CustomizedContestDetail
 	unique_id (RuniqueId
 
@@ -1375,7 +1375,9 @@ finishTime
 signup_start_time (RsignupStartTime&
 signup_end_time (RsignupEndTime
 signup_type (R
-signupType"¯
+signupType
+
+auto_match (R	autoMatch"¯
 CustomizedContestPlayerReport
 	rank_rule (RrankRule
 rank (Rrank
@@ -3043,7 +3045,7 @@ resourceId%
 observer_level (RobserverLevel"L
 ReqEnterCustomizedContest
 	unique_id (RuniqueId
-lang (	Rlang"ù
+lang (	Rlang"”
 ResEnterCustomizedContest
 error (2	.lq.ErrorRerror<
 detail_info (2.lq.CustomizedContestDetailR
@@ -3051,7 +3053,8 @@ detailInfoF
 player_report (2!.lq.CustomizedContestPlayerReportRplayerReport
 is_followed (R
 isFollowed
-state (Rstate"B
+state (Rstate
+is_admin (RisAdmin"B
 #ReqFetchCustomizedContestOnlineInfo
 	unique_id (RuniqueId"k
 #ResFetchCustomizedContestOnlineInfo
@@ -3905,14 +3908,28 @@ activityId?
 activity_id (R
 activityId
 bag_id (RbagId
-pos (Rpos"Á
+pos (Rpos"Ò
+ContestSetting>
+level_limit (2.lq.ContestSetting.LevelLimitR
+levelLimit
+
+game_limit (R	gameLimit)
+system_broadcast (RsystemBroadcast6
+
+LevelLimit
+type (Rtype
+value (Rvalue"º
 ReqCreateCustomizedContest
 name (	Rname
 	open_show (RopenShow8
 game_rule_setting (2.lq.GameModeRgameRuleSetting
 
 start_time (R	startTime
-end_time (RendTime"Z
+end_time (RendTime
+
+auto_match (R	autoMatch
+	rank_rule (RrankRule;
+contest_setting (2.lq.ContestSettingRcontestSetting"Z
 ResCreateCustomizedContest
 error (2	.lq.ErrorRerror
 	unique_id (RuniqueId":
@@ -3922,7 +3939,7 @@ $ResFetchManagerCustomizedContestList
 error (2	.lq.ErrorRerror5
 contests (2.lq.CustomizedContestBaseRcontests"?
  ReqFetchManagerCustomizedContest
-	unique_id (RuniqueId"ê
+	unique_id (RuniqueId"§
  ResFetchManagerCustomizedContest
 error (2	.lq.ErrorRerror
 name (	Rname
@@ -3937,7 +3954,8 @@ auto_match (R	autoMatch
 check_state	 (R
 checkState#
 checking_name
- (	RcheckingName"¡
+ (	RcheckingName;
+contest_setting (2.lq.ContestSettingRcontestSetting"Þ
 !ReqUpdateManagerCustomizedContest
 name (	Rname
 	open_show (RopenShow8
@@ -3948,7 +3966,57 @@ start_time (R	startTime
 	unique_id (RuniqueId
 
 auto_match (R	autoMatch
-	rank_rule (RrankRule"
+	rank_rule (RrankRule;
+contest_setting	 (2.lq.ContestSettingRcontestSetting"f
+ReqFetchContestPlayerRank
+	unique_id (RuniqueId
+limit (Rlimit
+offset (Roffset"ô
+ResFetchContestPlayerRank
+error (2	.lq.ErrorRerror
+total (Rtotal<
+rank (2(.lq.ResFetchContestPlayerRank.SeasonRankRrankI
+player_data (2(.lq.ResFetchContestPlayerRank.PlayerDataR
+playerData’
+ContestPlayerAccountData(
+total_game_count (RtotalGameCountk
+recent_games (2H.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestGameResultRrecentGames‚
+highest_series_points (2N.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestSeriesGameResultRhighestSeriesPointsH
+ContestGameResult
+rank (Rrank
+total_point (R
+totalPoint
+ContestSeriesGameResult
+key (Rkeyb
+results (2H.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestGameResultRresults“
+
+SeasonRank
+
+account_id (R	accountId
+nickname (	RnicknameJ
+data (26.lq.ResFetchContestPlayerRank.ContestPlayerAccountDataRdatal
+
+PlayerData
+rank (RrankJ
+data (26.lq.ResFetchContestPlayerRank.ContestPlayerAccountDataRdata"6
+ReqFetchReadyPlayerList
+	unique_id (RuniqueId"·
+ResFetchReadyPlayerList
+error (2	.lq.ErrorRerror6
+list (2".lq.ResFetchReadyPlayerList.PlayerRlistC
+Player
+
+account_id (R	accountId
+nickname (	Rnickname"»
+ReqCreateGamePlan
+	unique_id (RuniqueId!
+account_list (RaccountList&
+game_start_time (RgameStartTime#
+shuffle_seats (RshuffleSeats
+ai_level (RaiLevel"Y
+"ResGenerateContestManagerLoginCode
+error (2	.lq.ErrorRerror
+code (	Rcode"
 ActionMJStart"U
 NewRoundOpenedTiles
 seat (Rseat
@@ -4741,7 +4809,7 @@ account_id (R	accountId
 NULL 
 AUTH
 SYNCING	
-READY2¦«
+READY2â­
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -5073,7 +5141,11 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 createCustomizedContest.lq.ReqCreateCustomizedContest.lq.ResCreateCustomizedContestw
 !fetchManagerCustomizedContestList(.lq.ReqFetchmanagerCustomizedContestList(.lq.ResFetchManagerCustomizedContestListk
 fetchManagerCustomizedContest$.lq.ReqFetchManagerCustomizedContest$.lq.ResFetchManagerCustomizedContestV
-updateManagerCustomizedContest%.lq.ReqUpdateManagerCustomizedContest.lq.ResCommon2õ
+updateManagerCustomizedContest%.lq.ReqUpdateManagerCustomizedContest.lq.ResCommonV
+fetchContestPlayerRank.lq.ReqFetchContestPlayerRank.lq.ResFetchContestPlayerRankP
+fetchReadyPlayerList.lq.ReqFetchReadyPlayerList.lq.ResFetchReadyPlayerList6
+createGamePlan.lq.ReqCreateGamePlan.lq.ResCommonX
+generateContestManagerLoginCode.lq.ReqCommon&.lq.ResGenerateContestManagerLoginCode2õ
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,

@@ -16,7 +16,7 @@ use majsoul_max_rs::{
     helper::helper_worker,
     modder::{Modder, MOD_SETTINGS},
     parser::Parser,
-    SETTINGS,
+    settings::SETTINGS,
 };
 
 #[derive(Clone)]
@@ -184,8 +184,7 @@ async fn main() {
         if SETTINGS.helper_on() { "on" } else { "off" }
     );
 
-    let mut modder = None;
-    if SETTINGS.mod_on() {
+    let modder = if SETTINGS.mod_on() {
         // start mod worker
         info!("Mod worker started");
         if MOD_SETTINGS.read().await.auto_update() {
@@ -193,16 +192,18 @@ async fn main() {
             let mut new_mod_settings = MOD_SETTINGS.read().await.clone();
             match new_mod_settings.get_lqc().await {
                 Err(e) => warn!("更新mod失败: {}", e),
-                Ok(false) => (),
+                Ok(false) => {}
                 Ok(true) => {
                     info!("mod更新成功, 请重启程序");
                     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
                     return;
                 }
             }
-            modder = Some(Arc::new(Modder::new().await));
         }
-    }
+        Some(Arc::new(Modder::new().await))
+    } else {
+        None
+    };
 
     let (tx, rx) = channel::<(Bytes, char)>(100);
     let proxy = Proxy::builder()

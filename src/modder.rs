@@ -9,16 +9,16 @@ use crate::{
 use anyhow::{anyhow, Result};
 use bytes::Bytes;
 use const_format::formatcp;
-use once_cell::sync::Lazy;
 use prost::Message;
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::LazyLock};
 use tokio::sync::RwLock;
 use tracing::{error, info};
 
-pub static MOD_SETTINGS: Lazy<RwLock<ModSettings>> = Lazy::new(|| RwLock::new(ModSettings::new()));
-static SAFE: Lazy<RwLock<Safe>> = Lazy::new(|| RwLock::new(Safe::default()));
-static CONTRACT: Lazy<RwLock<String>> = Lazy::new(|| RwLock::new(String::new()));
-static PARSER: Lazy<RwLock<Parser>> = Lazy::new(|| RwLock::new(Parser::default()));
+pub static MOD_SETTINGS: LazyLock<RwLock<ModSettings>> =
+    LazyLock::new(|| RwLock::new(ModSettings::new()));
+static SAFE: LazyLock<RwLock<Safe>> = LazyLock::new(|| RwLock::new(Safe::default()));
+static CONTRACT: LazyLock<RwLock<String>> = LazyLock::new(|| RwLock::new(String::new()));
+static PARSER: LazyLock<RwLock<Parser>> = LazyLock::new(|| RwLock::new(Parser::default()));
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const ANNOUNCEMENT: &str = formatcp!(
     "<color=#f9963b>作者: Xerxes-2        版本: {}</color>\n

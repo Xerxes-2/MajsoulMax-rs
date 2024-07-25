@@ -2844,6 +2844,8 @@ pub struct CustomizedContestDetail {
     pub signup_end_time: u32,
     #[prost(uint32, tag = "19")]
     pub signup_type: u32,
+    #[prost(uint32, tag = "20")]
+    pub auto_match: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -6565,6 +6567,8 @@ pub struct ResEnterCustomizedContest {
     pub is_followed: bool,
     #[prost(uint32, tag = "5")]
     pub state: u32,
+    #[prost(bool, tag = "6")]
+    pub is_admin: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -8521,6 +8525,27 @@ pub struct ReqIslandActivityUnlockBagGrid {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ContestSetting {
+    #[prost(message, repeated, tag = "1")]
+    pub level_limit: ::prost::alloc::vec::Vec<contest_setting::LevelLimit>,
+    #[prost(uint32, tag = "2")]
+    pub game_limit: u32,
+    #[prost(uint32, tag = "3")]
+    pub system_broadcast: u32,
+}
+/// Nested message and enum types in `ContestSetting`.
+pub mod contest_setting {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct LevelLimit {
+        #[prost(uint32, tag = "1")]
+        pub r#type: u32,
+        #[prost(uint32, tag = "2")]
+        pub value: u32,
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReqCreateCustomizedContest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -8532,6 +8557,12 @@ pub struct ReqCreateCustomizedContest {
     pub start_time: u32,
     #[prost(uint32, tag = "5")]
     pub end_time: u32,
+    #[prost(uint32, tag = "6")]
+    pub auto_match: u32,
+    #[prost(uint32, tag = "7")]
+    pub rank_rule: u32,
+    #[prost(message, optional, tag = "8")]
+    pub contest_setting: ::core::option::Option<ContestSetting>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -8584,6 +8615,8 @@ pub struct ResFetchManagerCustomizedContest {
     pub check_state: u32,
     #[prost(string, tag = "10")]
     pub checking_name: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "11")]
+    pub contest_setting: ::core::option::Option<ContestSetting>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -8604,6 +8637,128 @@ pub struct ReqUpdateManagerCustomizedContest {
     pub auto_match: u32,
     #[prost(uint32, tag = "8")]
     pub rank_rule: u32,
+    #[prost(message, optional, tag = "9")]
+    pub contest_setting: ::core::option::Option<ContestSetting>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqFetchContestPlayerRank {
+    #[prost(uint32, tag = "1")]
+    pub unique_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub limit: u32,
+    #[prost(uint32, tag = "3")]
+    pub offset: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResFetchContestPlayerRank {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(uint32, tag = "2")]
+    pub total: u32,
+    #[prost(message, repeated, tag = "3")]
+    pub rank: ::prost::alloc::vec::Vec<res_fetch_contest_player_rank::SeasonRank>,
+    #[prost(message, optional, tag = "4")]
+    pub player_data: ::core::option::Option<res_fetch_contest_player_rank::PlayerData>,
+}
+/// Nested message and enum types in `ResFetchContestPlayerRank`.
+pub mod res_fetch_contest_player_rank {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct ContestPlayerAccountData {
+        #[prost(uint32, tag = "1")]
+        pub total_game_count: u32,
+        #[prost(message, repeated, tag = "2")]
+        pub recent_games: ::prost::alloc::vec::Vec<contest_player_account_data::ContestGameResult>,
+        #[prost(message, repeated, tag = "3")]
+        pub highest_series_points:
+            ::prost::alloc::vec::Vec<contest_player_account_data::ContestSeriesGameResult>,
+    }
+    /// Nested message and enum types in `ContestPlayerAccountData`.
+    pub mod contest_player_account_data {
+        #[allow(clippy::derive_partial_eq_without_eq)]
+        #[derive(Clone, PartialEq, ::prost::Message)]
+        pub struct ContestGameResult {
+            #[prost(uint32, tag = "1")]
+            pub rank: u32,
+            #[prost(int32, tag = "2")]
+            pub total_point: i32,
+        }
+        #[allow(clippy::derive_partial_eq_without_eq)]
+        #[derive(Clone, PartialEq, ::prost::Message)]
+        pub struct ContestSeriesGameResult {
+            #[prost(uint32, tag = "1")]
+            pub key: u32,
+            #[prost(message, repeated, tag = "2")]
+            pub results: ::prost::alloc::vec::Vec<ContestGameResult>,
+        }
+    }
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct SeasonRank {
+        #[prost(uint32, tag = "1")]
+        pub account_id: u32,
+        #[prost(string, tag = "2")]
+        pub nickname: ::prost::alloc::string::String,
+        #[prost(message, optional, tag = "3")]
+        pub data: ::core::option::Option<ContestPlayerAccountData>,
+    }
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct PlayerData {
+        #[prost(uint32, tag = "1")]
+        pub rank: u32,
+        #[prost(message, optional, tag = "2")]
+        pub data: ::core::option::Option<ContestPlayerAccountData>,
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqFetchReadyPlayerList {
+    #[prost(uint32, tag = "1")]
+    pub unique_id: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResFetchReadyPlayerList {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, repeated, tag = "2")]
+    pub list: ::prost::alloc::vec::Vec<res_fetch_ready_player_list::Player>,
+}
+/// Nested message and enum types in `ResFetchReadyPlayerList`.
+pub mod res_fetch_ready_player_list {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct Player {
+        #[prost(uint32, tag = "1")]
+        pub account_id: u32,
+        #[prost(string, tag = "2")]
+        pub nickname: ::prost::alloc::string::String,
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqCreateGamePlan {
+    #[prost(uint32, tag = "1")]
+    pub unique_id: u32,
+    #[prost(uint32, repeated, tag = "2")]
+    pub account_list: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, tag = "3")]
+    pub game_start_time: u32,
+    #[prost(uint32, tag = "4")]
+    pub shuffle_seats: u32,
+    #[prost(uint32, tag = "5")]
+    pub ai_level: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResGenerateContestManagerLoginCode {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(string, tag = "2")]
+    pub code: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

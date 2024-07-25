@@ -6,7 +6,7 @@ use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, Serialize
 use serde_json::{value::Serializer, Value as JsonValue};
 use std::{collections::HashMap, sync::Arc};
 
-use crate::{base::BaseMessage, SETTINGS};
+use crate::{base::BaseMessage, settings::SETTINGS};
 
 const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
@@ -35,7 +35,7 @@ pub struct Parser {
     pub pool: &'static DescriptorPool,
 }
 
-pub fn dyn_to_json(msg: DynamicMessage) -> Result<JsonValue> {
+pub fn dyn_to_json(msg: &DynamicMessage) -> Result<JsonValue> {
     Ok(msg.serialize_with_options(Serializer, &SERIALIZE_OPTIONS)?)
 }
 
@@ -79,7 +79,7 @@ impl Parser {
                     .get_message_by_name(&to_fqn(message_name))
                     .ok_or(anyhow!("Invalid message type: {}", message_name))?;
                 let dyn_msg = DynamicMessage::decode(message_type, data.as_ref())?;
-                data_obj = dyn_to_json(dyn_msg)?;
+                data_obj = dyn_to_json(&dyn_msg)?;
                 if let Some(b64) = data_obj.get("data") {
                     let action_name = data_obj
                         .get("name")
@@ -114,7 +114,10 @@ impl Parser {
                     .get_message_by_name(&to_fqn(req_type_name))
                     .ok_or(anyhow!("Invalid request type: {}", req_type_name))?;
                 let dyn_msg = DynamicMessage::decode(req_type, data.as_ref())?;
-                data_obj = dyn_to_json(dyn_msg)?;
+                if method_name.contains("oauth2Login") {
+                    println!("{}", dyn_to_json(&dyn_msg)?);
+                }
+                data_obj = dyn_to_json(&dyn_msg)?;
                 let res_type_name = proto_domain["responseType"]
                     .as_str()
                     .ok_or(anyhow!("Invalid response type"))?;
@@ -137,7 +140,7 @@ impl Parser {
                     .remove(&msg_id)
                     .ok_or(anyhow!("No corresponding request"))?;
                 let dyn_msg = DynamicMessage::decode(resp_type, data.as_ref())?;
-                data_obj = dyn_to_json(dyn_msg)?;
+                data_obj = dyn_to_json(&dyn_msg)?;
             }
         }
         self.total += 1;
@@ -161,7 +164,7 @@ pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<Js
         .get_message_by_name(&to_fqn(name))
         .ok_or(anyhow!("Invalid action type: {}", name))?;
     let action_msg = DynamicMessage::decode(action_type, Bytes::from(decoded))?;
-    dyn_to_json(action_msg)
+    dyn_to_json(&action_msg)
 }
 
 fn wtf_decode(data: &mut [u8]) {
