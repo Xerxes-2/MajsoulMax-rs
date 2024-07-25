@@ -30,6 +30,12 @@ const ANNOUNCEMENT: &str = formatcp!(
 <color=#f9963b>再次重申：脚本完全免费使用，没有收费功能！</color>",
     VERSION
 );
+static MY_ANNOUNCEMENT: LazyLock<lq::Announcement> = LazyLock::new(|| lq::Announcement {
+    title: "雀魂Max-rs载入成功".to_string(),
+    id: 1145141919,
+    header_image: "internal://2.jpg".to_string(),
+    content: ANNOUNCEMENT.to_string(),
+});
 
 #[derive(Default)]
 pub struct Safe {
@@ -312,13 +318,7 @@ impl Modder {
             }
             ".lq.Lobby.fetchAnnouncement" => {
                 let mut msg = lq::ResAnnouncement::decode(msg_block.data.as_ref())?;
-                let my_announcement = lq::Announcement {
-                    title: "雀魂Max-rs载入成功".to_string(),
-                    id: 1145141919,
-                    header_image: "internal://2.jpg".to_string(),
-                    content: ANNOUNCEMENT.to_string(),
-                };
-                msg.announcements.insert(0, my_announcement);
+                msg.announcements.insert(0, MY_ANNOUNCEMENT.clone());
                 modified_data = Some(msg.encode_to_vec());
             }
             ".lq.Lobby.fetchInfo" => {
