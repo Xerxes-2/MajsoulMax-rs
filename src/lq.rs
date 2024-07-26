@@ -38,7 +38,7 @@ pub struct NotifyMatchGameStart {
     pub location: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyRoomPlayerReady {
     #[prost(uint32, tag = "1")]
     pub account_id: u32,
@@ -52,7 +52,7 @@ pub struct NotifyRoomPlayerReady {
 /// Nested message and enum types in `NotifyRoomPlayerReady`.
 pub mod notify_room_player_ready {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct AccountReadyState {
         #[prost(uint32, tag = "1")]
         pub account_id: u32,
@@ -61,7 +61,7 @@ pub mod notify_room_player_ready {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyRoomPlayerDressing {
     #[prost(uint32, tag = "1")]
     pub account_id: u32,
@@ -75,7 +75,7 @@ pub struct NotifyRoomPlayerDressing {
 /// Nested message and enum types in `NotifyRoomPlayerDressing`.
 pub mod notify_room_player_dressing {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct AccountDressingState {
         #[prost(uint32, tag = "1")]
         pub account_id: u32,
@@ -100,7 +100,7 @@ pub struct NotifyRoomPlayerUpdate {
     pub seq: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyRoomKickOut {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -129,7 +129,7 @@ pub struct NotifyFriendChange {
     pub friend: ::core::option::Option<Friend>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyNewFriendApply {
     #[prost(uint32, tag = "1")]
     pub account_id: u32,
@@ -155,10 +155,10 @@ pub struct NotifyAccountUpdate {
     pub update: ::core::option::Option<AccountUpdate>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyAnotherLogin {}
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyAccountLogout {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -190,7 +190,7 @@ pub struct NotifyDeleteMail {
     pub mail_id_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyReviveCoinUpdate {
     #[prost(bool, tag = "1")]
     pub has_gained: bool,
@@ -254,7 +254,7 @@ pub mod notify_activity_update {
     /// Nested message and enum types in `FeedActivityData`.
     pub mod feed_activity_data {
         #[allow(clippy::derive_partial_eq_without_eq)]
-        #[derive(Clone, PartialEq, ::prost::Message)]
+        #[derive(Clone, Copy, PartialEq, ::prost::Message)]
         pub struct CountWithTimeData {
             #[prost(uint32, tag = "1")]
             pub count: u32,
@@ -262,7 +262,7 @@ pub mod notify_activity_update {
             pub last_update_time: u32,
         }
         #[allow(clippy::derive_partial_eq_without_eq)]
-        #[derive(Clone, PartialEq, ::prost::Message)]
+        #[derive(Clone, Copy, PartialEq, ::prost::Message)]
         pub struct GiftBoxData {
             #[prost(uint32, tag = "1")]
             pub id: u32,
@@ -296,7 +296,7 @@ pub struct NotifyAccountChallengeTaskUpdate {
     pub rewarded_season: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyNewComment {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -305,7 +305,7 @@ pub struct NotifyRollingNotice {
     pub notice: ::prost::alloc::vec::Vec<RollingNotice>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyGiftSendRefresh {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -314,10 +314,10 @@ pub struct NotifyShopUpdate {
     pub shop_info: ::core::option::Option<ShopInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyIntervalUpdate {}
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyVipLevelChange {
     #[prost(uint32, tag = "1")]
     pub gift_limit: u32,
@@ -355,7 +355,7 @@ pub struct NotifyPayResult {
 /// Nested message and enum types in `NotifyPayResult`.
 pub mod notify_pay_result {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ResourceModify {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -406,7 +406,7 @@ pub struct NotifyMatchFailed {
     pub sid: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyCustomContestState {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -432,7 +432,7 @@ pub struct NotifyAfkResult {
     pub game_uuid: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyLoginQueueFinished {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -451,7 +451,7 @@ pub struct NotifyGameFinishRewardV2 {
 /// Nested message and enum types in `NotifyGameFinishRewardV2`.
 pub mod notify_game_finish_reward_v2 {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct LevelChange {
         #[prost(message, optional, tag = "1")]
         pub origin: ::core::option::Option<super::AccountLevel>,
@@ -475,7 +475,7 @@ pub mod notify_game_finish_reward_v2 {
         pub rewards: ::prost::alloc::vec::Vec<super::RewardSlot>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct MainCharacter {
         #[prost(uint32, tag = "1")]
         pub level: u32,
@@ -485,7 +485,7 @@ pub mod notify_game_finish_reward_v2 {
         pub add: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct CharacterGift {
         #[prost(uint32, tag = "1")]
         pub origin: u32,
@@ -523,7 +523,7 @@ pub struct NotifyActivityPointV2 {
 /// Nested message and enum types in `NotifyActivityPointV2`.
 pub mod notify_activity_point_v2 {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ActivityPoint {
         #[prost(uint32, tag = "1")]
         pub activity_id: u32,
@@ -540,7 +540,7 @@ pub struct NotifyLeaderboardPointV2 {
 /// Nested message and enum types in `NotifyLeaderboardPointV2`.
 pub mod notify_leaderboard_point_v2 {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct LeaderboardPoint {
         #[prost(uint32, tag = "1")]
         pub leaderboard_id: u32,
@@ -579,7 +579,7 @@ pub struct NetworkEndpoint {
     pub port: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqCommon {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -596,7 +596,7 @@ pub struct ResAccountUpdate {
     pub update: ::core::option::Option<AccountUpdate>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct AntiAddiction {
     #[prost(uint32, tag = "1")]
     pub online_duration: u32,
@@ -622,7 +622,7 @@ pub struct AccountMahjongStatistic {
 /// Nested message and enum types in `AccountMahjongStatistic`.
 pub mod account_mahjong_statistic {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RoundSummary {
         #[prost(uint32, tag = "1")]
         pub total_count: u32,
@@ -634,7 +634,7 @@ pub mod account_mahjong_statistic {
         pub fangchong_count: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct HuSummary {
         #[prost(uint32, tag = "1")]
         pub total_count: u32,
@@ -662,7 +662,7 @@ pub mod account_mahjong_statistic {
         pub title_id: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Liqi20Summary {
         #[prost(uint32, tag = "1")]
         pub total_count: u32,
@@ -672,7 +672,7 @@ pub mod account_mahjong_statistic {
         pub average_hu_point: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct LiQi10Summary {
         #[prost(uint32, tag = "1")]
         pub total_xuanshang: u32,
@@ -680,7 +680,7 @@ pub mod account_mahjong_statistic {
         pub total_fanshu: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct GameResult {
         #[prost(uint32, tag = "1")]
         pub rank: u32,
@@ -701,15 +701,16 @@ pub struct AccountStatisticData {
     pub game_type: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct AccountLevel {
     #[prost(uint32, tag = "1")]
     pub id: u32,
     #[prost(uint32, tag = "2")]
     pub score: u32,
 }
+#[derive(::serde::Serialize, ::serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message, ::serde::Serialize, ::serde::Deserialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ViewSlot {
     #[prost(uint32, tag = "1")]
     pub slot: u32,
@@ -783,7 +784,7 @@ pub struct Account {
 /// Nested message and enum types in `Account`.
 pub mod account {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct PlatformDiamond {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -791,7 +792,7 @@ pub mod account {
         pub count: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct PlatformSkinTicket {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -799,7 +800,7 @@ pub mod account {
         pub count: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ChallengeLevel {
         #[prost(uint32, tag = "1")]
         pub season: u32,
@@ -809,7 +810,7 @@ pub mod account {
         pub rank: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct AchievementCount {
         #[prost(uint32, tag = "1")]
         pub rare: u32,
@@ -864,7 +865,7 @@ pub struct AccountUpdate {
 /// Nested message and enum types in `AccountUpdate`.
 pub mod account_update {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct NumericalUpdate {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -954,7 +955,7 @@ pub mod account_update {
     /// Nested message and enum types in `AccountABMatchUpdate`.
     pub mod account_ab_match_update {
         #[allow(clippy::derive_partial_eq_without_eq)]
-        #[derive(Clone, PartialEq, ::prost::Message)]
+        #[derive(Clone, Copy, PartialEq, ::prost::Message)]
         pub struct MatchPoint {
             #[prost(uint32, tag = "1")]
             pub match_id: u32,
@@ -971,7 +972,7 @@ pub mod account_update {
         pub task_list: ::prost::alloc::vec::Vec<u32>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct MonthTicketUpdate {
         #[prost(uint32, tag = "1")]
         pub end_time: u32,
@@ -980,7 +981,7 @@ pub mod account_update {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameMetaData {
     #[prost(uint32, tag = "1")]
     pub room_id: u32,
@@ -1086,7 +1087,7 @@ pub struct PlayerGameView {
     pub views: ::prost::alloc::vec::Vec<ViewSlot>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameSetting {
     #[prost(uint32, tag = "1")]
     pub emoji_switch: u32,
@@ -1108,7 +1109,7 @@ pub struct GameMode {
     pub game_setting: ::core::option::Option<GameSetting>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameTestingEnvironmentSet {
     #[prost(uint32, tag = "1")]
     pub paixing: u32,
@@ -1118,7 +1119,7 @@ pub struct GameTestingEnvironmentSet {
     pub field_spell_var: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameDetailRule {
     #[prost(uint32, tag = "1")]
     pub time_fixed: u32,
@@ -1288,7 +1289,7 @@ pub struct GameEndResult {
 /// Nested message and enum types in `GameEndResult`.
 pub mod game_end_result {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct PlayerItem {
         #[prost(uint32, tag = "1")]
         pub seat: u32,
@@ -1315,7 +1316,7 @@ pub struct GameConnectInfo {
     pub location: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ItemGainRecord {
     #[prost(uint32, tag = "1")]
     pub item_id: u32,
@@ -1345,7 +1346,7 @@ pub struct FakeRandomRecords {
     pub gain_history: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Item {
     #[prost(uint32, tag = "1")]
     pub item_id: u32,
@@ -1369,7 +1370,7 @@ pub struct BagUpdate {
     pub update_daily_gain_record: ::prost::alloc::vec::Vec<ItemGainRecords>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct RewardSlot {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -1377,7 +1378,7 @@ pub struct RewardSlot {
     pub count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct OpenResult {
     #[prost(message, optional, tag = "1")]
     pub reward: ::core::option::Option<RewardSlot>,
@@ -1385,7 +1386,7 @@ pub struct OpenResult {
     pub replace: ::core::option::Option<RewardSlot>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct RewardPlusResult {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -1397,7 +1398,7 @@ pub struct RewardPlusResult {
 /// Nested message and enum types in `RewardPlusResult`.
 pub mod reward_plus_result {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Exchange {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -1408,7 +1409,7 @@ pub mod reward_plus_result {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ExecuteReward {
     #[prost(message, optional, tag = "1")]
     pub reward: ::core::option::Option<RewardSlot>,
@@ -1418,7 +1419,7 @@ pub struct ExecuteReward {
     pub replace_count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ExecuteResult {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -1462,7 +1463,7 @@ pub struct Mail {
     pub template_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct AchievementProgress {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -1510,7 +1511,7 @@ pub struct AccountStatisticByGameMode {
 /// Nested message and enum types in `AccountStatisticByGameMode`.
 pub mod account_statistic_by_game_mode {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RoundEndData {
         #[prost(uint32, tag = "1")]
         pub r#type: u32,
@@ -1518,7 +1519,7 @@ pub mod account_statistic_by_game_mode {
         pub sum: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RankScore {
         #[prost(uint32, tag = "1")]
         pub rank: u32,
@@ -1529,7 +1530,7 @@ pub mod account_statistic_by_game_mode {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct AccountStatisticByFan {
     #[prost(uint32, tag = "1")]
     pub fan_id: u32,
@@ -1651,7 +1652,7 @@ pub mod account_detail_statistic_v2 {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct AccountShiLian {
     #[prost(uint32, tag = "1")]
     pub step: u32,
@@ -1705,7 +1706,7 @@ pub struct Announcement {
     pub header_image: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TaskProgress {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -1731,7 +1732,7 @@ pub struct GameConfig {
     pub meta: ::core::option::Option<GameMetaData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct RpgState {
     #[prost(uint32, tag = "1")]
     pub player_damaged: u32,
@@ -1759,7 +1760,7 @@ pub struct RpgActivity {
     pub last_show_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActivityArenaData {
     #[prost(uint32, tag = "1")]
     pub win_count: u32,
@@ -1795,7 +1796,7 @@ pub struct FeedActivityData {
 /// Nested message and enum types in `FeedActivityData`.
 pub mod feed_activity_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct CountWithTimeData {
         #[prost(uint32, tag = "1")]
         pub count: u32,
@@ -1803,7 +1804,7 @@ pub mod feed_activity_data {
         pub last_update_time: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct GiftBoxData {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -1820,7 +1821,7 @@ pub mod feed_activity_data {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SegmentTaskProgress {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -1876,7 +1877,7 @@ pub struct AccountActivityUpdate {
     pub island_data: ::prost::alloc::vec::Vec<ActivityIslandData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActivityCombiningWorkbench {
     #[prost(uint32, tag = "1")]
     pub craft_id: u32,
@@ -1894,7 +1895,7 @@ pub struct ActivityCombiningMenuData {
 /// Nested message and enum types in `ActivityCombiningMenuData`.
 pub mod activity_combining_menu_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct MenuRequire {
         #[prost(uint32, tag = "1")]
         pub level: u32,
@@ -1903,7 +1904,7 @@ pub mod activity_combining_menu_data {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActivityCombiningOrderData {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -1929,7 +1930,7 @@ pub struct ActivityCombiningLqData {
     pub unlocked_craft: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActivityCombiningPoolData {
     #[prost(uint32, tag = "1")]
     pub group: u32,
@@ -1963,7 +1964,7 @@ pub struct ActivityCombiningData {
 /// Nested message and enum types in `ActivityCombiningData`.
 pub mod activity_combining_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct BonusData {
         #[prost(uint32, tag = "1")]
         pub count: u32,
@@ -1972,7 +1973,7 @@ pub mod activity_combining_data {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct VillageReward {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -2004,7 +2005,7 @@ pub struct VillageTripData {
     pub info: ::core::option::Option<VillageTargetInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct VillageTaskData {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -2040,7 +2041,7 @@ pub struct ActivityVillageData {
     pub round: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TimeCounterData {
     #[prost(uint32, tag = "1")]
     pub count: u32,
@@ -2048,7 +2049,7 @@ pub struct TimeCounterData {
     pub update_time: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SignedTimeCounterData {
     #[prost(int32, tag = "1")]
     pub count: i32,
@@ -2056,7 +2057,7 @@ pub struct SignedTimeCounterData {
     pub update_time: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct FestivalProposalData {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -2104,7 +2105,7 @@ pub struct IslandBagData {
     pub items: ::prost::alloc::vec::Vec<IslandBagItemData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct IslandGoodsData {
     #[prost(uint32, tag = "1")]
     pub goods_id: u32,
@@ -2154,7 +2155,7 @@ pub struct ActivityFeedData {
 /// Nested message and enum types in `ActivityFeedData`.
 pub mod activity_feed_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct CountWithTimeData {
         #[prost(uint32, tag = "1")]
         pub count: u32,
@@ -2162,7 +2163,7 @@ pub mod activity_feed_data {
         pub last_update_time: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct GiftBoxData {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -2205,7 +2206,7 @@ pub mod activity_friend_gift_data {
         pub send_friend_id: ::prost::alloc::vec::Vec<u32>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct GiftBoxData {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -2234,7 +2235,7 @@ pub struct ActivityUpgradeData {
 /// Nested message and enum types in `ActivityUpgradeData`.
 pub mod activity_upgrade_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct LevelGroup {
         #[prost(uint32, tag = "1")]
         pub group_id: u32,
@@ -2243,7 +2244,7 @@ pub mod activity_upgrade_data {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GachaRecord {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -2378,7 +2379,7 @@ pub struct Friend {
     pub state: ::core::option::Option<AccountActiveState>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Point {
     #[prost(uint32, tag = "1")]
     pub x: u32,
@@ -2386,7 +2387,7 @@ pub struct Point {
     pub y: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct MineReward {
     #[prost(message, optional, tag = "1")]
     pub point: ::core::option::Option<Point>,
@@ -2440,13 +2441,13 @@ pub struct GameNewRoundState {
     pub seat_states: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameEndAction {
     #[prost(uint32, tag = "1")]
     pub state: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameNoopAction {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2495,7 +2496,7 @@ pub struct BillingGoods {
     pub resource_count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BillShortcut {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -2537,7 +2538,7 @@ pub struct Character {
     pub rewarded_level: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BuyRecord {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -2559,7 +2560,7 @@ pub struct ZhpShop {
 /// Nested message and enum types in `ZHPShop`.
 pub mod zhp_shop {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RefreshCount {
         #[prost(uint32, tag = "1")]
         pub count: u32,
@@ -2568,7 +2569,7 @@ pub mod zhp_shop {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct MonthTicketInfo {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -2677,7 +2678,7 @@ pub struct PaymentSetting {
 /// Nested message and enum types in `PaymentSetting`.
 pub mod payment_setting {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct WechatData {
         #[prost(bool, tag = "1")]
         pub disable_create: bool,
@@ -2687,7 +2688,7 @@ pub mod payment_setting {
         pub enable_credit: bool,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct AlipayData {
         #[prost(bool, tag = "1")]
         pub disable_create: bool,
@@ -2696,7 +2697,7 @@ pub mod payment_setting {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct AccountSetting {
     #[prost(uint32, tag = "1")]
     pub key: u32,
@@ -2704,7 +2705,7 @@ pub struct AccountSetting {
     pub value: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ChestData {
     #[prost(uint32, tag = "1")]
     pub chest_id: u32,
@@ -2716,7 +2717,7 @@ pub struct ChestData {
     pub face_black_count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ChestDataV2 {
     #[prost(uint32, tag = "1")]
     pub chest_id: u32,
@@ -2728,7 +2729,7 @@ pub struct ChestDataV2 {
     pub ticket_face_black_count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct FaithData {
     #[prost(uint32, tag = "1")]
     pub faith_id: u32,
@@ -2955,7 +2956,7 @@ pub struct Activity {
     pub r#type: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ExchangeRecord {
     #[prost(uint32, tag = "1")]
     pub exchange_id: u32,
@@ -2973,7 +2974,7 @@ pub struct ActivityAccumulatedPointData {
     pub gained_reward_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActivityRankPointData {
     #[prost(uint32, tag = "1")]
     pub leaderboard_id: u32,
@@ -3027,7 +3028,7 @@ pub mod game_round_hu_data {
         pub liqi: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Fan {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -3136,7 +3137,7 @@ pub mod game_final_snapshot {
         pub is_connected: bool,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct FinalPlayer {
         #[prost(uint32, tag = "1")]
         pub seat: u32,
@@ -3152,7 +3153,7 @@ pub mod game_final_snapshot {
         pub gold: i32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct AfkInfo {
         #[prost(uint32, tag = "1")]
         pub deal_tile_count: u32,
@@ -3175,7 +3176,7 @@ pub struct RecordCollectedData {
     pub end_time: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ContestDetailRule {
     #[prost(uint32, tag = "5")]
     pub init_point: u32,
@@ -3281,7 +3282,7 @@ pub struct ContestDetailRule {
     pub fanfu: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ContestDetailRuleV2 {
     #[prost(message, optional, tag = "1")]
     pub game_rule: ::core::option::Option<ContestDetailRule>,
@@ -3291,7 +3292,7 @@ pub struct ContestDetailRuleV2 {
 /// Nested message and enum types in `ContestDetailRuleV2`.
 pub mod contest_detail_rule_v2 {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ExtraRule {
         #[prost(uint32, tag = "1")]
         pub required_level: u32,
@@ -3300,7 +3301,7 @@ pub mod contest_detail_rule_v2 {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameRuleSetting {
     #[prost(uint32, tag = "1")]
     pub round_type: u32,
@@ -3400,7 +3401,7 @@ pub struct RecordHuleInfo {
 /// Nested message and enum types in `RecordHuleInfo`.
 pub mod record_hule_info {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RecordFanInfo {
         #[prost(uint32, tag = "1")]
         pub val: u32,
@@ -3417,7 +3418,7 @@ pub struct RecordHulesInfo {
     pub hules: ::prost::alloc::vec::Vec<RecordHuleInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct RecordLiujuInfo {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -3433,7 +3434,7 @@ pub struct RecordNoTileInfo {
     pub players: ::prost::alloc::vec::Vec<RecordNoTilePlayerInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct RecordLiqiInfo {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -3463,7 +3464,7 @@ pub struct RecordGangInfo {
     pub xun: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct RecordBaBeiInfo {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -3475,7 +3476,7 @@ pub struct RecordBaBeiInfo {
     pub is_bei: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct RecordPeiPaiInfo {
     #[prost(uint32, tag = "1")]
     pub dora_count: u32,
@@ -3519,7 +3520,7 @@ pub struct RecordAnalysisedData {
     pub round_infos: ::prost::alloc::vec::Vec<RecordRoundInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct VoteData {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -3529,7 +3530,7 @@ pub struct VoteData {
     pub count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActivityBuffData {
     #[prost(uint32, tag = "1")]
     pub buff_id: u32,
@@ -3553,7 +3554,7 @@ pub struct AccountResourceSnapshot {
 /// Nested message and enum types in `AccountResourceSnapshot`.
 pub mod account_resource_snapshot {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct BagItemSnapshot {
         #[prost(uint32, tag = "1")]
         pub resource_id: u32,
@@ -3563,7 +3564,7 @@ pub mod account_resource_snapshot {
         pub resource_version: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct CurrencySnapshot {
         #[prost(uint32, tag = "1")]
         pub currency_id: u32,
@@ -3577,7 +3578,7 @@ pub mod account_resource_snapshot {
         pub title_list: ::prost::alloc::vec::Vec<u32>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct UsedTitleSnapshot {
         #[prost(uint32, tag = "1")]
         pub title_id: u32,
@@ -3602,7 +3603,7 @@ pub struct AccountCharacterSnapshot {
 /// Nested message and enum types in `AccountCharacterSnapshot`.
 pub mod account_character_snapshot {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct MainCharacterSnapshot {
         #[prost(uint32, tag = "1")]
         pub character_id: u32,
@@ -3662,13 +3663,13 @@ pub struct AccountAchievementSnapshot {
 /// Nested message and enum types in `AccountAchievementSnapshot`.
 pub mod account_achievement_snapshot {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RewardedGroupSnapshot {
         #[prost(uint32, tag = "1")]
         pub rewarded_id: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct AchievementVersion {
         #[prost(uint32, tag = "1")]
         pub version: u32,
@@ -3722,7 +3723,7 @@ pub mod account_misc_snapshot {
         pub tickets: ::prost::alloc::vec::Vec<MonthTicketInfo>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct AccountVip {
         #[prost(uint32, tag = "1")]
         pub vip: u32,
@@ -3738,7 +3739,7 @@ pub mod account_misc_snapshot {
     /// Nested message and enum types in `AccountRechargeInfo`.
     pub mod account_recharge_info {
         #[allow(clippy::derive_partial_eq_without_eq)]
-        #[derive(Clone, PartialEq, ::prost::Message)]
+        #[derive(Clone, Copy, PartialEq, ::prost::Message)]
         pub struct RechargeRecord {
             #[prost(uint32, tag = "1")]
             pub level: u32,
@@ -4126,7 +4127,7 @@ pub struct ResDmmPreLogin {
     pub parameter: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqLogout {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -4135,7 +4136,7 @@ pub struct ResLogout {
     pub error: ::core::option::Option<Error>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqHeatBeat {
     #[prost(uint32, tag = "1")]
     pub no_operation_counter: u32,
@@ -4155,13 +4156,13 @@ pub struct ReqJoinMatchQueue {
     pub client_version_string: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqCancelMatchQueue {
     #[prost(uint32, tag = "1")]
     pub match_mode: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqAccountInfo {
     #[prost(uint32, tag = "1")]
     pub account_id: u32,
@@ -4195,7 +4196,7 @@ pub struct ReqModifyNickname {
     pub use_item_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqModifyBirthday {
     #[prost(int32, tag = "1")]
     pub birthday: i32,
@@ -4255,40 +4256,40 @@ pub struct ResJoinRoom {
     pub room: ::core::option::Option<Room>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRoomReady {
     #[prost(bool, tag = "1")]
     pub ready: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRoomDressing {
     #[prost(bool, tag = "1")]
     pub dressing: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRoomStart {}
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRoomKick {
     #[prost(uint32, tag = "1")]
     pub account_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqModifyRoom {
     #[prost(uint32, tag = "1")]
     pub robot_count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqChangeAvatar {
     #[prost(uint32, tag = "1")]
     pub avatar_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqAccountStatisticInfo {
     #[prost(uint32, tag = "1")]
     pub account_id: u32,
@@ -4314,7 +4315,7 @@ pub struct ResAccountChallengeRankInfo {
 /// Nested message and enum types in `ResAccountChallengeRankInfo`.
 pub mod res_account_challenge_rank_info {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ChallengeRank {
         #[prost(uint32, tag = "1")]
         pub season: u32,
@@ -4369,7 +4370,7 @@ pub struct ResGameRecord {
     pub data_url: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqGameRecordList {
     #[prost(uint32, tag = "1")]
     pub start: u32,
@@ -4457,7 +4458,7 @@ pub struct ResChangeCollectedGameRecordRemarks {
     pub error: ::core::option::Option<Error>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqLevelLeaderboard {
     #[prost(uint32, tag = "1")]
     pub r#type: u32,
@@ -4475,7 +4476,7 @@ pub struct ResLevelLeaderboard {
 /// Nested message and enum types in `ResLevelLeaderboard`.
 pub mod res_level_leaderboard {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Item {
         #[prost(uint32, tag = "1")]
         pub account_id: u32,
@@ -4484,7 +4485,7 @@ pub mod res_level_leaderboard {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqChallangeLeaderboard {
     #[prost(uint32, tag = "1")]
     pub season: u32,
@@ -4531,7 +4532,7 @@ pub struct ResMutiChallengeLevel {
 /// Nested message and enum types in `ResMutiChallengeLevel`.
 pub mod res_muti_challenge_level {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Item {
         #[prost(uint32, tag = "1")]
         pub account_id: u32,
@@ -4576,7 +4577,7 @@ pub struct ResFriendApplyList {
 /// Nested message and enum types in `ResFriendApplyList`.
 pub mod res_friend_apply_list {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct FriendApply {
         #[prost(uint32, tag = "1")]
         pub account_id: u32,
@@ -4585,13 +4586,13 @@ pub mod res_friend_apply_list {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqApplyFriend {
     #[prost(uint32, tag = "1")]
     pub target_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqHandleFriendApply {
     #[prost(uint32, tag = "1")]
     pub target_id: u32,
@@ -4599,7 +4600,7 @@ pub struct ReqHandleFriendApply {
     pub method: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRemoveFriend {
     #[prost(uint32, tag = "1")]
     pub target_id: u32,
@@ -4639,7 +4640,7 @@ pub struct ResAccountStates {
     pub states: ::prost::alloc::vec::Vec<AccountActiveState>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqSearchAccountById {
     #[prost(uint32, tag = "1")]
     pub account_id: u32,
@@ -4661,13 +4662,13 @@ pub struct ResBagInfo {
     pub bag: ::core::option::Option<Bag>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUseBagItem {
     #[prost(uint32, tag = "1")]
     pub item_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqOpenManualItem {
     #[prost(uint32, tag = "1")]
     pub item_id: u32,
@@ -4677,7 +4678,7 @@ pub struct ReqOpenManualItem {
     pub select_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqOpenRandomRewardItem {
     #[prost(uint32, tag = "1")]
     pub item_id: u32,
@@ -4691,7 +4692,7 @@ pub struct ResOpenRandomRewardItem {
     pub results: ::prost::alloc::vec::Vec<OpenResult>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqOpenAllRewardItem {
     #[prost(uint32, tag = "1")]
     pub item_id: u32,
@@ -4705,7 +4706,7 @@ pub struct ResOpenAllRewardItem {
     pub results: ::prost::alloc::vec::Vec<OpenResult>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqComposeShard {
     #[prost(uint32, tag = "1")]
     pub item_id: u32,
@@ -4739,25 +4740,25 @@ pub struct ResMailInfo {
     pub mails: ::prost::alloc::vec::Vec<Mail>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReadMail {
     #[prost(uint32, tag = "1")]
     pub mail_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqDeleteMail {
     #[prost(uint32, tag = "1")]
     pub mail_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqTakeAttachment {
     #[prost(uint32, tag = "1")]
     pub mail_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveAchievementGroupReward {
     #[prost(uint32, tag = "1")]
     pub group_id: u32,
@@ -4771,7 +4772,7 @@ pub struct ResReceiveAchievementGroupReward {
     pub execute_reward: ::prost::alloc::vec::Vec<ExecuteReward>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveAchievementReward {
     #[prost(uint32, tag = "1")]
     pub achievement_id: u32,
@@ -4795,7 +4796,7 @@ pub struct ResFetchAchievementRate {
 /// Nested message and enum types in `ResFetchAchievementRate`.
 pub mod res_fetch_achievement_rate {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct AchievementRate {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -4822,19 +4823,19 @@ pub struct ResTitleList {
     pub title_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUseTitle {
     #[prost(uint32, tag = "1")]
     pub title: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqBuyShiLian {
     #[prost(uint32, tag = "1")]
     pub r#type: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUpdateClientValue {
     #[prost(uint32, tag = "1")]
     pub key: u32,
@@ -4854,7 +4855,7 @@ pub struct ResClientValue {
 /// Nested message and enum types in `ResClientValue`.
 pub mod res_client_value {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Value {
         #[prost(uint32, tag = "1")]
         pub key: u32,
@@ -4887,7 +4888,7 @@ pub struct ResCurrentMatchInfo {
 /// Nested message and enum types in `ResCurrentMatchInfo`.
 pub mod res_current_match_info {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct CurrentMatchInfo {
         #[prost(uint32, tag = "1")]
         pub mode_id: u32,
@@ -4896,7 +4897,7 @@ pub mod res_current_match_info {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUserComplain {
     #[prost(uint32, tag = "1")]
     pub target_id: u32,
@@ -4934,7 +4935,7 @@ pub struct ResDailyTask {
     pub refresh_count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRefreshDailyTask {
     #[prost(uint32, tag = "1")]
     pub task_id: u32,
@@ -5024,7 +5025,7 @@ pub struct ResGameLiveLeftSegment {
     pub segment_end_millisecond: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqGameLiveList {
     #[prost(uint32, tag = "1")]
     pub filter_id: u32,
@@ -5046,13 +5047,13 @@ pub struct ResCommentSetting {
     pub comment_allow: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUpdateCommentSetting {
     #[prost(uint32, tag = "1")]
     pub comment_allow: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchCommentList {
     #[prost(uint32, tag = "1")]
     pub target_id: u32,
@@ -5102,7 +5103,7 @@ pub struct ReqDeleteComment {
     pub delete_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUpdateReadComment {
     #[prost(uint32, tag = "1")]
     pub read_id: u32,
@@ -5122,7 +5123,7 @@ pub struct ResServerTime {
     pub error: ::core::option::Option<Error>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqPlatformBillingProducts {
     #[prost(uint32, tag = "1")]
     pub shelves_id: u32,
@@ -5990,7 +5991,7 @@ pub struct ReqDeliverAa32Order {
     pub nsa_token: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqOpenChest {
     #[prost(uint32, tag = "1")]
     pub chest_id: u32,
@@ -6016,7 +6017,7 @@ pub struct ResOpenChest {
 /// Nested message and enum types in `ResOpenChest`.
 pub mod res_open_chest {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ChestReplaceCountData {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -6025,7 +6026,7 @@ pub mod res_open_chest {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqBuyFromChestShop {
     #[prost(uint32, tag = "1")]
     pub goods_id: u32,
@@ -6053,7 +6054,7 @@ pub struct ResDailySignInInfo {
     pub sign_in_days: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqDoActivitySignIn {
     #[prost(uint32, tag = "2")]
     pub activity_id: u32,
@@ -6071,7 +6072,7 @@ pub struct ResDoActivitySignIn {
 /// Nested message and enum types in `ResDoActivitySignIn`.
 pub mod res_do_activity_sign_in {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RewardData {
         #[prost(uint32, tag = "1")]
         pub resource_id: u32,
@@ -6110,13 +6111,13 @@ pub struct ReqUpdateCharacterSort {
     pub sort: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqChangeMainCharacter {
     #[prost(uint32, tag = "1")]
     pub character_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqChangeCharacterSkin {
     #[prost(uint32, tag = "1")]
     pub character_id: u32,
@@ -6124,7 +6125,7 @@ pub struct ReqChangeCharacterSkin {
     pub skin: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqChangeCharacterView {
     #[prost(uint32, tag = "1")]
     pub character_id: u32,
@@ -6158,7 +6159,7 @@ pub struct ReqSendGiftToCharacter {
 /// Nested message and enum types in `ReqSendGiftToCharacter`.
 pub mod req_send_gift_to_character {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Gift {
         #[prost(uint32, tag = "1")]
         pub item_id: u32,
@@ -6185,7 +6186,7 @@ pub struct ReqSellItem {
 /// Nested message and enum types in `ReqSellItem`.
 pub mod req_sell_item {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Item {
         #[prost(uint32, tag = "1")]
         pub item_id: u32,
@@ -6204,7 +6205,7 @@ pub struct ResCommonView {
 /// Nested message and enum types in `ResCommonView`.
 pub mod res_common_view {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Slot {
         #[prost(uint32, tag = "1")]
         pub slot: u32,
@@ -6213,7 +6214,7 @@ pub mod res_common_view {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqChangeCommonView {
     #[prost(uint32, tag = "1")]
     pub slot: u32,
@@ -6231,7 +6232,7 @@ pub struct ReqSaveCommonViews {
     pub is_use: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqCommonViews {
     #[prost(uint32, tag = "1")]
     pub index: u32,
@@ -6266,13 +6267,13 @@ pub mod res_allcommon_views {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUseCommonView {
     #[prost(uint32, tag = "3")]
     pub index: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUpgradeCharacter {
     #[prost(uint32, tag = "1")]
     pub character_id: u32,
@@ -6286,7 +6287,7 @@ pub struct ResUpgradeCharacter {
     pub character: ::core::option::Option<Character>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFinishedEnding {
     #[prost(uint32, tag = "1")]
     pub character_id: u32,
@@ -6324,7 +6325,7 @@ pub struct ReqBuyFromShop {
 /// Nested message and enum types in `ReqBuyFromShop`.
 pub mod req_buy_from_shop {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Item {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -6341,7 +6342,7 @@ pub struct ResBuyFromShop {
     pub rewards: ::prost::alloc::vec::Vec<RewardSlot>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqBuyFromZhp {
     #[prost(uint32, tag = "1")]
     pub goods_id: u32,
@@ -6349,7 +6350,7 @@ pub struct ReqBuyFromZhp {
     pub count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqPayMonthTicket {
     #[prost(uint32, tag = "1")]
     pub ticket_id: u32,
@@ -6365,7 +6366,7 @@ pub struct ResPayMonthTicket {
     pub resource_count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReshZhpShop {
     #[prost(uint32, tag = "1")]
     pub free_refresh: u32,
@@ -6389,7 +6390,7 @@ pub struct ResMonthTicketInfo {
     pub month_ticket_info: ::core::option::Option<MonthTicketInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqExchangeCurrency {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -6413,7 +6414,7 @@ pub struct ResAccountSettings {
     pub settings: ::prost::alloc::vec::Vec<AccountSetting>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUpdateAccountSettings {
     #[prost(message, optional, tag = "1")]
     pub setting: ::core::option::Option<AccountSetting>,
@@ -6439,7 +6440,7 @@ pub struct ResMisc {
 /// Nested message and enum types in `ResMisc`.
 pub mod res_misc {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct MiscFaithData {
         #[prost(uint32, tag = "1")]
         pub faith_id: u32,
@@ -6507,7 +6508,7 @@ pub mod res_fetch_refund_order {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqGainVipReward {
     #[prost(uint32, tag = "1")]
     pub vip_level: u32,
@@ -6533,7 +6534,7 @@ pub struct ResFetchCustomizedContestList {
     pub follow_contests: ::prost::alloc::vec::Vec<CustomizedContestBase>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchCustomizedContestAuthInfo {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -6571,7 +6572,7 @@ pub struct ResEnterCustomizedContest {
     pub is_admin: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchCustomizedContestOnlineInfo {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -6625,13 +6626,13 @@ pub struct ReqStartCustomizedContest {
     pub client_version_string: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqStopCustomizedContest {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqJoinCustomizedContestChatRoom {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -6653,7 +6654,7 @@ pub struct ReqSayChatMessage {
     pub unique_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchCustomizedContestGameLiveList {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -6667,7 +6668,7 @@ pub struct ResFetchCustomizedContestGameLiveList {
     pub live_list: ::prost::alloc::vec::Vec<GameLiveHead>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchCustomizedContestGameRecords {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -6687,7 +6688,7 @@ pub struct ResFetchCustomizedContestGameRecords {
     pub record_list: ::prost::alloc::vec::Vec<RecordGame>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqTargetCustomizedContest {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -6761,7 +6762,7 @@ pub struct ResAccountActivityData {
 /// Nested message and enum types in `ResAccountActivityData`.
 pub mod res_account_activity_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ActivitySignInData {
         #[prost(uint32, tag = "1")]
         pub activity_id: u32,
@@ -6771,7 +6772,7 @@ pub mod res_account_activity_data {
         pub last_sign_in_time: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct BuffData {
         #[prost(uint32, tag = "1")]
         pub r#type: u32,
@@ -6799,7 +6800,7 @@ pub mod res_account_activity_data {
         pub buff: ::prost::alloc::vec::Vec<BuffData>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ChestUpData {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -6818,7 +6819,7 @@ pub mod res_account_activity_data {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SnsBlog {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -6826,7 +6827,7 @@ pub struct SnsBlog {
     pub read_time: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SnsReply {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -6834,7 +6835,7 @@ pub struct SnsReply {
     pub reply_time: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqExchangeActivityItem {
     #[prost(uint32, tag = "1")]
     pub exchange_id: u32,
@@ -6850,7 +6851,7 @@ pub struct ResExchangeActivityItem {
     pub execute_reward: ::prost::alloc::vec::Vec<ExecuteReward>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqCompleteActivityTask {
     #[prost(uint32, tag = "1")]
     pub task_id: u32,
@@ -6868,7 +6869,7 @@ pub struct ReqCompletePeriodActivityTaskBatch {
     pub task_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveActivityFlipTask {
     #[prost(uint32, tag = "1")]
     pub task_id: u32,
@@ -6882,7 +6883,7 @@ pub struct ResReceiveActivityFlipTask {
     pub error: ::core::option::Option<Error>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqCompleteSegmentTaskReward {
     #[prost(uint32, tag = "1")]
     pub task_id: u32,
@@ -6898,7 +6899,7 @@ pub struct ResCompleteSegmentTaskReward {
     pub rewards: ::prost::alloc::vec::Vec<ExecuteReward>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchActivityFlipInfo {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -6914,7 +6915,7 @@ pub struct ResFetchActivityFlipInfo {
     pub error: ::core::option::Option<Error>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqGainAccumulatedPointActivityReward {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -6930,7 +6931,7 @@ pub struct ReqGainMultiPointActivityReward {
     pub reward_id_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchRankPointLeaderboard {
     #[prost(uint32, tag = "1")]
     pub leaderboard_id: u32,
@@ -6961,7 +6962,7 @@ pub mod res_fetch_rank_point_leaderboard {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqGainRankPointReward {
     #[prost(uint32, tag = "1")]
     pub leaderboard_id: u32,
@@ -6969,7 +6970,7 @@ pub struct ReqGainRankPointReward {
     pub activity_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRichmanNextMove {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7003,7 +7004,7 @@ pub struct ResRichmanNextMove {
 /// Nested message and enum types in `ResRichmanNextMove`.
 pub mod res_richman_next_move {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RewardData {
         #[prost(uint32, tag = "1")]
         pub resource_id: u32,
@@ -7025,7 +7026,7 @@ pub mod res_richman_next_move {
         pub events: ::prost::alloc::vec::Vec<u32>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct BuffData {
         #[prost(uint32, tag = "1")]
         pub r#type: u32,
@@ -7036,7 +7037,7 @@ pub mod res_richman_next_move {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRichmanSpecialMove {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7044,7 +7045,7 @@ pub struct ReqRichmanSpecialMove {
     pub step: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRichmanChestInfo {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7060,7 +7061,7 @@ pub struct ResRichmanChestInfo {
 /// Nested message and enum types in `ResRichmanChestInfo`.
 pub mod res_richman_chest_info {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ItemData {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -7107,13 +7108,13 @@ pub struct ResActivityBuff {
     pub buff_list: ::prost::alloc::vec::Vec<ActivityBuffData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUpgradeActivityBuff {
     #[prost(uint32, tag = "1")]
     pub buff_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUpgradeActivityLevel {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7131,7 +7132,7 @@ pub struct ResUpgradeActivityLevel {
     pub rewards: ::prost::alloc::vec::Vec<ExecuteReward>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveUpgradeActivityReward {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7145,7 +7146,7 @@ pub struct ResReceiveUpgradeActivityReward {
     pub rewards: ::prost::alloc::vec::Vec<ExecuteReward>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveAllActivityGift {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7163,7 +7164,7 @@ pub struct ResReceiveAllActivityGift {
 /// Nested message and enum types in `ResReceiveAllActivityGift`.
 pub mod res_receive_all_activity_gift {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ReceiveRewards {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -7226,7 +7227,7 @@ pub struct ResFetchChallengeInfo {
     pub rewarded_season: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqForceCompleteChallengeTask {
     #[prost(uint32, tag = "1")]
     pub task_id: u32,
@@ -7254,7 +7255,7 @@ pub struct ResFetchAbMatch {
 /// Nested message and enum types in `ResFetchABMatch`.
 pub mod res_fetch_ab_match {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct MatchPoint {
         #[prost(uint32, tag = "1")]
         pub match_id: u32,
@@ -7287,7 +7288,7 @@ pub struct ResChallengeSeasonInfo {
 /// Nested message and enum types in `ResChallengeSeasonInfo`.
 pub mod res_challenge_season_info {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ChallengeInfo {
         #[prost(uint32, tag = "1")]
         pub season_id: u32,
@@ -7300,7 +7301,7 @@ pub mod res_challenge_season_info {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveChallengeRankReward {
     #[prost(uint32, tag = "1")]
     pub season_id: u32,
@@ -7316,7 +7317,7 @@ pub struct ResReceiveChallengeRankReward {
 /// Nested message and enum types in `ResReceiveChallengeRankReward`.
 pub mod res_receive_challenge_rank_reward {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct Reward {
         #[prost(uint32, tag = "1")]
         pub resource_id: u32,
@@ -7325,13 +7326,13 @@ pub mod res_receive_challenge_rank_reward {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqBuyInAbMatch {
     #[prost(uint32, tag = "1")]
     pub match_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqGamePointRank {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7349,7 +7350,7 @@ pub struct ResGamePointRank {
 /// Nested message and enum types in `ResGamePointRank`.
 pub mod res_game_point_rank {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RankInfo {
         #[prost(uint32, tag = "1")]
         pub account_id: u32,
@@ -7366,7 +7367,7 @@ pub struct ResFetchSelfGamePointRank {
     pub self_rate: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReadSns {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -7380,7 +7381,7 @@ pub struct ResReadSns {
     pub sns_content: ::core::option::Option<SnsBlog>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReplySns {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -7394,7 +7395,7 @@ pub struct ResReplySns {
     pub sns_reply: ::core::option::Option<SnsReply>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqLikeSns {
     #[prost(uint32, tag = "1")]
     pub id: u32,
@@ -7408,7 +7409,7 @@ pub struct ResLikeSns {
     pub is_liked: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqDigMine {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7484,7 +7485,7 @@ pub struct ReqResponseCaptcha {
     pub r#type: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchRpgBattleHistory {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7581,19 +7582,19 @@ pub mod res_fetch_rpg_battle_history_v2 {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqBuyArenaTicket {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqArenaReward {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqEnterArena {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7609,7 +7610,7 @@ pub struct ResArenaReward {
 /// Nested message and enum types in `ResArenaReward`.
 pub mod res_arena_reward {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RewardItem {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -7618,13 +7619,13 @@ pub mod res_arena_reward {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveRpgRewards {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveRpgReward {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7642,7 +7643,7 @@ pub struct ResReceiveRpgRewards {
 /// Nested message and enum types in `ResReceiveRPGRewards`.
 pub mod res_receive_rpg_rewards {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RewardItem {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -7671,7 +7672,7 @@ pub struct ResFetchObToken {
     pub start_time: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveCharacterRewards {
     #[prost(uint32, tag = "1")]
     pub character_id: u32,
@@ -7689,7 +7690,7 @@ pub struct ResReceiveCharacterRewards {
 /// Nested message and enum types in `ResReceiveCharacterRewards`.
 pub mod res_receive_character_rewards {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RewardItem {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -7698,7 +7699,7 @@ pub mod res_receive_character_rewards {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFeedActivityFeed {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7718,7 +7719,7 @@ pub struct ResFeedActivityFeed {
 /// Nested message and enum types in `ResFeedActivityFeed`.
 pub mod res_feed_activity_feed {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RewardItem {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -7727,7 +7728,7 @@ pub mod res_feed_activity_feed {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqSendActivityGiftToFriend {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7745,7 +7746,7 @@ pub struct ResSendActivityGiftToFriend {
     pub send_gift_count: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveActivityGift {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7771,7 +7772,7 @@ pub struct ResFetchFriendGiftActivityData {
 /// Nested message and enum types in `ResFetchFriendGiftActivityData`.
 pub mod res_fetch_friend_gift_activity_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ItemCountData {
         #[prost(uint32, tag = "1")]
         pub item: u32,
@@ -7790,7 +7791,7 @@ pub mod res_fetch_friend_gift_activity_data {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqOpenPreChestItem {
     #[prost(uint32, tag = "1")]
     pub item_id: u32,
@@ -7806,7 +7807,7 @@ pub struct ResOpenPreChestItem {
     pub results: ::prost::alloc::vec::Vec<OpenResult>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchVoteActivity {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7822,7 +7823,7 @@ pub struct ResFetchVoteActivity {
     pub update_time: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqVoteActivity {
     #[prost(uint32, tag = "1")]
     pub vote: u32,
@@ -7838,13 +7839,13 @@ pub struct ResVoteActivity {
     pub vote_records: ::prost::alloc::vec::Vec<VoteData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUnlockActivitySpot {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUnlockActivitySpotEnding {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -7852,7 +7853,7 @@ pub struct ReqUnlockActivitySpotEnding {
     pub ending_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqReceiveActivitySpotReward {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -7868,7 +7869,7 @@ pub struct ResReceiveActivitySpotReward {
 /// Nested message and enum types in `ResReceiveActivitySpotReward`.
 pub mod res_receive_activity_spot_reward {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RewardItem {
         #[prost(uint32, tag = "1")]
         pub id: u32,
@@ -7877,7 +7878,7 @@ pub mod res_receive_activity_spot_reward {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqLogReport {
     #[prost(uint32, tag = "1")]
     pub success: u32,
@@ -7893,7 +7894,7 @@ pub struct ReqBindOauth2 {
     pub token: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchOauth2 {
     #[prost(uint32, tag = "1")]
     pub r#type: u32,
@@ -7931,7 +7932,7 @@ pub struct ResFetchShopInterval {
 /// Nested message and enum types in `ResFetchShopInterval`.
 pub mod res_fetch_shop_interval {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ShopInterval {
         #[prost(uint32, tag = "1")]
         pub group_id: u32,
@@ -7950,7 +7951,7 @@ pub struct ResFetchActivityInterval {
 /// Nested message and enum types in `ResFetchActivityInterval`.
 pub mod res_fetch_activity_interval {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ActivityInterval {
         #[prost(uint32, tag = "1")]
         pub activity_id: u32,
@@ -7967,7 +7968,7 @@ pub struct ResFetchrecentFriend {
     pub account_list: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqOpenGacha {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -7995,7 +7996,7 @@ pub struct ReqTaskRequest {
     pub params: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqSimulationActivityTrain {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8029,7 +8030,7 @@ pub struct ResFetchSimulationGameRecord {
     pub messages: ::prost::alloc::vec::Vec<ActivitySimulationGameRecordMessage>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqStartSimulationActivityGame {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8043,7 +8044,7 @@ pub struct ResStartSimulationActivityGame {
     pub records: ::prost::alloc::vec::Vec<ActivitySimulationGameRecord>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchSimulationGameRank {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8061,7 +8062,7 @@ pub struct ResFetchSimulationGameRank {
 /// Nested message and enum types in `ResFetchSimulationGameRank`.
 pub mod res_fetch_simulation_game_rank {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct RankInfo {
         #[prost(uint32, tag = "1")]
         pub character: u32,
@@ -8070,7 +8071,7 @@ pub mod res_fetch_simulation_game_rank {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqGenerateCombiningCraft {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8088,7 +8089,7 @@ pub struct ResGenerateCombiningCraft {
     pub craft_id: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqMoveCombiningCraft {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8114,7 +8115,7 @@ pub struct ResMoveCombiningCraft {
 /// Nested message and enum types in `ResMoveCombiningCraft`.
 pub mod res_move_combining_craft {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct BonusData {
         #[prost(uint32, tag = "1")]
         pub craft_id: u32,
@@ -8123,7 +8124,7 @@ pub mod res_move_combining_craft {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqCombiningRecycleCraft {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8139,7 +8140,7 @@ pub struct ResCombiningRecycleCraft {
     pub reward_items: ::prost::alloc::vec::Vec<ExecuteReward>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqRecoverCombiningRecycle {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8155,7 +8156,7 @@ pub struct ResRecoverCombiningRecycle {
     pub pos: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFinishCombiningOrder {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8235,7 +8236,7 @@ pub struct ResFetchInfo {
     pub collected_game_record_list: ::core::option::Option<ResCollectedGameRecordList>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqUpgradeVillageBuilding {
     #[prost(uint32, tag = "1")]
     pub building_id: u32,
@@ -8261,7 +8262,7 @@ pub struct ResReceiveVillageBuildingReward {
     pub reward_items: ::prost::alloc::vec::Vec<ExecuteReward>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqStartVillageTrip {
     #[prost(uint32, tag = "1")]
     pub dest: u32,
@@ -8287,7 +8288,7 @@ pub struct ResReceiveVillageTripReward {
     pub reward_items: ::prost::alloc::vec::Vec<ExecuteReward>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqCompleteVillageTask {
     #[prost(uint32, tag = "1")]
     pub task_id: u32,
@@ -8321,7 +8322,7 @@ pub struct ResGetFriendVillageData {
 /// Nested message and enum types in `ResGetFriendVillageData`.
 pub mod res_get_friend_village_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct FriendVillageData {
         #[prost(uint32, tag = "1")]
         pub account_id: u32,
@@ -8330,7 +8331,7 @@ pub mod res_get_friend_village_data {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqSetVillageWorker {
     #[prost(uint32, tag = "1")]
     pub building_id: u32,
@@ -8350,7 +8351,7 @@ pub struct ResSetVillageWorker {
     pub update_time: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqNextRoundVillage {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8364,7 +8365,7 @@ pub struct ResNextRoundVillage {
     pub activity_data: ::core::option::Option<ActivityVillageData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqResolveFestivalActivityProposal {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8388,7 +8389,7 @@ pub struct ResResolveFestivalActivityProposal {
     pub level: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqResolveFestivalActivityEvent {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8412,7 +8413,7 @@ pub struct ResResolveFestivalActivityEvent {
     pub level: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqBuyFestivalProposal {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8426,7 +8427,7 @@ pub struct ResBuyFestivalProposal {
     pub new_proposal: ::core::option::Option<FestivalProposalData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqIslandActivityMove {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -8469,7 +8470,7 @@ pub struct ReqIslandActivitySell {
 /// Nested message and enum types in `ReqIslandActivitySell`.
 pub mod req_island_activity_sell {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct SellItem {
         #[prost(uint32, tag = "2")]
         pub bag_id: u32,
@@ -8536,7 +8537,7 @@ pub struct ContestSetting {
 /// Nested message and enum types in `ContestSetting`.
 pub mod contest_setting {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct LevelLimit {
         #[prost(uint32, tag = "1")]
         pub r#type: u32,
@@ -8587,7 +8588,7 @@ pub struct ResFetchManagerCustomizedContestList {
     pub contests: ::prost::alloc::vec::Vec<CustomizedContestBase>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchManagerCustomizedContest {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -8641,7 +8642,7 @@ pub struct ReqUpdateManagerCustomizedContest {
     pub contest_setting: ::core::option::Option<ContestSetting>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchContestPlayerRank {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -8678,7 +8679,7 @@ pub mod res_fetch_contest_player_rank {
     /// Nested message and enum types in `ContestPlayerAccountData`.
     pub mod contest_player_account_data {
         #[allow(clippy::derive_partial_eq_without_eq)]
-        #[derive(Clone, PartialEq, ::prost::Message)]
+        #[derive(Clone, Copy, PartialEq, ::prost::Message)]
         pub struct ContestGameResult {
             #[prost(uint32, tag = "1")]
             pub rank: u32,
@@ -8714,7 +8715,7 @@ pub mod res_fetch_contest_player_rank {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqFetchReadyPlayerList {
     #[prost(uint32, tag = "1")]
     pub unique_id: u32,
@@ -8761,7 +8762,7 @@ pub struct ResGenerateContestManagerLoginCode {
     pub code: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActionMjStart {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -8774,7 +8775,7 @@ pub struct NewRoundOpenedTiles {
     pub count: ::prost::alloc::vec::Vec<u32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct MuyuInfo {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -8800,7 +8801,7 @@ pub struct ChuanmaGang {
     pub hules_history: ::prost::alloc::vec::Vec<HuleInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct YongchangInfo {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -8814,13 +8815,13 @@ pub struct YongchangInfo {
     pub shouqie_bonus: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActionNewCard {
     #[prost(uint32, tag = "1")]
     pub field_spell: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct RecordNewCard {
     #[prost(uint32, tag = "1")]
     pub field_spell: u32,
@@ -9037,7 +9038,7 @@ pub struct GameSelfOperation {
     pub gap_type: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameChiPengGang {
     #[prost(uint32, tag = "1")]
     pub r#type: u32,
@@ -9049,7 +9050,7 @@ pub struct GameChiPengGang {
     pub timeuse: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameVoteGameEnd {
     #[prost(bool, tag = "1")]
     pub yes: bool,
@@ -9071,7 +9072,7 @@ pub struct GameUserInput {
     pub vote: ::core::option::Option<GameVoteGameEnd>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GameUserEvent {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -9121,7 +9122,7 @@ pub struct OptionalOperationList {
     pub time_fixed: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct LiQiSuccess {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -9227,7 +9228,7 @@ pub struct TingPaiDiscardInfo {
     pub infos: ::prost::alloc::vec::Vec<TingPaiInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct HunZhiYiJiBuffInfo {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -10019,7 +10020,7 @@ pub struct RecordNoTile {
     pub hules_history: ::prost::alloc::vec::Vec<HuleInfo>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct PlayerLeaving {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -10129,7 +10130,7 @@ pub struct ReqSelfOperation {
     pub gap_type: u32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqChiPengGang {
     #[prost(uint32, tag = "1")]
     pub r#type: u32,
@@ -10163,7 +10164,7 @@ pub struct ResGamePlayerState {
     pub state_list: ::prost::alloc::vec::Vec<i32>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ReqVoteGameEnd {
     #[prost(bool, tag = "1")]
     pub yes: bool,
@@ -10227,7 +10228,7 @@ pub struct NotifyGameTerminate {
     pub reason: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyPlayerConnectionState {
     #[prost(uint32, tag = "1")]
     pub seat: u32,
@@ -10235,7 +10236,7 @@ pub struct NotifyPlayerConnectionState {
     pub state: i32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyAccountLevelChange {
     #[prost(message, optional, tag = "1")]
     pub origin: ::core::option::Option<AccountLevel>,
@@ -10261,7 +10262,7 @@ pub struct NotifyGameFinishReward {
 /// Nested message and enum types in `NotifyGameFinishReward`.
 pub mod notify_game_finish_reward {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct LevelChange {
         #[prost(message, optional, tag = "1")]
         pub origin: ::core::option::Option<super::AccountLevel>,
@@ -10285,7 +10286,7 @@ pub mod notify_game_finish_reward {
         pub rewards: ::prost::alloc::vec::Vec<super::RewardSlot>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct MainCharacter {
         #[prost(uint32, tag = "1")]
         pub level: u32,
@@ -10295,7 +10296,7 @@ pub mod notify_game_finish_reward {
         pub add: u32,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct CharacterGift {
         #[prost(uint32, tag = "1")]
         pub origin: u32,
@@ -10333,7 +10334,7 @@ pub struct NotifyActivityPoint {
 /// Nested message and enum types in `NotifyActivityPoint`.
 pub mod notify_activity_point {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct ActivityPoint {
         #[prost(uint32, tag = "1")]
         pub activity_id: u32,
@@ -10350,7 +10351,7 @@ pub struct NotifyLeaderboardPoint {
 /// Nested message and enum types in `NotifyLeaderboardPoint`.
 pub mod notify_leaderboard_point {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct LeaderboardPoint {
         #[prost(uint32, tag = "1")]
         pub leaderboard_id: u32,
@@ -10359,7 +10360,7 @@ pub mod notify_leaderboard_point {
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct NotifyGamePause {
     #[prost(bool, tag = "1")]
     pub paused: bool,
@@ -10377,7 +10378,7 @@ pub struct NotifyEndGameVote {
 /// Nested message and enum types in `NotifyEndGameVote`.
 pub mod notify_end_game_vote {
     #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
     pub struct VoteResult {
         #[prost(uint32, tag = "1")]
         pub account_id: u32,
