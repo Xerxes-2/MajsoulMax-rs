@@ -58,9 +58,11 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup PROTOC env
+      - name: Setup protoc
         shell: bash
-        run: echo "PROTOC=$(which protoc)" >> $GITHUB_ENV
+        run: |
+          chmod 755 (which protoc)
+          echo "PROTOC=$(which protoc)" >> $GITHUB_ENV
             
       - name: Get the release version from the tag
         shell: bash
