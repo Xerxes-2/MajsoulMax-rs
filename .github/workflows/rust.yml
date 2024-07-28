@@ -52,7 +52,10 @@ jobs:
         with:
           # Make Rust compile to our target (defined in the matrix)
           targets: ${{ matrix.target }}
-
+          
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v3.0.0
+            
       - name: Get the release version from the tag
         shell: bash
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
