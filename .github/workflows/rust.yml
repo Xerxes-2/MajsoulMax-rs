@@ -52,17 +52,22 @@ jobs:
         with:
           # Make Rust compile to our target (defined in the matrix)
           targets: ${{ matrix.target }}
-          
+
       - name: Install protoc
         uses: Noelware/setup-protoc@1.2.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup protoc
+      - name: Setup protoc Unix
+        if: ${{ matrix.os != 'windows-latest' }}
         shell: bash
         run: |
           chmod 755 $(which protoc)
           echo "PROTOC=$(which protoc)" >> $GITHUB_ENV
+    
+      - name: Setup protoc Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: echo "PROTOC=$(which protoc)" >> $env:GITHUB_ENV
             
       - name: Get the release version from the tag
         shell: bash
