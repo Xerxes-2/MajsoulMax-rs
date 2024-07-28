@@ -61,7 +61,7 @@ jobs:
       - name: Setup protoc
         shell: bash
         run: |
-          chmod 755 (which protoc)
+          chmod 755 $(which protoc)
           echo "PROTOC=$(which protoc)" >> $GITHUB_ENV
             
       - name: Get the release version from the tag
