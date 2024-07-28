@@ -54,7 +54,7 @@ jobs:
           targets: ${{ matrix.target }}
           
       - name: Install protoc
-        uses: Noelware/setup-protoc@v1
+        uses: Noelware/setup-protoc@v1.2.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
