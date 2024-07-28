@@ -84,7 +84,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --verbose --release
+          args: --verbose --release --target ${{ matrix.target }}
 
       - name: Build Android
         if: ${{ matrix.target  == 'aarch64-linux-android' }}
