@@ -53,8 +53,13 @@ jobs:
           # Make Rust compile to our target (defined in the matrix)
           targets: ${{ matrix.target }}
           
-      - name: Setup protoc
-        uses: arduino/setup-protoc@v3.0.0
+      - name: Install protoc
+        uses: Noelware/setup-protoc@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup PROTOC env
+        run: export PROTOC=(which protoc)
             
       - name: Get the release version from the tag
         shell: bash
