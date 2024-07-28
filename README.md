@@ -113,7 +113,7 @@
 
 1. 为什么要自动更新liqi和lqc.lqbin？更新失败有什么影响？
     - liqi：
-       - 共有2个文件，包括`liqi.json`和根据其生成的`liqi.proto`，用于解析雀魂protobuf消息
+       - 共有3个文件，包括`liqi.json`和根据其生成的`liqi.proto`和`liqi.desc`，用于解析雀魂protobuf消息
        - 如果更新失败，可能会导致消息无法解析（如新活动的消息）
     - lqc.lqbin：
        - 用于获取全部角色、装扮、物品等游戏资源

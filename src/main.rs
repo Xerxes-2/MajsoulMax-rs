@@ -36,7 +36,7 @@ impl WebSocketHandler for Handler {
         if let WebSocketContext::ServerToClient { .. } = ctx {
             if let Some(msg) = self.inject_msg.take() {
                 if let Err(e) = sink.send(msg).await {
-                    error!("Failed to send injected message: {:?}", e);
+                    error!("Failed to send injected message: {e}");
                 }
             }
         }
@@ -49,16 +49,16 @@ impl WebSocketHandler for Handler {
 
                     match sink.send(message).await {
                         Err(tungstenite::Error::ConnectionClosed) => (),
-                        Err(e) => error!("WebSocket send error: {}", e),
+                        Err(e) => error!("WebSocket send error: {e}"),
                         _ => (),
                     }
                 }
                 Err(e) => {
-                    error!("WebSocket message error: {}", e);
+                    error!("WebSocket message error: {e}");
 
                     match sink.send(Message::Close(None)).await {
                         Err(tungstenite::Error::ConnectionClosed) => (),
-                        Err(e) => error!("WebSocket close error: {}", e),
+                        Err(e) => error!("WebSocket close error: {e}"),
                         _ => (),
                     };
 
@@ -79,7 +79,7 @@ impl WebSocketHandler for Handler {
             return Some(msg);
         }
 
-        debug!("{} {}", direction_char, uri);
+        debug!("{direction_char} {uri}");
 
         if SETTINGS.helper_on() {
             if let Message::Binary(ref buf) = msg {
@@ -88,7 +88,7 @@ impl WebSocketHandler for Handler {
                     .send((Bytes::copy_from_slice(buf), direction_char))
                     .await
                 {
-                    error!("Failed to send message to channel: {:?}", e);
+                    error!("Failed to send message to channel: {e}");
                 }
             }
         }
@@ -154,8 +154,8 @@ async fn main() {
         Ok(addr) => addr,
         Err(e) => {
             error!(
-                "Failed to parse proxy address: {:?}, url: {}",
-                e, SETTINGS.proxy_addr
+                "Failed to parse proxy address: {e}, url: {}",
+                SETTINGS.proxy_addr
             );
             return;
         }
@@ -165,7 +165,7 @@ async fn main() {
         info!("自动更新liqi已开启");
         let mut new_settings = SETTINGS.clone();
         match new_settings.update().await {
-            Err(e) => warn!("更新liqi失败: {}", e),
+            Err(e) => warn!("更新liqi失败: {e}"),
             Ok(true) => {
                 info!("liqi更新成功, 请重启程序");
                 tokio::time::sleep(std::time::Duration::from_secs(5)).await;
@@ -191,13 +191,13 @@ async fn main() {
             info!("自动更新mod已开启");
             let mut new_mod_settings = MOD_SETTINGS.read().await.clone();
             match new_mod_settings.get_lqc().await {
-                Err(e) => warn!("更新mod失败: {}", e),
-                Ok(false) => {}
+                Err(e) => warn!("更新mod失败: {e}"),
                 Ok(true) => {
                     info!("mod更新成功, 请重启程序");
                     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
                     return;
                 }
+                Ok(false) => (),
             }
         }
         Some(Arc::new(Modder::new().await))
@@ -225,6 +225,6 @@ async fn main() {
     }
 
     if let Err(e) = proxy.start().await {
-        error!("{}", e);
+        error!("{e}");
     }
 }

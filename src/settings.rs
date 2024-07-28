@@ -103,12 +103,12 @@ impl Settings {
         let version = get_version().await?;
         let prefix = get_proto_prefix(&version).await?;
         if self.liqi_version == prefix {
-            info!("无需更新liqi, 当前版本: {}", version);
+            info!("无需更新liqi, 当前版本: {version}");
             return Ok(false);
         }
         info!(
-            "liqi需要更新, 当前版本: {}, 最新版本: {}",
-            self.liqi_version, prefix
+            "liqi需要更新, 当前版本: {}, 最新版本: {prefix}",
+            self.liqi_version
         );
 
         let req = REQUEST_CLIENT
@@ -138,7 +138,7 @@ impl Settings {
                     self.download_asset(asset_item).await?;
                 }
             }
-            Err(e) => return Err(anyhow!("Failed to get latest release: {:?}", e)),
+            Err(e) => return Err(anyhow!("Failed to get latest release: {e}")),
         }
         // write settings.json
         self.liqi_version = prefix;
@@ -168,10 +168,10 @@ impl Settings {
                 let bytes = resp.bytes().await?;
                 let file_dir = self.dir.join(name);
                 std::fs::write(file_dir, bytes).expect("无法写入文件");
-                info!("下载完成: {}", name);
+                info!("下载完成: {name}");
                 Ok(())
             }
-            Err(e) => Err(anyhow!("Failed to download asset: {:?}", e)),
+            Err(e) => Err(anyhow!("Failed to download asset: {e}")),
         }
     }
 }
@@ -190,13 +190,15 @@ async fn get_version() -> Result<String> {
                 .ok_or(anyhow!("No version found"))?;
             Ok(version.to_string())
         }
-        Err(e) => Err(anyhow!("Failed to get version: {:?}", e)),
+        Err(e) => Err(anyhow!("Failed to get version: {e}")),
     }
 }
 
 async fn get_proto_prefix(version: &str) -> Result<String> {
     let req = REQUEST_CLIENT
-        .get(format!("https://game.maj-soul.com/1/resversion{}.json", version).as_str())
+        .get(format!(
+            "https://game.maj-soul.com/1/resversion{version}.json",
+        ))
         .timeout(std::time::Duration::from_secs(10))
         .send()
         .await;
@@ -208,13 +210,15 @@ async fn get_proto_prefix(version: &str) -> Result<String> {
                 .ok_or(anyhow!("No prefix found"))?;
             Ok(prefix.to_string())
         }
-        Err(e) => Err(anyhow!("Failed to get prefix: {:?}", e)),
+        Err(e) => Err(anyhow!("Failed to get prefix: {e}")),
     }
 }
 
 pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
     let req = REQUEST_CLIENT
-        .get(format!("https://game.maj-soul.com/1/resversion{}.json", version).as_str())
+        .get(format!(
+            "https://game.maj-soul.com/1/resversion{version}.json"
+        ))
         .timeout(std::time::Duration::from_secs(10))
         .send()
         .await;
@@ -226,7 +230,7 @@ pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
                 .ok_or(anyhow!("No prefix found"))?;
             Ok(prefix.to_string())
         }
-        Err(e) => Err(anyhow!("Failed to get prefix: {:?}", e)),
+        Err(e) => Err(anyhow!("Failed to get prefix: {e}")),
     }
 }
 
@@ -323,22 +327,18 @@ impl ModSettings {
         let prefix = get_lqbin_prefix(&version).await?;
 
         if self.version == prefix {
-            info!("无需更新lqc.lqbin, 当前版本: {}", version);
+            info!("无需更新lqc.lqbin, 当前版本: {version}");
             return Ok(false);
         }
         info!(
-            "lqc.lqbin需要更新, 当前版本: {}, 最新版本: {}",
-            self.version, prefix
+            "lqc.lqbin需要更新, 当前版本: {}, 最新版本: {prefix}",
+            self.version
         );
 
         let req = REQUEST_CLIENT
-            .get(
-                format!(
-                    "https://game.maj-soul.com/1/{}/res/config/lqc.lqbin",
-                    prefix
-                )
-                .as_str(),
-            )
+            .get(format!(
+                "https://game.maj-soul.com/1/{prefix}/res/config/lqc.lqbin",
+            ))
             .timeout(std::time::Duration::from_secs(10))
             .send()
             .await;
@@ -354,7 +354,7 @@ impl ModSettings {
                 std::fs::write(dir, serde_json::to_string_pretty(self)?)?;
                 Ok(true)
             }
-            Err(e) => Err(anyhow!("Failed to download lqc.lqbin: {:?}", e)),
+            Err(e) => Err(anyhow!("Failed to download lqc.lqbin: {e}")),
         }
     }
 

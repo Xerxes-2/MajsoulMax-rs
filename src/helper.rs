@@ -9,7 +9,7 @@ use reqwest::Client;
 use serde::Serialize;
 use serde_json::{json, Map, Value as JsonValue};
 use std::{future::Future, sync::LazyLock};
-use tokio::{sync::mpsc::Receiver, time::sleep};
+use tokio::{spawn, sync::mpsc::Receiver, time::sleep};
 use tracing::{debug, error, info};
 
 #[derive(Serialize, Debug)]
@@ -38,24 +38,24 @@ pub async fn helper_worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Pa
                 }
             })
             .collect::<String>();
-        debug!("{} {}", direction_char, hex);
+        debug!("{direction_char} {hex}");
         let parsed = parser.parse(buf.clone());
         let parsed = match parsed {
             Ok(parsed) => parsed,
             Err(e) => {
-                error!("Failed to parse message: {:?}", e);
+                error!("Failed to parse message: {e}");
                 continue;
             }
         };
         debug!(
-            "Method: {}, {}, {:?}, {}",
-            direction_char, parsed.id, parsed.msg_type, parsed.method_name
+            "Method: {direction_char}, {}, {:?}, {}",
+            parsed.id, parsed.msg_type, parsed.method_name
         );
         if direction_char == '\u{2191}' {
             continue;
         }
         if let Err(e) = process_message(parsed, &mut parser) {
-            error!("Failed to process message: {:?}", e);
+            error!("Failed to process message: {e}");
         }
     }
 }
@@ -72,19 +72,15 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
     }
     let json_data = match parsed.method_name.as_ref() {
         ".lq.ActionPrototype" => {
-            let name = parsed
-                .data
-                .get("name")
-                .and_then(|n| n.as_str())
+            let name = parsed.data["name"]
+                .as_str()
                 .ok_or(anyhow!("name field invalid"))?;
             if !SETTINGS.is_action(name) {
                 return Ok(());
             }
             if name == "ActionNewRound" {
-                parsed
-                    .data
-                    .get_mut("data")
-                    .and_then(|d| d.as_object_mut())
+                parsed.data["data"]
+                    .as_object_mut()
                     .ok_or(anyhow!("data field invalid"))?
                     .insert("md5".to_string(), json!(ARBITRARY_MD5));
             }
@@ -95,23 +91,13 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
                 .take()
         }
         ".lq.FastTest.syncGame" => {
-            let game_restore = parsed
-                .data
-                .get("game_restore")
-                .and_then(|n| n.get("actions"))
-                .and_then(|n| n.as_array())
+            let game_restore = parsed.data["game_restore"]["actions"]
+                .as_array()
                 .ok_or(anyhow!("actions field invalid"))?;
             let mut actions: Vec<Action> = vec![];
             for item in game_restore.iter() {
-                let action_name = item
-                    .get("name")
-                    .and_then(|n| n.as_str())
-                    .ok_or(anyhow!("name field invalid"))?;
-                let action_data = item
-                    .get("data")
-                    .ok_or(anyhow!("No data field"))?
-                    .as_str()
-                    .unwrap_or_default();
+                let action_name = item["name"].as_str().ok_or(anyhow!("name field invalid"))?;
+                let action_data = item["data"].as_str().unwrap_or_default();
                 if action_data.is_empty() {
                     let action = Action {
                         name: action_name.to_string(),
@@ -144,31 +130,29 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
     };
 
     // post data to API, no verification
-    let future = CLIENT.post(&SETTINGS.api_url).json(&json_data).send();
+    let res = CLIENT.post(&SETTINGS.api_url).json(&json_data).send();
 
-    handle_future(future);
-    info!("已发送至助手");
+    spawn(handle_response(res));
+    info!("发送至助手……");
 
     if let Some(liqi_data) = json_data.get("liqi") {
         let res = CLIENT.post(&SETTINGS.api_url).json(liqi_data).send();
-        handle_future(res);
-        info!("已发送立直至助手");
+        spawn(handle_response(res));
+        info!("发送立直至助手……");
     }
 
     Ok(())
 }
 
-fn handle_future(
-    future: impl Future<Output = Result<reqwest::Response, reqwest::Error>> + Send + 'static,
+async fn handle_response(
+    res: impl Future<Output = Result<reqwest::Response, reqwest::Error>> + Send + 'static,
 ) {
-    tokio::spawn(async {
-        match future.await {
-            Ok(_) => {
-                info!("小助手已接收");
-            }
-            Err(e) => {
-                error!("请求失败: {:?}", e);
-            }
+    match res.await {
+        Ok(_) => {
+            info!("请求小助手已接收");
         }
-    });
+        Err(e) => {
+            error!("请求小助手失败: {e}");
+        }
+    }
 }

@@ -11,7 +11,7 @@ use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
 use std::{collections::HashMap, sync::LazyLock};
-use tokio::sync::RwLock;
+use tokio::{spawn, sync::RwLock};
 use tracing::{error, info};
 
 pub static MOD_SETTINGS: LazyLock<RwLock<ModSettings>> =
@@ -21,14 +21,13 @@ static CONTRACT: LazyLock<RwLock<String>> = LazyLock::new(|| RwLock::new(String:
 static PARSER: LazyLock<RwLock<Parser>> = LazyLock::new(|| RwLock::new(Parser::default()));
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const ANNOUNCEMENT: &str = formatcp!(
-    "<color=#f9963b>作者: Xerxes-2        版本: {}</color>\n
+    "<color=#f9963b>作者: Xerxes-2        版本: {VERSION}</color>\n
 <b>本工具完全免费、开源，如果您为此付费，说明您被骗了！</b>\n
 <b>本工具仅供学习交流, 请在下载后24小时内删除, 不得用于商业用途, 否则后果自负！</b>\n
 <b>本工具有可能导致账号被封禁，给猫粮充钱才是正道！</b>\n\n
 <color=#f9963b>开源地址：</color>\n
 <href=https://github.com/Xerxes-2/MajsoulMax-rs>https://github.com/Xerxes-2/MajsoulMax-rs</href>\n\n
-<color=#f9963b>再次重申：脚本完全免费使用，没有收费功能！</color>",
-    VERSION
+<color=#f9963b>再次重申：脚本完全免费使用，没有收费功能！</color>"
 );
 static MY_ANNOUNCEMENT: LazyLock<lq::Announcement> = LazyLock::new(|| lq::Announcement {
     title: "雀魂Max-rs载入成功".to_string(),
@@ -140,15 +139,15 @@ impl Modder {
             0x01 => self.modify_notify(buf.clone()).await,
             0x02 => self.modify_req(buf.clone(), from_client).await,
             0x03 => self.modify_res(buf.clone(), from_client).await,
-            _ => Err(anyhow!("Unimplemented message type: {}", msg_type)),
+            _ => Err(anyhow!("Unimplemented message type: {msg_type}")),
         };
         if let Err(e) = PARSER.write().await.parse(buf.clone()) {
-            error!("Mod: Failed to parse message: {:?}", e);
+            error!("Mod: Failed to parse message: {e}");
         }
         match res {
             Ok(r) => r,
             Err(e) => {
-                error!("Failed to modify message: {}", e);
+                error!("Failed to modify message: {e}");
                 ModifyResult {
                     msg: Some(buf),
                     inject_msg: None,
@@ -165,7 +164,7 @@ impl Modder {
             return Err(anyhow!("Non-empty respond method name"));
         }
         if !PARSER.read().await.respond_type.contains_key(&msg_id) {
-            return Err(anyhow!("No request message with id: {}", msg_id));
+            return Err(anyhow!("No request message with id: {msg_id}"));
         }
         let method_name = PARSER.read().await.respond_type[&msg_id].0.clone();
         let mut modified_data: Option<Vec<u8>> = None;
@@ -406,13 +405,13 @@ impl Modder {
                             encode_account_id(acc.account_id),
                         );
                     }
-                    info!("{}{}{}", LOG_HEAD, logs, LOG_TAIL);
+                    info!("{LOG_HEAD}{logs}{LOG_TAIL}");
                 }
             }
             _ => {}
         }
         if let Some(data) = modified_data {
-            info!("Respond method: {}", method_name);
+            info!("Respond method: {method_name}");
             msg_block.data = data;
             let mut buf = buf[..3].to_vec();
             buf.extend(msg_block.encode_to_vec());
@@ -520,10 +519,10 @@ impl Modder {
         // Request message must be from client
         assert!(from_client);
         if msg_id >= 1 << 16 {
-            return Err(anyhow!("Invalid request message id: {}", msg_id));
+            return Err(anyhow!("Invalid request message id: {msg_id}",));
         }
         if PARSER.read().await.respond_type.contains_key(&msg_id) {
-            return Err(anyhow!("Duplicate request message id: {}", msg_id));
+            return Err(anyhow!("Duplicate request message id: {msg_id}",));
         }
         let mut fake = false;
         let method_name = &msg_block.method_name;
@@ -533,9 +532,7 @@ impl Modder {
                 fake = true;
                 let msg = lq::ReqChangeMainCharacter::decode(msg_block.data.as_ref())?;
                 MOD_SETTINGS.write().await.main_char = msg.character_id;
-                if let Err(e) = MOD_SETTINGS.read().await.write() {
-                    error!("Failed to write settings.mod.json : {}", e);
-                }
+                spawn(write_settings());
             }
             ".lq.Lobby.changeCharacterSkin" => {
                 fake = true;
@@ -545,9 +542,7 @@ impl Modder {
                     .await
                     .char_skin
                     .insert(msg.character_id, msg.skin);
-                if let Err(e) = MOD_SETTINGS.read().await.write() {
-                    error!("Failed to write settings.mod.json : {}", e);
-                }
+                spawn(write_settings());
                 let character = self.perfect_character(msg.character_id).await;
                 let mut character_update = lq::account_update::CharacterUpdate::default();
                 character_update.characters.push(character);
@@ -577,25 +572,19 @@ impl Modder {
                 fake = true;
                 let msg = lq::ReqUpdateCharacterSort::decode(msg_block.data.as_ref())?;
                 MOD_SETTINGS.write().await.star_character = msg.sort;
-                if let Err(e) = MOD_SETTINGS.read().await.write() {
-                    error!("Failed to write settings.mod.json : {}", e);
-                }
+                spawn(write_settings());
             }
             ".lq.Lobby.useTitle" => {
                 fake = true;
                 let msg = lq::ReqUseTitle::decode(msg_block.data.as_ref())?;
                 MOD_SETTINGS.write().await.title = msg.title;
-                if let Err(e) = MOD_SETTINGS.read().await.write() {
-                    error!("Failed to write settings.mod.json : {}", e);
-                }
+                spawn(write_settings());
             }
             ".lq.Lobby.setLoadingImage" => {
                 fake = true;
                 let msg = lq::ReqSetLoadingImage::decode(msg_block.data.as_ref())?;
                 MOD_SETTINGS.write().await.loading_bg = msg.images;
-                if let Err(e) = MOD_SETTINGS.read().await.write() {
-                    error!("Failed to write settings.mod.json : {}", e);
-                }
+                spawn(write_settings());
             }
             ".lq.Lobby.saveCommonViews" => {
                 fake = true;
@@ -604,16 +593,12 @@ impl Modder {
                 if msg.is_use == 1 {
                     MOD_SETTINGS.write().await.preset_index = msg.save_index;
                 }
-                if let Err(e) = MOD_SETTINGS.read().await.write() {
-                    error!("Failed to write settings.mod.json : {}", e);
-                }
+                spawn(write_settings());
             }
             ".lq.Lobby.useCommonView" => {
                 let msg = lq::ReqUseCommonView::decode(msg_block.data.as_ref())?;
                 MOD_SETTINGS.write().await.preset_index = msg.index;
-                if let Err(e) = MOD_SETTINGS.read().await.write() {
-                    error!("Failed to write settings.mod.json : {}", e);
-                }
+                spawn(write_settings());
             }
             ".lq.Lobby.loginBeat" => {
                 let msg = lq::ReqLoginBeat::decode(msg_block.data.as_ref())?;
@@ -631,7 +616,7 @@ impl Modder {
             _ => {}
         }
         if fake {
-            info!("Request method: {}", method_name);
+            info!("Request method: {method_name}");
             let data = lq::ReqLoginBeat {
                 contract: CONTRACT.read().await.clone(),
             };
@@ -727,7 +712,7 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
-            info!("Notify method: {}", method_name);
+            info!("Notify method: {method_name}");
             // add 0x01 to the beginning of the message
             msg_block.data = data;
             let mut buf = vec![0x01];
@@ -742,6 +727,12 @@ impl Modder {
                 inject_msg: None,
             })
         }
+    }
+}
+
+async fn write_settings() {
+    if let Err(e) = MOD_SETTINGS.read().await.write() {
+        error!("Failed to write settings.mod.json : {e}");
     }
 }
 

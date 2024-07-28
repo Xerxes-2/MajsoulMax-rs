@@ -35,7 +35,7 @@ pub struct Parser {
     pub pool: &'static DescriptorPool,
 }
 
-pub fn dyn_to_json(msg: &DynamicMessage) -> Result<JsonValue> {
+fn dyn_to_json(msg: &DynamicMessage) -> Result<JsonValue> {
     Ok(msg.serialize_with_options(Serializer, &SERIALIZE_OPTIONS)?)
 }
 
@@ -55,8 +55,7 @@ impl Parser {
         let msg_type_byte = buf[0];
         ensure!(
             (1..=3).contains(&msg_type_byte),
-            "Invalid message type: {}",
-            msg_type_byte
+            "Invalid message type: {msg_type_byte}"
         );
         let msg_type = match msg_type_byte {
             1 => MessageType::Notify,
@@ -77,13 +76,12 @@ impl Parser {
                 let message_type = self
                     .pool
                     .get_message_by_name(&to_fqn(message_name))
-                    .ok_or(anyhow!("Invalid message type: {}", message_name))?;
+                    .ok_or(anyhow!("Invalid message type: {message_name}"))?;
                 let dyn_msg = DynamicMessage::decode(message_type, data.as_ref())?;
                 data_obj = dyn_to_json(&dyn_msg)?;
                 if let Some(b64) = data_obj.get("data") {
-                    let action_name = data_obj
-                        .get("name")
-                        .and_then(|n| n.as_str())
+                    let action_name = data_obj["name"]
+                        .as_str()
                         .ok_or(anyhow!("name field invalid"))?;
                     let b64 = b64.as_str().unwrap_or_default();
                     let action_obj = decode_action(action_name, b64, self.pool)?;
@@ -112,7 +110,7 @@ impl Parser {
                 let req_type = self
                     .pool
                     .get_message_by_name(&to_fqn(req_type_name))
-                    .ok_or(anyhow!("Invalid request type: {}", req_type_name))?;
+                    .ok_or(anyhow!("Invalid request type: {req_type_name}"))?;
                 let dyn_msg = DynamicMessage::decode(req_type, data.as_ref())?;
                 if method_name.contains("oauth2Login") {
                     println!("{}", dyn_to_json(&dyn_msg)?);
@@ -124,7 +122,7 @@ impl Parser {
                 let resp_type = self
                     .pool
                     .get_message_by_name(&to_fqn(res_type_name))
-                    .ok_or(anyhow!("Invalid response type: {}", res_type_name))?;
+                    .ok_or(anyhow!("Invalid response type: {res_type_name}"))?;
                 self.respond_type
                     .insert(msg_id, (method_name.clone(), resp_type));
             }
@@ -153,8 +151,8 @@ impl Parser {
     }
 }
 
-pub fn to_fqn(method_name: &str) -> String {
-    format!("lq.{}", method_name)
+fn to_fqn(method_name: &str) -> String {
+    String::from("lq.") + method_name
 }
 
 pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<JsonValue> {
@@ -162,7 +160,7 @@ pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<Js
     wtf_decode(&mut decoded);
     let action_type = pool
         .get_message_by_name(&to_fqn(name))
-        .ok_or(anyhow!("Invalid action type: {}", name))?;
+        .ok_or(anyhow!("Invalid action type: {name}"))?;
     let action_msg = DynamicMessage::decode(action_type, Bytes::from(decoded))?;
     dyn_to_json(&action_msg)
 }
