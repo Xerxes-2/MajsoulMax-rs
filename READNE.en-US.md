@@ -116,7 +116,7 @@ For the Android version, assuming you are technically proficient, only key terms
    2. Disable the system proxy, enable service mode, and Tun mode.
    3. (Optional) Enable LAN connection; go to system settings > network > proxy, turn on "Use a proxy server", fill in the address and port (default is `http://127.0.0.1` and `7897`), make sure to prefix the address.
 3. Other questions?
-   Join our [Telegram group](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/READNE.en-US.md#%EF%B8%8Ftelegram%E9%A2%91%E9%81%93%E4%BA%A4%E6%B5%81%E7%BE%A4) linked above.
+   Join our [Telegram group](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/READNE.en-US.md#%EF%B8%8F-telegram-channel--group) linked above.
 
 ## 🛠️ Development Dependencies
 
