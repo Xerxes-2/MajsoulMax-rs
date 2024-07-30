@@ -1,4 +1,4 @@
-use crate::{lq::ViewSlot, Arg};
+use crate::{proto::lq::ViewSlot, Arg};
 use anyhow::{anyhow, Result};
 use bytes::Bytes;
 use clap::Parser;

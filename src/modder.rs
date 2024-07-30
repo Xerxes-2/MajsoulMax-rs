@@ -1,10 +1,7 @@
 use crate::{
-    base::BaseMessage,
-    lq::{self, Character, PlayerGameView, ResTitleList},
-    lq_config::ConfigTables,
     parser::Parser,
+    proto::{base::BaseMessage, lq, lq_config::ConfigTables, sheets},
     settings::{ModSettings, SETTINGS},
-    sheets,
 };
 use anyhow::{anyhow, Result};
 use bytes::Bytes;
@@ -368,7 +365,7 @@ impl Modder {
                         views.views.push(new_view);
                     }
                 }
-                msg.title_list = Some(ResTitleList {
+                msg.title_list = Some(lq::ResTitleList {
                     title_list: self.titles.iter().map(|t| t.id).collect(),
                     ..Default::default()
                 });
@@ -455,7 +452,7 @@ impl Modder {
         }
     }
 
-    async fn change_player(&self, p: &mut PlayerGameView) {
+    async fn change_player(&self, p: &mut lq::PlayerGameView) {
         if let Some(ref mut character) = p.character {
             character.is_upgraded = true;
             character.level = 5;
@@ -486,8 +483,8 @@ impl Modder {
         }
     }
 
-    async fn perfect_character(&self, id: u32) -> Character {
-        let mut character = Character {
+    async fn perfect_character(&self, id: u32) -> lq::Character {
+        let mut character = lq::Character {
             charid: id,
             exp: 0,
             is_upgraded: true,

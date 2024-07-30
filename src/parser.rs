@@ -6,7 +6,7 @@ use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, Serialize
 use serde_json::{value::Serializer, Value as JsonValue};
 use std::{collections::HashMap, sync::Arc};
 
-use crate::base::BaseMessage;
+use crate::proto::base::BaseMessage;
 
 const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)

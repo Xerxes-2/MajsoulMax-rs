@@ -1,6 +1,6 @@
 use const_format::formatcp;
 use criterion::{criterion_group, criterion_main, Criterion};
-use majsoul_max_rs::lq;
+use majsoul_max_rs::proto::lq;
 use std::{hint::black_box, sync::LazyLock};
 
 const ANNOUNCEMENT: &str = formatcp!(

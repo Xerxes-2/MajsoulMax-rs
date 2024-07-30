@@ -2,7 +2,7 @@ use std::io::Result;
 
 fn main() -> Result<()> {
     let mut config = prost_build::Config::new();
-    config.out_dir("src/");
+    config.out_dir("src/proto");
     config.type_attribute(
         "lq.ViewSlot",
         "#[derive(::serde::Serialize, ::serde::Deserialize)]",
