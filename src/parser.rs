@@ -6,7 +6,7 @@ use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, Serialize
 use serde_json::{value::Serializer, Value as JsonValue};
 use std::{collections::HashMap, sync::Arc};
 
-use crate::{base::BaseMessage, settings::SETTINGS};
+use crate::base::BaseMessage;
 
 const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
@@ -39,18 +39,16 @@ fn dyn_to_json(msg: &DynamicMessage) -> Result<JsonValue> {
     Ok(msg.serialize_with_options(Serializer, &SERIALIZE_OPTIONS)?)
 }
 
-impl Default for Parser {
-    fn default() -> Self {
+impl Parser {
+    pub fn new(proto_json: &'static JsonValue, pool: &'static DescriptorPool) -> Self {
         Self {
             total: 0,
             respond_type: HashMap::new(),
-            proto_json: &SETTINGS.proto_json,
-            pool: &SETTINGS.desc,
+            proto_json,
+            pool,
         }
     }
-}
 
-impl Parser {
     pub fn parse(&mut self, buf: Bytes) -> Result<LiqiMessage> {
         let msg_type_byte = buf[0];
         ensure!(

@@ -221,7 +221,10 @@ async fn main() {
     if SETTINGS.helper_on() {
         // start helper worker
         info!("Helper worker started");
-        tokio::spawn(helper_worker(rx, Parser::default()));
+        tokio::spawn(helper_worker(
+            rx,
+            Parser::new(&SETTINGS.proto_json, &SETTINGS.desc),
+        ));
     }
 
     if let Err(e) = proxy.start().await {

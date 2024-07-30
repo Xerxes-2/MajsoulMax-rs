@@ -3,7 +3,7 @@ use crate::{
     lq::{self, Character, PlayerGameView, ResTitleList},
     lq_config::ConfigTables,
     parser::Parser,
-    settings::ModSettings,
+    settings::{ModSettings, SETTINGS},
     sheets,
 };
 use anyhow::{anyhow, Result};
@@ -18,7 +18,8 @@ pub static MOD_SETTINGS: LazyLock<RwLock<ModSettings>> =
     LazyLock::new(|| RwLock::new(ModSettings::new()));
 static SAFE: LazyLock<RwLock<Safe>> = LazyLock::new(|| RwLock::new(Safe::default()));
 static CONTRACT: LazyLock<RwLock<String>> = LazyLock::new(|| RwLock::new(String::new()));
-static PARSER: LazyLock<RwLock<Parser>> = LazyLock::new(|| RwLock::new(Parser::default()));
+static PARSER: LazyLock<RwLock<Parser>> =
+    LazyLock::new(|| RwLock::new(Parser::new(&SETTINGS.proto_json, &SETTINGS.desc)));
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const ANNOUNCEMENT: &str = formatcp!(
     "<color=#f9963b>作者: Xerxes-2        版本: {VERSION}</color>\n
