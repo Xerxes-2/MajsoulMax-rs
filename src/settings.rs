@@ -167,7 +167,7 @@ impl Settings {
             Ok(resp) => {
                 let bytes = resp.bytes().await?;
                 let file_dir = self.dir.join(name);
-                std::fs::write(file_dir, bytes).expect("无法写入文件");
+                std::fs::write(file_dir, bytes)?;
                 info!("下载完成: {name}");
                 Ok(())
             }
@@ -346,7 +346,7 @@ impl ModSettings {
             Ok(resp) => {
                 let bytes = resp.bytes().await?;
                 let file_dir = SETTINGS.dir.join("lqc.lqbin");
-                std::fs::write(file_dir, bytes).expect("无法写入lqc.lqbin文件");
+                std::fs::write(file_dir, bytes)?;
                 info!("lqc.lqbin更新完成");
                 self.version = prefix;
                 // write settings.mod.json
