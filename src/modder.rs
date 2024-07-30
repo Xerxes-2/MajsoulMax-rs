@@ -29,12 +29,6 @@ const ANNOUNCEMENT: &str = formatcp!(
 <href=https://github.com/Xerxes-2/MajsoulMax-rs>https://github.com/Xerxes-2/MajsoulMax-rs</href>\n\n
 <color=#f9963b>再次重申：脚本完全免费使用，没有收费功能！</color>"
 );
-static MY_ANNOUNCEMENT: LazyLock<lq::Announcement> = LazyLock::new(|| lq::Announcement {
-    title: "雀魂Max-rs载入成功".to_string(),
-    id: 1145141919,
-    header_image: "internal://2.jpg".to_string(),
-    content: ANNOUNCEMENT.to_string(),
-});
 
 #[derive(Default)]
 pub struct Safe {
@@ -83,8 +77,7 @@ pub struct ModifyResult {
 
 impl Modder {
     pub async fn new() -> Self {
-        let mod_settings = MOD_SETTINGS.read().await;
-        let config_tables = ConfigTables::decode(mod_settings.resource.as_ref())
+        let config_tables = ConfigTables::decode(MOD_SETTINGS.read().await.resource.as_ref())
             .expect("Failed to decode config tables");
         let mut modder = Modder::default();
         for data in config_tables.datas {
@@ -317,7 +310,15 @@ impl Modder {
             }
             ".lq.Lobby.fetchAnnouncement" => {
                 let mut msg = lq::ResAnnouncement::decode(msg_block.data.as_ref())?;
-                msg.announcements.insert(0, MY_ANNOUNCEMENT.clone());
+                msg.announcements.insert(
+                    0,
+                    lq::Announcement {
+                        title: "雀魂Max-rs载入成功".to_string(),
+                        id: 1145141919,
+                        header_image: "internal://2.jpg".to_string(),
+                        content: ANNOUNCEMENT.to_string(),
+                    },
+                );
                 modified_data = Some(msg.encode_to_vec());
             }
             ".lq.Lobby.fetchInfo" => {
