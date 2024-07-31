@@ -1,5 +1,8 @@
 # 雀魂Max-rs
 
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/README.en-US.md)
+[![cn](https://img.shields.io/badge/lang-cn-green.svg)](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/README.md)
+
 **本项目启发自[MajsoulMax](https://github.com/Avenshy/MajsoulMax)**
 
 雀魂解锁全角色、皮肤、装扮等，基于[hudsucker](https://github.com/omjadas/hudsucker)的中间人攻击方式，支持网页版与电脑/Android客户端。

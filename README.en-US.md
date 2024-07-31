@@ -1,5 +1,8 @@
 # MajsoulMax-rs
 
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/README.en-US.md)
+[![cn](https://img.shields.io/badge/lang-cn-green.svg)](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/README.md)
+
 **This project is inspired by [MajsoulMax](https://github.com/Avenshy/MajsoulMax)**
 
 Unlock all characters, skins, and decorations in Mahjong Soul, using a man-in-the-middle attack based on [hudsucker](https://github.com/omjadas/hudsucker). Supports both the web version and the PC/Android client.
