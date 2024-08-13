@@ -148,7 +148,7 @@ impl Settings {
     }
 
     pub async fn download_asset(&self, asset_item: &Value) -> Result<()> {
-        const ASSET_NAMES: [&str; 3] = ["liqi.desc", "liqi.json", "liqi.proto"];
+        const ASSET_NAMES: [&str; 2] = ["liqi.desc", "liqi.json"];
         let name = asset_item["name"]
             .as_str()
             .ok_or(anyhow!("No name found in asset"))?;
