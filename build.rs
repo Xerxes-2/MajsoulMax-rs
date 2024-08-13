@@ -7,7 +7,7 @@ fn main() -> Result<()> {
         "lq.ViewSlot",
         "#[derive(::serde::Serialize, ::serde::Deserialize)]",
     );
-    config.compile_protos(&["proto/liqi.proto"], &["proto/"])?;
+    config.compile_protos(&["liqi_config/liqi.proto"], &["liqi_config/", "proto/"])?;
     // cargo fmt
     std::process::Command::new("cargo").arg("fmt").status()?;
     Ok(())
