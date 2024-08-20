@@ -25,7 +25,7 @@ serde_json = "1.0.124"
 tokio = { version = "1.38.1", features = ["rt-multi-thread"] }
 tracing-subscriber = { version = "0.3.18", features = ["env-filter", "chrono"] }
 tracing = "0.1.40"
-clap = { version = "4.5.15", features = ["derive"] }
+clap = { version = "4.5.16", features = ["derive"] }
 prost = "0.13.1"
 hudsucker = "0.22.0"
 const_format = "0.2.32"
