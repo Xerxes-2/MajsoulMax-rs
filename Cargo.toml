@@ -16,7 +16,7 @@ anyhow = "1.0.86"
 base64 = "0.22.1"
 bytes = "1.7.1"
 prost-reflect = { version = "0.14.0", features = ["serde"] }
-reqwest = { version = "0.12.5", features = [
+reqwest = { version = "0.12.6", features = [
     "json",
     "rustls-tls",
 ], default-features = false }
