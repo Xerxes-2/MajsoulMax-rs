@@ -1,5 +1,6 @@
 
-ª√	
+¶™
+
 
 liqi.protolq"|
 NotifyCaptcha
@@ -887,7 +888,7 @@ gift_inbox (2 .lq.FeedActivityData.GiftBoxDataR	giftInboxS
 MineActivityData&
 	dig_point (2	.lq.PointRdigPoint 
 map (2.lq.MineRewardRmap
-id (Rid"◊
+id (Rid"∆
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -903,7 +904,11 @@ gacha_data (2.lq.ActivityGachaUpdateDataR	gachaDataC
  (2.lq.ActivityVillageDataRvillageData=
 festival_data (2.lq.ActivityFestivalDataRfestivalData7
 island_data (2.lq.ActivityIslandDataR
-islandData"I
+islandData7
+amulet_data (2.lq.ActivityAmuletDataR
+amuletData4
+
+story_data (2.lq.ActivityStoryDataR	storyData"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
 pos (Rpos"æ
@@ -1027,7 +1032,137 @@ updateTime"ö
 activityId
 zone (Rzone%
 bags (2.lq.IslandBagDataRbags(
-zones (2.lq.IslandZoneDataRzones"€
+zones (2.lq.IslandZoneDataRzones"J
+AmuletEffectData
+id (Rid
+uid (Ruid
+store (Rstore"6
+AmuletBuffData
+id (Rid
+store (Rstore"T
+AmuletGameShopGoods
+id (Rid
+sold (Rsold
+goods_id (RgoodsId"[
+AmuletActivityTingInfo
+tile (	Rtile
+fan (Rfan
+	ting_tile (	RtingTile"=
+AmuletShowDesktopTileData
+id (Rid
+pos (Rpos"†
+AmuletGameOperation
+type (Rtype5
+gang (2!.lq.AmuletGameOperation.GangTilesRgang
+	effect_id (ReffectId!
+	GangTiles
+tiles (Rtiles"∑
+AmuletGameShopData-
+goods (2.lq.AmuletGameShopGoodsRgoods
+effect_list (R
+effectList,
+shop_refresh_count (RshopRefreshCount#
+refresh_price (RrefreshPrice"·
+AmuletGameUpdateData1
+tile_replace (2.lq.AmuletTileRtileReplace
+	tian_dora (	RtianDora
+dora (Rdora
+hands (Rhands&
+ming (2.lq.AmuletMingInfoRming5
+effect_list	 (2.lq.AmuletEffectDataR
+effectList1
+	buff_list
+ (2.lq.AmuletEffectDataRbuffList
+point (	Rpoint
+coin (Rcoin
+stage (Rstage%
+desktop_remain (RdesktopRemainK
+show_desktop_tiles (2.lq.AmuletShowDesktopTileDataRshowDesktopTiles7
+	ting_list (2.lq.AmuletActivityTingInfoRtingList>
+next_operation (2.lq.AmuletGameOperationRnextOperation!
+used_desktop" (RusedDesktop9
+
+highest_hu# (2.lq.ActivityAmuletHuRecordR	highestHu2
+records$ (2.lq.ActivityAmuletRecordRrecords"Ü
+AmuletGameRecordData
+key (Rkey
+	int_value (RintValue
+	str_value (	RstrValue"
+int_arr_value (RintArrValue"
+
+AmuletGameData"
+pool (2.lq.AmuletTileRpool1
+tile_replace (2.lq.AmuletTileRtileReplace
+	tian_dora (	RtianDora
+mountain (Rmountain
+dora (Rdora
+hands (Rhands&
+ming (2.lq.AmuletMingInfoRming5
+effect_list	 (2.lq.AmuletEffectDataR
+effectList/
+	buff_list
+ (2.lq.AmuletBuffDataRbuffList
+level (Rlevel
+point (	Rpoint
+coin (Rcoin*
+shop (2.lq.AmuletGameShopDataRshop
+used (Rused
+	boss_buff (RbossBuff
+stage (Rstage
+desktop (Rdesktop!
+show_desktop (RshowDesktop%
+desktop_remain (RdesktopRemain(
+free_effect_list (RfreeEffectListK
+show_desktop_tiles (2.lq.AmuletShowDesktopTileDataRshowDesktopTiles*
+change_tile_count (RchangeTileCount7
+	ting_list (2.lq.AmuletActivityTingInfoRtingList>
+next_operation (2.lq.AmuletGameOperationRnextOperation8
+shop_buff_list  (2.lq.AmuletBuffDataRshopBuffList7
+remain_change_tile_count! (RremainChangeTileCount!
+used_desktop" (RusedDesktop
+
+after_gang# (R	afterGang9
+record_data$ (2.lq.AmuletGameRecordDataR
+recordData:
+skill_buff_list% (2.lq.AmuletBuffDataRskillBuffList(
+max_effect_count& (RmaxEffectCount9
+
+highest_hu' (2.lq.ActivityAmuletHuRecordR	highestHu.
+total_consumed_coin( (RtotalConsumedCoin 
+boss_buff_id) (R
+bossBuffId"ï
+ActivityAmuletUpdateData
+activity_id (R
+activityId9
+game_update (2.lq.AmuletGameUpdateDataR
+gameUpdate
+
+game_empty (R	gameEmpty"7
+AmuletSkillData
+id (Rid
+level (Rlevel"F
+ActivityAmuletUpgradeData)
+skill (2.lq.AmuletSkillDataRskill"]
+ActivityAmuletRecord*
+effect_gain_count (ReffectGainCount
+hu_count (RhuCount"f
+ActivityAmuletHuRecord
+point (	Rpoint
+pai (	Rpai
+fan (Rfan
+base (Rbase"∞
+!ActivityAmuletIllustratedBookData+
+effect_collection (ReffectCollection9
+
+highest_hu (2.lq.ActivityAmuletHuRecordR	highestHu#
+highest_level (RhighestLevel"Ç
+ActivityAmuletData
+activity_id (R
+activityId&
+game (2.lq.AmuletGameDataRgame
+version (Rversion7
+upgrade (2.lq.ActivityAmuletUpgradeDataRupgradeP
+illustrated_book (2%.lq.ActivityAmuletIllustratedBookDataRillustratedBook"€
 ActivityFeedData
 activity_id (R
 activityId
@@ -1048,7 +1183,17 @@ maxInboxIdS
 count (Rcount&
 from_account_id (RfromAccountId
 time (Rtime
-received (Rreceived"‡
+received (Rreceived"Ÿ
+UnlockedStoryData
+story_id (RstoryId'
+finished_ending (RfinishedEnding'
+rewarded_ending (RrewardedEnding'
+finish_rewarded (RfinishRewarded.
+all_finish_rewarded (RallFinishRewarded"r
+ActivityStoryData
+activity_id (R
+activityId<
+unlocked_story (2.lq.UnlockedStoryDataRunlockedStory"‡
 ActivityFriendGiftData
 activity_id (R
 activityId 
@@ -1832,7 +1977,75 @@ account_id (R	accountId
 method (	Rmethod
 data (Rdata
 session (	Rsession+
-remote (2.lq.NetworkEndpointRremote"r
+remote (2.lq.NetworkEndpointRremote"0
+
+AmuletTile
+id (Rid
+tile (	Rtile"Y
+	AmuletFan
+id (Rid
+val (Rval
+count (Rcount
+yiman (Ryiman"3
+AmuletReplace
+id (Rid
+tile (	Rtile"A
+AmuletMingInfo
+type (Rtype
+	tile_list (RtileList"ô
+AmuletActivityHookEffect
+add_dora (RaddDora"
+add_tian_dora (	RaddTianDora
+
+add_effect (R	addEffect#
+remove_effect (RremoveEffect
+add_buff (RaddBuff
+remove_buff (R
+removeBuff
+add_coin	 (RaddCoin4
+tile_replace (2.lq.AmuletReplaceRtileReplace
+add_fan (RaddFan
+add_base (RaddBase,
+
+modify_fan (2.lq.AmuletFanR	modifyFan
+id (Rid
+modify_dora (R
+modifyDora
+uid (Ruid"
+add_show_tile (RaddShowTile$
+add_dora_count (RaddDoraCount"ä
+AmuletHuleInfo
+tile (Rtile(
+fan_list (2.lq.AmuletFanRfanList
+fan (Rfan
+point (	Rpoint
+base (Rbase"¥
+AmuletHuleOperateResult-
+hu_final (2.lq.AmuletHuleInfoRhuFinal+
+hu_base (2.lq.AmuletHuleInfoRhuBase=
+hook_effect (2.lq.AmuletActivityHookEffectR
+hookEffect"s
+AmuletGangOperateResult
+new_dora (RnewDora=
+hook_effect (2.lq.AmuletActivityHookEffectR
+hookEffect"i
+AmuletDealTileResult
+tile (Rtile=
+hook_effect (2.lq.AmuletActivityHookEffectR
+hookEffect"à
+AmuletRoundResult8
+	hu_result (2.lq.AmuletHuleOperateResultRhuResult9
+deal_result (2.lq.AmuletDealTileResultR
+dealResult"˙
+AmuletUpgradeResult:
+remain_rounds (2.lq.AmuletRoundResultRremainRounds
+
+point_coin (R	pointCoin
+
+level_coin (R	levelCoin*
+shop (2.lq.AmuletGameShopDataRshop=
+hook_effect (2.lq.AmuletActivityHookEffectR
+hookEffect"r
 ResConnectionInfo
 error (2	.lq.ErrorRerror<
 client_endpoint (2.lq.NetworkEndpointRclientEndpoint"`
@@ -3108,7 +3321,7 @@ recordList"9
 error (2	.lq.ErrorRerror,
 
 activities (2.lq.ActivityR
-activities"Ú
+activities"·
 ResAccountActivityData
 error (2	.lq.ErrorRerror=
 exchange_records (2.lq.ExchangeRecordRexchangeRecords>
@@ -3141,7 +3354,11 @@ gacha_data (2.lq.ActivityGachaUpdateDataR	gachaDataC
 village_data (2.lq.ActivityVillageDataRvillageData=
 festival_data (2.lq.ActivityFestivalDataRfestivalData7
 island_data (2.lq.ActivityIslandDataR
-islandDataÑ
+islandData7
+amulet_data (2.lq.ActivityAmuletDataR
+amuletData4
+
+story_data (2.lq.ActivityStoryDataR	storyDataÑ
 ActivitySignInData
 activity_id (R
 activityId"
@@ -4016,7 +4233,181 @@ account_id (R	accountId
 ai_level (RaiLevel"Y
 "ResGenerateContestManagerLoginCode
 error (2	.lq.ErrorRerror
-code (	Rcode"
+code (	Rcode"=
+ReqAmuletActivityStartGame
+activity_id (R
+activityId"e
+ResAmuletActivityStartGame
+error (2	.lq.ErrorRerror&
+game (2.lq.AmuletGameDataRgame"c
+ReqAmuletActivityOperate
+activity_id (R
+activityId
+type (Rtype
+tile (Rtile"ù
+ResAmuletActivityOperate
+error (2	.lq.ErrorRerror8
+	hu_result (2.lq.AmuletHuleOperateResultRhuResult<
+gang_result (2.lq.AmuletGangOperateResultR
+gangResult9
+deal_result (2.lq.AmuletDealTileResultR
+dealResult>
+upgrade_result (2.lq.AmuletUpgradeResultRupgradeResult
+upgraded (Rupgraded
+failed (Rfailed9
+game_update (2.lq.AmuletGameUpdateDataR
+gameUpdate"U
+ReqAmuletActivityChangeHands
+activity_id (R
+activityId
+hands (Rhands"˛
+ResAmuletActivityChangeHands
+error (2	.lq.ErrorRerror
+hands (Rhands7
+remain_change_tile_count (RremainChangeTileCount7
+	ting_list (2.lq.AmuletActivityTingInfoRtingList5
+effect_list (2.lq.AmuletEffectDataR
+effectList";
+ReqAmuletActivityUpgrade
+activity_id (R
+activityId"¢
+ResAmuletActivityUpgrade
+error (2	.lq.ErrorRerror&
+game (2.lq.AmuletGameDataRgame=
+hook_effect (2.lq.AmuletActivityHookEffectR
+hookEffect"N
+ReqAmuletActivitySelectPack
+activity_id (R
+activityId
+id (Rid"°
+ResAmuletActivitySelectPack
+error (2	.lq.ErrorRerror5
+effect_list (2.lq.AmuletEffectDataR
+effectList*
+shop (2.lq.AmuletGameShopDataRshop"G
+ReqAmuletActivityBuy
+activity_id (R
+activityId
+id (Rid"Ù
+ResAmuletActivityBuy
+error (2	.lq.ErrorRerror
+coin (Rcoin*
+shop (2.lq.AmuletGameShopDataRshop
+stage (Rstage5
+effect_list (2.lq.AmuletEffectDataR
+effectList.
+total_consumed_coin (RtotalConsumedCoin"N
+ReqAmuletActivitySellEffect
+activity_id (R
+activityId
+id (Rid"˝
+ResAmuletActivitySellEffect
+error (2	.lq.ErrorRerror
+coin (Rcoin5
+effect_list (2.lq.AmuletEffectDataR
+effectList9
+game_update (2.lq.AmuletGameUpdateDataR
+gameUpdate7
+remain_change_tile_count (RremainChangeTileCount"[
+ReqAmuletActivityEffectSort
+activity_id (R
+activityId
+	sorted_id (RsortedId":
+ReqAmuletActivityGiveup
+activity_id (R
+activityId"?
+ReqAmuletActivityRefreshShop
+activity_id (R
+activityId"∂
+ResAmuletActivityRefreshShop
+error (2	.lq.ErrorRerror*
+shop (2.lq.AmuletGameShopDataRshop
+coin (Rcoin5
+effect_list (2.lq.AmuletEffectDataR
+effectList"e
+!ReqAmuletActivitySelectFreeEffect
+activity_id (R
+activityId
+selected_id (R
+selectedId"∏
+!ResAmuletActivitySelectFreeEffect
+error (2	.lq.ErrorRerror9
+game_update (2.lq.AmuletGameUpdateDataR
+gameUpdate7
+remain_change_tile_count (RremainChangeTileCount"S
+ ReqAmuletActivityUpgradeShopBuff
+activity_id (R
+activityId
+id (Rid"Í
+ ResAmuletActivityUpgradeShopBuff
+error (2	.lq.ErrorRerror9
+game_update (2.lq.AmuletGameUpdateDataR
+gameUpdate:
+shop_buff_list (2.lq.AmuletEffectDataRshopBuffList.
+total_consumed_coin (RtotalConsumedCoin"?
+ReqAmuletActivityEndShopping
+activity_id (R
+activityId"z
+ResAmuletActivityEndShopping
+error (2	.lq.ErrorRerror9
+game_update (2.lq.AmuletGameUpdateDataR
+gameUpdate"l
+ReqAmuletActivitySetSkillLevel
+activity_id (R
+activityId)
+skill (2.lq.AmuletSkillDataRskill"T
+ResAmuletActivityMaintainInfo
+error (2	.lq.ErrorRerror
+mode (	Rmode"T
+ReqStoryActivityUnlock
+activity_id (R
+activityId
+story_id (RstoryId"w
+ReqStoryActivityUnlockEnding
+activity_id (R
+activityId
+story_id (RstoryId
+	ending_id (RendingId"~
+#ReqStoryActivityReceiveEndingReward
+activity_id (R
+activityId
+story_id (RstoryId
+	ending_id (RendingId"g
+ResStoryReward
+error (2	.lq.ErrorRerror4
+reward_items (2.lq.ExecuteRewardRrewardItems"a
+#ReqStoryActivityReceiveFinishReward
+activity_id (R
+activityId
+story_id (RstoryId"d
+&ReqStoryActivityReceiveAllFinishReward
+activity_id (R
+activityId
+story_id (RstoryId"Å
+&ReqStoryActivityUnlockEndingAndReceive
+activity_id (R
+activityId
+story_id (RstoryId
+	ending_id (RendingId"¯
+&ResStoryActivityUnlockEndingAndReceive
+error (2	.lq.ErrorRerror6
+ending_reward (2.lq.ExecuteRewardRendingReward6
+finish_reward (2.lq.ExecuteRewardRfinishReward=
+all_finish_reward (2.lq.ExecuteRewardRallFinishReward"Z
+ReqFetchActivityRank
+activity_id (R
+activityId!
+account_list (RaccountList"®
+ResFetchActivityRank
+error (2	.lq.ErrorRerror?
+items (2).lq.ResFetchActivityRank.ActivityRankItemRitems=
+self (2).lq.ResFetchActivityRank.ActivityRankItemRselfo
+ActivityRankItem
+
+account_id (R	accountId
+score (Rscore
+data (	Rdata
+rank (Rrank"
 ActionMJStart"U
 NewRoundOpenedTiles
 seat (Rseat
@@ -4809,7 +5200,7 @@ account_id (R	accountId
 NULL 
 AUTH
 SYNCING	
-READY2‚≠
+READY2üΩ
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -5145,7 +5536,29 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 fetchContestPlayerRank.lq.ReqFetchContestPlayerRank.lq.ResFetchContestPlayerRankP
 fetchReadyPlayerList.lq.ReqFetchReadyPlayerList.lq.ResFetchReadyPlayerList6
 createGamePlan.lq.ReqCreateGamePlan.lq.ResCommonX
-generateContestManagerLoginCode.lq.ReqCommon&.lq.ResGenerateContestManagerLoginCode2ı
+generateContestManagerLoginCode.lq.ReqCommon&.lq.ResGenerateContestManagerLoginCodeY
+amuletActivityStartGame.lq.ReqAmuletActivityStartGame.lq.ResAmuletActivityStartGameS
+amuletActivityOperate.lq.ReqAmuletActivityOperate.lq.ResAmuletActivityOperate_
+amuletActivityChangeHands .lq.ReqAmuletActivityChangeHands .lq.ResAmuletActivityChangeHandsS
+amuletActivityUpgrade.lq.ReqAmuletActivityUpgrade.lq.ResAmuletActivityUpgradeG
+amuletActivityBuy.lq.ReqAmuletActivityBuy.lq.ResAmuletActivityBuy\
+amuletActivitySelectPack.lq.ReqAmuletActivitySelectPack.lq.ResAmuletActivitySelectPack\
+amuletActivitySellEffect.lq.ReqAmuletActivitySellEffect.lq.ResAmuletActivitySellEffectJ
+amuletActivityEffectSort.lq.ReqAmuletActivityEffectSort.lq.ResCommonB
+amuletActivityGiveup.lq.ReqAmuletActivityGiveup.lq.ResCommon_
+amuletActivityRefreshShop .lq.ReqAmuletActivityRefreshShop .lq.ResAmuletActivityRefreshShopn
+amuletActivitySelectFreeEffect%.lq.ReqAmuletActivitySelectFreeEffect%.lq.ResAmuletActivitySelectFreeEffectk
+amuletActivityUpgradeShopBuff$.lq.ReqAmuletActivityUpgradeShopBuff$.lq.ResAmuletActivityUpgradeShopBuff_
+amuletActivityEndShopping .lq.ReqAmuletActivityEndShopping .lq.ResAmuletActivityEndShoppingP
+amuletActivitySetSkillLevel".lq.ReqAmuletActivitySetSkillLevel.lq.ResCommonN
+amuletActivityMaintainInfo.lq.ReqCommon!.lq.ResAmuletActivityMaintainInfo@
+storyActivityUnlock.lq.ReqStoryActivityUnlock.lq.ResCommonL
+storyActivityUnlockEnding .lq.ReqStoryActivityUnlockEnding.lq.ResCommon_
+ storyActivityReceiveEndingReward'.lq.ReqStoryActivityReceiveEndingReward.lq.ResStoryReward_
+ storyActivityReceiveFinishReward'.lq.ReqStoryActivityReceiveFinishReward.lq.ResStoryRewarde
+#storyActivityReceiveAllFinishReward*.lq.ReqStoryActivityReceiveAllFinishReward.lq.ResStoryReward}
+#storyActivityUnlockEndingAndReceive*.lq.ReqStoryActivityUnlockEndingAndReceive*.lq.ResStoryActivityUnlockEndingAndReceiveG
+fetchActivityRank.lq.ReqFetchActivityRank.lq.ResFetchActivityRank2ı
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,
