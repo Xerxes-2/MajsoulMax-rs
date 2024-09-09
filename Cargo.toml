@@ -15,7 +15,7 @@ name = "majsoul_max_rs"
 anyhow = "1.0.86"
 base64 = "0.22.1"
 bytes = "1.7.1"
-prost-reflect = { version = "0.14.0", features = ["serde"] }
+prost-reflect = { version = "0.14.2", features = ["serde"] }
 reqwest = { version = "0.12.7", features = [
     "json",
     "rustls-tls",
