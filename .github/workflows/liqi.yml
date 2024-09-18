@@ -40,7 +40,8 @@ jobs:
         curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.desc"
         curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.json"
         curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.proto"
-        mv liqi.desc liqi.json liqi_config/
+        curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/lqc.lqbin"
+        mv liqi.desc liqi.json lqc.lqbin liqi_config/
         mv liqi.proto proto/
 
     - name: Update version in settings files
@@ -63,6 +64,7 @@ jobs:
           - Updated liqi.desc
           - Updated liqi.json
           - Updated liqi.proto
+          - Updated lqc.lqbin
           - Updated version in settings.json and settings.mod.json
         branch: update-liqi-files
         base: master
