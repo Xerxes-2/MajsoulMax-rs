@@ -1722,6 +1722,10 @@ pub struct AccountActivityUpdate {
     pub festival_data: ::prost::alloc::vec::Vec<ActivityFestivalData>,
     #[prost(message, repeated, tag = "12")]
     pub island_data: ::prost::alloc::vec::Vec<ActivityIslandData>,
+    #[prost(message, repeated, tag = "13")]
+    pub amulet_data: ::prost::alloc::vec::Vec<ActivityAmuletData>,
+    #[prost(message, repeated, tag = "14")]
+    pub story_data: ::prost::alloc::vec::Vec<ActivityStoryData>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActivityCombiningWorkbench {
@@ -1961,6 +1965,255 @@ pub struct ActivityIslandData {
     pub zones: ::prost::alloc::vec::Vec<IslandZoneData>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletEffectData {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(uint32, tag = "2")]
+    pub uid: u32,
+    #[prost(int32, repeated, tag = "3")]
+    pub store: ::prost::alloc::vec::Vec<i32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletBuffData {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(int32, repeated, tag = "3")]
+    pub store: ::prost::alloc::vec::Vec<i32>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AmuletGameShopGoods {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(bool, tag = "2")]
+    pub sold: bool,
+    #[prost(uint32, tag = "3")]
+    pub goods_id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletActivityTingInfo {
+    #[prost(string, tag = "1")]
+    pub tile: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub fan: u64,
+    #[prost(string, tag = "3")]
+    pub ting_tile: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AmuletShowDesktopTileData {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(uint32, tag = "2")]
+    pub pos: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletGameOperation {
+    #[prost(uint32, tag = "1")]
+    pub r#type: u32,
+    #[prost(message, repeated, tag = "2")]
+    pub gang: ::prost::alloc::vec::Vec<amulet_game_operation::GangTiles>,
+    #[prost(uint32, tag = "3")]
+    pub effect_id: u32,
+}
+/// Nested message and enum types in `AmuletGameOperation`.
+pub mod amulet_game_operation {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct GangTiles {
+        #[prost(uint32, repeated, tag = "1")]
+        pub tiles: ::prost::alloc::vec::Vec<u32>,
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletGameShopData {
+    #[prost(message, repeated, tag = "1")]
+    pub goods: ::prost::alloc::vec::Vec<AmuletGameShopGoods>,
+    #[prost(uint32, repeated, tag = "2")]
+    pub effect_list: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, tag = "3")]
+    pub shop_refresh_count: u32,
+    #[prost(uint32, tag = "4")]
+    pub refresh_price: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletGameUpdateData {
+    #[prost(message, repeated, tag = "1")]
+    pub tile_replace: ::prost::alloc::vec::Vec<AmuletTile>,
+    #[prost(string, repeated, tag = "2")]
+    pub tian_dora: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, repeated, tag = "4")]
+    pub dora: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "7")]
+    pub hands: ::prost::alloc::vec::Vec<u32>,
+    #[prost(message, repeated, tag = "8")]
+    pub ming: ::prost::alloc::vec::Vec<AmuletMingInfo>,
+    #[prost(message, repeated, tag = "9")]
+    pub effect_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+    #[prost(message, repeated, tag = "10")]
+    pub buff_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+    #[prost(string, tag = "13")]
+    pub point: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "14")]
+    pub coin: u32,
+    #[prost(uint32, tag = "22")]
+    pub stage: u32,
+    #[prost(uint32, tag = "26")]
+    pub desktop_remain: u32,
+    #[prost(message, repeated, tag = "28")]
+    pub show_desktop_tiles: ::prost::alloc::vec::Vec<AmuletShowDesktopTileData>,
+    #[prost(message, repeated, tag = "30")]
+    pub ting_list: ::prost::alloc::vec::Vec<AmuletActivityTingInfo>,
+    #[prost(message, repeated, tag = "31")]
+    pub next_operation: ::prost::alloc::vec::Vec<AmuletGameOperation>,
+    #[prost(uint32, repeated, tag = "34")]
+    pub used_desktop: ::prost::alloc::vec::Vec<u32>,
+    #[prost(message, optional, tag = "35")]
+    pub highest_hu: ::core::option::Option<ActivityAmuletHuRecord>,
+    #[prost(message, optional, tag = "36")]
+    pub records: ::core::option::Option<ActivityAmuletRecord>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletGameRecordData {
+    #[prost(uint32, tag = "1")]
+    pub key: u32,
+    #[prost(int32, tag = "2")]
+    pub int_value: i32,
+    #[prost(string, tag = "3")]
+    pub str_value: ::prost::alloc::string::String,
+    #[prost(int32, repeated, tag = "4")]
+    pub int_arr_value: ::prost::alloc::vec::Vec<i32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletGameData {
+    #[prost(message, repeated, tag = "1")]
+    pub pool: ::prost::alloc::vec::Vec<AmuletTile>,
+    #[prost(message, repeated, tag = "2")]
+    pub tile_replace: ::prost::alloc::vec::Vec<AmuletTile>,
+    #[prost(string, repeated, tag = "3")]
+    pub tian_dora: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, repeated, tag = "4")]
+    pub mountain: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "5")]
+    pub dora: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "7")]
+    pub hands: ::prost::alloc::vec::Vec<u32>,
+    #[prost(message, repeated, tag = "8")]
+    pub ming: ::prost::alloc::vec::Vec<AmuletMingInfo>,
+    #[prost(message, repeated, tag = "9")]
+    pub effect_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+    #[prost(message, repeated, tag = "10")]
+    pub buff_list: ::prost::alloc::vec::Vec<AmuletBuffData>,
+    #[prost(uint32, tag = "11")]
+    pub level: u32,
+    #[prost(string, tag = "13")]
+    pub point: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "14")]
+    pub coin: u32,
+    #[prost(message, optional, tag = "16")]
+    pub shop: ::core::option::Option<AmuletGameShopData>,
+    #[prost(uint32, repeated, tag = "20")]
+    pub used: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "21")]
+    pub boss_buff: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, tag = "22")]
+    pub stage: u32,
+    #[prost(uint32, repeated, tag = "24")]
+    pub desktop: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "25")]
+    pub show_desktop: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, tag = "26")]
+    pub desktop_remain: u32,
+    #[prost(uint32, repeated, tag = "27")]
+    pub free_effect_list: ::prost::alloc::vec::Vec<u32>,
+    #[prost(message, repeated, tag = "28")]
+    pub show_desktop_tiles: ::prost::alloc::vec::Vec<AmuletShowDesktopTileData>,
+    #[prost(uint32, tag = "29")]
+    pub change_tile_count: u32,
+    #[prost(message, repeated, tag = "30")]
+    pub ting_list: ::prost::alloc::vec::Vec<AmuletActivityTingInfo>,
+    #[prost(message, repeated, tag = "31")]
+    pub next_operation: ::prost::alloc::vec::Vec<AmuletGameOperation>,
+    #[prost(message, repeated, tag = "32")]
+    pub shop_buff_list: ::prost::alloc::vec::Vec<AmuletBuffData>,
+    #[prost(int32, tag = "33")]
+    pub remain_change_tile_count: i32,
+    #[prost(uint32, repeated, tag = "34")]
+    pub used_desktop: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, tag = "35")]
+    pub after_gang: u32,
+    #[prost(message, repeated, tag = "36")]
+    pub record_data: ::prost::alloc::vec::Vec<AmuletGameRecordData>,
+    #[prost(message, repeated, tag = "37")]
+    pub skill_buff_list: ::prost::alloc::vec::Vec<AmuletBuffData>,
+    #[prost(uint32, tag = "38")]
+    pub max_effect_count: u32,
+    #[prost(message, optional, tag = "39")]
+    pub highest_hu: ::core::option::Option<ActivityAmuletHuRecord>,
+    #[prost(uint32, tag = "40")]
+    pub total_consumed_coin: u32,
+    #[prost(uint32, repeated, tag = "41")]
+    pub boss_buff_id: ::prost::alloc::vec::Vec<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ActivityAmuletUpdateData {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(message, optional, tag = "2")]
+    pub game_update: ::core::option::Option<AmuletGameUpdateData>,
+    #[prost(bool, tag = "3")]
+    pub game_empty: bool,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AmuletSkillData {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(uint32, tag = "2")]
+    pub level: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ActivityAmuletUpgradeData {
+    #[prost(message, repeated, tag = "2")]
+    pub skill: ::prost::alloc::vec::Vec<AmuletSkillData>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ActivityAmuletRecord {
+    #[prost(uint32, tag = "1")]
+    pub effect_gain_count: u32,
+    #[prost(uint32, tag = "2")]
+    pub hu_count: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ActivityAmuletHuRecord {
+    #[prost(string, tag = "1")]
+    pub point: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub pai: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub fan: u64,
+    #[prost(uint64, tag = "4")]
+    pub base: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ActivityAmuletIllustratedBookData {
+    #[prost(uint32, repeated, tag = "1")]
+    pub effect_collection: ::prost::alloc::vec::Vec<u32>,
+    #[prost(message, optional, tag = "2")]
+    pub highest_hu: ::core::option::Option<ActivityAmuletHuRecord>,
+    #[prost(uint32, tag = "3")]
+    pub highest_level: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ActivityAmuletData {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(message, optional, tag = "2")]
+    pub game: ::core::option::Option<AmuletGameData>,
+    #[prost(uint32, tag = "3")]
+    pub version: u32,
+    #[prost(message, optional, tag = "4")]
+    pub upgrade: ::core::option::Option<ActivityAmuletUpgradeData>,
+    #[prost(message, optional, tag = "5")]
+    pub illustrated_book: ::core::option::Option<ActivityAmuletIllustratedBookData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ActivityFeedData {
     #[prost(uint32, tag = "1")]
     pub activity_id: u32,
@@ -1999,6 +2252,26 @@ pub mod activity_feed_data {
         #[prost(uint32, tag = "6")]
         pub received: u32,
     }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UnlockedStoryData {
+    #[prost(uint32, tag = "1")]
+    pub story_id: u32,
+    #[prost(uint32, repeated, tag = "2")]
+    pub finished_ending: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "3")]
+    pub rewarded_ending: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, tag = "4")]
+    pub finish_rewarded: u32,
+    #[prost(uint32, tag = "5")]
+    pub all_finish_rewarded: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ActivityStoryData {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(message, repeated, tag = "2")]
+    pub unlocked_story: ::prost::alloc::vec::Vec<UnlockedStoryData>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ActivityFriendGiftData {
@@ -3502,6 +3775,129 @@ pub struct TransparentData {
     pub session: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "4")]
     pub remote: ::core::option::Option<NetworkEndpoint>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletTile {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(string, tag = "2")]
+    pub tile: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AmuletFan {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(int32, tag = "2")]
+    pub val: i32,
+    #[prost(uint32, tag = "3")]
+    pub count: u32,
+    #[prost(bool, tag = "4")]
+    pub yiman: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletReplace {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(string, tag = "2")]
+    pub tile: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletMingInfo {
+    #[prost(uint32, tag = "1")]
+    pub r#type: u32,
+    #[prost(uint32, repeated, tag = "2")]
+    pub tile_list: ::prost::alloc::vec::Vec<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletActivityHookEffect {
+    #[prost(uint32, repeated, tag = "1")]
+    pub add_dora: ::prost::alloc::vec::Vec<u32>,
+    #[prost(string, repeated, tag = "3")]
+    pub add_tian_dora: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, repeated, tag = "4")]
+    pub add_effect: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "5")]
+    pub remove_effect: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "6")]
+    pub add_buff: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, repeated, tag = "7")]
+    pub remove_buff: ::prost::alloc::vec::Vec<u32>,
+    #[prost(int32, tag = "9")]
+    pub add_coin: i32,
+    #[prost(message, repeated, tag = "11")]
+    pub tile_replace: ::prost::alloc::vec::Vec<AmuletReplace>,
+    #[prost(int64, tag = "12")]
+    pub add_fan: i64,
+    #[prost(int64, tag = "13")]
+    pub add_base: i64,
+    #[prost(message, repeated, tag = "14")]
+    pub modify_fan: ::prost::alloc::vec::Vec<AmuletFan>,
+    #[prost(uint32, tag = "15")]
+    pub id: u32,
+    #[prost(bool, tag = "16")]
+    pub modify_dora: bool,
+    #[prost(uint32, tag = "17")]
+    pub uid: u32,
+    #[prost(uint32, repeated, tag = "18")]
+    pub add_show_tile: ::prost::alloc::vec::Vec<u32>,
+    #[prost(int32, tag = "19")]
+    pub add_dora_count: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletHuleInfo {
+    #[prost(uint32, tag = "1")]
+    pub tile: u32,
+    #[prost(message, repeated, tag = "2")]
+    pub fan_list: ::prost::alloc::vec::Vec<AmuletFan>,
+    #[prost(uint64, tag = "3")]
+    pub fan: u64,
+    #[prost(string, tag = "4")]
+    pub point: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "5")]
+    pub base: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletHuleOperateResult {
+    #[prost(message, optional, tag = "2")]
+    pub hu_final: ::core::option::Option<AmuletHuleInfo>,
+    #[prost(message, optional, tag = "3")]
+    pub hu_base: ::core::option::Option<AmuletHuleInfo>,
+    #[prost(message, repeated, tag = "5")]
+    pub hook_effect: ::prost::alloc::vec::Vec<AmuletActivityHookEffect>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletGangOperateResult {
+    #[prost(uint32, repeated, tag = "4")]
+    pub new_dora: ::prost::alloc::vec::Vec<u32>,
+    #[prost(message, repeated, tag = "5")]
+    pub hook_effect: ::prost::alloc::vec::Vec<AmuletActivityHookEffect>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletDealTileResult {
+    #[prost(uint32, tag = "1")]
+    pub tile: u32,
+    #[prost(message, repeated, tag = "5")]
+    pub hook_effect: ::prost::alloc::vec::Vec<AmuletActivityHookEffect>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletRoundResult {
+    #[prost(message, optional, tag = "2")]
+    pub hu_result: ::core::option::Option<AmuletHuleOperateResult>,
+    #[prost(message, optional, tag = "4")]
+    pub deal_result: ::core::option::Option<AmuletDealTileResult>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AmuletUpgradeResult {
+    #[prost(message, repeated, tag = "1")]
+    pub remain_rounds: ::prost::alloc::vec::Vec<AmuletRoundResult>,
+    #[prost(uint32, tag = "2")]
+    pub point_coin: u32,
+    #[prost(uint32, tag = "3")]
+    pub level_coin: u32,
+    #[prost(message, optional, tag = "4")]
+    pub shop: ::core::option::Option<AmuletGameShopData>,
+    #[prost(message, repeated, tag = "5")]
+    pub hook_effect: ::prost::alloc::vec::Vec<AmuletActivityHookEffect>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ResConnectionInfo {
@@ -6148,6 +6544,10 @@ pub struct ResAccountActivityData {
     pub festival_data: ::prost::alloc::vec::Vec<ActivityFestivalData>,
     #[prost(message, repeated, tag = "27")]
     pub island_data: ::prost::alloc::vec::Vec<ActivityIslandData>,
+    #[prost(message, repeated, tag = "28")]
+    pub amulet_data: ::prost::alloc::vec::Vec<ActivityAmuletData>,
+    #[prost(message, repeated, tag = "29")]
+    pub story_data: ::prost::alloc::vec::Vec<ActivityStoryData>,
 }
 /// Nested message and enum types in `ResAccountActivityData`.
 pub mod res_account_activity_data {
@@ -7946,6 +8346,322 @@ pub struct ResGenerateContestManagerLoginCode {
     pub error: ::core::option::Option<Error>,
     #[prost(string, tag = "2")]
     pub code: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityStartGame {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityStartGame {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, optional, tag = "2")]
+    pub game: ::core::option::Option<AmuletGameData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityOperate {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub r#type: u32,
+    #[prost(uint32, repeated, tag = "3")]
+    pub tile: ::prost::alloc::vec::Vec<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityOperate {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, optional, tag = "2")]
+    pub hu_result: ::core::option::Option<AmuletHuleOperateResult>,
+    #[prost(message, optional, tag = "3")]
+    pub gang_result: ::core::option::Option<AmuletGangOperateResult>,
+    #[prost(message, optional, tag = "4")]
+    pub deal_result: ::core::option::Option<AmuletDealTileResult>,
+    #[prost(message, optional, tag = "5")]
+    pub upgrade_result: ::core::option::Option<AmuletUpgradeResult>,
+    #[prost(bool, tag = "6")]
+    pub upgraded: bool,
+    #[prost(bool, tag = "7")]
+    pub failed: bool,
+    #[prost(message, optional, tag = "8")]
+    pub game_update: ::core::option::Option<AmuletGameUpdateData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityChangeHands {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, repeated, tag = "2")]
+    pub hands: ::prost::alloc::vec::Vec<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityChangeHands {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(uint32, repeated, tag = "2")]
+    pub hands: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint32, tag = "3")]
+    pub remain_change_tile_count: u32,
+    #[prost(message, repeated, tag = "4")]
+    pub ting_list: ::prost::alloc::vec::Vec<AmuletActivityTingInfo>,
+    #[prost(message, repeated, tag = "5")]
+    pub effect_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityUpgrade {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityUpgrade {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, optional, tag = "2")]
+    pub game: ::core::option::Option<AmuletGameData>,
+    #[prost(message, repeated, tag = "3")]
+    pub hook_effect: ::prost::alloc::vec::Vec<AmuletActivityHookEffect>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivitySelectPack {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivitySelectPack {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, repeated, tag = "2")]
+    pub effect_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+    #[prost(message, optional, tag = "3")]
+    pub shop: ::core::option::Option<AmuletGameShopData>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityBuy {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "3")]
+    pub id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityBuy {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(uint32, tag = "2")]
+    pub coin: u32,
+    #[prost(message, optional, tag = "3")]
+    pub shop: ::core::option::Option<AmuletGameShopData>,
+    #[prost(uint32, tag = "4")]
+    pub stage: u32,
+    #[prost(message, repeated, tag = "5")]
+    pub effect_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+    #[prost(uint32, tag = "6")]
+    pub total_consumed_coin: u32,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivitySellEffect {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivitySellEffect {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(uint32, tag = "2")]
+    pub coin: u32,
+    #[prost(message, repeated, tag = "3")]
+    pub effect_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+    #[prost(message, optional, tag = "4")]
+    pub game_update: ::core::option::Option<AmuletGameUpdateData>,
+    #[prost(uint32, tag = "5")]
+    pub remain_change_tile_count: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityEffectSort {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, repeated, tag = "2")]
+    pub sorted_id: ::prost::alloc::vec::Vec<u32>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityGiveup {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityRefreshShop {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityRefreshShop {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, optional, tag = "2")]
+    pub shop: ::core::option::Option<AmuletGameShopData>,
+    #[prost(uint32, tag = "3")]
+    pub coin: u32,
+    #[prost(message, repeated, tag = "4")]
+    pub effect_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivitySelectFreeEffect {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub selected_id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivitySelectFreeEffect {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, optional, tag = "3")]
+    pub game_update: ::core::option::Option<AmuletGameUpdateData>,
+    #[prost(uint32, tag = "4")]
+    pub remain_change_tile_count: u32,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityUpgradeShopBuff {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityUpgradeShopBuff {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, optional, tag = "3")]
+    pub game_update: ::core::option::Option<AmuletGameUpdateData>,
+    #[prost(message, repeated, tag = "4")]
+    pub shop_buff_list: ::prost::alloc::vec::Vec<AmuletEffectData>,
+    #[prost(uint32, tag = "5")]
+    pub total_consumed_coin: u32,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivityEndShopping {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityEndShopping {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, optional, tag = "3")]
+    pub game_update: ::core::option::Option<AmuletGameUpdateData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqAmuletActivitySetSkillLevel {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(message, repeated, tag = "2")]
+    pub skill: ::prost::alloc::vec::Vec<AmuletSkillData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResAmuletActivityMaintainInfo {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(string, tag = "2")]
+    pub mode: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqStoryActivityUnlock {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub story_id: u32,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqStoryActivityUnlockEnding {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub story_id: u32,
+    #[prost(uint32, tag = "3")]
+    pub ending_id: u32,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqStoryActivityReceiveEndingReward {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub story_id: u32,
+    #[prost(uint32, tag = "3")]
+    pub ending_id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResStoryReward {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, repeated, tag = "2")]
+    pub reward_items: ::prost::alloc::vec::Vec<ExecuteReward>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqStoryActivityReceiveFinishReward {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub story_id: u32,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqStoryActivityReceiveAllFinishReward {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub story_id: u32,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ReqStoryActivityUnlockEndingAndReceive {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, tag = "2")]
+    pub story_id: u32,
+    #[prost(uint32, tag = "3")]
+    pub ending_id: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResStoryActivityUnlockEndingAndReceive {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, repeated, tag = "2")]
+    pub ending_reward: ::prost::alloc::vec::Vec<ExecuteReward>,
+    #[prost(message, repeated, tag = "3")]
+    pub finish_reward: ::prost::alloc::vec::Vec<ExecuteReward>,
+    #[prost(message, repeated, tag = "4")]
+    pub all_finish_reward: ::prost::alloc::vec::Vec<ExecuteReward>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReqFetchActivityRank {
+    #[prost(uint32, tag = "1")]
+    pub activity_id: u32,
+    #[prost(uint32, repeated, tag = "2")]
+    pub account_list: ::prost::alloc::vec::Vec<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResFetchActivityRank {
+    #[prost(message, optional, tag = "1")]
+    pub error: ::core::option::Option<Error>,
+    #[prost(message, repeated, tag = "4")]
+    pub items: ::prost::alloc::vec::Vec<res_fetch_activity_rank::ActivityRankItem>,
+    #[prost(message, optional, tag = "5")]
+    pub self_: ::core::option::Option<res_fetch_activity_rank::ActivityRankItem>,
+}
+/// Nested message and enum types in `ResFetchActivityRank`.
+pub mod res_fetch_activity_rank {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct ActivityRankItem {
+        #[prost(uint32, tag = "1")]
+        pub account_id: u32,
+        #[prost(uint64, tag = "2")]
+        pub score: u64,
+        #[prost(string, tag = "3")]
+        pub data: ::prost::alloc::string::String,
+        #[prost(uint32, tag = "4")]
+        pub rank: u32,
+    }
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ActionMjStart {}
