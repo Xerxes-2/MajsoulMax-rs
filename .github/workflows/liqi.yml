@@ -47,7 +47,7 @@ jobs:
 
     - name: Create Pull Request
       if: steps.compare_versions.outputs.update_needed == 'true'
-      uses: peter-evans/create-pull-request@v5
+      uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Update Liqi files to ${{ steps.autoliqi.outputs.release }}
