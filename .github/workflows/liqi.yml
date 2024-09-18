@@ -1,0 +1,64 @@
+name: Update Liqi Files
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Run every Sunday at midnight UTC
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  update-liqi:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Get latest AutoLiqi release
+      id: autoliqi
+      uses: pozetroninc/github-action-get-latest-release@master
+      with:
+        repository: Xerxes-2/AutoLiqi
+
+    - name: Read current version
+      id: current_version
+      run: echo "::set-output name=version::$(jq -r .liqiVersion liqi_config/settings.json)"
+
+    - name: Compare versions
+      id: compare_versions
+      run: |
+        if [ "${{ steps.autoliqi.outputs.release }}" != "${{ steps.current_version.outputs.version }}" ]; then
+          echo "::set-output name=update_needed::true"
+        else
+          echo "::set-output name=update_needed::false"
+        fi
+
+    - name: Download new files
+      if: steps.compare_versions.outputs.update_needed == 'true'
+      run: |
+        curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.desc"
+        curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.json"
+        curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.proto"
+        mv liqi.desc liqi.json liqi.proto liqi_config/
+
+    - name: Update version in settings files
+      if: steps.compare_versions.outputs.update_needed == 'true'
+      run: |
+        jq '.liqiVersion = "${{ steps.autoliqi.outputs.release }}"' liqi_config/settings.json > temp.json && mv temp.json liqi_config/settings.json
+        jq '.version = "${{ steps.autoliqi.outputs.release }}"' liqi_config/settings.mod.json > temp.json && mv temp.json liqi_config/settings.mod.json
+
+    - name: Create Pull Request
+      if: steps.compare_versions.outputs.update_needed == 'true'
+      uses: peter-evans/create-pull-request@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: Update Liqi files to ${{ steps.autoliqi.outputs.release }}
+        title: Update Liqi files to ${{ steps.autoliqi.outputs.release }}
+        body: |
+          This PR updates the Liqi files to the latest version (${{ steps.autoliqi.outputs.release }}) from [AutoLiqi](https://github.com/Xerxes-2/AutoLiqi).
+          
+          Changes:
+          - Updated liqi.desc
+          - Updated liqi.json
+          - Updated liqi.proto
+          - Updated version in settings.json and settings.mod.json
+        branch: update-liqi-files
+        base: master  # Changed this line from 'main' to 'master'
