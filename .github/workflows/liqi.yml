@@ -40,7 +40,8 @@ jobs:
         curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.desc"
         curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.json"
         curl -LO "https://github.com/Xerxes-2/AutoLiqi/releases/download/${{ steps.autoliqi.outputs.release }}/liqi.proto"
-        mv liqi.desc liqi.json liqi.proto liqi_config/
+        mv liqi.desc liqi.json liqi_config/
+        mv liqi.proto proto/
 
     - name: Update version in settings files
       if: steps.compare_versions.outputs.update_needed == 'true'
