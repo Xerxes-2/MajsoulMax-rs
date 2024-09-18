@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Get latest AutoLiqi release
       id: autoliqi
@@ -20,15 +20,15 @@ jobs:
 
     - name: Read current version
       id: current_version
-      run: echo "::set-output name=version::$(jq -r .liqiVersion liqi_config/settings.json)"
+      run: echo "version=$(jq -r .liqiVersion liqi_config/settings.json)" >> $GITHUB_OUTPUT
 
     - name: Compare versions
       id: compare_versions
       run: |
         if [ "${{ steps.autoliqi.outputs.release }}" != "${{ steps.current_version.outputs.version }}" ]; then
-          echo "::set-output name=update_needed::true"
+          echo "update_needed=true" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=update_needed::false"
+          echo "update_needed=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Download new files
@@ -47,7 +47,7 @@ jobs:
 
     - name: Create Pull Request
       if: steps.compare_versions.outputs.update_needed == 'true'
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Update Liqi files to ${{ steps.autoliqi.outputs.release }}
@@ -61,4 +61,4 @@ jobs:
           - Updated liqi.proto
           - Updated version in settings.json and settings.mod.json
         branch: update-liqi-files
-        base: master  # Changed this line from 'main' to 'master'
+        base: master
