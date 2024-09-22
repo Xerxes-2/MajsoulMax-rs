@@ -1,3 +1,4 @@
+use anyhow::{Context, Result};
 use bytes::Bytes;
 use hudsucker::{
     certificate_authority::RcgenAuthority,
@@ -112,7 +113,7 @@ async fn shutdown_signal() {
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
     // chrono formatted timer
     let timer = ChronoLocal::new("%H:%M:%S%.3f".to_string());
     let filter = EnvFilter::builder()
@@ -130,11 +131,16 @@ async fn main() {
     let ca_cert = include_str!("./ca/hudsucker.cer");
     let key_pair = KeyPair::from_pem(key_pair).expect("Failed to parse private key");
     let ca_cert = CertificateParams::from_ca_cert_pem(ca_cert)
-        .expect("Failed to parse CA certificate")
+        .context("Failed to parse CA certificate")?
         .self_signed(&key_pair)
-        .expect("Failed to sign CA certificate");
+        .context("Failed to sign CA certificate")?;
 
-    let ca = RcgenAuthority::new(key_pair, ca_cert, 1_000);
+    let ca = RcgenAuthority::new(
+        key_pair,
+        ca_cert,
+        1_000,
+        rustls::crypto::aws_lc_rs::default_provider(),
+    );
 
     // print red declaimer text
     println!(
@@ -143,23 +149,15 @@ async fn main() {
     \x1b[31m
     本项目完全免费开源，如果您购买了此程序，请立即退款！
     项目地址: https://github.com/Xerxes-2/MajsoulMax-rs
-    
+
     本程序仅供学习交流使用，严禁用于商业用途！
     请遵守当地法律法规，对于使用本程序所产生的任何后果，作者概不负责！
     \x1b[0m",
         env!("CARGO_PKG_VERSION")
     );
 
-    let proxy_addr = match SocketAddr::from_str(SETTINGS.proxy_addr.as_str()) {
-        Ok(addr) => addr,
-        Err(e) => {
-            error!(
-                "Failed to parse proxy address: {e}, url: {}",
-                SETTINGS.proxy_addr
-            );
-            return;
-        }
-    };
+    let proxy_addr = SocketAddr::from_str(SETTINGS.proxy_addr.as_str())
+        .context("Failed to parse proxy address")?;
 
     if SETTINGS.auto_update() {
         info!("自动更新liqi已开启");
@@ -169,9 +167,9 @@ async fn main() {
             Ok(true) => {
                 info!("liqi更新成功, 请重启程序");
                 tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-                return;
+                return Ok(());
             }
-            Ok(false) => (),
+            _ => (),
         }
     }
 
@@ -195,7 +193,7 @@ async fn main() {
                 Ok(true) => {
                     info!("mod更新成功, 请重启程序");
                     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-                    return;
+                    return Ok(());
                 }
                 Ok(false) => (),
             }
@@ -208,15 +206,16 @@ async fn main() {
     let (tx, rx) = channel::<(Bytes, char)>(100);
     let proxy = Proxy::builder()
         .with_addr(proxy_addr)
-        .with_rustls_client()
         .with_ca(ca)
+        .with_rustls_client(rustls::crypto::aws_lc_rs::default_provider())
         .with_websocket_handler(Handler {
             sender: tx.clone(),
             modder,
             inject_msg: None,
         })
         .with_graceful_shutdown(shutdown_signal())
-        .build();
+        .build()
+        .context("Failed to build proxy")?;
 
     if SETTINGS.helper_on() {
         // start helper worker
@@ -227,7 +226,5 @@ async fn main() {
         ));
     }
 
-    if let Err(e) = proxy.start().await {
-        error!("{e}");
-    }
+    proxy.start().await.context("Failed to start proxy")
 }

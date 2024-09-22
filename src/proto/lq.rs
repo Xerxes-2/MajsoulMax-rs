@@ -10199,10 +10199,10 @@ impl GamePlayerState {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            GamePlayerState::Null => "NULL",
-            GamePlayerState::Auth => "AUTH",
-            GamePlayerState::Syncing => "SYNCING",
-            GamePlayerState::Ready => "READY",
+            Self::Null => "NULL",
+            Self::Auth => "AUTH",
+            Self::Syncing => "SYNCING",
+            Self::Ready => "READY",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.

@@ -65,16 +65,16 @@ impl Settings {
         settings.methods_set = settings.send_method.iter().cloned().collect();
         settings.actions_set = settings.send_action.iter().cloned().collect();
 
-        // read desc from file
-        let bytes = std::fs::read(dir.join("liqi.desc")).expect("无法读取liqi.desc");
+        // // read desc from file
+        // let bytes = std::fs::read(dir.join("liqi.desc")).expect("无法读取liqi.desc");
 
-        settings.desc = DescriptorPool::decode(bytes.as_slice()).expect("无法解析liqi.desc");
+        // settings.desc = DescriptorPool::decode(bytes.as_slice()).expect("无法解析liqi.desc");
 
-        // read liqi.json from file
-        settings.proto_json = serde_json::from_str(
-            &std::fs::read_to_string(dir.join("liqi.json")).expect("无法读取liqi.json"),
-        )
-        .expect("无法解析liqi.json");
+        // // read liqi.json from file
+        // settings.proto_json = serde_json::from_str(
+        //     &std::fs::read_to_string(dir.join("liqi.json")).expect("无法读取liqi.json"),
+        // )
+        // .expect("无法解析liqi.json");
         settings.dir = dir;
         settings
     }
