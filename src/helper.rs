@@ -3,7 +3,7 @@ use crate::{
     settings::SETTINGS,
     ARBITRARY_MD5,
 };
-use anyhow::{anyhow, Result};
+use anyhow::{Context, Result};
 use bytes::Bytes;
 use reqwest::Client;
 use serde::Serialize;
@@ -72,31 +72,25 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
     }
     let json_data = match parsed.method_name.as_ref() {
         ".lq.ActionPrototype" => {
-            let name = parsed.data["name"]
-                .as_str()
-                .ok_or(anyhow!("name field invalid"))?;
+            let name = parsed.data["name"].as_str().context("name field invalid")?;
             if !SETTINGS.is_action(name) {
                 return Ok(());
             }
             if name == "ActionNewRound" {
                 parsed.data["data"]
                     .as_object_mut()
-                    .ok_or(anyhow!("data field invalid"))?
+                    .context("data field invalid")?
                     .insert("md5".to_string(), json!(ARBITRARY_MD5));
             }
-            parsed
-                .data
-                .get_mut("data")
-                .ok_or(anyhow!("No data field"))?
-                .take()
+            parsed.data.get_mut("data").context("No data field")?.take()
         }
         ".lq.FastTest.syncGame" => {
             let game_restore = parsed.data["game_restore"]["actions"]
                 .as_array()
-                .ok_or(anyhow!("actions field invalid"))?;
+                .context("actions field invalid")?;
             let mut actions: Vec<Action> = vec![];
             for item in game_restore.iter() {
-                let action_name = item["name"].as_str().ok_or(anyhow!("name field invalid"))?;
+                let action_name = item["name"].as_str().context("name field invalid")?;
                 let action_data = item["data"].as_str().unwrap_or_default();
                 if action_data.is_empty() {
                     let action = Action {
@@ -109,7 +103,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
                     if action_name == "ActionNewRound" {
                         value
                             .as_object_mut()
-                            .ok_or(anyhow!("data is not an object"))?
+                            .context("data is not an object")?
                             .insert("md5".to_string(), json!(ARBITRARY_MD5));
                     }
                     let action = Action {

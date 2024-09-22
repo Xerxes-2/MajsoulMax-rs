@@ -1,4 +1,4 @@
-use anyhow::{anyhow, ensure, Result};
+use anyhow::{ensure, Context, Result};
 use base64::prelude::*;
 use bytes::Bytes;
 use prost::Message;
@@ -74,18 +74,16 @@ impl Parser {
                 let message_type = self
                     .pool
                     .get_message_by_name(&to_fqn(message_name))
-                    .ok_or(anyhow!("Invalid message type: {message_name}"))?;
+                    .context(format!("Invalid message type: {message_name}"))?;
                 let dyn_msg = DynamicMessage::decode(message_type, data.as_ref())?;
                 data_obj = dyn_to_json(&dyn_msg)?;
                 if let Some(b64) = data_obj.get("data") {
-                    let action_name = data_obj["name"]
-                        .as_str()
-                        .ok_or(anyhow!("name field invalid"))?;
+                    let action_name = data_obj["name"].as_str().context("name field invalid")?;
                     let b64 = b64.as_str().unwrap_or_default();
                     let action_obj = decode_action(action_name, b64, self.pool)?;
                     data_obj
                         .as_object_mut()
-                        .ok_or(anyhow!("data is not an object"))?
+                        .context("data is not an object")?
                         .insert("data".to_string(), action_obj);
                 }
                 msg_id = self.total;
@@ -104,11 +102,11 @@ impl Parser {
                     &self.proto_json["nested"][lq]["nested"][service]["methods"][rpc];
                 let req_type_name = &proto_domain["requestType"]
                     .as_str()
-                    .ok_or(anyhow!("Invalid request type"))?;
+                    .context("Invalid request type")?;
                 let req_type = self
                     .pool
                     .get_message_by_name(&to_fqn(req_type_name))
-                    .ok_or(anyhow!("Invalid request type: {req_type_name}"))?;
+                    .context(format!("Invalid request type: {req_type_name}"))?;
                 let dyn_msg = DynamicMessage::decode(req_type, data.as_ref())?;
                 if method_name.contains("oauth2Login") {
                     println!("{}", dyn_to_json(&dyn_msg)?);
@@ -116,11 +114,11 @@ impl Parser {
                 data_obj = dyn_to_json(&dyn_msg)?;
                 let res_type_name = proto_domain["responseType"]
                     .as_str()
-                    .ok_or(anyhow!("Invalid response type"))?;
+                    .context("Invalid response type")?;
                 let resp_type = self
                     .pool
                     .get_message_by_name(&to_fqn(res_type_name))
-                    .ok_or(anyhow!("Invalid response type: {res_type_name}"))?;
+                    .context(format!("Invalid response type: {res_type_name}"))?;
                 self.respond_type
                     .insert(msg_id, (method_name.clone(), resp_type));
             }
@@ -134,7 +132,7 @@ impl Parser {
                 (method_name, resp_type) = self
                     .respond_type
                     .remove(&msg_id)
-                    .ok_or(anyhow!("No corresponding request"))?;
+                    .context("No corresponding request")?;
                 let dyn_msg = DynamicMessage::decode(resp_type, data.as_ref())?;
                 data_obj = dyn_to_json(&dyn_msg)?;
             }
@@ -158,7 +156,7 @@ pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<Js
     wtf_decode(&mut decoded);
     let action_type = pool
         .get_message_by_name(&to_fqn(name))
-        .ok_or(anyhow!("Invalid action type: {name}"))?;
+        .context(format!("Invalid action type: {name}"))?;
     let action_msg = DynamicMessage::decode(action_type, Bytes::from(decoded))?;
     dyn_to_json(&action_msg)
 }

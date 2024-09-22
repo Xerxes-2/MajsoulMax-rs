@@ -3,7 +3,7 @@ use crate::{
     proto::{base::BaseMessage, lq, lq_config::ConfigTables, sheets},
     settings::{ModSettings, SETTINGS},
 };
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, bail, Context, Result};
 use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
@@ -152,12 +152,16 @@ impl Modder {
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         assert!(!from_client);
         if !msg_block.method_name.is_empty() {
-            return Err(anyhow!("Non-empty respond method name"));
+            bail!("Non-empty respond method name");
         }
-        if !PARSER.read().await.respond_type.contains_key(&msg_id) {
-            return Err(anyhow!("No request message with id: {msg_id}"));
-        }
-        let method_name = PARSER.read().await.respond_type[&msg_id].0.clone();
+        let method_name = PARSER
+            .read()
+            .await
+            .respond_type
+            .get(&msg_id)
+            .context(format!("No request message with id: {msg_id}"))?
+            .0
+            .clone();
         let mut modified_data: Option<Vec<u8>> = None;
         match method_name.as_ref() {
             ".lq.Lobby.fetchAccountInfo" => {
@@ -518,10 +522,10 @@ impl Modder {
         // Request message must be from client
         assert!(from_client);
         if msg_id >= 1 << 16 {
-            return Err(anyhow!("Invalid request message id: {msg_id}",));
+            bail!("Invalid request message id: {msg_id}");
         }
         if PARSER.read().await.respond_type.contains_key(&msg_id) {
-            return Err(anyhow!("Duplicate request message id: {msg_id}",));
+            bail!("Duplicate request message id: {msg_id}");
         }
         let mut fake = false;
         let method_name = &msg_block.method_name;
