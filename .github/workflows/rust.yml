@@ -86,8 +86,6 @@ jobs:
           export PATH=$ANDROID_NDK_HOME:$PATH
           rustup target add aarch64-linux-android
           cargo install cargo-ndk
-          sudo apt-get update
-          sudo apt-get upgrade -y
           sudo apt-get install -y gcc-multilib
 
       - name: Build
