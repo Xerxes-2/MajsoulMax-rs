@@ -50,7 +50,7 @@ jobs:
           DESC=steps.autoliqi.outputs.description
           LQBIN_VERSION=$(echo $DESC | grep "lqc.lqbin" | awk '{print $2}')
           jq '.liqiVersion = "${{ steps.autoliqi.outputs.release }}"' liqi_config/settings.json > temp.json && mv temp.json liqi_config/settings.json
-          jq '.version = \"$LQBIN_VERSION\"' liqi_config/settings.mod.json > temp.json && mv temp.json liqi_config/settings.mod.json
+          jq --arg LQBIN_VERSION "$LQBIN_VERSION" '.version = $LQBIN_VERSION' liqi_config/settings.mod.json > temp.json && mv temp.json liqi_config/settings.mod.json
 
       - name: Create Pull Request
         if: steps.compare_versions.outputs.update_needed == 'true'
