@@ -3060,6 +3060,7 @@ service Lobby {
     rpc storyActivityReceiveAllFinishReward (ReqStoryActivityReceiveAllFinishReward) returns (ResStoryReward);
     rpc storyActivityUnlockEndingAndReceive (ReqStoryActivityUnlockEndingAndReceive) returns (ResStoryActivityUnlockEndingAndReceive);
     rpc fetchActivityRank (ReqFetchActivityRank) returns (ResFetchActivityRank);
+    rpc setVerifiedHidden (ReqSetVerifiedHidden) returns (ResCommon);
 }
 
 message ResConnectionInfo {
@@ -3849,6 +3850,18 @@ message ReqUserComplain {
 
     uint32 target_id = 1;
     uint32 type = 2;
+    string content = 3;
+    string game_uuid = 4;
+    GameRoundInfo round_info = 5;
+
+    message GameRoundInfo {
+
+        uint32 chang = 1;
+        uint32 ju = 2;
+        uint32 ben = 3;
+        uint32 seat = 4;
+        uint32 xun = 5;
+    }
 }
 
 message ReqReadAnnouncement {
@@ -4905,6 +4918,8 @@ message ResMisc {
     Error error = 1;
     repeated uint32 recharged_list = 2;
     repeated MiscFaithData faiths = 3;
+    uint32 verified_hidden = 4;
+    uint32 verified_value = 5;
 
     message MiscFaithData {
 
@@ -6738,6 +6753,11 @@ message ResFetchActivityRank {
         string data = 3;
         uint32 rank = 4;
     }
+}
+
+message ReqSetVerifiedHidden {
+
+    uint32 verified_hidden = 1;
 }
 
 message ActionMJStart {

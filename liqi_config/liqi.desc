@@ -1,5 +1,5 @@
 
-¦ª
+Þ­
 
 
 liqi.protolq"|
@@ -2494,10 +2494,20 @@ title_list (R	titleList"#
 matches (2(.lq.ResCurrentMatchInfo.CurrentMatchInfoRmatchesP
 CurrentMatchInfo
 mode_id (RmodeId#
-playing_count (RplayingCount"B
+playing_count (RplayingCount"ª
 ReqUserComplain
 	target_id (RtargetId
-type (Rtype"k
+type (Rtype
+content (	Rcontent
+	game_uuid (	RgameUuid@
+
+round_info (2!.lq.ReqUserComplain.GameRoundInfoR	roundInfom
+GameRoundInfo
+chang (Rchang
+ju (Rju
+ben (Rben
+seat (Rseat
+xun (Rxun"k
 ReqReadAnnouncement'
 announcement_id (RannouncementId+
 announcement_list (RannouncementList"S
@@ -3211,11 +3221,13 @@ resourceId%
 setting (2.lq.AccountSettingRsetting"Y
 ResModNicknameTime
 error (2	.lq.ErrorRerror"
-last_mod_time (RlastModTime"Æ
+last_mod_time (RlastModTime"–
 ResMisc
 error (2	.lq.ErrorRerror%
 recharged_list (RrechargedList1
-faiths (2.lq.ResMisc.MiscFaithDataRfaiths@
+faiths (2.lq.ResMisc.MiscFaithDataRfaiths'
+verified_hidden (RverifiedHidden%
+verified_value (RverifiedValue@
 MiscFaithData
 faith_id (RfaithId
 count (Rcount"2
@@ -4407,7 +4419,9 @@ activityId!
 account_id (R	accountId
 score (Rscore
 data (	Rdata
-rank (Rrank"
+rank (Rrank"?
+ReqSetVerifiedHidden'
+verified_hidden (RverifiedHidden"
 ActionMJStart"U
 NewRoundOpenedTiles
 seat (Rseat
@@ -5200,7 +5214,7 @@ account_id (R	accountId
 NULL 
 AUTH
 SYNCING	
-READY2Ÿ½
+READY2Ý½
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -5558,7 +5572,8 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
  storyActivityReceiveFinishReward'.lq.ReqStoryActivityReceiveFinishReward.lq.ResStoryRewarde
 #storyActivityReceiveAllFinishReward*.lq.ReqStoryActivityReceiveAllFinishReward.lq.ResStoryReward}
 #storyActivityUnlockEndingAndReceive*.lq.ReqStoryActivityUnlockEndingAndReceive*.lq.ResStoryActivityUnlockEndingAndReceiveG
-fetchActivityRank.lq.ReqFetchActivityRank.lq.ResFetchActivityRank2õ
+fetchActivityRank.lq.ReqFetchActivityRank.lq.ResFetchActivityRank<
+setVerifiedHidden.lq.ReqSetVerifiedHidden.lq.ResCommon2õ
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,
