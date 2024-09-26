@@ -47,10 +47,8 @@ jobs:
       - name: Update version in settings files
         if: steps.compare_versions.outputs.update_needed == 'true'
         run: |
-          DESC=steps.autoliqi.outputs.description
-          echo $DESC
+          DESC=${{steps.autoliqi.outputs.description}}
           LQBIN_VERSION=$(echo $DESC | grep "lqc.lqbin" | awk '{print $2}')
-          echo $LQBIN_VERSION
           jq '.liqiVersion = "${{ steps.autoliqi.outputs.release }}"' liqi_config/settings.json > temp.json && mv temp.json liqi_config/settings.json
           jq --arg LQBIN_VERSION "$LQBIN_VERSION" '.version = $LQBIN_VERSION' liqi_config/settings.mod.json > temp.json && mv temp.json liqi_config/settings.mod.json
 
