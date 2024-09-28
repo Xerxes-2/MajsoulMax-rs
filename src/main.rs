@@ -82,27 +82,25 @@ impl WebSocketHandler for Handler {
 
         debug!("{direction_char} {uri}");
 
+        let Message::Binary(buf) = msg else {
+            return Some(msg);
+        };
+
+        let buf: Bytes = buf.into();
+
         if SETTINGS.helper_on() {
-            if let Message::Binary(ref buf) = msg {
-                if let Err(e) = self
-                    .sender
-                    .send((Bytes::copy_from_slice(buf), direction_char))
-                    .await
-                {
-                    error!("Failed to send message to channel: {e}");
-                }
+            if let Err(e) = self.sender.send((buf.clone(), direction_char)).await {
+                error!("Failed to send message to channel: {e}");
             }
         }
         if let Some(ref modder) = self.modder {
-            if let Message::Binary(buf) = msg {
-                let res = modder.modify(buf, direction_char == '\u{2191}').await;
-                if let Some(inj) = res.inject_msg {
-                    self.inject_msg = Some(Message::Binary(inj.into()));
-                }
-                return res.msg.map(|msg| Message::Binary(msg.into()));
+            let res = modder.modify(buf, direction_char == '\u{2191}').await;
+            if let Some(inj) = res.inject_msg {
+                self.inject_msg = Some(Message::Binary(inj.into()));
             }
+            return res.msg.map(|msg| Message::Binary(msg.into()));
         }
-        Some(msg)
+        Some(Message::Binary(buf.into()))
     }
 }
 

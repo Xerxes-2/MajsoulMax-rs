@@ -123,8 +123,7 @@ impl Modder {
         modder
     }
 
-    pub async fn modify(&self, buf: Vec<u8>, from_client: bool) -> ModifyResult {
-        let buf = Bytes::from(buf);
+    pub async fn modify(&self, buf: Bytes, from_client: bool) -> ModifyResult {
         let msg_type = buf[0];
         let res = match msg_type {
             0x01 => self.modify_notify(buf.clone()).await,
