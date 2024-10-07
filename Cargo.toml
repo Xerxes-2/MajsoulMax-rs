@@ -26,7 +26,7 @@ serde = { version = "1.0.210", features = ["derive"] }
 tokio = { version = "1.40.0", features = ["rt-multi-thread"] }
 tracing-subscriber = { version = "0.3.18", features = ["env-filter", "chrono"] }
 tracing = "0.1.40"
-clap = { version = "4.5.18", features = ["derive"] }
+clap = { version = "4.5.19", features = ["derive"] }
 prost = "0.13.3"
 hudsucker = "0.23.0"
 const_format = "0.2.33"
