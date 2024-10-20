@@ -1,5 +1,5 @@
 
-ﬁ≠
+›—
 
 
 liqi.protolq"|
@@ -1552,7 +1552,35 @@ account_id (R	accountId
 avatar_frame	 (RavatarFrame
 verified
  (Rverified"
-views (2.lq.ViewSlotRviews"û
+views (2.lq.ViewSlotRviews"’
+RecordListEntry
+version (Rversion
+uuid (	Ruuid
+
+start_time (R	startTime
+end_time (RendTime
+tag (Rtag
+subtag (Rsubtag0
+players (2.lq.RecordPlayerResultRplayers"ù
+RecordPlayerResult
+rank (Rrank
+
+account_id (R	accountId
+nickname (	Rnickname&
+level (2.lq.AccountLevelRlevel(
+level3 (2.lq.AccountLevelRlevel3
+pt (Rpt
+point (Rpoint
+max_hu_type	 (R	maxHuType
+action_liqi
+ (R
+actionLiqi
+action_rong (R
+actionRong
+action_zimo (R
+actionZimo!
+action_chong (RactionChong
+verified (Rverified"û
 CustomizedContestGameStart=
 players (2#.lq.CustomizedContestGameStart.ItemRplayersA
 Item
@@ -2045,7 +2073,70 @@ point_coin (R	pointCoin
 level_coin (R	levelCoin*
 shop (2.lq.AmuletGameShopDataRshop=
 hook_effect (2.lq.AmuletActivityHookEffectR
-hookEffect"r
+hookEffect"L
+QuestionnaireReward
+resource_id (R
+resourceId
+count (Rcount" 
+QuestionnaireDetail
+id (Rid
+
+version_id (R	versionId0
+effective_time_start (ReffectiveTimeStart,
+effective_time_end (ReffectiveTimeEnd1
+rewards (2.lq.QuestionnaireRewardRrewards!
+banner_title (	RbannerTitle
+title (	Rtitle-
+announcement_title (	RannouncementTitle1
+announcement_content	 (	RannouncementContent
+
+final_text
+ (	R	finalText7
+	questions (2.lq.QuestionnaireQuestionR	questions"Ç
+QuestionnaireQuestion
+id (Rid
+title (	Rtitle
+describe (	Rdescribe
+type (	Rtype
+sub_type (	RsubTypeB
+options (2(.lq.QuestionnaireQuestion.QuestionOptionRoptions,
+option_random_sort (RoptionRandomSort
+require (Rrequire
+
+max_choice	 (R	maxChoiceO
+next_question
+ (2*.lq.QuestionnaireQuestion.NextQuestionDataRnextQuestion
+
+matrix_row (	R	matrixRow]
+QuestionOption
+label (	Rlabel
+value (	Rvalue
+allow_input (R
+allowInput˝
+NextQuestionData,
+target_question_id (RtargetQuestionIdc
+
+conditions
+ (2C.lq.QuestionnaireQuestion.NextQuestionData.QuestionconditionWrapperR
+conditions\
+QuestionCondition
+question_id (R
+questionId
+op (	Rop
+values (	Rvaluesx
+QuestionconditionWrapper\
+
+conditions (2<.lq.QuestionnaireQuestion.NextQuestionData.QuestionConditionR
+conditions"è
+QuestionnaireBrief
+id (Rid
+
+version_id (R	versionId0
+effective_time_start (ReffectiveTimeStart,
+effective_time_end (ReffectiveTimeEnd1
+rewards (2.lq.QuestionnaireRewardRrewards!
+banner_title (	RbannerTitle
+title (	Rtitle"r
 ResConnectionInfo
 error (2	.lq.ErrorRerror<
 client_endpoint (2.lq.NetworkEndpointRclientEndpoint"`
@@ -2298,7 +2389,32 @@ unlockList"5
 total_count (R
 totalCount/
 record_list (2.lq.RecordGameR
-recordList"©
+recordList"Ã
+ReqGameRecordListV2
+tag (Rtag
+
+begin_time (R	beginTime
+end_time (RendTime
+ranks (Rranks
+modes (Rmodes
+max_hu_type (R	maxHuType
+
+level_mode (R	levelMode"œ
+ResGameRecordListV2
+error (2	.lq.ErrorRerror
+iterator (	Riterator'
+iterator_expire (RiteratorExpire*
+actual_begin_time (RactualBeginTime&
+actual_end_time (RactualEndTime"I
+ReqNextGameRecordList
+iterator (	Riterator
+count (Rcount"»
+ResNextGameRecordList
+error (2	.lq.ErrorRerror
+next (Rnext-
+entries (2.lq.RecordListEntryRentries'
+iterator_expire (RiteratorExpire"
+next_end_time (RnextEndTime"©
 ResCollectedGameRecordList
 error (2	.lq.ErrorRerror8
 record_list (2.lq.RecordCollectedDataR
@@ -2309,7 +2425,12 @@ recordList0
 ResGameRecordsDetail
 error (2	.lq.ErrorRerror/
 record_list (2.lq.RecordGameR
-recordList"É
+recordList"5
+ReqGameRecordsDetailV2
+	uuid_list (	RuuidList"h
+ResGameRecordsDetailV2
+error (2	.lq.ErrorRerror-
+entries (2.lq.RecordListEntryRentries"É
 ReqAddCollectedGameRecord
 uuid (	Ruuid
 remarks (	Rremarks
@@ -4419,9 +4540,192 @@ activityId!
 account_id (R	accountId
 score (Rscore
 data (	Rdata
-rank (Rrank"?
+rank (Rrank"/
+ReqFetchQuestionnaireList
+lang (	Rlang"ç
+ResFetchQuestionnaireList
+error (2	.lq.ErrorRerror*
+list (2.lq.QuestionnaireBriefRlist#
+finished_list (RfinishedList"A
+ReqFetchQuestionnaireDetail
+id (Rid
+lang (	Rlang"o
+ResFetchQuestionnaireDetail
+error (2	.lq.ErrorRerror/
+detail (2.lq.QuestionnaireDetailRdetail"?
 ReqSetVerifiedHidden'
-verified_hidden (RverifiedHidden"
+verified_hidden (RverifiedHidden"å
+ReqSubmitQuestionnaire)
+questionnaire_id (RquestionnaireId8
+questionnaire_version_id (RquestionnaireVersionIdH
+answers (2..lq.ReqSubmitQuestionnaire.QuestionnaireAnswerRanswers
+	open_time (RopenTime
+finish_time (R
+finishTime
+client (	RclientÏ
+QuestionnaireAnswer
+question_id (R
+questionId_
+values (2G.lq.ReqSubmitQuestionnaire.QuestionnaireAnswer.QuestionnaireAnswerValueRvaluesS
+QuestionnaireAnswerValue
+value (	Rvalue!
+custom_input (	RcustomInput"ù
+ReqAuthGame
+
+account_id (R	accountId
+token (	Rtoken
+	game_uuid (	RgameUuid
+session (	Rsession
+gift (	Rgift
+vs (Rvs"Ú
+ResAuthGame
+error (2	.lq.ErrorRerror,
+players (2.lq.PlayerGameViewRplayers
+	seat_list (RseatList"
+is_game_start (RisGameStart/
+game_config (2.lq.GameConfigR
+gameConfig"
+ready_id_list (RreadyIdList"Ö
+GameRestore,
+snapshot (2.lq.GameSnapshotRsnapshot-
+actions (2.lq.ActionPrototypeRactions.
+passed_waiting_time (RpassedWaitingTime
+
+game_state (R	gameState
+
+start_time (R	startTime+
+last_pause_time_ms (RlastPauseTimeMs"é
+ResEnterGame
+error (2	.lq.ErrorRerror
+is_end (RisEnd
+step (Rstep2
+game_restore (2.lq.GameRestoreRgameRestore"<
+ReqSyncGame
+round_id (	RroundId
+step (Rstep"ç
+ResSyncGame
+error (2	.lq.ErrorRerror
+is_end (RisEnd
+step (Rstep2
+game_restore (2.lq.GameRestoreRgameRestore"©
+ReqSelfOperation
+type (Rtype
+index (Rindex
+tile (	Rtile)
+cancel_operation (RcancelOperation
+moqie (Rmoqie
+timeuse (Rtimeuse
+
+tile_state (R	tileState!
+change_tiles (	RchangeTiles
+tile_states	 (R
+tileStates
+gap_type
+ (RgapType"
+ReqChiPengGang
+type (Rtype
+index (Rindex)
+cancel_operation (RcancelOperation
+timeuse (Rtimeuse"O
+ReqBroadcastInGame
+content (	Rcontent
+except_self (R
+exceptSelf"3
+ReqGMCommandInGaming
+	json_data (	RjsonData"i
+ResGamePlayerState
+error (2	.lq.ErrorRerror2
+
+state_list (2.lq.GamePlayerStateR	stateList""
+ReqVoteGameEnd
+yes (Ryes"t
+ResGameEndVote
+success (Rsuccess'
+vote_cd_end_time (RvoteCdEndTime
+error (2	.lq.ErrorRerror"&
+ReqAuthObserve
+token (	Rtoken"d
+ResStartObserve$
+head (2.lq.GameLiveHeadRhead+
+passed (2.lq.GameLiveSegmentRpassed"M
+NotifyNewGame
+	game_uuid (	RgameUuid
+player_list (	R
+playerList"?
+NotifyPlayerLoadGameReady"
+ready_id_list (RreadyIdList"C
+NotifyGameBroadcast
+seat (Rseat
+content (	Rcontent"@
+NotifyGameEndResult)
+result (2.lq.GameEndResultRresult"-
+NotifyGameTerminate
+reason (	Rreason"\
+NotifyPlayerConnectionState
+seat (Rseat)
+state (2.lq.GamePlayerStateRstate"Ä
+NotifyAccountLevelChange(
+origin (2.lq.AccountLevelRorigin&
+final (2.lq.AccountLevelRfinal
+type (Rtype"≥
+NotifyGameFinishReward
+mode_id (RmodeIdI
+level_change (2&.lq.NotifyGameFinishReward.LevelChangeRlevelChangeF
+match_chest (2%.lq.NotifyGameFinishReward.MatchChestR
+matchChestO
+main_character (2(.lq.NotifyGameFinishReward.MainCharacterRmainCharacterO
+character_gift (2(.lq.NotifyGameFinishReward.CharacterGiftRcharacterGifts
+LevelChange(
+origin (2.lq.AccountLevelRorigin&
+final (2.lq.AccountLevelRfinal
+type (Rtypeú
+
+MatchChest
+chest_id (RchestId
+origin (Rorigin
+final (Rfinal
+	is_graded (RisGraded(
+rewards (2.lq.RewardSlotRrewardsI
+MainCharacter
+level (Rlevel
+exp (Rexp
+add (Raddl
+CharacterGift
+origin (Rorigin
+final (Rfinal
+add (Radd
+	is_graded (RisGraded"≈
+NotifyActivityRewardP
+activity_reward (2'.lq.NotifyActivityReward.ActivityRewardRactivityReward[
+ActivityReward
+activity_id (R
+activityId(
+rewards (2.lq.RewardSlotRrewards"≠
+NotifyActivityPointN
+activity_points (2%.lq.NotifyActivityPoint.ActivityPointRactivityPointsF
+ActivityPoint
+activity_id (R
+activityId
+point (Rpoint"≈
+NotifyLeaderboardPointZ
+leaderboard_points (2+.lq.NotifyLeaderboardPoint.LeaderboardPointRleaderboardPointsO
+LeaderboardPoint%
+leaderboard_id (RleaderboardId
+point (Rpoint")
+NotifyGamePause
+paused (Rpaused"“
+NotifyEndGameVote:
+results (2 .lq.NotifyEndGameVote.VoteResultRresults
+
+start_time (R	startTime#
+duration_time (RdurationTime=
+
+VoteResult
+
+account_id (R	accountId
+yes (Ryes"9
+NotifyObserveData$
+unit (2.lq.GameLiveUnitRunit"
 ActionMJStart"U
 NewRoundOpenedTiles
 seat (Rseat
@@ -5053,168 +5357,12 @@ old_scores (R	oldScores!
 muyu (2.lq.MuyuInfoRmuyu1
 hules_history	 (2.lq.HuleInfoRhulesHistory"#
 PlayerLeaving
-seat (Rseat"ù
-ReqAuthGame
-
-account_id (R	accountId
-token (	Rtoken
-	game_uuid (	RgameUuid
-session (	Rsession
-gift (	Rgift
-vs (Rvs"Ú
-ResAuthGame
-error (2	.lq.ErrorRerror,
-players (2.lq.PlayerGameViewRplayers
-	seat_list (RseatList"
-is_game_start (RisGameStart/
-game_config (2.lq.GameConfigR
-gameConfig"
-ready_id_list (RreadyIdList"Ö
-GameRestore,
-snapshot (2.lq.GameSnapshotRsnapshot-
-actions (2.lq.ActionPrototypeRactions.
-passed_waiting_time (RpassedWaitingTime
-
-game_state (R	gameState
-
-start_time (R	startTime+
-last_pause_time_ms (RlastPauseTimeMs"é
-ResEnterGame
-error (2	.lq.ErrorRerror
-is_end (RisEnd
-step (Rstep2
-game_restore (2.lq.GameRestoreRgameRestore"<
-ReqSyncGame
-round_id (	RroundId
-step (Rstep"ç
-ResSyncGame
-error (2	.lq.ErrorRerror
-is_end (RisEnd
-step (Rstep2
-game_restore (2.lq.GameRestoreRgameRestore"©
-ReqSelfOperation
-type (Rtype
-index (Rindex
-tile (	Rtile)
-cancel_operation (RcancelOperation
-moqie (Rmoqie
-timeuse (Rtimeuse
-
-tile_state (R	tileState!
-change_tiles (	RchangeTiles
-tile_states	 (R
-tileStates
-gap_type
- (RgapType"
-ReqChiPengGang
-type (Rtype
-index (Rindex)
-cancel_operation (RcancelOperation
-timeuse (Rtimeuse"O
-ReqBroadcastInGame
-content (	Rcontent
-except_self (R
-exceptSelf"3
-ReqGMCommandInGaming
-	json_data (	RjsonData"i
-ResGamePlayerState
-error (2	.lq.ErrorRerror2
-
-state_list (2.lq.GamePlayerStateR	stateList""
-ReqVoteGameEnd
-yes (Ryes"t
-ResGameEndVote
-success (Rsuccess'
-vote_cd_end_time (RvoteCdEndTime
-error (2	.lq.ErrorRerror"&
-ReqAuthObserve
-token (	Rtoken"d
-ResStartObserve$
-head (2.lq.GameLiveHeadRhead+
-passed (2.lq.GameLiveSegmentRpassed"M
-NotifyNewGame
-	game_uuid (	RgameUuid
-player_list (	R
-playerList"?
-NotifyPlayerLoadGameReady"
-ready_id_list (RreadyIdList"C
-NotifyGameBroadcast
-seat (Rseat
-content (	Rcontent"@
-NotifyGameEndResult)
-result (2.lq.GameEndResultRresult"-
-NotifyGameTerminate
-reason (	Rreason"\
-NotifyPlayerConnectionState
-seat (Rseat)
-state (2.lq.GamePlayerStateRstate"Ä
-NotifyAccountLevelChange(
-origin (2.lq.AccountLevelRorigin&
-final (2.lq.AccountLevelRfinal
-type (Rtype"≥
-NotifyGameFinishReward
-mode_id (RmodeIdI
-level_change (2&.lq.NotifyGameFinishReward.LevelChangeRlevelChangeF
-match_chest (2%.lq.NotifyGameFinishReward.MatchChestR
-matchChestO
-main_character (2(.lq.NotifyGameFinishReward.MainCharacterRmainCharacterO
-character_gift (2(.lq.NotifyGameFinishReward.CharacterGiftRcharacterGifts
-LevelChange(
-origin (2.lq.AccountLevelRorigin&
-final (2.lq.AccountLevelRfinal
-type (Rtypeú
-
-MatchChest
-chest_id (RchestId
-origin (Rorigin
-final (Rfinal
-	is_graded (RisGraded(
-rewards (2.lq.RewardSlotRrewardsI
-MainCharacter
-level (Rlevel
-exp (Rexp
-add (Raddl
-CharacterGift
-origin (Rorigin
-final (Rfinal
-add (Radd
-	is_graded (RisGraded"≈
-NotifyActivityRewardP
-activity_reward (2'.lq.NotifyActivityReward.ActivityRewardRactivityReward[
-ActivityReward
-activity_id (R
-activityId(
-rewards (2.lq.RewardSlotRrewards"≠
-NotifyActivityPointN
-activity_points (2%.lq.NotifyActivityPoint.ActivityPointRactivityPointsF
-ActivityPoint
-activity_id (R
-activityId
-point (Rpoint"≈
-NotifyLeaderboardPointZ
-leaderboard_points (2+.lq.NotifyLeaderboardPoint.LeaderboardPointRleaderboardPointsO
-LeaderboardPoint%
-leaderboard_id (RleaderboardId
-point (Rpoint")
-NotifyGamePause
-paused (Rpaused"“
-NotifyEndGameVote:
-results (2 .lq.NotifyEndGameVote.VoteResultRresults
-
-start_time (R	startTime#
-duration_time (RdurationTime=
-
-VoteResult
-
-account_id (R	accountId
-yes (Ryes"9
-NotifyObserveData$
-unit (2.lq.GameLiveUnitRunit*=
+seat (Rseat*=
 GamePlayerState
 NULL 
 AUTH
 SYNCING	
-READY2›Ω
+READY2≈¡
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -5272,9 +5420,12 @@ modifyRoom.lq.ReqModifyRoom.lq.ResCommon1
 shopPurchase.lq.ReqShopPurchase.lq.ResShopPurchase7
 fetchGameRecord.lq.ReqGameRecord.lq.ResGameRecord2
 readGameRecord.lq.ReqGameRecord.lq.ResCommonC
-fetchGameRecordList.lq.ReqGameRecordList.lq.ResGameRecordListM
+fetchGameRecordList.lq.ReqGameRecordList.lq.ResGameRecordListI
+fetchGameRecordListV2.lq.ReqGameRecordListV2.lq.ResGameRecordListV2O
+fetchNextGameRecordList.lq.ReqNextGameRecordList.lq.ResNextGameRecordListM
 fetchCollectedGameRecordList.lq.ReqCommon.lq.ResCollectedGameRecordListL
-fetchGameRecordsDetail.lq.ReqGameRecordsDetail.lq.ResGameRecordsDetailV
+fetchGameRecordsDetail.lq.ReqGameRecordsDetail.lq.ResGameRecordsDetailR
+fetchGameRecordsDetailV2.lq.ReqGameRecordsDetailV2.lq.ResGameRecordsDetailV2V
 addCollectedGameRecord.lq.ReqAddCollectedGameRecord.lq.ResAddCollectedGameRecord_
 removeCollectedGameRecord .lq.ReqRemoveCollectedGameRecord .lq.ResRemoveCollectedGameRecordt
  changeCollectedGameRecordRemarks'.lq.ReqChangeCollectedGameRecordRemarks'.lq.ResChangeCollectedGameRecordRemarksI
@@ -5573,7 +5724,10 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 #storyActivityReceiveAllFinishReward*.lq.ReqStoryActivityReceiveAllFinishReward.lq.ResStoryReward}
 #storyActivityUnlockEndingAndReceive*.lq.ReqStoryActivityUnlockEndingAndReceive*.lq.ResStoryActivityUnlockEndingAndReceiveG
 fetchActivityRank.lq.ReqFetchActivityRank.lq.ResFetchActivityRank<
-setVerifiedHidden.lq.ReqSetVerifiedHidden.lq.ResCommon2ı
+setVerifiedHidden.lq.ReqSetVerifiedHidden.lq.ResCommonV
+fetchQuestionnaireList.lq.ReqFetchQuestionnaireList.lq.ResFetchQuestionnaireList\
+fetchQuestionnaireDetail.lq.ReqFetchQuestionnaireDetail.lq.ResFetchQuestionnaireDetail@
+submitQuestionnaire.lq.ReqSubmitQuestionnaire.lq.ResCommon2ı
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,
@@ -5591,4 +5745,4 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 voteGameEnd.lq.ReqVoteGameEnd.lq.ResGameEndVote0
 authObserve.lq.ReqAuthObserve.lq.ResCommon2
 startObserve.lq.ReqCommon.lq.ResStartObserve+
-stopObserve.lq.ReqCommon.lq.ResCommonbproto3
+stopObserve.lq.ReqCommon.lq.ResCommonBZ.;majprotocolbproto3
