@@ -1,5 +1,5 @@
 
-ÝÑ
+´Ô
 
 
 liqi.protolq"|
@@ -147,9 +147,9 @@ progresses
 matchCount
 	ticket_id (RticketId'
 rewarded_season (RrewardedSeason"
-NotifyNewComment"@
-NotifyRollingNotice)
-notice (2.lq.RollingNoticeRnotice"
+NotifyNewComment"
+NotifyRollingNotice"
+NotifyMaintainNotice"
 NotifyGiftSendRefresh"=
 NotifyShopUpdate)
 	shop_info (2.lq.ShopInfoRshopInfo"
@@ -1328,15 +1328,19 @@ comment_id (R	commentId
 	timestamp (R	timestamp0
 	commenter (2.lq.PlayerBaseViewR	commenter
 content (	Rcontent
-	is_banned (RisBanned"°
-RollingNotice
-id (Rid
+	is_banned (RisBanned"Î
+RollingNotice
 content (	Rcontent
 
 start_time (R	startTime
 end_time (RendTime'
-repeat_interval (RrepeatInterval
-lang (	Rlang"¢
+repeat_interval (RrepeatInterval
+repeat_time (R
+repeatTime
+repeat_type (R
+repeatType"5
+MaintainNotice#
+maintain_time (RmaintainTime"¢
 BillingGoods
 id (	Rid
 name (	Rname
@@ -2712,9 +2716,15 @@ lastReadId"]
 delete_list (R
 deleteList"/
 ReqUpdateReadComment
-read_id (RreadId"=
-ReqRollingNotice)
-notice (2.lq.RollingNoticeRnotice"Q
+read_id (RreadId"c
+ResFetchRollingNotice
+error (2	.lq.ErrorRerror)
+notice (2.lq.RollingNoticeRnotice"e
+ResFetchMaintainNotice
+error (2	.lq.ErrorRerror*
+notice (2.lq.MaintainNoticeRnotice"+
+ReqFetchRollingNotice
+lang (	Rlang"Q
 ResServerTime
 server_time (R
 serverTime
@@ -4094,7 +4104,7 @@ activityId
 	order_pos (RorderPos"p
 ResFinishCombiningOrder
 error (2	.lq.ErrorRerror4
-reward_items (2.lq.ExecuteRewardRrewardItems"­
+reward_items (2.lq.ExecuteRewardRrewardItems"µ
 ResFetchInfo
 error (2	.lq.ErrorRerror2
 server_time (2.lq.ResServerTimeR
@@ -4124,12 +4134,12 @@ vip_reward (2.lq.ResVipRewardR	vipRewardB
 account_settings (2.lq.ResAccountSettingsRaccountSettingsB
 mod_nickname_time (2.lq.ResModNicknameTimeRmodNicknameTime
 misc (2.lq.ResMiscRmisc7
-announcement (2.lq.ResAnnouncementRannouncement;
-rolling_notice (2.lq.ReqRollingNoticeRrollingNotice8
+announcement (2.lq.ResAnnouncementRannouncement8
 activity_list (2.lq.ResActivityListRactivityList;
 character_info (2.lq.ResCharacterInfoRcharacterInfo?
 all_common_views (2.lq.ResAllcommonViewsRallCommonViews[
-collected_game_record_list (2.lq.ResCollectedGameRecordListRcollectedGameRecordList"]
+collected_game_record_list (2.lq.ResCollectedGameRecordListRcollectedGameRecordListC
+maintain_notice (2.lq.ResFetchMaintainNoticeRmaintainNotice"]
 ReqUpgradeVillageBuilding
 building_id (R
 buildingId
@@ -5362,7 +5372,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2ÅÁ
+READY2˜Â
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -5486,8 +5496,9 @@ buyShiLian.lq.ReqBuyShiLian.lq.ResCommon,
 fetchCommentContent.lq.ReqFetchCommentContent.lq.ResFetchCommentContent2
 leaveComment.lq.ReqLeaveComment.lq.ResCommon4
 deleteComment.lq.ReqDeleteComment.lq.ResCommon<
-updateReadComment.lq.ReqUpdateReadComment.lq.ResCommon9
-fetchRollingNotice.lq.ReqCommon.lq.ReqRollingNotice3
+updateReadComment.lq.ReqUpdateReadComment.lq.ResCommonJ
+fetchRollingNotice.lq.ReqFetchRollingNotice.lq.ResFetchRollingNotice@
+fetchMaintainNotice.lq.ReqCommon.lq.ResFetchMaintainNotice3
 fetchServerTime.lq.ReqCommon.lq.ResServerTimeW
 fetchPlatformProducts.lq.ReqPlatformBillingProducts.lq.ResPlatformBillingProductsD
 cancelGooglePlayOrder.lq.ReqCancelGooglePlayOrder.lq.ResCommon/
