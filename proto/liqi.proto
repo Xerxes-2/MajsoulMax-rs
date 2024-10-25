@@ -211,8 +211,9 @@ message NotifyNewComment {
 }
 
 message NotifyRollingNotice {
+}
 
-    repeated RollingNotice notice = 1;
+message NotifyMaintainNotice {
 }
 
 message NotifyGiftSendRefresh {
@@ -1793,12 +1794,17 @@ message CommentItem {
 
 message RollingNotice {
 
-    uint32 id = 1;
     string content = 2;
     uint32 start_time = 3;
     uint32 end_time = 4;
     uint32 repeat_interval = 5;
-    string lang = 6;
+    repeated uint32 repeat_time = 7;
+    uint32 repeat_type = 8;
+}
+
+message MaintainNotice {
+
+    uint32 maintain_time = 1;
 }
 
 message BillingGoods {
@@ -2931,7 +2937,8 @@ service Lobby {
     rpc leaveComment (ReqLeaveComment) returns (ResCommon);
     rpc deleteComment (ReqDeleteComment) returns (ResCommon);
     rpc updateReadComment (ReqUpdateReadComment) returns (ResCommon);
-    rpc fetchRollingNotice (ReqCommon) returns (ReqRollingNotice);
+    rpc fetchRollingNotice (ReqFetchRollingNotice) returns (ResFetchRollingNotice);
+    rpc fetchMaintainNotice (ReqCommon) returns (ResFetchMaintainNotice);
     rpc fetchServerTime (ReqCommon) returns (ResServerTime);
     rpc fetchPlatformProducts (ReqPlatformBillingProducts) returns (ResPlatformBillingProducts);
     rpc cancelGooglePlayOrder (ReqCancelGooglePlayOrder) returns (ResCommon);
@@ -4168,9 +4175,21 @@ message ReqUpdateReadComment {
     uint32 read_id = 1;
 }
 
-message ReqRollingNotice {
+message ResFetchRollingNotice {
 
-    repeated RollingNotice notice = 1;
+    Error error = 2;
+    RollingNotice notice = 3;
+}
+
+message ResFetchMaintainNotice {
+
+    Error error = 1;
+    MaintainNotice notice = 2;
+}
+
+message ReqFetchRollingNotice {
+
+    string lang = 1;
 }
 
 message ResServerTime {
@@ -6302,11 +6321,11 @@ message ResFetchInfo {
     ResModNicknameTime mod_nickname_time = 22;
     ResMisc misc = 23;
     ResAnnouncement announcement = 24;
-    ReqRollingNotice rolling_notice = 25;
     ResActivityList activity_list = 26;
     ResCharacterInfo character_info = 27;
     ResAllcommonViews all_common_views = 28;
     ResCollectedGameRecordList collected_game_record_list = 29;
+    ResFetchMaintainNotice maintain_notice = 30;
 }
 
 message ReqUpgradeVillageBuilding {
