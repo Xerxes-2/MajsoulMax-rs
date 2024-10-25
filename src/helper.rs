@@ -54,13 +54,13 @@ pub async fn helper_worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Pa
         if direction_char == '\u{2191}' {
             continue;
         }
-        if let Err(e) = process_message(parsed, &mut parser) {
+        if let Err(e) = process_message(parsed) {
             error!("Failed to process message: {e}");
         }
     }
 }
 
-fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
+fn process_message(mut parsed: LiqiMessage) -> Result<()> {
     static CLIENT: LazyLock<Client> = LazyLock::new(|| {
         reqwest::ClientBuilder::new()
             .danger_accept_invalid_certs(true)
@@ -99,7 +99,7 @@ fn process_message(mut parsed: LiqiMessage, parser: &mut Parser) -> Result<()> {
                     };
                     actions.push(action);
                 } else {
-                    let mut value = decode_action(action_name, action_data, parser.pool)?;
+                    let mut value = decode_action(action_name, action_data, &SETTINGS.desc)?;
                     if action_name == "ActionNewRound" {
                         value
                             .as_object_mut()
