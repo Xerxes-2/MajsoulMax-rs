@@ -20,6 +20,7 @@ jobs:
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           repository: Xerxes-2/AutoLiqi
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Read current version
         id: current_version
