@@ -13,7 +13,7 @@ name = "majsoul_max_rs"
 
 [dependencies]
 aws-lc-rs = { version = "1", features = ["bindgen"] }
-anyhow = "1.0.92"
+anyhow = "1.0.93"
 base64 = "0.22.1"
 bytes = "1.7.2"
 prost-reflect = { version = "0.14.2", features = ["serde"] }
