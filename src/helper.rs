@@ -1,10 +1,9 @@
 use crate::{
-    parser::{decode_action, LiqiMessage, Parser},
+    parser::{decode_action, LiqiMessage},
     settings::SETTINGS,
     ARBITRARY_MD5,
 };
 use anyhow::{Context, Result};
-use bytes::Bytes;
 use reqwest::Client;
 use serde::Serialize;
 use serde_json::{json, Map, Value as JsonValue};
@@ -18,32 +17,13 @@ struct Action {
     pub data: JsonValue,
 }
 
-pub async fn helper_worker(mut receiver: Receiver<(Bytes, char)>, mut parser: Parser) {
+pub async fn helper_worker(mut receiver: Receiver<(LiqiMessage, char)>) {
     loop {
-        let (buf, direction_char) = match receiver.recv().await {
+        let (parsed, direction_char) = match receiver.recv().await {
             Some((b, c)) => (b, c),
             None => {
                 error!("Failed to receive message from channel, retrying...");
                 sleep(std::time::Duration::from_secs(1)).await;
-                continue;
-            }
-        };
-        let hex = buf
-            .iter()
-            .map(|b| {
-                if *b >= 0x20 && *b <= 0x7e {
-                    format!("{}", *b as char)
-                } else {
-                    format!("{:02x} ", b)
-                }
-            })
-            .collect::<String>();
-        debug!("{direction_char} {hex}");
-        let parsed = parser.parse(buf.clone());
-        let parsed = match parsed {
-            Ok(parsed) => parsed,
-            Err(e) => {
-                error!("Failed to parse message: {e}");
                 continue;
             }
         };
