@@ -164,7 +164,7 @@ async fn main() -> Result<()> {
     );
 
     let settings = Box::new(Settings::new());
-    let settings = Box::leak(settings);
+    let settings: &'static Settings = Box::leak(settings);
 
     let proxy_addr = SocketAddr::from_str(settings.proxy_addr.as_str())
         .context("Failed to parse proxy address")?;
@@ -217,7 +217,7 @@ async fn main() -> Result<()> {
         let (tx, rx) = channel(32);
         // start helper worker
         info!("Helper worker started");
-        tokio::spawn(helper_worker(rx));
+        tokio::spawn(helper_worker(rx, &settings));
         Some(tx)
     } else {
         None

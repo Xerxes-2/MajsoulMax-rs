@@ -1,6 +1,6 @@
 use crate::{
     parser::{decode_action, LiqiMessage},
-    settings::SETTINGS,
+    settings::Settings,
     ARBITRARY_MD5,
 };
 use anyhow::{Context, Result};
@@ -21,7 +21,7 @@ struct Action {
     pub data: JsonValue,
 }
 
-pub async fn helper_worker(mut receiver: Receiver<(LiqiMessage, char)>) {
+pub async fn helper_worker(mut receiver: Receiver<(LiqiMessage, char)>, settings: &Settings) {
     loop {
         let (parsed, direction_char) = match receiver.recv().await {
             Some((b, c)) => (b, c),
@@ -38,26 +38,26 @@ pub async fn helper_worker(mut receiver: Receiver<(LiqiMessage, char)>) {
         if direction_char == '\u{2191}' {
             continue;
         }
-        if let Err(e) = process_message(parsed) {
+        if let Err(e) = process_message(parsed, settings) {
             error!("Failed to process message: {e}");
         }
     }
 }
 
-fn process_message(mut parsed: LiqiMessage) -> Result<()> {
+fn process_message(mut parsed: LiqiMessage, settings: &Settings) -> Result<()> {
     static CLIENT: LazyLock<Client> = LazyLock::new(|| {
         reqwest::ClientBuilder::new()
             .danger_accept_invalid_certs(true)
             .build()
             .expect("Failed to create reqwest client")
     });
-    if !SETTINGS.is_method(&parsed.method_name) {
+    if !settings.is_method(&parsed.method_name) {
         return Ok(());
     }
     let json_data: Cow<JsonValue> = match parsed.method_name.as_ref() {
         ".lq.ActionPrototype" => {
             let name = parsed.data["name"].as_str().context("name field invalid")?;
-            if !SETTINGS.is_action(name) {
+            if !settings.is_action(name) {
                 return Ok(());
             }
             if name == "ActionNewRound" {
@@ -88,7 +88,7 @@ fn process_message(mut parsed: LiqiMessage) -> Result<()> {
                     };
                     actions.push(action);
                 } else {
-                    let mut value = decode_action(action_name, action_data, &SETTINGS.desc)?;
+                    let mut value = decode_action(action_name, action_data, &settings.desc)?;
                     if action_name == "ActionNewRound" {
                         value
                             .as_object_mut()
@@ -113,13 +113,13 @@ fn process_message(mut parsed: LiqiMessage) -> Result<()> {
     };
 
     // post data to API, no verification
-    let res = CLIENT.post(&SETTINGS.api_url).json(&json_data).send();
+    let res = CLIENT.post(&settings.api_url).json(&json_data).send();
 
     spawn(handle_response(res));
     info!("发送至助手……");
 
     if let Some(liqi_data) = json_data.get("liqi") {
-        let res = CLIENT.post(&SETTINGS.api_url).json(liqi_data).send();
+        let res = CLIENT.post(&settings.api_url).json(liqi_data).send();
         spawn(handle_response(res));
         info!("发送立直至助手……");
     }
