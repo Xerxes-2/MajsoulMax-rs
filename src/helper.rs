@@ -7,7 +7,11 @@ use anyhow::{Context, Result};
 use reqwest::Client;
 use serde::Serialize;
 use serde_json::{json, Map, Value as JsonValue};
-use std::{future::Future, sync::LazyLock};
+use std::{
+    borrow::Cow,
+    future::Future,
+    sync::{Arc, LazyLock},
+};
 use tokio::{spawn, sync::mpsc::Receiver, time::sleep};
 use tracing::{debug, error, info};
 
@@ -50,19 +54,24 @@ fn process_message(mut parsed: LiqiMessage) -> Result<()> {
     if !SETTINGS.is_method(&parsed.method_name) {
         return Ok(());
     }
-    let json_data = match parsed.method_name.as_ref() {
+    let json_data: Cow<JsonValue> = match parsed.method_name.as_ref() {
         ".lq.ActionPrototype" => {
             let name = parsed.data["name"].as_str().context("name field invalid")?;
             if !SETTINGS.is_action(name) {
                 return Ok(());
             }
             if name == "ActionNewRound" {
-                parsed.data["data"]
+                Arc::<serde_json::Value>::make_mut(&mut parsed.data)["data"]
                     .as_object_mut()
                     .context("data field invalid")?
                     .insert("md5".to_string(), json!(ARBITRARY_MD5));
             }
-            parsed.data.get_mut("data").context("No data field")?.take()
+            Cow::Owned(
+                Arc::<serde_json::Value>::make_mut(&mut parsed.data)
+                    .get_mut("data")
+                    .context("No data field")?
+                    .take(),
+            )
         }
         ".lq.FastTest.syncGame" => {
             let game_restore = parsed.data["game_restore"]["actions"]
@@ -98,9 +107,9 @@ fn process_message(mut parsed: LiqiMessage) -> Result<()> {
                 "sync_game_actions".to_string(),
                 serde_json::to_value(actions)?,
             );
-            JsonValue::Object(map)
+            Cow::Owned(JsonValue::Object(map))
         }
-        _ => parsed.data,
+        _ => Cow::Borrowed(&parsed.data),
     };
 
     // post data to API, no verification
