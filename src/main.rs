@@ -93,14 +93,14 @@ impl WebSocketHandler for Handler {
                 error!("Failed to send message to channel: {e}");
             }
         }
-        if let Some(ref modder) = self.modder {
-            let res = modder.modify(buf, direction_char == '\u{2191}').await;
-            if let Some(inj) = res.inject_msg {
-                self.inject_msg = Some(Message::Binary(inj.into()));
-            }
-            return res.msg.map(|msg| Message::Binary(msg.into()));
+        let Some(ref modder) = self.modder else {
+            return Some(Message::Binary(buf.into()));
+        };
+        let res = modder.modify(buf, direction_char == '\u{2191}').await;
+        if let Some(inj) = res.inject_msg {
+            self.inject_msg = Some(Message::Binary(inj.into()));
         }
-        Some(Message::Binary(buf.into()))
+        res.msg.map(|msg| Message::Binary(msg.into()))
     }
 }
 
