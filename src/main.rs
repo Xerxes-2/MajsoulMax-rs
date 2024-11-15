@@ -142,7 +142,7 @@ async fn main() -> Result<()> {
 
     let key_pair = include_str!("./ca/hudsucker.key");
     let ca_cert = include_str!("./ca/hudsucker.cer");
-    let key_pair = KeyPair::from_pem(key_pair).expect("Failed to parse private key");
+    let key_pair = KeyPair::from_pem(key_pair).context("Failed to parse key pair")?;
     let ca_cert = CertificateParams::from_ca_cert_pem(ca_cert)
         .context("Failed to parse CA certificate")?
         .self_signed(&key_pair)
@@ -215,7 +215,7 @@ async fn main() -> Result<()> {
                 Ok(false) => (),
             }
         }
-        Some(Arc::new(Modder::new(mod_settings).await))
+        Some(Arc::new(Modder::new(mod_settings).await?))
     } else {
         None
     };

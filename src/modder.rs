@@ -2,7 +2,7 @@ use crate::{
     proto::{base::BaseMessage, lq, lq_config::ConfigTables, sheets},
     settings::ModSettings,
 };
-use anyhow::{anyhow, bail, Result};
+use anyhow::{anyhow, bail, Context, Result};
 use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
@@ -70,9 +70,9 @@ pub struct ModifyResult {
 }
 
 impl Modder {
-    pub async fn new(mod_settings: RwLock<ModSettings>) -> Self {
+    pub async fn new(mod_settings: RwLock<ModSettings>) -> Result<Self> {
         let config_tables = ConfigTables::decode(mod_settings.read().await.resource.as_ref())
-            .expect("Failed to decode config tables");
+            .context("Failed to decode config tables")?;
         let mut modder = Modder::default();
         modder.mod_settings = mod_settings;
         for data in config_tables.datas {
@@ -101,15 +101,15 @@ impl Modder {
                 }
                 "CharacterEmoji" => {
                     // one character can have multiple emojis
-                    data.data.iter().for_each(|d| {
+                    for d in data.data {
                         let emoji = sheets::CharacterEmoji::decode(d.as_ref())
-                            .expect("Failed to decode CharacterEmoji");
+                            .context("Failed to decode CharacterEmoji")?;
                         modder
                             .emojis
                             .entry(emoji.charid)
                             .or_insert_with(Vec::new)
                             .push(emoji.sub_id);
-                    });
+                    }
                 }
                 "SpotRewards" => {
                     modder.endings = to_vec(data.data.as_ref());
@@ -117,7 +117,7 @@ impl Modder {
                 _ => {}
             }
         }
-        modder
+        Ok(modder)
     }
 
     pub async fn modify(
