@@ -73,8 +73,10 @@ impl Modder {
     pub async fn new(mod_settings: RwLock<ModSettings>) -> Result<Self> {
         let config_tables = ConfigTables::decode(mod_settings.read().await.resource.as_ref())
             .context("Failed to decode config tables")?;
-        let mut modder = Modder::default();
-        modder.mod_settings = mod_settings;
+        let mut modder = Modder {
+            mod_settings,
+            ..Default::default()
+        };
         for data in config_tables.datas {
             // get '_' splitted words in data.table and data.sheet, turn into CamelCase then join by ""
             let class_name = data
@@ -107,7 +109,7 @@ impl Modder {
                         modder
                             .emojis
                             .entry(emoji.charid)
-                            .or_insert_with(Vec::new)
+                            .or_default()
                             .push(emoji.sub_id);
                     }
                 }
@@ -158,7 +160,7 @@ impl Modder {
             bail!("Non-empty respond method name");
         }
         let mut modified_data: Option<Vec<u8>> = None;
-        match method_name.as_ref() {
+        match method_name {
             ".lq.Lobby.fetchAccountInfo" => {
                 let mut msg = lq::ResAccountInfo::decode(msg_block.data.as_ref())?;
                 if let Some(ref mut acc) = msg.account {

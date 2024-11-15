@@ -272,9 +272,11 @@ impl ModSettings {
         let settings = match settings {
             Ok(settings) => settings,
             Err(_) => {
-                let mut default = ModSettings::default();
-                default.dir = general_settings.dir.clone();
-                default.resource = Bytes::from(res);
+                let default = ModSettings {
+                    dir: general_settings.dir.clone(),
+                    resource: Bytes::from(res),
+                    ..Default::default()
+                };
                 default.write();
                 return Ok(default);
             }
