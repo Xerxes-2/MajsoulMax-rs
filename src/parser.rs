@@ -12,19 +12,30 @@ const SERIALIZE_OPTIONS: SerializeOptions = SerializeOptions::new()
     .skip_default_fields(false)
     .use_proto_field_name(true);
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MessageType {
     Notify = 1,
     Request = 2,
     Response = 3,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LiqiMessage {
     pub id: usize,
     pub msg_type: MessageType,
     pub method_name: Arc<str>,
-    pub data: JsonValue,
+    pub data: Arc<JsonValue>,
+}
+
+impl LiqiMessage {
+    pub fn new(id: usize, msg_type: MessageType, method_name: Arc<str>, data: JsonValue) -> Self {
+        Self {
+            id,
+            msg_type,
+            method_name,
+            data: Arc::new(data),
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -138,12 +149,7 @@ impl Parser {
             }
         }
         self.total += 1;
-        Ok(LiqiMessage {
-            id: msg_id,
-            msg_type,
-            method_name,
-            data: data_obj,
-        })
+        Ok(LiqiMessage::new(msg_id, msg_type, method_name, data_obj))
     }
 }
 

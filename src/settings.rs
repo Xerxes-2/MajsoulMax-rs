@@ -10,7 +10,8 @@ use std::{
     path::PathBuf,
     sync::LazyLock,
 };
-use tracing::info;
+use tokio::spawn;
+use tracing::{error, info};
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -35,8 +36,7 @@ pub struct Settings {
     dir: PathBuf,
 }
 
-pub static SETTINGS: LazyLock<Settings> = LazyLock::new(Settings::new);
-static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
+const APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 static REQUEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
     reqwest::Client::builder()
         .user_agent(APP_USER_AGENT)
@@ -45,38 +45,38 @@ static REQUEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
 });
 
 impl Settings {
-    pub fn new() -> Self {
+    pub fn new() -> Result<Self> {
         let arg = Arg::parse();
         let arg_dir = std::path::Path::new(&arg.config_dir);
-        let exe = std::env::current_exe().expect("无法获取当前可执行文件路径");
+        let exe = std::env::current_exe().context("无法获取当前可执行文件路径")?;
         let dir = if arg_dir.is_dir() {
             arg_dir.to_path_buf()
         } else {
             // current executable path
             exe.parent()
-                .expect("无法获取当前可执行文件路径的父目录")
+                .context("无法获取当前可执行文件路径的父目录")?
                 .join("liqi_config")
         };
         let settings =
-            std::fs::read_to_string(dir.join("settings.json")).expect("无法读取settings.json");
+            std::fs::read_to_string(dir.join("settings.json")).context("无法读取settings.json")?;
         let mut settings: Settings =
-            serde_json::from_str(&settings).expect("无法解析settings.json");
+            serde_json::from_str(&settings).context("无法解析settings.json")?;
         info!("已载入配置");
         settings.methods_set = settings.send_method.iter().cloned().collect();
         settings.actions_set = settings.send_action.iter().cloned().collect();
 
         // read desc from file
-        let bytes = std::fs::read(dir.join("liqi.desc")).expect("无法读取liqi.desc");
+        let bytes = std::fs::read(dir.join("liqi.desc")).context("无法读取liqi.desc")?;
 
-        settings.desc = DescriptorPool::decode(bytes.as_slice()).expect("无法解析liqi.desc");
+        settings.desc = DescriptorPool::decode(bytes.as_slice()).context("无法解析liqi.desc")?;
 
         // read liqi.json from file
         settings.proto_json = serde_json::from_str(
-            &std::fs::read_to_string(dir.join("liqi.json")).expect("无法读取liqi.json"),
+            &std::fs::read_to_string(dir.join("liqi.json")).context("无法读取liqi.json")?,
         )
-        .expect("无法解析liqi.json");
+        .context("无法解析liqi.json")?;
         settings.dir = dir;
-        settings
+        Ok(settings)
     }
 
     pub fn is_method(&self, method: &str) -> bool {
@@ -233,6 +233,8 @@ pub struct ModSettings {
     pub verified: u32,
     #[serde(skip)]
     pub resource: Bytes,
+    #[serde(skip)]
+    dir: PathBuf,
 }
 
 impl Default for ModSettings {
@@ -254,30 +256,35 @@ impl Default for ModSettings {
             verified: 0,
             version: String::new(),
             resource: Bytes::new(),
+            dir: PathBuf::new(),
         }
     }
 }
 
 impl ModSettings {
-    pub fn new() -> Self {
+    pub fn new(general_settings: &Settings) -> Result<Self> {
         // read settings.mod.json, if not exist, create a new one
-        let dir = SETTINGS.dir.join("settings.mod.json");
+        let dir = general_settings.dir.join("settings.mod.json");
+        // read res from lqc.lqbin
+        let res =
+            std::fs::read(general_settings.dir.join("lqc.lqbin")).context("无法读取lqc.lqbin")?;
         let settings = std::fs::read_to_string(dir);
         let settings = match settings {
             Ok(settings) => settings,
             Err(_) => {
-                let default = ModSettings::default();
-                default.write().expect("无法写入settings.mod.json");
-                return default;
+                let mut default = ModSettings::default();
+                default.dir = general_settings.dir.clone();
+                default.resource = Bytes::from(res);
+                default.write();
+                return Ok(default);
             }
         };
         let mut settings: ModSettings =
-            serde_json::from_str(&settings).expect("无法解析settings.mod.json");
+            serde_json::from_str(&settings).context("无法解析settings.mod.json")?;
         info!("已载入Mod配置");
-        // read res from lqc.lqbin
-        let res = std::fs::read(SETTINGS.dir.join("lqc.lqbin")).expect("无法读取lqc.lqbin");
         settings.resource = Bytes::from(res);
-        settings
+        settings.dir = general_settings.dir.clone();
+        Ok(settings)
     }
 
     pub fn hint_on(&self) -> bool {
@@ -324,19 +331,26 @@ impl ModSettings {
             .context("Failed to get lqc.lqbin")?;
 
         let bytes = resp.bytes().await?;
-        let file_dir = SETTINGS.dir.join("lqc.lqbin");
+        let file_dir = self.dir.join("lqc.lqbin");
         std::fs::write(file_dir, bytes)?;
         info!("lqc.lqbin更新完成");
         self.version = prefix;
         // write settings.mod.json
-        let dir = SETTINGS.dir.join("settings.mod.json");
+        let dir = self.dir.join("settings.mod.json");
         std::fs::write(dir, serde_json::to_string_pretty(self)?)?;
         Ok(true)
     }
 
-    pub fn write(&self) -> Result<()> {
-        let dir = SETTINGS.dir.join("settings.mod.json");
-        std::fs::write(dir, serde_json::to_string_pretty(self)?)?;
-        Ok(())
+    pub fn write(&self) {
+        let dir = self.dir.join("settings.mod.json");
+        let Ok(contend) = serde_json::to_string_pretty(self) else {
+            error!("Failed to serialize settings.mod.json");
+            return;
+        };
+        spawn(async move {
+            tokio::fs::write(dir, contend)
+                .await
+                .inspect_err(|e| error!("Failed to write settings.mod.json: {e}"))
+        });
     }
 }

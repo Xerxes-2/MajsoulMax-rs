@@ -9,22 +9,26 @@ use hudsucker::{
 };
 use metadata::LevelFilter;
 use std::{net::SocketAddr, str::FromStr, sync::Arc};
-use tokio::sync::mpsc::{channel, Sender};
+use tokio::sync::{
+    mpsc::{channel, Sender},
+    RwLock,
+};
 use tracing::*;
 use tracing_subscriber::{fmt::time::ChronoLocal, EnvFilter};
 
 use majsoul_max_rs::{
     helper::helper_worker,
-    modder::{Modder, MOD_SETTINGS},
-    parser::Parser,
-    settings::SETTINGS,
+    modder::Modder,
+    parser::{LiqiMessage, Parser},
+    settings::{ModSettings, Settings},
 };
 
 #[derive(Clone)]
 struct Handler {
-    sender: Sender<(Bytes, char)>,
+    sender: Option<Sender<(LiqiMessage, char)>>,
     modder: Option<Arc<Modder>>,
     inject_msg: Option<Message>,
+    parser: Arc<RwLock<Parser>>,
 }
 
 impl WebSocketHandler for Handler {
@@ -87,16 +91,27 @@ impl WebSocketHandler for Handler {
         };
 
         let buf: Bytes = buf.into();
+        let mut parser = self.parser.write().await;
+        let Ok(parsed) = parser.parse(buf.clone()) else {
+            error!("Failed to parse message");
+            return Some(Message::Binary(buf.into()));
+        };
+        drop(parser);
 
-        if SETTINGS.helper_on() {
-            if let Err(e) = self.sender.send((buf.clone(), direction_char)).await {
+        let method_name = parsed.method_name.clone();
+        if let Some(tx) = &self.sender {
+            if let Err(e) = tx.send((parsed, direction_char)).await {
                 error!("Failed to send message to channel: {e}");
             }
         }
         let Some(ref modder) = self.modder else {
             return Some(Message::Binary(buf.into()));
         };
-        let res = modder.modify(buf, direction_char == '\u{2191}').await;
+        let parser = self.parser.read().await;
+        let res = modder
+            .modify(buf, direction_char == '\u{2191}', method_name)
+            .await;
+        drop(parser);
         if let Some(inj) = res.inject_msg {
             self.inject_msg = Some(Message::Binary(inj.into()));
         }
@@ -127,7 +142,7 @@ async fn main() -> Result<()> {
 
     let key_pair = include_str!("./ca/hudsucker.key");
     let ca_cert = include_str!("./ca/hudsucker.cer");
-    let key_pair = KeyPair::from_pem(key_pair).expect("Failed to parse private key");
+    let key_pair = KeyPair::from_pem(key_pair).context("Failed to parse key pair")?;
     let ca_cert = CertificateParams::from_ca_cert_pem(ca_cert)
         .context("Failed to parse CA certificate")?
         .self_signed(&key_pair)
@@ -154,12 +169,16 @@ async fn main() -> Result<()> {
         env!("CARGO_PKG_VERSION")
     );
 
-    let proxy_addr = SocketAddr::from_str(SETTINGS.proxy_addr.as_str())
+    let settings = Box::new(Settings::new()?);
+    let settings: &'static Settings = Box::leak(settings);
+    let mod_settings = RwLock::new(ModSettings::new(&settings)?);
+
+    let proxy_addr = SocketAddr::from_str(settings.proxy_addr.as_str())
         .context("Failed to parse proxy address")?;
 
-    if SETTINGS.auto_update() {
+    if settings.auto_update() {
         info!("自动更新liqi已开启");
-        let mut new_settings = SETTINGS.clone();
+        let mut new_settings = settings.clone();
         match new_settings.update().await {
             Err(e) => warn!("更新liqi失败: {e}"),
             Ok(true) => {
@@ -174,18 +193,18 @@ async fn main() -> Result<()> {
     // show mod and helper switch status, green for on, red for off
     println!(
         "\n\x1b[{}mmod: {}\x1b[0m\n\x1b[{}mhelper: {}\x1b[0m\n",
-        if SETTINGS.mod_on() { 32 } else { 31 },
-        if SETTINGS.mod_on() { "on" } else { "off" },
-        if SETTINGS.helper_on() { 32 } else { 31 },
-        if SETTINGS.helper_on() { "on" } else { "off" }
+        if settings.mod_on() { 32 } else { 31 },
+        if settings.mod_on() { "on" } else { "off" },
+        if settings.helper_on() { 32 } else { 31 },
+        if settings.helper_on() { "on" } else { "off" }
     );
 
-    let modder = if SETTINGS.mod_on() {
+    let modder = if settings.mod_on() {
         // start mod worker
         info!("Mod worker started");
-        if MOD_SETTINGS.read().await.auto_update() {
+        if mod_settings.read().await.auto_update() {
             info!("自动更新mod已开启");
-            let mut new_mod_settings = MOD_SETTINGS.read().await.clone();
+            let mut new_mod_settings = mod_settings.read().await.clone();
             match new_mod_settings.get_lqc().await {
                 Err(e) => warn!("更新mod失败: {e}"),
                 Ok(true) => {
@@ -196,33 +215,36 @@ async fn main() -> Result<()> {
                 Ok(false) => (),
             }
         }
-        Some(Arc::new(Modder::new().await))
+        Some(Arc::new(Modder::new(mod_settings).await?))
     } else {
         None
     };
 
-    let (tx, rx) = channel::<(Bytes, char)>(100);
+    let tx = if settings.helper_on() {
+        let (tx, rx) = channel(32);
+        // start helper worker
+        info!("Helper worker started");
+        tokio::spawn(helper_worker(rx, &settings));
+        Some(tx)
+    } else {
+        None
+    };
     let proxy = Proxy::builder()
         .with_addr(proxy_addr)
         .with_ca(ca)
         .with_rustls_client(rustls::crypto::aws_lc_rs::default_provider())
         .with_websocket_handler(Handler {
-            sender: tx.clone(),
+            sender: tx,
             modder,
             inject_msg: None,
+            parser: Arc::new(RwLock::new(Parser::new(
+                &settings.proto_json,
+                &settings.desc,
+            ))),
         })
         .with_graceful_shutdown(shutdown_signal())
         .build()
         .context("Failed to build proxy")?;
-
-    if SETTINGS.helper_on() {
-        // start helper worker
-        info!("Helper worker started");
-        tokio::spawn(helper_worker(
-            rx,
-            Parser::new(&SETTINGS.proto_json, &SETTINGS.desc),
-        ));
-    }
 
     proxy.start().await.context("Failed to start proxy")
 }
