@@ -170,7 +170,7 @@ async fn main() -> Result<()> {
 
     let settings = Box::new(Settings::new());
     let settings: &'static Settings = Box::leak(settings);
-    let mod_settings = RwLock::new(ModSettings::new());
+    let mod_settings = RwLock::new(ModSettings::new(&settings));
 
     let proxy_addr = SocketAddr::from_str(settings.proxy_addr.as_str())
         .context("Failed to parse proxy address")?;

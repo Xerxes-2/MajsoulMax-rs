@@ -36,8 +36,7 @@ pub struct Settings {
     dir: PathBuf,
 }
 
-pub static SETTINGS: LazyLock<Settings> = LazyLock::new(Settings::new);
-static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
+const APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 static REQUEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
     reqwest::Client::builder()
         .user_agent(APP_USER_AGENT)
@@ -234,6 +233,8 @@ pub struct ModSettings {
     pub verified: u32,
     #[serde(skip)]
     pub resource: Bytes,
+    #[serde(skip)]
+    dir: PathBuf,
 }
 
 impl Default for ModSettings {
@@ -255,14 +256,15 @@ impl Default for ModSettings {
             verified: 0,
             version: String::new(),
             resource: Bytes::new(),
+            dir: PathBuf::new(),
         }
     }
 }
 
 impl ModSettings {
-    pub fn new() -> Self {
+    pub fn new(general_settings: &Settings) -> Self {
         // read settings.mod.json, if not exist, create a new one
-        let dir = SETTINGS.dir.join("settings.mod.json");
+        let dir = general_settings.dir.join("settings.mod.json");
         let settings = std::fs::read_to_string(dir);
         let settings = match settings {
             Ok(settings) => settings,
@@ -276,8 +278,9 @@ impl ModSettings {
             serde_json::from_str(&settings).expect("无法解析settings.mod.json");
         info!("已载入Mod配置");
         // read res from lqc.lqbin
-        let res = std::fs::read(SETTINGS.dir.join("lqc.lqbin")).expect("无法读取lqc.lqbin");
+        let res = std::fs::read(general_settings.dir.join("lqc.lqbin")).expect("无法读取lqc.lqbin");
         settings.resource = Bytes::from(res);
+        settings.dir = general_settings.dir.clone();
         settings
     }
 
@@ -325,18 +328,18 @@ impl ModSettings {
             .context("Failed to get lqc.lqbin")?;
 
         let bytes = resp.bytes().await?;
-        let file_dir = SETTINGS.dir.join("lqc.lqbin");
+        let file_dir = self.dir.join("lqc.lqbin");
         std::fs::write(file_dir, bytes)?;
         info!("lqc.lqbin更新完成");
         self.version = prefix;
         // write settings.mod.json
-        let dir = SETTINGS.dir.join("settings.mod.json");
+        let dir = self.dir.join("settings.mod.json");
         std::fs::write(dir, serde_json::to_string_pretty(self)?)?;
         Ok(true)
     }
 
     pub fn write(&self) {
-        let dir = SETTINGS.dir.join("settings.mod.json");
+        let dir = self.dir.join("settings.mod.json");
         let Ok(contend) = serde_json::to_string_pretty(self) else {
             error!("Failed to serialize settings.mod.json");
             return;
