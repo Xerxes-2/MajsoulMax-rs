@@ -18,9 +18,9 @@ use tracing_subscriber::{fmt::time::ChronoLocal, EnvFilter};
 
 use majsoul_max_rs::{
     helper::helper_worker,
-    modder::{Modder, MOD_SETTINGS},
+    modder::Modder,
     parser::{LiqiMessage, Parser},
-    settings::Settings,
+    settings::{ModSettings, Settings},
 };
 
 #[derive(Clone)]
@@ -170,6 +170,7 @@ async fn main() -> Result<()> {
 
     let settings = Box::new(Settings::new());
     let settings: &'static Settings = Box::leak(settings);
+    let mod_settings = RwLock::new(ModSettings::new());
 
     let proxy_addr = SocketAddr::from_str(settings.proxy_addr.as_str())
         .context("Failed to parse proxy address")?;
@@ -200,9 +201,9 @@ async fn main() -> Result<()> {
     let modder = if settings.mod_on() {
         // start mod worker
         info!("Mod worker started");
-        if MOD_SETTINGS.read().await.auto_update() {
+        if mod_settings.read().await.auto_update() {
             info!("自动更新mod已开启");
-            let mut new_mod_settings = MOD_SETTINGS.read().await.clone();
+            let mut new_mod_settings = mod_settings.read().await.clone();
             match new_mod_settings.get_lqc().await {
                 Err(e) => warn!("更新mod失败: {e}"),
                 Ok(true) => {
@@ -213,7 +214,7 @@ async fn main() -> Result<()> {
                 Ok(false) => (),
             }
         }
-        Some(Arc::new(Modder::new().await))
+        Some(Arc::new(Modder::new(mod_settings).await))
     } else {
         None
     };

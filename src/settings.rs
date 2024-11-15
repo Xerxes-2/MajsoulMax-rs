@@ -10,7 +10,8 @@ use std::{
     path::PathBuf,
     sync::LazyLock,
 };
-use tracing::info;
+use tokio::spawn;
+use tracing::{error, info};
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -267,7 +268,7 @@ impl ModSettings {
             Ok(settings) => settings,
             Err(_) => {
                 let default = ModSettings::default();
-                default.write().expect("无法写入settings.mod.json");
+                default.write();
                 return default;
             }
         };
@@ -334,9 +335,16 @@ impl ModSettings {
         Ok(true)
     }
 
-    pub fn write(&self) -> Result<()> {
+    pub fn write(&self) {
         let dir = SETTINGS.dir.join("settings.mod.json");
-        std::fs::write(dir, serde_json::to_string_pretty(self)?)?;
-        Ok(())
+        let Ok(contend) = serde_json::to_string_pretty(self) else {
+            error!("Failed to serialize settings.mod.json");
+            return;
+        };
+        spawn(async move {
+            tokio::fs::write(dir, contend)
+                .await
+                .inspect_err(|e| error!("Failed to write settings.mod.json: {e}"))
+        });
     }
 }
