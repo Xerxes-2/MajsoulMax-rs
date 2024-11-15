@@ -2,12 +2,11 @@ use crate::{
     proto::{base::BaseMessage, lq, lq_config::ConfigTables, sheets},
     settings::ModSettings,
 };
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{anyhow, bail, Result};
 use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
-use prost_reflect::MessageDescriptor;
-use std::{collections::HashMap, sync::Arc};
+use std::collections::HashMap;
 use tokio::sync::RwLock;
 use tracing::{error, info};
 
@@ -125,13 +124,13 @@ impl Modder {
         &self,
         buf: Bytes,
         from_client: bool,
-        resp_map: &HashMap<usize, (Arc<str>, MessageDescriptor)>,
+        method_name: impl AsRef<str>,
     ) -> ModifyResult {
         let msg_type = buf[0];
         let res = match msg_type {
             0x01 => self.modify_notify(buf.clone()).await,
-            0x02 => self.modify_req(buf.clone(), from_client, resp_map).await,
-            0x03 => self.modify_res(buf.clone(), from_client, resp_map).await,
+            0x02 => self.modify_req(buf.clone(), from_client).await,
+            0x03 => self.modify_res(buf.clone(), from_client, method_name).await,
             _ => Err(anyhow!("Unimplemented message type: {msg_type}")),
         };
         match res {
@@ -150,19 +149,14 @@ impl Modder {
         &self,
         buf: Bytes,
         from_client: bool,
-        resp_map: &HashMap<usize, (Arc<str>, MessageDescriptor)>,
+        method_name: impl AsRef<str>,
     ) -> Result<ModifyResult> {
-        let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
+        let method_name = method_name.as_ref();
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         assert!(!from_client);
         if !msg_block.method_name.is_empty() {
             bail!("Non-empty respond method name");
         }
-        let method_name = resp_map
-            .get(&msg_id)
-            .context(format!("No request message with id: {msg_id}"))?
-            .0
-            .clone();
         let mut modified_data: Option<Vec<u8>> = None;
         match method_name.as_ref() {
             ".lq.Lobby.fetchAccountInfo" => {
@@ -435,7 +429,6 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
-            info!("Respond method: {method_name}");
             msg_block.data = data;
             let mut buf = buf[..3].to_vec();
             buf.extend(msg_block.encode_to_vec());
@@ -539,21 +532,13 @@ impl Modder {
         character
     }
 
-    async fn modify_req(
-        &self,
-        buf: Bytes,
-        from_client: bool,
-        resp_map: &HashMap<usize, (Arc<str>, MessageDescriptor)>,
-    ) -> Result<ModifyResult> {
+    async fn modify_req(&self, buf: Bytes, from_client: bool) -> Result<ModifyResult> {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         // Request message must be from client
         assert!(from_client);
         if msg_id >= 1 << 16 {
             bail!("Invalid request message id: {msg_id}");
-        }
-        if resp_map.contains_key(&msg_id) {
-            bail!("Duplicate request message id: {msg_id}");
         }
         let mut fake = false;
         let method_name = &msg_block.method_name;
@@ -646,7 +631,6 @@ impl Modder {
             _ => {}
         }
         if fake {
-            info!("Request method: {method_name}");
             let data = lq::ReqLoginBeat {
                 contract: self.contract.read().await.clone(),
             };

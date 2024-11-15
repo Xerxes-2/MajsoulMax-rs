@@ -98,6 +98,7 @@ impl WebSocketHandler for Handler {
         };
         drop(parser);
 
+        let method_name = parsed.method_name.clone();
         if let Some(tx) = &self.sender {
             if let Err(e) = tx.send((parsed, direction_char)).await {
                 error!("Failed to send message to channel: {e}");
@@ -108,7 +109,7 @@ impl WebSocketHandler for Handler {
         };
         let parser = self.parser.read().await;
         let res = modder
-            .modify(buf, direction_char == '\u{2191}', &parser.respond_type)
+            .modify(buf, direction_char == '\u{2191}', method_name)
             .await;
         drop(parser);
         if let Some(inj) = res.inject_msg {
