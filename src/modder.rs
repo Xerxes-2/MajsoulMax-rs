@@ -1,13 +1,16 @@
 use crate::{
-    parser::Parser,
     proto::{base::BaseMessage, lq, lq_config::ConfigTables, sheets},
-    settings::{ModSettings, SETTINGS},
+    settings::ModSettings,
 };
 use anyhow::{anyhow, bail, Context, Result};
 use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
-use std::{collections::HashMap, sync::LazyLock};
+use prost_reflect::MessageDescriptor;
+use std::{
+    collections::HashMap,
+    sync::{Arc, LazyLock},
+};
 use tokio::{spawn, sync::RwLock};
 use tracing::{error, info};
 
@@ -15,8 +18,6 @@ pub static MOD_SETTINGS: LazyLock<RwLock<ModSettings>> =
     LazyLock::new(|| RwLock::new(ModSettings::new()));
 static SAFE: LazyLock<RwLock<Safe>> = LazyLock::new(|| RwLock::new(Safe::default()));
 static CONTRACT: LazyLock<RwLock<String>> = LazyLock::new(|| RwLock::new(String::new()));
-static PARSER: LazyLock<RwLock<Parser>> =
-    LazyLock::new(|| RwLock::new(Parser::new(&SETTINGS.proto_json, &SETTINGS.desc)));
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const ANNOUNCEMENT: &str = formatcp!(
     "<color=#f9963b>作者: Xerxes-2        版本: {VERSION}</color>\n
@@ -123,17 +124,19 @@ impl Modder {
         modder
     }
 
-    pub async fn modify(&self, buf: Bytes, from_client: bool) -> ModifyResult {
+    pub async fn modify(
+        &self,
+        buf: Bytes,
+        from_client: bool,
+        resp_map: &HashMap<usize, (Arc<str>, MessageDescriptor)>,
+    ) -> ModifyResult {
         let msg_type = buf[0];
         let res = match msg_type {
             0x01 => self.modify_notify(buf.clone()).await,
-            0x02 => self.modify_req(buf.clone(), from_client).await,
-            0x03 => self.modify_res(buf.clone(), from_client).await,
+            0x02 => self.modify_req(buf.clone(), from_client, resp_map).await,
+            0x03 => self.modify_res(buf.clone(), from_client, resp_map).await,
             _ => Err(anyhow!("Unimplemented message type: {msg_type}")),
         };
-        if let Err(e) = PARSER.write().await.parse(buf.clone()) {
-            error!("Mod: Failed to parse message: {e}");
-        }
         match res {
             Ok(r) => r,
             Err(e) => {
@@ -146,17 +149,19 @@ impl Modder {
         }
     }
 
-    async fn modify_res(&self, buf: Bytes, from_client: bool) -> Result<ModifyResult> {
+    async fn modify_res(
+        &self,
+        buf: Bytes,
+        from_client: bool,
+        resp_map: &HashMap<usize, (Arc<str>, MessageDescriptor)>,
+    ) -> Result<ModifyResult> {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         assert!(!from_client);
         if !msg_block.method_name.is_empty() {
             bail!("Non-empty respond method name");
         }
-        let method_name = PARSER
-            .read()
-            .await
-            .respond_type
+        let method_name = resp_map
             .get(&msg_id)
             .context(format!("No request message with id: {msg_id}"))?
             .0
@@ -515,7 +520,12 @@ impl Modder {
         character
     }
 
-    async fn modify_req(&self, buf: Bytes, from_client: bool) -> Result<ModifyResult> {
+    async fn modify_req(
+        &self,
+        buf: Bytes,
+        from_client: bool,
+        resp_map: &HashMap<usize, (Arc<str>, MessageDescriptor)>,
+    ) -> Result<ModifyResult> {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         // Request message must be from client
@@ -523,7 +533,7 @@ impl Modder {
         if msg_id >= 1 << 16 {
             bail!("Invalid request message id: {msg_id}");
         }
-        if PARSER.read().await.respond_type.contains_key(&msg_id) {
+        if resp_map.contains_key(&msg_id) {
             bail!("Duplicate request message id: {msg_id}");
         }
         let mut fake = false;

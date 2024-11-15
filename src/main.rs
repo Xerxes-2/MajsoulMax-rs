@@ -96,6 +96,7 @@ impl WebSocketHandler for Handler {
             error!("Failed to parse message");
             return Some(Message::Binary(buf.into()));
         };
+        drop(parser);
 
         if let Some(tx) = &self.sender {
             if let Err(e) = tx.send((parsed, direction_char)).await {
@@ -105,7 +106,11 @@ impl WebSocketHandler for Handler {
         let Some(ref modder) = self.modder else {
             return Some(Message::Binary(buf.into()));
         };
-        let res = modder.modify(buf, direction_char == '\u{2191}').await;
+        let parser = self.parser.read().await;
+        let res = modder
+            .modify(buf, direction_char == '\u{2191}', &parser.respond_type)
+            .await;
+        drop(parser);
         if let Some(inj) = res.inject_msg {
             self.inject_msg = Some(Message::Binary(inj.into()));
         }
