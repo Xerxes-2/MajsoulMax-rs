@@ -1,4 +1,4 @@
-use majsoul_max_rs::prelude::*;
+use majsoul_max_rs::*;
 
 async fn shutdown_signal() {
     tokio::signal::ctrl_c()
