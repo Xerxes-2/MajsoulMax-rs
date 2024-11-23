@@ -1,13 +1,12 @@
-use crate::{proto::lq::ViewSlot, Arg};
+use crate::proto::lq::ViewSlot;
 use anyhow::{bail, Context, Result};
 use bytes::Bytes;
-use clap::Parser;
 use prost_reflect::DescriptorPool;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{
     collections::{HashMap, HashSet},
-    path::PathBuf,
+    path::{Path, PathBuf},
     sync::LazyLock,
 };
 use tokio::spawn;
@@ -45,9 +44,7 @@ static REQUEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
 });
 
 impl Settings {
-    pub fn new() -> Result<Self> {
-        let arg = Arg::parse();
-        let arg_dir = std::path::Path::new(&arg.config_dir);
+    pub fn new(arg_dir: &Path) -> Result<Self> {
         let exe = std::env::current_exe().context("无法获取当前可执行文件路径")?;
         let dir = if arg_dir.is_dir() {
             arg_dir.to_path_buf()

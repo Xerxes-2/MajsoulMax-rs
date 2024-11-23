@@ -1,5 +1,4 @@
 use anyhow::{Context, Result};
-use clap::Parser;
 use handler::Handler;
 use helper::helper_worker;
 use hudsucker::{
@@ -21,12 +20,6 @@ pub mod proto;
 pub mod settings;
 
 pub const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
-
-#[derive(Parser, Debug)]
-pub struct Arg {
-    #[clap(short, long, default_value = "./liqi_config/")]
-    config_dir: String,
-}
 
 pub fn init_trace() {
     let timer = tracing_subscriber::fmt::time::ChronoLocal::new("%H:%M:%S%.3f".to_string());

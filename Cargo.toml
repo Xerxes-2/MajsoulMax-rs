@@ -13,26 +13,25 @@ name = "majsoul_max_rs"
 
 [dependencies]
 aws-lc-rs = { version = "1", features = ["bindgen"] }
-anyhow = "1.0.93"
-base64 = "0.22.1"
-bytes = "1.7.2"
-prost-reflect = { version = "0.14.2", features = ["serde"] }
-reqwest = { version = "0.12.9", features = [
+anyhow = "1"
+base64 = "0.22"
+bytes = "1"
+prost-reflect = { version = "0.14", features = ["serde"] }
+reqwest = { version = "0.12", features = [
     "json",
     "rustls-tls",
 ], default-features = false }
-serde_json = "1.0.133"
-serde = { version = "1.0.214", features = ["derive"] }
-tokio = { version = "1.41.1", features = ["rt-multi-thread", "fs"] }
-tracing-subscriber = { version = "0.3.18", features = ["env-filter", "chrono"] }
-tracing = "0.1.40"
-clap = { version = "4.5.20", features = ["derive"] }
-prost = "0.13.3"
-hudsucker = "0.23.0"
-const_format = "0.2.33"
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["rt-multi-thread", "fs"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "chrono"] }
+tracing = "0.1"
+prost = "0.13"
+hudsucker = "0.23"
+const_format = "0.2"
 
 [build-dependencies]
-prost-build = "0.13.3"
+prost-build = "0.13"
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
