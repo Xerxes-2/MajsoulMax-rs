@@ -844,5 +844,5 @@ fn to_var_int(mut x: u64) -> Bytes {
         }
         base += 8;
     }
-    data.to_le_bytes()[..length].to_vec().into()
+    data.to_le_bytes().into_iter().take(length).collect()
 }
