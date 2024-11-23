@@ -72,21 +72,26 @@ where
         .context("Failed to parse proxy address")?;
     let modder = modder.map(Arc::new);
 
-    let tx = if settings.helper_on() {
+    let (tx, helper) = if settings.helper_on() {
         let (tx, rx) = channel(32);
         // start helper worker
         info!("Helper worker started");
-        tokio::spawn(helper_worker(rx, settings));
-        Some(tx)
+        let helper_handle = tokio::spawn(helper_worker(rx, settings));
+        (Some(tx), Some(helper_handle))
     } else {
-        None
+        (None, None)
     };
     let proxy = Proxy::builder()
         .with_addr(proxy_addr)
         .with_ca(ca)
         .with_rustls_client(rustls::crypto::aws_lc_rs::default_provider())
         .with_websocket_handler(Handler::new(tx, modder, settings))
-        .with_graceful_shutdown(graceful_shutdown)
+        .with_graceful_shutdown(async {
+            graceful_shutdown.await;
+            if let Some(helper) = helper {
+                helper.abort();
+            }
+        })
         .build()
         .context("Failed to build proxy")?;
 
