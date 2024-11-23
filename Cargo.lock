@@ -1423,7 +1423,7 @@ dependencies = [
 
 [[package]]
 name = "majsoul_max_rs"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "anyhow",
  "aws-lc-rs",
