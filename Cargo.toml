@@ -32,10 +32,3 @@ const_format = "0.2"
 
 [build-dependencies]
 prost-build = "0.13"
-
-[dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }
-
-[[bench]]
-name = "clone_static_vs_construct"
-harness = false

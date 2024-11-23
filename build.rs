@@ -8,7 +8,5 @@ fn main() -> Result<()> {
             "#[derive(::serde::Serialize, ::serde::Deserialize)]",
         )
         .compile_protos(&["proto/liqi.proto"], &["proto/"])?;
-    // cargo fmt
-    std::process::Command::new("cargo").arg("fmt").status()?;
     Ok(())
 }

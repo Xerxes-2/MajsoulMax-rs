@@ -12,14 +12,26 @@ use std::{future::Future, net::SocketAddr, str::FromStr, sync::Arc};
 use tokio::sync::mpsc::channel;
 use tracing::info;
 
-pub mod handler;
-pub mod helper;
-pub mod modder;
-pub mod parser;
-pub mod proto;
-pub mod settings;
+mod handler;
+mod helper;
+mod modder;
+mod parser;
+pub(crate) mod proto;
+mod settings;
 
-pub const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
+pub mod prelude {
+    pub use anyhow::Result;
+    pub use tokio::sync::RwLock;
+    pub use tracing::{info, warn};
+
+    pub use crate::{
+        build_and_start_proxy, init_trace,
+        modder::Modder,
+        settings::{ModSettings, Settings},
+    };
+}
+
+pub(crate) const ARBITRARY_MD5: &str = "0123456789abcdef0123456789abcdef";
 
 pub fn init_trace() {
     let timer = tracing_subscriber::fmt::time::ChronoLocal::new("%H:%M:%S%.3f".to_string());
