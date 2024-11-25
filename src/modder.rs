@@ -672,7 +672,7 @@ impl Modder {
             }
             ".lq.NotifyRoomPlayerUpdate" => {
                 let mut msg = lq::NotifyRoomPlayerUpdate::decode(msg_block.data.as_ref())?;
-                for player in msg.player_list.iter_mut().chain(msg.update_list.iter_mut()) {
+                for player in msg.player_list.iter_mut().chain(msg.robots.iter_mut()) {
                     if player.account_id == self.safe.read().await.account_id {
                         player.avatar_id = self.mod_settings.read().await.char_skin
                             [&self.mod_settings.read().await.main_char];
