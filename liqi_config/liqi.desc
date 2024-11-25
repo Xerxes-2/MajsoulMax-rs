@@ -1,5 +1,5 @@
 
-¥‘
+´‡
 
 
 liqi.protolq"|
@@ -40,18 +40,16 @@ account_id (R	accountId
 AccountDressingState
 
 account_id (R	accountId
-dressing (Rdressing"Ò
-NotifyRoomPlayerUpdate3
-update_list (2.lq.PlayerBaseViewR
-updateList
-remove_list (R
-removeList
+dressing (Rdressing"Â
+NotifyRoomPlayerUpdate
 owner_id (RownerId
 robot_count (R
 robotCount3
-player_list (2.lq.PlayerBaseViewR
+player_list (2.lq.PlayerGameViewR
 playerList
-seq (Rseq"
+seq (Rseq*
+robots (2.lq.PlayerGameViewRrobots
+	positions (R	positions"
 NotifyRoomKickOut"q
 NotifyFriendStateChange
 	target_id (RtargetId9
@@ -380,7 +378,7 @@ skinTicketP
 rare (Rrare
 count (Rcount"?
 AccountOwnerData+
-unlock_characters (RunlockCharacters"Ô
+unlock_characters (RunlockCharacters"ê
 AccountUpdate?
 	numerical (2!.lq.AccountUpdate.NumericalUpdateR	numerical?
 	character (2!.lq.AccountUpdate.CharacterUpdateR	character
@@ -400,7 +398,8 @@ daily_task (2!.lq.AccountUpdate.DailyTaskUpdateR	dailyTask3
 ab_match (2&.lq.AccountUpdate.AccountABMatchUpdateRabMatch5
 activity (2.lq.AccountActivityUpdateRactivityW
 activity_segment_task (2#.lq.AccountUpdate.SegmentTaskUpdateRactivitySegmentTaskF
-month_ticket (2#.lq.AccountUpdate.MonthTicketUpdateRmonthTicket7
+month_ticket (2#.lq.AccountUpdate.MonthTicketUpdateRmonthTicketL
+main_character (2%.lq.AccountUpdate.MainCharacterUpdateRmainCharacter7
 NumericalUpdate
 id (Rid
 final (Rfinal¨
@@ -463,7 +462,10 @@ progresses
 	task_list (RtaskListR
 MonthTicketUpdate
 end_time (RendTime"
-last_pay_time (RlastPayTime"a
+last_pay_time (RlastPayTimeQ
+MainCharacterUpdate!
+character_id (RcharacterId
+skin_id (RskinId"a
 GameMetaData
 room_id (RroomId
 mode_id (RmodeId
@@ -472,7 +474,10 @@ contestUid"s
 AccountPlayingGame
 	game_uuid (	RgameUuid
 category (Rcategory$
-meta (2.lq.GameMetaDataRmeta"⁄
+meta (2.lq.GameMetaDataRmeta"M
+RandomCharacter!
+character_id (RcharacterId
+skin_id (RskinId"⁄
 AccountCacheView#
 cache_version (RcacheVersion
 
@@ -537,7 +542,7 @@ detailRuleN
 paixing (Rpaixing
 
 left_count (R	leftCount&
-field_spell_var (RfieldSpellVar"è
+field_spell_var (RfieldSpellVar"¿
 GameDetailRule
 
 time_fixed (R	timeFixed
@@ -612,7 +617,8 @@ dora3_mode+ (R	dora3Mode&
 enable_renheD (RenableRenheA
 enable_baopai_extend_settingsE (RenableBaopaiExtendSettings%
 yongchang_modeF (RyongchangMode'
-hunzhiyiji_modeG (RhunzhiyijiMode"Ü
+hunzhiyiji_modeG (RhunzhiyijiMode/
+wanxiangxiuluo_modeH (RwanxiangxiuluoMode"–
 Room
 room_id (RroomId
 owner_id (RownerId 
@@ -630,7 +636,9 @@ robotCount#
 tournament_id
  (RtournamentId
 seq (Rseq
-pre_rule (	RpreRule"à
+pre_rule (	RpreRule*
+robots (2.lq.PlayerGameViewRrobots
+	positions (R	positions"à
 GameEndResult6
 players (2.lq.GameEndResult.PlayerItemRplayersæ
 
@@ -1533,7 +1541,7 @@ auto_match (R	autoMatch"Ø
 point (Rpoint
 
 game_ranks (R	gameRanks(
-total_game_count (RtotalGameCount"Ÿ
+total_game_count (RtotalGameCount"ç
 
 RecordGame
 uuid (	Ruuid
@@ -1542,7 +1550,8 @@ start_time (R	startTime
 end_time (RendTime&
 config (2.lq.GameConfigRconfig6
 accounts (2.lq.RecordGame.AccountInfoRaccounts)
-result (2.lq.GameEndResultRresultÒ
+result (2.lq.GameEndResultRresult2
+robots (2.lq.RecordGame.AccountInfoRrobotsÒ
 AccountInfo
 
 account_id (R	accountId
@@ -1661,7 +1670,8 @@ lianZhuang#
 GameRoundSnapshot
 ju (Rju
 ben (Rben-
-players (2.lq.GameRoundPlayerRplayers"·	
+players (2.lq.GameRoundPlayerRplayers"ñ
+
 GameFinalSnapshot
 uuid (	Ruuid
 state (Rstate
@@ -1680,7 +1690,9 @@ finishTime4
 rounds (2.lq.GameRoundSnapshotRrounds7
 account_views (2.lq.PlayerGameViewRaccountViewsF
 final_players (2!.lq.GameFinalSnapshot.FinalPlayerRfinalPlayers8
-afk_info (2.lq.GameFinalSnapshot.AFKInfoRafkInfo|
+afk_info (2.lq.GameFinalSnapshot.AFKInfoRafkInfo3
+robot_views (2.lq.PlayerGameViewR
+robotViews|
 CalculateParam
 
 init_point (R	initPoint*
@@ -1897,10 +1909,13 @@ roundInfos"U
 activity_id (R
 activityId
 vote (Rvote
-count (Rcount"A
+count (Rcount"x
 ActivityBuffData
 buff_id (RbuffId
-level (Rlevel"®
+level (Rlevel
+count (Rcount
+update_time (R
+updateTime"®
 AccountResourceSnapshotF
 bag_item (2+.lq.AccountResourceSnapshot.BagItemSnapshotRbagItemH
 currency (2,.lq.AccountResourceSnapshot.CurrencySnapshotRcurrency?
@@ -2341,13 +2356,14 @@ publicLive2
 ready (Rready"-
 ReqRoomDressing
 dressing (Rdressing"
-ReqRoomStart",
-ReqRoomKick
-
-account_id (R	accountId"0
+ReqRoomStart"#
+ReqRoomKickPlayer
+id (Rid"0
 ReqModifyRoom
 robot_count (R
-robotCount".
+robotCount"-
+ReqAddRoomRobot
+position (Rposition".
 ReqChangeAvatar
 	avatar_id (RavatarId"8
 ReqAccountStatisticInfo
@@ -3130,7 +3146,14 @@ clientType
 ResCreateSteamOrder
 error (2	.lq.ErrorRerror
 order_id (	RorderId*
-platform_order_id (	RplatformOrderId"O
+platform_order_id (	RplatformOrderId"x
+ResRandomCharacter
+error (2	.lq.ErrorRerror
+enabled (Renabled'
+pool (2.lq.RandomCharacterRpool"W
+ReqRandomCharacter
+enabled (Renabled'
+pool (2.lq.RandomCharacterRpool"O
 ReqVerifySteamOrder
 order_id (	RorderId
 
@@ -4104,7 +4127,7 @@ activityId
 	order_pos (RorderPos"p
 ResFinishCombiningOrder
 error (2	.lq.ErrorRerror4
-reward_items (2.lq.ExecuteRewardRrewardItems"µ
+reward_items (2.lq.ExecuteRewardRrewardItems"∆
 ResFetchInfo
 error (2	.lq.ErrorRerror2
 server_time (2.lq.ResServerTimeR
@@ -4139,7 +4162,14 @@ vip_reward (2.lq.ResVipRewardR	vipRewardB
 character_info (2.lq.ResCharacterInfoRcharacterInfo?
 all_common_views (2.lq.ResAllcommonViewsRallCommonViews[
 collected_game_record_list (2.lq.ResCollectedGameRecordListRcollectedGameRecordListC
-maintain_notice (2.lq.ResFetchMaintainNoticeRmaintainNotice"]
+maintain_notice (2.lq.ResFetchMaintainNoticeRmaintainNoticeA
+random_character (2.lq.ResRandomCharacterRrandomCharacterL
+maintenance_info  (2!.lq.ResFetchServerMaintenanceInfoRmaintenanceInfo"‹
+ResFetchServerMaintenanceInfor
+function_maintenance (2?.lq.ResFetchServerMaintenanceInfo.ServerFunctionMaintenanceInfoRfunctionMaintenanceG
+ServerFunctionMaintenanceInfo
+name (	Rname
+open (Ropen"]
 ReqUpgradeVillageBuilding
 building_id (R
 buildingId
@@ -4587,7 +4617,7 @@ account_id (R	accountId
 	game_uuid (	RgameUuid
 session (	Rsession
 gift (	Rgift
-vs (Rvs"Ú
+vs (Rvs"û
 ResAuthGame
 error (2	.lq.ErrorRerror,
 players (2.lq.PlayerGameViewRplayers
@@ -4595,7 +4625,8 @@ account_id (R	accountId
 is_game_start (RisGameStart/
 game_config (2.lq.GameConfigR
 gameConfig"
-ready_id_list (RreadyIdList"Ö
+ready_id_list (RreadyIdList*
+robots (2.lq.PlayerGameViewRrobots"Ö
 GameRestore,
 snapshot (2.lq.GameSnapshotRsnapshot-
 actions (2.lq.ActionPrototypeRactions.
@@ -4920,7 +4951,7 @@ time_fixed (R	timeFixed"k
 FanInfo
 name (	Rname
 val (Rval
-id (Rid"¯
+id (Rid"—
 HuleInfo
 hand (	Rhand
 ming (	Rming
@@ -4947,7 +4978,9 @@ point_rong (R	pointRong$
 baopai (Rbaopai!
 baopai_seats (RbaopaiSeats
 lines (	Rlines%
-tianming_bonus (RtianmingBonus"Ù
+tianming_bonus (RtianmingBonus#
+baida_changed (	RbaidaChanged2
+hu_tile_bai_da_changed (	RhuTileBaiDaChanged"Ù
 TingPaiInfo
 tile (	Rtile
 haveyi (Rhaveyi
@@ -5372,7 +5405,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2ò¬
+READY2¢ƒ
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -5381,7 +5414,8 @@ old_scores (R	oldScores!
 signup.lq.ReqSignupAccount.lq.ResSignupAccount#
 login.lq.ReqLogin.lq.ResLogin,
 	fetchInfo.lq.ReqCommon.lq.ResFetchInfo,
-loginSuccess.lq.ReqCommon.lq.ResCommon-
+loginSuccess.lq.ReqCommon.lq.ResCommonN
+fetchServerMaintenanceInfo.lq.ReqCommon!.lq.ResFetchServerMaintenanceInfo-
 
 emailLogin.lq.ReqEmailLogin.lq.ResLogin2
 
@@ -5414,11 +5448,11 @@ createRoom.lq.ReqCreateRoom.lq.ResCreateRoom,
 	leaveRoom.lq.ReqCommon.lq.ResCommon,
 	readyPlay.lq.ReqRoomReady.lq.ResCommon4
 dressingStatus.lq.ReqRoomDressing.lq.ResCommon,
-	startRoom.lq.ReqRoomStart.lq.ResCommon,
+	startRoom.lq.ReqRoomStart.lq.ResCommon6
+roomKickPlayer.lq.ReqRoomKickPlayer.lq.ResCommon.
 
-kickPlayer.lq.ReqRoomKick.lq.ResCommon.
-
-modifyRoom.lq.ReqModifyRoom.lq.ResCommon1
+modifyRoom.lq.ReqModifyRoom.lq.ResCommon2
+addRoomRobot.lq.ReqAddRoomRobot.lq.ResCommon1
 	matchGame.lq.ReqJoinMatchQueue.lq.ResCommon5
 cancelMatch.lq.ReqCancelMatchQueue.lq.ResCommon:
 fetchAccountInfo.lq.ReqAccountInfo.lq.ResAccountInfo2
@@ -5500,7 +5534,9 @@ buyShiLian.lq.ReqBuyShiLian.lq.ResCommon,
 fetchRollingNotice.lq.ReqFetchRollingNotice.lq.ResFetchRollingNotice@
 fetchMaintainNotice.lq.ReqCommon.lq.ResFetchMaintainNotice3
 fetchServerTime.lq.ReqCommon.lq.ResServerTimeW
-fetchPlatformProducts.lq.ReqPlatformBillingProducts.lq.ResPlatformBillingProductsD
+fetchPlatformProducts.lq.ReqPlatformBillingProducts.lq.ResPlatformBillingProducts=
+fetchRandomCharacter.lq.ReqCommon.lq.ResRandomCharacter;
+setRandomCharacter.lq.ReqRandomCharacter.lq.ResCommonD
 cancelGooglePlayOrder.lq.ReqCancelGooglePlayOrder.lq.ResCommon/
 	openChest.lq.ReqOpenChest.lq.ResOpenChestD
 buyFromChestShop.lq.ReqBuyFromChestShop.lq.ResBuyFromChestShop=
