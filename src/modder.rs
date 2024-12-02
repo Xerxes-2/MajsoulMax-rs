@@ -7,9 +7,10 @@ use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
 use rand::seq::SliceRandom;
+use serde::de;
 use std::collections::HashMap;
 use tokio::sync::RwLock;
-use tracing::{error, info};
+use tracing::{debug, error, info};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const ANNOUNCEMENT: &str = formatcp!(
@@ -155,6 +156,7 @@ impl Modder {
         method_name: impl AsRef<str>,
     ) -> Result<ModifyResult> {
         let method_name = method_name.as_ref();
+        debug!("Respond method: {method_name}");
         let mut msg_block = BaseMessage::decode(&buf[3..])?;
         assert!(!from_client);
         if !msg_block.method_name.is_empty() {
@@ -617,6 +619,7 @@ impl Modder {
         }
         let mut fake = false;
         let method_name = &msg_block.method_name;
+        debug!("Request method: {method_name}");
         let mut inject_data: Option<Vec<u8>> = None;
         match method_name.as_str() {
             ".lq.Lobby.changeMainCharacter" => {
@@ -747,6 +750,7 @@ impl Modder {
     async fn modify_notify(&self, buf: Bytes) -> Result<ModifyResult> {
         let mut msg_block = BaseMessage::decode(&buf[1..])?;
         let method_name = &msg_block.method_name;
+        debug!("Notify method: {method_name}");
         let mut modified_data: Option<Vec<u8>> = None;
         match method_name.as_str() {
             ".lq.NotifyAccountUpdate" => {
@@ -823,7 +827,6 @@ impl Modder {
             _ => {}
         }
         if let Some(data) = modified_data {
-            info!("Notify method: {method_name}");
             // add 0x01 to the beginning of the message
             msg_block.data = data;
             let mut buf = vec![0x01];
