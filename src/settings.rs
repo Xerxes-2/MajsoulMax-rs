@@ -19,10 +19,11 @@ pub struct Settings {
     pub send_action: Vec<String>,
     pub proxy_addr: String,
     pub api_url: String,
-    helper_switch: i32,
-    mod_switch: i32,
-    auto_update: i32,
+    helper_switch: bool,
+    mod_switch: bool,
+    auto_update: bool,
     liqi_version: String,
+    github_token: String,
     #[serde(skip)]
     methods_set: HashSet<String>,
     #[serde(skip)]
@@ -85,15 +86,15 @@ impl Settings {
     }
 
     pub fn helper_on(&self) -> bool {
-        self.helper_switch != 0
+        self.helper_switch
     }
 
     pub fn mod_on(&self) -> bool {
-        self.mod_switch != 0
+        self.mod_switch
     }
 
     pub fn auto_update(&self) -> bool {
-        self.auto_update != 0
+        self.auto_update
     }
 
     pub async fn update(&mut self) -> Result<bool> {
@@ -108,15 +109,26 @@ impl Settings {
             self.liqi_version
         );
 
-        let resp = REQUEST_CLIENT
-            .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
-            .timeout(std::time::Duration::from_secs(10))
-            .send()
-            .await
-            .context("Failed to get latest release")?;
+        let resp = if self.github_token.is_empty() {
+            REQUEST_CLIENT
+                .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
+                .timeout(std::time::Duration::from_secs(10))
+                .send()
+                .await
+                .context("Failed to get latest release")?
+        } else {
+            REQUEST_CLIENT
+                .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
+                .header("Authorization", format!("Bearer {}", self.github_token))
+                .header("X-GitHub-Api-Version", "2022-11-28")
+                .timeout(std::time::Duration::from_secs(10))
+                .send()
+                .await
+                .context("Failed to get latest release")?
+        };
         if resp
             .headers()
-            .get("x-ratelimit-remaining")
+            .get("X-RateLimit-Remaining")
             .context("GitHub API rate limit header not found")?
             == "0"
         {
@@ -151,11 +163,26 @@ impl Settings {
         let url = asset_item["browser_download_url"]
             .as_str()
             .context("No download url found in asset")?;
-        let resp = REQUEST_CLIENT
-            .get(url)
-            .timeout(std::time::Duration::from_secs(10))
-            .send()
-            .await
+        let resp = if self.github_token.is_empty() {
+            REQUEST_CLIENT
+                .get(url)
+                .timeout(std::time::Duration::from_secs(10))
+                .send()
+                .await
+                .context("Failed to download asset")?
+        } else {
+            REQUEST_CLIENT
+                .get(url)
+                .header("Authorization", format!("Bearer {}", self.github_token))
+                .header("X-GitHub-Api-Version", "2022-11-28")
+                .timeout(std::time::Duration::from_secs(10))
+                .send()
+                .await
+                .context("Failed to download asset")?
+        };
+
+        let resp = resp
+            .error_for_status()
             .context("Failed to download asset")?;
 
         let bytes = resp.bytes().await?;
@@ -217,16 +244,18 @@ pub struct ModSettings {
     pub char_skin: HashMap<u32, u32>,
     pub nickname: String,
     pub star_character: Vec<u32>,
-    hint_switch: i32,
+    hint_switch: bool,
     pub title: u32,
     pub loading_bg: Vec<u32>,
-    emoji_switch: i32,
+    emoji_switch: bool,
     pub views_presets: [Vec<ViewSlot>; 10],
     pub preset_index: u32,
-    show_server: i32,
-    anti_nickname_censorship: i32,
-    auto_update: i32,
+    show_server: bool,
+    anti_nickname_censorship: bool,
+    auto_update: bool,
     version: String,
+    pub random_char_switch: bool,
+    pub random_char_pool: Vec<(u32, u32)>,
     pub verified: u32,
     #[serde(skip)]
     pub resource: Bytes,
@@ -241,16 +270,18 @@ impl Default for ModSettings {
             char_skin: HashMap::new(),
             nickname: String::new(),
             star_character: Vec::new(),
-            hint_switch: 1,
+            hint_switch: true,
             title: 0,
             loading_bg: Vec::new(),
-            emoji_switch: 0,
+            emoji_switch: false,
             views_presets: Default::default(),
             preset_index: 0,
-            show_server: 1,
-            anti_nickname_censorship: 1,
-            auto_update: 1,
+            show_server: true,
+            anti_nickname_censorship: true,
+            auto_update: true,
             verified: 0,
+            random_char_switch: false,
+            random_char_pool: Vec::new(),
             version: String::new(),
             resource: Bytes::new(),
             dir: PathBuf::new(),
@@ -287,23 +318,23 @@ impl ModSettings {
     }
 
     pub fn hint_on(&self) -> bool {
-        self.hint_switch != 0
+        self.hint_switch
     }
 
     pub fn emoji_on(&self) -> bool {
-        self.emoji_switch != 0
+        self.emoji_switch
     }
 
     pub fn show_server(&self) -> bool {
-        self.show_server != 0
+        self.show_server
     }
 
     pub fn auto_update(&self) -> bool {
-        self.auto_update != 0
+        self.auto_update
     }
 
     pub fn anti_nickname_censorship(&self) -> bool {
-        self.anti_nickname_censorship != 0
+        self.anti_nickname_censorship
     }
 
     pub async fn get_lqc(&mut self) -> Result<bool> {
