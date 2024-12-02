@@ -73,7 +73,7 @@ The default configuration enables `helper` and disables `mod`. To customize, mod
 
 1. Modify the configuration:
     - Follow program prompts and personal needs.
-    - In `liqi_config/settings.json`, set the universal settings including toggles for Helper and Mod—`modSwitch` and `helperSwitch`, 0 is off, 1 is on.
+    - In `liqi_config/settings.json`, set the universal settings including toggles for Helper and Mod—`modSwitch` and `helperSwitch`, `false` is off, `true` is on.
     - In `liqi_config/settings.mod.json`, set the Mod-specific settings.
 2. Start the program by running the executable file.
 3. Start the game, either the web version or the client/Steam version.
