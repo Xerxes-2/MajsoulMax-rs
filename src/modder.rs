@@ -7,7 +7,6 @@ use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
 use rand::seq::SliceRandom;
-use serde::de;
 use std::collections::HashMap;
 use tokio::sync::RwLock;
 use tracing::{debug, error, info};
@@ -539,7 +538,6 @@ impl Modder {
                     character.skin = p.avatar_id;
                 }
                 *character = self.perfect_character(character.charid).await?;
-                [&self.mod_settings.read().await.main_char];
                 if !self.mod_settings.read().await.nickname.is_empty() {
                     p.nickname
                         .clone_from(&self.mod_settings.read().await.nickname);
