@@ -109,15 +109,26 @@ impl Settings {
             self.liqi_version
         );
 
-        let resp = REQUEST_CLIENT
-            .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
-            .timeout(std::time::Duration::from_secs(10))
-            .send()
-            .await
-            .context("Failed to get latest release")?;
+        let resp = if self.github_token.is_empty() {
+            REQUEST_CLIENT
+                .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
+                .timeout(std::time::Duration::from_secs(10))
+                .send()
+                .await
+                .context("Failed to get latest release")?
+        } else {
+            REQUEST_CLIENT
+                .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
+                .header("Authorization", format!("Bearer {}", self.github_token))
+                .header("X-GitHub-Api-Version", "2022-11-28")
+                .timeout(std::time::Duration::from_secs(10))
+                .send()
+                .await
+                .context("Failed to get latest release")?
+        };
         if resp
             .headers()
-            .get("x-ratelimit-remaining")
+            .get("X-RateLimit-Remaining")
             .context("GitHub API rate limit header not found")?
             == "0"
         {
@@ -152,11 +163,26 @@ impl Settings {
         let url = asset_item["browser_download_url"]
             .as_str()
             .context("No download url found in asset")?;
-        let resp = REQUEST_CLIENT
-            .get(url)
-            .timeout(std::time::Duration::from_secs(10))
-            .send()
-            .await
+        let resp = if self.github_token.is_empty() {
+            REQUEST_CLIENT
+                .get(url)
+                .timeout(std::time::Duration::from_secs(10))
+                .send()
+                .await
+                .context("Failed to download asset")?
+        } else {
+            REQUEST_CLIENT
+                .get(url)
+                .header("Authorization", format!("Bearer {}", self.github_token))
+                .header("X-GitHub-Api-Version", "2022-11-28")
+                .timeout(std::time::Duration::from_secs(10))
+                .send()
+                .await
+                .context("Failed to download asset")?
+        };
+
+        let resp = resp
+            .error_for_status()
             .context("Failed to download asset")?;
 
         let bytes = resp.bytes().await?;
@@ -229,7 +255,7 @@ pub struct ModSettings {
     auto_update: bool,
     version: String,
     pub random_char_switch: bool,
-    pub random_char_pool: Vec<u32>,
+    pub random_char_pool: Vec<(u32, u32)>,
     pub verified: u32,
     #[serde(skip)]
     pub resource: Bytes,
