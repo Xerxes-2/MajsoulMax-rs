@@ -1,5 +1,5 @@
 
-´‡
+⁄˜
 
 
 liqi.protolq"|
@@ -203,14 +203,15 @@ game_start (2.lq.CustomizedContestGameStartR	gameStart7
 ban_end_time (R
 banEndTime
 	game_uuid (	RgameUuid"
-NotifyLoginQueueFinished"Ω
+NotifyLoginQueueFinished"Ô
 NotifyGameFinishRewardV2
 mode_id (RmodeIdK
 level_change (2(.lq.NotifyGameFinishRewardV2.LevelChangeRlevelChangeH
 match_chest (2'.lq.NotifyGameFinishRewardV2.MatchChestR
 matchChestQ
 main_character (2*.lq.NotifyGameFinishRewardV2.MainCharacterRmainCharacterQ
-character_gift (2*.lq.NotifyGameFinishRewardV2.CharacterGiftRcharacterGifts
+character_gift (2*.lq.NotifyGameFinishRewardV2.CharacterGiftRcharacterGift0
+badges (2.lq.BadgeAchieveProgressRbadgess
 LevelChange(
 origin (2.lq.AccountLevelRorigin&
 final (2.lq.AccountLevelRfinal
@@ -270,14 +271,21 @@ json_param (	R	jsonParam"1
 error (2	.lq.ErrorRerror)
 update (2.lq.AccountUpdateRupdate"8
 AntiAddiction'
-online_duration (RonlineDuration"≠
-
+online_duration (RonlineDuration"¥
+HighestHuRecord
+fanshu (Rfanshu
+doranum (Rdoranum
+title (	Rtitle
+hands (	Rhands
+ming (	Rming
+hupai (	Rhupai
+title_id (RtitleId"ﬁ
 AccountMahjongStatistic2
 final_position_counts (RfinalPositionCountsK
 recent_round (2(.lq.AccountMahjongStatistic.RoundSummaryRrecentRoundB
-	recent_hu (2%.lq.AccountMahjongStatistic.HuSummaryRrecentHuJ
+	recent_hu (2%.lq.AccountMahjongStatistic.HuSummaryRrecentHu2
 
-highest_hu (2+.lq.AccountMahjongStatistic.HighestHuRecordR	highestHuZ
+highest_hu (2.lq.HighestHuRecordR	highestHuZ
 recent_20_hu_summary (2).lq.AccountMahjongStatistic.Liqi20SummaryRrecent20HuSummaryZ
 recent_10_hu_summary (2).lq.AccountMahjongStatistic.LiQi10SummaryRrecent10HuSummaryY
 recent_10_game_result (2&.lq.AccountMahjongStatistic.GameResultRrecent10GameResultñ
@@ -293,15 +301,7 @@ zimo_count (R	zimoCount'
 total_count (R
 totalCount(
 dora_round_count (RdoraRoundCount
-	total_fan (RtotalFan¥
-HighestHuRecord
-fanshu (Rfanshu
-doranum (Rdoranum
-title (	Rtitle
-hands (	Rhands
-ming (	Rming
-hupai (	Rhupai
-title_id (RtitleIdà
+	total_fan (RtotalFanà
 Liqi20Summary
 total_count (R
 totalCount,
@@ -328,8 +328,13 @@ finalPoint"æ
 item_id (RitemId
 type (Rtype 
 item_id_list (R
-itemIdList"£
+itemIdList"u
 
+FavoriteHu
+category (Rcategory
+type (Rtype#
+hu (2.lq.HighestHuRecordRhu
+mode (Rmode"Ë
 Account
 
 account_id (R	accountId
@@ -360,10 +365,13 @@ logoutTime
 skinTicketP
 platform_skin_ticket (2.lq.Account.PlatformSkinTicketRplatformSkinTicket
 verified (RverifiedE
-challenge_levels (2.lq.Account.ChallengeLevelRchallengeLevelsI
-achievement_count (2.lq.Account.AchievementCountRachievementCount!
-frozen_state (RfrozenState#
-loading_image (RloadingImage7
+challenge_levels (2.lq.Account.ChallengeLevelRchallengeLevels!
+frozen_state (RfrozenStateI
+achievement_count (2.lq.Account.AchievementCountRachievementCount#
+loading_image (RloadingImage/
+favorite_hu" (2.lq.FavoriteHuR
+favoriteHu)
+badges# (2.lq.Account.BadgeRbadges7
 PlatformDiamond
 id (Rid
 count (Rcount:
@@ -376,9 +384,13 @@ skinTicketP
 rank (Rrank<
 AchievementCount
 rare (Rrare
-count (Rcount"?
+count (Rcountg
+Badge
+id (Rid#
+achieved_time (RachievedTime)
+achieved_counter (RachievedCounter"?
 AccountOwnerData+
-unlock_characters (RunlockCharacters"ê
+unlock_characters (RunlockCharacters"é
 AccountUpdate?
 	numerical (2!.lq.AccountUpdate.NumericalUpdateR	numerical?
 	character (2!.lq.AccountUpdate.CharacterUpdateR	character
@@ -399,7 +411,8 @@ daily_task (2!.lq.AccountUpdate.DailyTaskUpdateR	dailyTask3
 activity (2.lq.AccountActivityUpdateRactivityW
 activity_segment_task (2#.lq.AccountUpdate.SegmentTaskUpdateRactivitySegmentTaskF
 month_ticket (2#.lq.AccountUpdate.MonthTicketUpdateRmonthTicketL
-main_character (2%.lq.AccountUpdate.MainCharacterUpdateRmainCharacter7
+main_character (2%.lq.AccountUpdate.MainCharacterUpdateRmainCharacter3
+badge (2.lq.AccountUpdate.BadgeUpdateRbadge7
 NumericalUpdate
 id (Rid
 final (Rfinal¨
@@ -465,7 +478,11 @@ progresses
 last_pay_time (RlastPayTimeQ
 MainCharacterUpdate!
 character_id (RcharacterId
-skin_id (RskinId"a
+skin_id (RskinIdG
+BadgeUpdate8
+
+progresses (2.lq.BadgeAchieveProgressR
+progresses"a
 GameMetaData
 room_id (RroomId
 mode_id (RmodeId
@@ -728,7 +745,12 @@ templateId"ú
 counter (Rcounter
 achieved (Rachieved
 rewarded (Rrewarded#
-achieved_time (RachievedTime"
+achieved_time (RachievedTime"ê
+BadgeAchieveProgress
+id (Rid
+counter (Rcounter)
+achieved_counter (RachievedCounter#
+achieved_time (RachievedTime"
 AccountStatisticByGameMode
 mode (Rmode$
 game_count_sum (RgameCountSum.
@@ -3375,13 +3397,14 @@ resourceId%
 setting (2.lq.AccountSettingRsetting"Y
 ResModNicknameTime
 error (2	.lq.ErrorRerror"
-last_mod_time (RlastModTime"ñ
+last_mod_time (RlastModTime"÷
 ResMisc
 error (2	.lq.ErrorRerror%
 recharged_list (RrechargedList1
 faiths (2.lq.ResMisc.MiscFaithDataRfaiths'
 verified_hidden (RverifiedHidden%
-verified_value (RverifiedValue@
+verified_value (RverifiedValue>
+disable_room_random_bot_char (RdisableRoomRandomBotChar@
 MiscFaithData
 faith_id (RfaithId
 count (Rcount"2
@@ -4609,7 +4632,72 @@ questionId_
 values (2G.lq.ReqSubmitQuestionnaire.QuestionnaireAnswer.QuestionnaireAnswerValueRvaluesS
 QuestionnaireAnswerValue
 value (	Rvalue!
-custom_input (	RcustomInput"ù
+custom_input (	RcustomInput"O
+ReqSetFriendRoomRandomBotChar.
+disable_random_char (RdisableRandomChar"b
+ReqFetchAccountGameHuRecords
+uuid (	Ruuid
+category (Rcategory
+type (Rtype"«
+ResFetchAccountGameHuRecords
+error (2	.lq.ErrorRerrorH
+records (2..lq.ResFetchAccountGameHuRecords.GameHuRecordsRrecordsª
+GameHuRecords
+chang (Rchang
+ju (Rju
+ben (Rben
+title_id (RtitleId
+hands (	Rhands
+ming (	Rming
+hupai (	Rhupai
+hu_fans (RhuFans"i
+ReqFetchAccountInfoExtra
+
+account_id (R	accountId
+category (Rcategory
+type (Rtype"ü
+ResFetchAccountInfoExtra
+error (2	.lq.ErrorRerrorU
+recent_games (22.lq.ResFetchAccountInfoExtra.AccountInfoGameRecordRrecentGamesU
+hu_type_details (2-.lq.ResFetchAccountInfoExtra.GameHuTypeDetailRhuTypeDetails^
+game_rank_details (22.lq.ResFetchAccountInfoExtra.AccountGameRankDetailRgameRankDetails“
+AccountInfoGameRecord
+uuid (	Ruuid
+
+start_time (R	startTime
+end_time (RendTime
+tag (Rtag
+sub_tag (RsubTag
+rank (Rrank
+final_point (R
+finalPoint^
+results (2D.lq.ResFetchAccountInfoExtra.AccountInfoGameRecord.AccountGameResultRresults™
+AccountGameResult
+rank (Rrank
+
+account_id (R	accountId
+nickname (	Rnickname
+verified (Rverified#
+grading_score (RgradingScore
+final_point (R
+finalPoint
+seat (Rseat&
+level (2.lq.AccountLevelRlevel(
+level3	 (2.lq.AccountLevelRlevel3<
+GameHuTypeDetail
+type (Rtype
+count (RcountA
+AccountGameRankDetail
+rank (Rrank
+count (Rcount"©
+ReqSetAccountFavoriteHu
+mode (Rmode
+category (Rcategory
+type (Rtype
+uuid (	Ruuid
+chang (Rchang
+ju (Rju
+ben (Rben"ù
 ReqAuthGame
 
 account_id (R	accountId
@@ -4708,14 +4796,15 @@ playerList"?
 NotifyAccountLevelChange(
 origin (2.lq.AccountLevelRorigin&
 final (2.lq.AccountLevelRfinal
-type (Rtype"≥
+type (Rtype"Â
 NotifyGameFinishReward
 mode_id (RmodeIdI
 level_change (2&.lq.NotifyGameFinishReward.LevelChangeRlevelChangeF
 match_chest (2%.lq.NotifyGameFinishReward.MatchChestR
 matchChestO
 main_character (2(.lq.NotifyGameFinishReward.MainCharacterRmainCharacterO
-character_gift (2(.lq.NotifyGameFinishReward.CharacterGiftRcharacterGifts
+character_gift (2(.lq.NotifyGameFinishReward.CharacterGiftRcharacterGift0
+badges (2.lq.BadgeAchieveProgressRbadgess
 LevelChange(
 origin (2.lq.AccountLevelRorigin&
 final (2.lq.AccountLevelRfinal
@@ -5405,7 +5494,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2¢ƒ
+READY2¿«
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -5645,7 +5734,8 @@ buyFromZHP.lq.ReqBuyFromZHP.lq.ResCommon;
 completeActivityFlipTask.lq.ReqCompleteActivityTask.lq.ResCommonH
 completePeriodActivityTask.lq.ReqCompleteActivityTask.lq.ResCommonX
 completePeriodActivityTaskBatch&.lq.ReqCompletePeriodActivityTaskBatch.lq.ResCommonH
-completeRandomActivityTask.lq.ReqCompleteActivityTask.lq.ResCommonY
+completeRandomActivityTask.lq.ReqCompleteActivityTask.lq.ResCommonR
+completeRandomActivityTaskBatch .lq.ReqCompleteActivityTaskBatch.lq.ResCommonY
 receiveActivityFlipTask.lq.ReqReceiveActivityFlipTask.lq.ResReceiveActivityFlipTask_
 completeSegmentTaskReward .lq.ReqCompleteSegmentTaskReward .lq.ResCompleteSegmentTaskRewardS
 fetchActivityFlipInfo.lq.ReqFetchActivityFlipInfo.lq.ResFetchActivityFlipInfo^
@@ -5774,7 +5864,11 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 setVerifiedHidden.lq.ReqSetVerifiedHidden.lq.ResCommonV
 fetchQuestionnaireList.lq.ReqFetchQuestionnaireList.lq.ResFetchQuestionnaireList\
 fetchQuestionnaireDetail.lq.ReqFetchQuestionnaireDetail.lq.ResFetchQuestionnaireDetail@
-submitQuestionnaire.lq.ReqSubmitQuestionnaire.lq.ResCommon2ı
+submitQuestionnaire.lq.ReqSubmitQuestionnaire.lq.ResCommonN
+setFriendRoomRandomBotChar!.lq.ReqSetFriendRoomRandomBotChar.lq.ResCommon_
+fetchAccountGameHuRecords .lq.ReqFetchAccountGameHuRecords .lq.ResFetchAccountGameHuRecordsS
+fetchAccountInfoExtra.lq.ReqFetchAccountInfoExtra.lq.ResFetchAccountInfoExtraB
+setAccountFavoriteHu.lq.ReqSetAccountFavoriteHu.lq.ResCommon2ı
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,

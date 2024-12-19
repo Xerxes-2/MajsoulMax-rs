@@ -315,6 +315,7 @@ message NotifyGameFinishRewardV2 {
     MatchChest match_chest = 3;
     MainCharacter main_character = 4;
     CharacterGift character_gift = 5;
+    repeated BadgeAchieveProgress badges = 6;
 
     message LevelChange {
 
@@ -421,6 +422,17 @@ message AntiAddiction {
     uint32 online_duration = 1;
 }
 
+message HighestHuRecord {
+
+    uint32 fanshu = 1;
+    uint32 doranum = 2;
+    string title = 3;
+    repeated string hands = 4;
+    repeated string ming = 5;
+    string hupai = 6;
+    uint32 title_id = 7;
+}
+
 message AccountMahjongStatistic {
 
     repeated uint32 final_position_counts = 1;
@@ -444,17 +456,6 @@ message AccountMahjongStatistic {
         uint32 total_count = 1;
         uint32 dora_round_count = 2;
         uint32 total_fan = 3;
-    }
-
-    message HighestHuRecord {
-
-        uint32 fanshu = 1;
-        uint32 doranum = 2;
-        string title = 3;
-        repeated string hands = 4;
-        repeated string ming = 5;
-        string hupai = 6;
-        uint32 title_id = 7;
     }
 
     message Liqi20Summary {
@@ -499,6 +500,14 @@ message ViewSlot {
     repeated uint32 item_id_list = 4;
 }
 
+message FavoriteHu {
+
+    uint32 category = 1;
+    uint32 type = 2;
+    HighestHuRecord hu = 3;
+    uint32 mode = 4;
+}
+
 message Account {
 
     uint32 account_id = 1;
@@ -526,9 +535,11 @@ message Account {
     repeated PlatformSkinTicket platform_skin_ticket = 25;
     uint32 verified = 26;
     repeated ChallengeLevel challenge_levels = 27;
-    repeated AchievementCount achievement_count = 28;
     uint32 frozen_state = 29;
+    repeated AchievementCount achievement_count = 28;
     repeated uint32 loading_image = 30;
+    repeated FavoriteHu favorite_hu = 34;
+    repeated Badge badges = 35;
 
     message PlatformDiamond {
 
@@ -553,6 +564,13 @@ message Account {
 
         uint32 rare = 1;
         uint32 count = 2;
+    }
+
+    message Badge {
+
+        uint32 id = 1;
+        uint32 achieved_time = 2;
+        uint32 achieved_counter = 3;
     }
 }
 
@@ -581,6 +599,7 @@ message AccountUpdate {
     SegmentTaskUpdate activity_segment_task = 16;
     MonthTicketUpdate month_ticket = 17;
     MainCharacterUpdate main_character = 18;
+    BadgeUpdate badge = 19;
 
     message NumericalUpdate {
 
@@ -664,6 +683,11 @@ message AccountUpdate {
 
         uint32 character_id = 1;
         uint32 skin_id = 2;
+    }
+
+    message BadgeUpdate {
+
+        repeated BadgeAchieveProgress progresses = 1;
     }
 }
 
@@ -975,6 +999,14 @@ message AchievementProgress {
     bool achieved = 3;
     bool rewarded = 4;
     uint32 achieved_time = 5;
+}
+
+message BadgeAchieveProgress {
+
+    uint32 id = 1;
+    uint32 counter = 2;
+    uint32 achieved_counter = 3;
+    uint32 achieved_time = 4;
 }
 
 message AccountStatisticByGameMode {
@@ -3073,6 +3105,7 @@ service Lobby {
     rpc completePeriodActivityTask (ReqCompleteActivityTask) returns (ResCommon);
     rpc completePeriodActivityTaskBatch (ReqCompletePeriodActivityTaskBatch) returns (ResCommon);
     rpc completeRandomActivityTask (ReqCompleteActivityTask) returns (ResCommon);
+    rpc completeRandomActivityTaskBatch (ReqCompleteActivityTaskBatch) returns (ResCommon);
     rpc receiveActivityFlipTask (ReqReceiveActivityFlipTask) returns (ResReceiveActivityFlipTask);
     rpc completeSegmentTaskReward (ReqCompleteSegmentTaskReward) returns (ResCompleteSegmentTaskReward);
     rpc fetchActivityFlipInfo (ReqFetchActivityFlipInfo) returns (ResFetchActivityFlipInfo);
@@ -3200,6 +3233,10 @@ service Lobby {
     rpc fetchQuestionnaireList (ReqFetchQuestionnaireList) returns (ResFetchQuestionnaireList);
     rpc fetchQuestionnaireDetail (ReqFetchQuestionnaireDetail) returns (ResFetchQuestionnaireDetail);
     rpc submitQuestionnaire (ReqSubmitQuestionnaire) returns (ResCommon);
+    rpc setFriendRoomRandomBotChar (ReqSetFriendRoomRandomBotChar) returns (ResCommon);
+    rpc fetchAccountGameHuRecords (ReqFetchAccountGameHuRecords) returns (ResFetchAccountGameHuRecords);
+    rpc fetchAccountInfoExtra (ReqFetchAccountInfoExtra) returns (ResFetchAccountInfoExtra);
+    rpc setAccountFavoriteHu (ReqSetAccountFavoriteHu) returns (ResCommon);
 }
 
 message ResConnectionInfo {
@@ -3456,7 +3493,7 @@ message ReqAccountInfo {
 message ResAccountInfo {
 
     Error error = 1;
-    Account account = 2;
+    lq.Account account = 2;
     Room room = 3;
 }
 
@@ -5135,6 +5172,7 @@ message ResMisc {
     repeated MiscFaithData faiths = 3;
     uint32 verified_hidden = 4;
     uint32 verified_value = 5;
+    uint32 disable_room_random_bot_char = 6;
 
     message MiscFaithData {
 
@@ -7033,6 +7071,99 @@ message ReqSubmitQuestionnaire {
         }
     }
 }
+
+message ReqSetFriendRoomRandomBotChar {
+
+    uint32 disable_random_char = 1;
+}
+
+message ReqFetchAccountGameHuRecords {
+
+    string uuid = 1;
+    uint32 category = 2;
+    uint32 type = 3;
+}
+
+message ResFetchAccountGameHuRecords {
+
+    Error error = 1;
+    repeated GameHuRecords records = 2;
+
+    message GameHuRecords {
+
+        uint32 chang = 1;
+        uint32 ju = 2;
+        uint32 ben = 3;
+        uint32 title_id = 4;
+        repeated string hands = 5;
+        repeated string ming = 6;
+        string hupai = 7;
+        repeated uint32 hu_fans = 8;
+    }
+}
+
+message ReqFetchAccountInfoExtra {
+
+    uint32 account_id = 1;
+    uint32 category = 2;
+    uint32 type = 3;
+}
+
+message ResFetchAccountInfoExtra {
+
+    Error error = 1;
+    repeated AccountInfoGameRecord recent_games = 2;
+    repeated GameHuTypeDetail hu_type_details = 3;
+    repeated AccountGameRankDetail game_rank_details = 4;
+
+    message AccountInfoGameRecord {
+
+        string uuid = 1;
+        uint32 start_time = 2;
+        uint32 end_time = 3;
+        uint32 tag = 4;
+        uint32 sub_tag = 5;
+        uint32 rank = 6;
+        uint32 final_point = 7;
+        repeated AccountGameResult results = 8;
+
+        message AccountGameResult {
+
+            uint32 rank = 1;
+            uint32 account_id = 2;
+            string nickname = 3;
+            uint32 verified = 4;
+            int32 grading_score = 5;
+            int32 final_point = 6;
+            uint32 seat = 7;
+            AccountLevel level = 8;
+            AccountLevel level3 = 9;
+        }
+    }
+
+    message GameHuTypeDetail {
+
+        uint32 type = 1;
+        uint32 count = 2;
+    }
+
+    message AccountGameRankDetail {
+
+        uint32 rank = 1;
+        uint32 count = 2;
+    }
+}
+
+message ReqSetAccountFavoriteHu {
+
+    uint32 mode = 1;
+    uint32 category = 2;
+    uint32 type = 3;
+    string uuid = 4;
+    uint32 chang = 5;
+    uint32 ju = 6;
+    uint32 ben = 7;
+}
 service FastTest {
     rpc authGame (ReqAuthGame) returns (ResAuthGame);
     rpc enterGame (ReqCommon) returns (ResEnterGame);
@@ -7215,6 +7346,7 @@ message NotifyGameFinishReward {
     MatchChest match_chest = 3;
     MainCharacter main_character = 4;
     CharacterGift character_gift = 5;
+    repeated BadgeAchieveProgress badges = 6;
 
     message LevelChange {
 
