@@ -1191,7 +1191,7 @@ dependencies = [
 
 [[package]]
 name = "majsoul_max_rs"
-version = "0.6.2"
+version = "0.6.3"
 dependencies = [
  "anyhow",
  "aws-lc-rs",
