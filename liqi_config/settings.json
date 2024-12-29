@@ -33,8 +33,8 @@
   "proxyAddr": "127.0.0.1:23410",
   "apiUrl": "https://localhost:12121/",
   "helperSwitch": true,
-  "modSwitch": false,
+  "modSwitch": true,
   "autoUpdate": true,
-  "liqiVersion": "v0.11.104.w",
+  "liqiVersion": "v0.11.110.w",
   "githubToken": ""
 }
