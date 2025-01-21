@@ -1,6 +1,5 @@
 
-⁄˜
-
+Ä†
 
 liqi.protolq"|
 NotifyCaptcha
@@ -248,7 +247,9 @@ activityId
 leaderboard_points (2-.lq.NotifyLeaderboardPointV2.LeaderboardPointRleaderboardPointsO
 LeaderboardPoint%
 leaderboard_id (RleaderboardId
-point (Rpoint"x
+point (Rpoint"9
+NotifySeerReport%
+report (2.lq.SeerBriefRreport"x
 Error
 code (Rcode
 
@@ -918,7 +919,7 @@ gift_inbox (2 .lq.FeedActivityData.GiftBoxDataR	giftInboxS
 MineActivityData&
 	dig_point (2	.lq.PointRdigPoint 
 map (2.lq.MineRewardRmap
-id (Rid"∆
+id (Rid"Õ
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -934,11 +935,10 @@ gacha_data (2.lq.ActivityGachaUpdateDataR	gachaDataC
  (2.lq.ActivityVillageDataRvillageData=
 festival_data (2.lq.ActivityFestivalDataRfestivalData7
 island_data (2.lq.ActivityIslandDataR
-islandData7
-amulet_data (2.lq.ActivityAmuletDataR
-amuletData4
+islandData4
 
-story_data (2.lq.ActivityStoryDataR	storyData"I
+story_data (2.lq.ActivityStoryDataR	storyData>
+choose_up_data (2.lq.ActivityChooseUpDataRchooseUpData"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
 pos (Rpos"æ
@@ -1066,14 +1066,15 @@ activityId
 AmuletEffectData
 id (Rid
 uid (Ruid
-store (Rstore"6
+store (Rstore"6
 AmuletBuffData
 id (Rid
-store (Rstore"T
+store (Rstore"j
 AmuletGameShopGoods
 id (Rid
 sold (Rsold
-goods_id (RgoodsId"[
+goods_id (RgoodsId
+price (Rprice"[
 AmuletActivityTingInfo
 tile (	Rtile
 fan (Rfan
@@ -1086,13 +1087,14 @@ activityId
 gang (2!.lq.AmuletGameOperation.GangTilesRgang
 	effect_id (ReffectId!
 	GangTiles
-tiles (Rtiles"∑
+tiles (Rtiles"€
 AmuletGameShopData-
 goods (2.lq.AmuletGameShopGoodsRgoods
 effect_list (R
 effectList,
 shop_refresh_count (RshopRefreshCount#
-refresh_price (RrefreshPrice"·
+refresh_price (RrefreshPrice"
+next_goods_id (RnextGoodsId"â
 AmuletGameUpdateData1
 tile_replace (2.lq.AmuletTileRtileReplace
 	tian_dora (	RtianDora
@@ -1113,13 +1115,21 @@ effectList1
 used_desktop" (RusedDesktop9
 
 highest_hu# (2.lq.ActivityAmuletHuRecordR	highestHu2
-records$ (2.lq.ActivityAmuletRecordRrecords"Ü
+records$ (2.lq.ActivityAmuletRecordRrecords
+reward_pack% (R
+rewardPack#
+reward_effect& (RrewardEffect:
+
+tile_score+ (2.lq.AmuletGameTileScoreDataR	tileScore$
+reward_pack_id/ (RrewardPackId"Ü
 AmuletGameRecordData
 key (Rkey
 	int_value (RintValue
 	str_value (	RstrValue"
-int_arr_value (RintArrValue"
-
+int_arr_value (RintArrValue"C
+AmuletGameTileScoreData
+tile (	Rtile
+score (	Rscore"ú
 AmuletGameData"
 pool (2.lq.AmuletTileRpool1
 tile_replace (2.lq.AmuletTileRtileReplace
@@ -1160,7 +1170,17 @@ recordData:
 highest_hu' (2.lq.ActivityAmuletHuRecordR	highestHu.
 total_consumed_coin( (RtotalConsumedCoin 
 boss_buff_id) (R
-bossBuffId"ï
+bossBuffId
+locked_tile* (R
+lockedTile:
+
+tile_score+ (2.lq.AmuletGameTileScoreDataR	tileScore*
+locked_tile_count, (RlockedTileCount
+reward_pack- (R
+rewardPack#
+reward_effect. (RrewardEffect$
+reward_pack_id/ (RrewardPackId5
+total_change_tile_count0 (RtotalChangeTileCount"ï
 ActivityAmuletUpdateData
 activity_id (R
 activityId9
@@ -1179,20 +1199,23 @@ game_empty (R	gameEmpty"7
 ActivityAmuletHuRecord
 point (	Rpoint
 pai (	Rpai
-fan (Rfan
-base (Rbase"∞
+fan (	Rfan
+base (	Rbase"∞
 !ActivityAmuletIllustratedBookData+
 effect_collection (ReffectCollection9
 
 highest_hu (2.lq.ActivityAmuletHuRecordR	highestHu#
-highest_level (RhighestLevel"Ç
+highest_level (RhighestLevel"F
+ActivityAmuletTaskData,
+progress (2.lq.TaskProgressRprogress"≤
 ActivityAmuletData
 activity_id (R
 activityId&
 game (2.lq.AmuletGameDataRgame
 version (Rversion7
 upgrade (2.lq.ActivityAmuletUpgradeDataRupgradeP
-illustrated_book (2%.lq.ActivityAmuletIllustratedBookDataRillustratedBook"€
+illustrated_book (2%.lq.ActivityAmuletIllustratedBookDataRillustratedBook.
+task (2.lq.ActivityAmuletTaskDataRtask"€
 ActivityFeedData
 activity_id (R
 activityId
@@ -1223,7 +1246,13 @@ maxInboxIdS
 ActivityStoryData
 activity_id (R
 activityId<
-unlocked_story (2.lq.UnlockedStoryDataRunlockedStory"‡
+unlocked_story (2.lq.UnlockedStoryDataRunlockedStory"á
+ActivityChooseUpData
+activity_id (R
+activityId
+chest_id (RchestId
+	selection (R	selection
+is_end (RisEnd"‡
 ActivityFriendGiftData
 activity_id (R
 activityId 
@@ -1596,14 +1625,15 @@ start_time (R	startTime
 end_time (RendTime
 tag (Rtag
 subtag (Rsubtag0
-players (2.lq.RecordPlayerResultRplayers"ù
+players (2.lq.RecordPlayerResultRplayers"±
 RecordPlayerResult
 rank (Rrank
 
 account_id (R	accountId
 nickname (	Rnickname&
 level (2.lq.AccountLevelRlevel(
-level3 (2.lq.AccountLevelRlevel3
+level3 (2.lq.AccountLevelRlevel3
+seat (Rseat
 pt (Rpt
 point (Rpoint
 max_hu_type	 (R	maxHuType
@@ -2053,7 +2083,7 @@ AmuletTile
 tile (	Rtile"Y
 	AmuletFan
 id (Rid
-val (Rval
+val (Rval
 count (Rcount
 yiman (Ryiman"3
 AmuletReplace
@@ -2061,20 +2091,20 @@ AmuletTile
 tile (	Rtile"A
 AmuletMingInfo
 type (Rtype
-	tile_list (RtileList"ô
+	tile_list (RtileList"˙
 AmuletActivityHookEffect
 add_dora (RaddDora"
-add_tian_dora (	RaddTianDora
+add_tian_dora (	RaddTianDoraW
 
-add_effect (R	addEffect#
+add_effect (28.lq.AmuletActivityHookEffect.AmuletActivityAddHookEffectR	addEffect#
 remove_effect (RremoveEffect
 add_buff (RaddBuff
 remove_buff (R
 removeBuff
 add_coin	 (RaddCoin4
 tile_replace (2.lq.AmuletReplaceRtileReplace
-add_fan (RaddFan
-add_base (RaddBase,
+add_fan (	RaddFan
+add_base (	RaddBase,
 
 modify_fan (2.lq.AmuletFanR	modifyFan
 id (Rid
@@ -2082,13 +2112,20 @@ modify_fan (2.lq.AmuletFanR	modifyFan
 modifyDora
 uid (Ruid"
 add_show_tile (RaddShowTile$
-add_dora_count (RaddDoraCount"ä
+add_dora_count (RaddDoraCount'
+add_dora_no_hook (RaddDoraNoHook'
+add_coin_no_hook (RaddCoinNoHookA
+add_tile_score (2.lq.AmuletGameTileScoreDataRaddTileScoreO
+add_tile_score_no_hook (2.lq.AmuletGameTileScoreDataRaddTileScoreNoHook?
+AmuletActivityAddHookEffect
+id (Rid
+uid (Ruid"ä
 AmuletHuleInfo
 tile (Rtile(
 fan_list (2.lq.AmuletFanRfanList
-fan (Rfan
+fan (	Rfan
 point (	Rpoint
-base (Rbase"¥
+base (	Rbase"¥
 AmuletHuleOperateResult-
 hu_final (2.lq.AmuletHuleInfoRhuFinal+
 hu_base (2.lq.AmuletHuleInfoRhuBase=
@@ -2101,11 +2138,19 @@ hookEffect"i
 AmuletDealTileResult
 tile (Rtile=
 hook_effect (2.lq.AmuletActivityHookEffectR
-hookEffect"à
+hookEffect"l
+AmuletDiscardTileResult
+tile (Rtile=
+hook_effect (2.lq.AmuletActivityHookEffectR
+hookEffect"V
+AmuletStartGameResult=
+hook_effect (2.lq.AmuletActivityHookEffectR
+hookEffect"Ã
 AmuletRoundResult8
 	hu_result (2.lq.AmuletHuleOperateResultRhuResult9
 deal_result (2.lq.AmuletDealTileResultR
-dealResult"˙
+dealResultB
+discard_result (2.lq.AmuletDiscardTileResultRdiscardResult"õ
 AmuletUpgradeResult:
 remain_rounds (2.lq.AmuletRoundResultRremainRounds
 
@@ -2114,11 +2159,13 @@ point_coin (R	pointCoin
 level_coin (R	levelCoin*
 shop (2.lq.AmuletGameShopDataRshop=
 hook_effect (2.lq.AmuletActivityHookEffectR
-hookEffect"L
+hookEffect
+reward_pack (R
+rewardPack"L
 QuestionnaireReward
 resource_id (R
 resourceId
-count (Rcount" 
+count (Rcount"ﬁ
 QuestionnaireDetail
 id (Rid
 
@@ -2133,7 +2180,8 @@ version_id (R	versionId0
 
 final_text
  (	R	finalText7
-	questions (2.lq.QuestionnaireQuestionR	questions"Ç
+	questions (2.lq.QuestionnaireQuestionR	questions
+type (Rtype"Ç
 QuestionnaireQuestion
 id (Rid
 title (	Rtitle
@@ -2168,7 +2216,7 @@ questionId
 QuestionconditionWrapper\
 
 conditions (2<.lq.QuestionnaireQuestion.NextQuestionData.QuestionConditionR
-conditions"è
+conditions"£
 QuestionnaireBrief
 id (Rid
 
@@ -2177,7 +2225,40 @@ version_id (R	versionId0
 effective_time_end (ReffectiveTimeEnd1
 rewards (2.lq.QuestionnaireRewardRrewards!
 banner_title (	RbannerTitle
-title (	Rtitle"r
+title (	Rtitle
+type (Rtype"n
+
+SeerReport
+uuid (	Ruuid%
+events (2.lq.SeerEventRevents%
+rounds (2.lq.SeerRoundRrounds"Ä
+	SeerEvent!
+record_index (RrecordIndex
+
+seer_index (R	seerIndex1
+
+recommends (2.lq.SeerRecommendR
+recommends"Y
+SeerRecommend
+seat (Rseat4
+predictions (2.lq.SeerPredictionRpredictions">
+SeerPrediction
+action (Raction
+score (Rscore"w
+	SeerRound
+chang (Rchang
+ju (Rju
+ben (Rben2
+player_scores (2.lq.SeerScoreRplayerScores"7
+	SeerScore
+seat (Rseat
+rating (Rrating"ä
+	SeerBrief
+uuid (	Ruuid
+state (Rstate
+expire_time (R
+expireTime2
+player_scores (2.lq.SeerScoreRplayerScores"r
 ResConnectionInfo
 error (2	.lq.ErrorRerror<
 client_endpoint (2.lq.NetworkEndpointRclientEndpoint"`
@@ -2577,9 +2658,10 @@ ResBagInfo
 ReqOpenManualItem
 item_id (RitemId
 count (Rcount
-	select_id (RselectId"2
+	select_id (RselectId"H
 ReqOpenRandomRewardItem
-item_id (RitemId"d
+item_id (RitemId
+count (Rcount"d
 ResOpenRandomRewardItem
 error (2	.lq.ErrorRerror(
 results (2.lq.OpenResultRresults"/
@@ -3225,12 +3307,13 @@ account_id (R	accountId%
 
 account_id (R	accountId
 nsa_id (	RnsaId
-	nsa_token (	RnsaToken"^
+	nsa_token (	RnsaToken"ë
 ReqOpenChest
 chest_id (RchestId
 count (Rcount
 
-use_ticket (R	useTicket"µ
+use_ticket (R	useTicket1
+choose_up_activity_id (RchooseUpActivityId"µ
 ResOpenChest
 error (2	.lq.ErrorRerror(
 results (2.lq.OpenResultRresults(
@@ -3510,7 +3593,7 @@ recordList"9
 error (2	.lq.ErrorRerror,
 
 activities (2.lq.ActivityR
-activities"·
+activities"Ë
 ResAccountActivityData
 error (2	.lq.ErrorRerror=
 exchange_records (2.lq.ExchangeRecordRexchangeRecords>
@@ -3543,11 +3626,10 @@ gacha_data (2.lq.ActivityGachaUpdateDataR	gachaDataC
 village_data (2.lq.ActivityVillageDataRvillageData=
 festival_data (2.lq.ActivityFestivalDataRfestivalData7
 island_data (2.lq.ActivityIslandDataR
-islandData7
-amulet_data (2.lq.ActivityAmuletDataR
-amuletData4
+islandData4
 
-story_data (2.lq.ActivityStoryDataR	storyDataÑ
+story_data (2.lq.ActivityStoryDataR	storyData>
+choose_up_data (2.lq.ActivityChooseUpDataRchooseUpDataÑ
 ActivitySignInData
 activity_id (R
 activityId"
@@ -4150,7 +4232,7 @@ activityId
 	order_pos (RorderPos"p
 ResFinishCombiningOrder
 error (2	.lq.ErrorRerror4
-reward_items (2.lq.ExecuteRewardRrewardItems"∆
+reward_items (2.lq.ExecuteRewardRrewardItems"˘
 ResFetchInfo
 error (2	.lq.ErrorRerror2
 server_time (2.lq.ResServerTimeR
@@ -4187,7 +4269,11 @@ vip_reward (2.lq.ResVipRewardR	vipRewardB
 collected_game_record_list (2.lq.ResCollectedGameRecordListRcollectedGameRecordListC
 maintain_notice (2.lq.ResFetchMaintainNoticeRmaintainNoticeA
 random_character (2.lq.ResRandomCharacterRrandomCharacterL
-maintenance_info  (2!.lq.ResFetchServerMaintenanceInfoRmaintenanceInfo"‹
+maintenance_info  (2!.lq.ResFetchServerMaintenanceInfoRmaintenanceInfo1
+	seer_info! (2.lq.ResFetchSeerInfoRseerInfo"V
+ResFetchSeerInfo
+error (2	.lq.ErrorRerror!
+remain_count (RremainCount"‹
 ResFetchServerMaintenanceInfor
 function_maintenance (2?.lq.ResFetchServerMaintenanceInfo.ServerFunctionMaintenanceInfoRfunctionMaintenanceG
 ServerFunctionMaintenanceInfo
@@ -4430,6 +4516,20 @@ account_id (R	accountId
 "ResGenerateContestManagerLoginCode
 error (2	.lq.ErrorRerror
 code (	Rcode"=
+ReqAmuletActivityFetchInfo
+activity_id (R
+activityId"i
+ResAmuletActivityFetchInfo
+error (2	.lq.ErrorRerror*
+data (2.lq.ActivityAmuletDataRdata">
+ReqAmuletActivityFetchBrief
+activity_id (R
+activityId"˘
+ResAmuletActivityFetchBrief
+error (2	.lq.ErrorRerror7
+upgrade (2.lq.ActivityAmuletUpgradeDataRupgradeP
+illustrated_book (2%.lq.ActivityAmuletIllustratedBookDataRillustratedBook.
+task (2.lq.ActivityAmuletTaskDataRtask"=
 ReqAmuletActivityStartGame
 activity_id (R
 activityId"e
@@ -4440,7 +4540,7 @@ activityId"e
 activity_id (R
 activityId
 type (Rtype
-tile (Rtile"ù
+tile (Rtile"ü
 ResAmuletActivityOperate
 error (2	.lq.ErrorRerror8
 	hu_result (2.lq.AmuletHuleOperateResultRhuResult<
@@ -4452,7 +4552,10 @@ dealResult>
 upgraded (Rupgraded
 failed (Rfailed9
 game_update (2.lq.AmuletGameUpdateDataR
-gameUpdate"U
+gameUpdateB
+discard_result	 (2.lq.AmuletDiscardTileResultRdiscardResult<
+start_result
+ (2.lq.AmuletStartGameResultRstartResult"U
 ReqAmuletActivityChangeHands
 activity_id (R
 activityId
@@ -4496,7 +4599,7 @@ effectList.
 ReqAmuletActivitySellEffect
 activity_id (R
 activityId
-id (Rid"˝
+id (Rid"Ë
 ResAmuletActivitySellEffect
 error (2	.lq.ErrorRerror
 coin (Rcoin5
@@ -4504,7 +4607,10 @@ activityId
 effectList9
 game_update (2.lq.AmuletGameUpdateDataR
 gameUpdate7
-remain_change_tile_count (RremainChangeTileCount"[
+remain_change_tile_count (RremainChangeTileCount=
+hook_effect (2.lq.AmuletActivityHookEffectR
+hookEffect*
+shop (2.lq.AmuletGameShopDataRshop"[
 ReqAmuletActivityEffectSort
 activity_id (R
 activityId
@@ -4525,12 +4631,15 @@ effectList"e
 activity_id (R
 activityId
 selected_id (R
-selectedId"∏
+selectedId"Ö
 !ResAmuletActivitySelectFreeEffect
 error (2	.lq.ErrorRerror9
 game_update (2.lq.AmuletGameUpdateDataR
 gameUpdate7
-remain_change_tile_count (RremainChangeTileCount"S
+remain_change_tile_count (RremainChangeTileCount
+locked_tile (R
+lockedTile*
+locked_tile_count (RlockedTileCount"S
  ReqAmuletActivityUpgradeShopBuff
 activity_id (R
 activityId
@@ -4555,6 +4664,22 @@ activityId)
 ResAmuletActivityMaintainInfo
 error (2	.lq.ErrorRerror
 mode (	Rmode"T
+!ReqAmuletActivitySelectRewardPack
+activity_id (R
+activityId
+id (Rid"´
+!ResAmuletActivitySelectRewardPack
+error (2	.lq.ErrorRerror9
+game_update (2.lq.AmuletGameUpdateDataR
+gameUpdate*
+shop (2.lq.AmuletGameShopDataRshop"b
+"ReqAmuletActivityReceiveTaskReward
+activity_id (R
+activityId
+	task_list (RtaskList"u
+"ResAmuletActivityReceiveTaskReward
+error (2	.lq.ErrorRerror.
+task (2.lq.ActivityAmuletTaskDataRtask"T
 ReqStoryActivityUnlock
 activity_id (R
 activityId
@@ -4603,16 +4728,18 @@ activityId!
 account_id (R	accountId
 score (Rscore
 data (	Rdata
-rank (Rrank"/
+rank (Rrank"I
 ReqFetchQuestionnaireList
-lang (	Rlang"ç
+lang (	Rlang
+channel (	Rchannel"ç
 ResFetchQuestionnaireList
 error (2	.lq.ErrorRerror*
 list (2.lq.QuestionnaireBriefRlist#
-finished_list (RfinishedList"A
+finished_list (RfinishedList"[
 ReqFetchQuestionnaireDetail
 id (Rid
-lang (	Rlang"o
+lang (	Rlang
+channel (	Rchannel"o
 ResFetchQuestionnaireDetail
 error (2	.lq.ErrorRerror/
 detail (2.lq.QuestionnaireDetailRdetail"?
@@ -4697,7 +4824,26 @@ finalPoint
 uuid (	Ruuid
 chang (Rchang
 ju (Rju
-ben (Rben"ù
+ben (Rben"(
+ReqFetchSeerReport
+uuid (	Ruuid"]
+ResFetchSeerReport
+error (2	.lq.ErrorRerror&
+report (2.lq.SeerReportRreport")
+ReqCreateSeerReport
+uuid (	Ruuid"f
+ResCreateSeerReport
+error (2	.lq.ErrorRerror.
+seer_report (2.lq.SeerBriefR
+seerReport"r
+ResFetchSeerReportList
+error (2	.lq.ErrorRerror7
+seer_report_list (2.lq.SeerBriefRseerReportList"r
+ReqSelectChestChooseUp
+activity_id (R
+activityId
+	selection (R	selection
+chest_id (RchestId"ù
 ReqAuthGame
 
 account_id (R	accountId
@@ -5494,7 +5640,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2¿«
+READY2ßÕ
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -5839,6 +5985,8 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 fetchReadyPlayerList.lq.ReqFetchReadyPlayerList.lq.ResFetchReadyPlayerList6
 createGamePlan.lq.ReqCreateGamePlan.lq.ResCommonX
 generateContestManagerLoginCode.lq.ReqCommon&.lq.ResGenerateContestManagerLoginCodeY
+amuletActivityFetchInfo.lq.ReqAmuletActivityFetchInfo.lq.ResAmuletActivityFetchInfo\
+amuletActivityFetchBrief.lq.ReqAmuletActivityFetchBrief.lq.ResAmuletActivityFetchBriefY
 amuletActivityStartGame.lq.ReqAmuletActivityStartGame.lq.ResAmuletActivityStartGameS
 amuletActivityOperate.lq.ReqAmuletActivityOperate.lq.ResAmuletActivityOperate_
 amuletActivityChangeHands .lq.ReqAmuletActivityChangeHands .lq.ResAmuletActivityChangeHandsS
@@ -5853,7 +6001,9 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 amuletActivityUpgradeShopBuff$.lq.ReqAmuletActivityUpgradeShopBuff$.lq.ResAmuletActivityUpgradeShopBuff_
 amuletActivityEndShopping .lq.ReqAmuletActivityEndShopping .lq.ResAmuletActivityEndShoppingP
 amuletActivitySetSkillLevel".lq.ReqAmuletActivitySetSkillLevel.lq.ResCommonN
-amuletActivityMaintainInfo.lq.ReqCommon!.lq.ResAmuletActivityMaintainInfo@
+amuletActivityMaintainInfo.lq.ReqCommon!.lq.ResAmuletActivityMaintainInfon
+amuletActivitySelectRewardPack%.lq.ReqAmuletActivitySelectRewardPack%.lq.ResAmuletActivitySelectRewardPackq
+amuletActivityReceiveTaskReward&.lq.ReqAmuletActivityReceiveTaskReward&.lq.ResAmuletActivityReceiveTaskReward@
 storyActivityUnlock.lq.ReqStoryActivityUnlock.lq.ResCommonL
 storyActivityUnlockEnding .lq.ReqStoryActivityUnlockEnding.lq.ResCommon_
  storyActivityReceiveEndingReward'.lq.ReqStoryActivityReceiveEndingReward.lq.ResStoryReward_
@@ -5868,7 +6018,12 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 setFriendRoomRandomBotChar!.lq.ReqSetFriendRoomRandomBotChar.lq.ResCommon_
 fetchAccountGameHuRecords .lq.ReqFetchAccountGameHuRecords .lq.ResFetchAccountGameHuRecordsS
 fetchAccountInfoExtra.lq.ReqFetchAccountInfoExtra.lq.ResFetchAccountInfoExtraB
-setAccountFavoriteHu.lq.ReqSetAccountFavoriteHu.lq.ResCommon2ı
+setAccountFavoriteHu.lq.ReqSetAccountFavoriteHu.lq.ResCommonA
+fetchSeerReport.lq.ReqFetchSeerReport.lq.ResFetchSeerReportD
+createSeerReport.lq.ReqCreateSeerReport.lq.ResCreateSeerReport@
+fetchSeerReportList.lq.ReqCommon.lq.ResFetchSeerReportList4
+fetchSeerInfo.lq.ReqCommon.lq.ResFetchSeerInfoH
+selectChestChooseUpActivity.lq.ReqSelectChestChooseUp.lq.ReqCommon2ı
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,
