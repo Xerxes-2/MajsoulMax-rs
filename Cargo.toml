@@ -29,7 +29,7 @@ tracing = "0.1"
 prost = "0.13"
 hudsucker = "0.23"
 const_format = "0.2"
-rand = "0.8"
+rand = "0.9"
 
 [build-dependencies]
 prost-build = "0.13"
