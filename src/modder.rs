@@ -6,7 +6,7 @@ use anyhow::{anyhow, bail, Context, Result};
 use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
-use rand::seq::SliceRandom;
+use rand::{rng, seq::IndexedRandom};
 use std::collections::HashMap;
 use tokio::sync::RwLock;
 use tracing::{debug, error, info};
@@ -527,7 +527,7 @@ impl Modder {
                     let mod_settings = self.mod_settings.read().await;
                     let (charid, skin) = mod_settings
                         .random_char_pool
-                        .choose(&mut rand::thread_rng())
+                        .choose(&mut rng())
                         .context("Failed to choose random character")?;
                     character.charid = *charid;
                     p.avatar_id = *skin;
@@ -552,11 +552,7 @@ impl Modder {
                 p.views.iter_mut().for_each(|v| match v.r#type {
                     1 => {}
                     _ => {
-                        v.item_id = v
-                            .item_id_list
-                            .choose(&mut rand::thread_rng())
-                            .unwrap_or(&0)
-                            .to_owned();
+                        v.item_id = v.item_id_list.choose(&mut rng()).unwrap_or(&0).to_owned();
                     }
                 });
                 // avatar_frame id is view.item_id which view.slot is 5
