@@ -222,22 +222,22 @@ impl Modder {
                         .await
                         .loading_image
                         .clone_from(&account.loading_image);
-                    if let Some(av) = self
+                    match self
                         .mod_settings
                         .read()
                         .await
                         .char_skin
                         .get(&self.mod_settings.read().await.main_char)
-                    {
+                    { Some(av) => {
                         account.avatar_id = *av;
-                    } else {
+                    } _ => {
                         account.avatar_id = {
                             let id_str = format!("{}", self.mod_settings.read().await.main_char);
                             let slice = &id_str[4..];
                             let id_str = format!("40{slice}01");
                             id_str.parse().context("Failed to parse avatar id")?
                         }
-                    }
+                    }}
                     if !self.mod_settings.read().await.nickname.is_empty() {
                         account
                             .nickname
