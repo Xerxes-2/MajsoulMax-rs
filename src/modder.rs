@@ -887,7 +887,7 @@ fn encode_account_id2(id: u32) -> u32 {
     let s = p & !H;
     let mut z = p & H;
     for _ in 0..5 {
-        z = (511 & z) << 17 | z >> 9;
+        z = ((511 & z) << 17) | (z >> 9);
     }
     z + s + 1e7 as u32
 }
