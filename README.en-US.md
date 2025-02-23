@@ -123,5 +123,5 @@ For the Android version, assuming you are technically proficient, only key terms
 
 ## 🛠️ Development Dependencies
 
-- [Rust](https://www.rust-lang.org/) >= 1.80.0
+- [Rust](https://www.rust-lang.org/) >= 1.85
 - [Protoc](https://github.com/protocolbuffers/protobuf)

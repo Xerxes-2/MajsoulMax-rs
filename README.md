@@ -132,5 +132,5 @@ macOS或Linux用户，可以参考Windows的步骤，步骤3有所不同。
 
 ## 🛠️开发依赖
 
-- [Rust](https://www.rust-lang.org/) >= 1.80.0
+- [Rust](https://www.rust-lang.org/) >= 1.85
 - [Protoc](https://github.com/protocolbuffers/protobuf)
