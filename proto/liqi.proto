@@ -2984,6 +2984,7 @@ message SeerBrief {
     uint32 state = 2;
     uint32 expire_time = 3;
     repeated SeerScore player_scores = 4;
+    uint32 create_time = 5;
 }
 service Lobby {
     rpc fetchConnectionInfo (ReqCommon) returns (ResConnectionInfo);
@@ -6538,6 +6539,8 @@ message ResFetchSeerInfo {
 
     Error error = 1;
     uint32 remain_count = 2;
+    uint32 date_limit = 3;
+    uint32 expire_time = 4;
 }
 
 message ResFetchServerMaintenanceInfo {

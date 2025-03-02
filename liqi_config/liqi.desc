@@ -1,5 +1,5 @@
 
-€ 
+â 
 
 liqi.protolq"|
 NotifyCaptcha
@@ -2252,13 +2252,15 @@ recommends"Y
 player_scores (2.lq.SeerScoreRplayerScores"7
 	SeerScore
 seat (Rseat
-rating (Rrating"Š
+rating (Rrating"«
 	SeerBrief
 uuid (	Ruuid
 state (Rstate
 expire_time (R
 expireTime2
-player_scores (2.lq.SeerScoreRplayerScores"r
+player_scores (2.lq.SeerScoreRplayerScores
+create_time (R
+createTime"r
 ResConnectionInfo
 error (2	.lq.ErrorRerror<
 client_endpoint (2.lq.NetworkEndpointRclientEndpoint"`
@@ -4270,10 +4272,14 @@ vip_reward (2.lq.ResVipRewardR	vipRewardB
 maintain_notice (2.lq.ResFetchMaintainNoticeRmaintainNoticeA
 random_character (2.lq.ResRandomCharacterRrandomCharacterL
 maintenance_info  (2!.lq.ResFetchServerMaintenanceInfoRmaintenanceInfo1
-	seer_info! (2.lq.ResFetchSeerInfoRseerInfo"V
+	seer_info! (2.lq.ResFetchSeerInfoRseerInfo"–
 ResFetchSeerInfo
 error (2	.lq.ErrorRerror!
-remain_count (RremainCount"Ü
+remain_count (RremainCount
+
+date_limit (R	dateLimit
+expire_time (R
+expireTime"Ü
 ResFetchServerMaintenanceInfor
 function_maintenance (2?.lq.ResFetchServerMaintenanceInfo.ServerFunctionMaintenanceInfoRfunctionMaintenanceG
 ServerFunctionMaintenanceInfo
