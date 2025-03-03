@@ -95,16 +95,17 @@ impl Parser {
 
     fn parse_notify(&self, buf: &[u8]) -> Result<(usize, Arc<str>, JsonValue)> {
         let msg_block = BaseMessage::decode(&buf[1..])?;
-        let method_name = Arc::from(msg_block.method_name);
-        
-        // Extract message name from method (e.g. "lq.NotifyRoomMessage" -> "RoomMessage")
+        let method_name: Arc<str> = Arc::from(msg_block.method_name);
+
+        // Extract message name from method (e.g. "lq.Notify.RoomMessage" -> "RoomMessage")
         let message_name = method_name
             .split('.')
             .nth(2)
             .context("Invalid method name format")?;
 
         // Decode and convert to JSON
-        let message_type = self.pool
+        let message_type = self
+            .pool
             .get_message_by_name(&to_fqn(message_name))
             .context(format!("Invalid message type: {}", message_name))?;
         let dyn_msg = DynamicMessage::decode(message_type, msg_block.data.as_ref())?;
@@ -112,9 +113,7 @@ impl Parser {
 
         // Handle nested action data if present
         if let Some(b64) = data_obj.get("data") {
-            let action_name = data_obj["name"]
-                .as_str()
-                .context("name field invalid")?;
+            let action_name = data_obj["name"].as_str().context("name field invalid")?;
             let b64 = b64.as_str().unwrap_or_default();
             let action_obj = decode_action(action_name, b64, self.pool)?;
             data_obj
@@ -131,20 +130,22 @@ impl Parser {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
 
         let msg_block = BaseMessage::decode(&buf[3..])?;
-        let method_name = Arc::from(msg_block.method_name);
+        let method_name: Arc<str> = Arc::from(msg_block.method_name);
 
         // Split method name into components (e.g. "lq.Lobby.oauth2Login")
         let parts: Vec<&str> = method_name.split('.').collect();
-        ensure!(parts.len() == 4, "Invalid method name format");
+        ensure!(parts.len() >= 4, "Invalid method name format");
 
         // Lookup method details in proto JSON
-        let proto_domain = &self.proto_json["nested"][parts[1]]["nested"][parts[2]]["methods"][parts[3]];
-        
+        let proto_domain =
+            &self.proto_json["nested"][parts[1]]["nested"][parts[2]]["methods"][parts[3]];
+
         // Decode request
         let req_type_name = proto_domain["requestType"]
             .as_str()
             .context("Invalid request type")?;
-        let req_type = self.pool
+        let req_type = self
+            .pool
             .get_message_by_name(&to_fqn(req_type_name))
             .context(format!("Invalid request type: {}", req_type_name))?;
         let dyn_msg = DynamicMessage::decode(req_type, msg_block.data.as_ref())?;
@@ -154,7 +155,8 @@ impl Parser {
         let res_type_name = proto_domain["responseType"]
             .as_str()
             .context("Invalid response type")?;
-        let resp_type = self.pool
+        let resp_type = self
+            .pool
             .get_message_by_name(&to_fqn(res_type_name))
             .context(format!("Invalid response type: {}", res_type_name))?;
         self.respond_type
@@ -167,10 +169,14 @@ impl Parser {
         let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
 
         let msg_block = BaseMessage::decode(&buf[3..])?;
-        ensure!(msg_block.method_name.is_empty(), "Response should have empty method name");
+        ensure!(
+            msg_block.method_name.is_empty(),
+            "Response should have empty method name"
+        );
 
         // Retrieve stored method info
-        let (method_name, resp_type) = self.respond_type
+        let (method_name, resp_type) = self
+            .respond_type
             .remove(&msg_id)
             .context("No corresponding request")?;
 
@@ -183,13 +189,13 @@ impl Parser {
 }
 
 /// Converts a method name to its fully qualified name (FQN) by prefixing with "lq."
-/// 
+///
 /// # Arguments
 /// * `method_name` - The method name to convert
-/// 
+///
 /// # Returns
 /// A new String with the fully qualified name
-/// 
+///
 /// # Examples
 /// ```
 /// assert_eq!(to_fqn("example"), "lq.example");
