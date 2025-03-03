@@ -163,17 +163,16 @@ pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<Js
     let action_type = pool
         .get_message_by_name(&to_fqn(name))
         .context(format!("Invalid action type: {name}"))?;
-    let action_msg = DynamicMessage::decode(action_type, Bytes::from(decoded))?;
+    let action_msg = DynamicMessage::decode(action_type, decoded.as_ref())?;
     dyn_to_json(&action_msg)
 }
 
 fn wtf_decode(data: &mut [u8]) {
-    const KEYS: [usize; 9] = [0x84, 0x5E, 0x4E, 0x42, 0x39, 0xA2, 0x1F, 0x60, 0x1C];
-    let d = data.len();
+    const KEYS: [u8; 9] = [0x84, 0x5E, 0x4E, 0x42, 0x39, 0xA2, 0x1F, 0x60, 0x1C];
+    let base = 23 ^ data.len() as u8;
     KEYS.iter()
         .cycle()
         .zip(data.iter_mut())
         .enumerate()
-        .map(|(i, (key, b))| (((23 ^ d) + 5 * i + key) & 255, b))
-        .for_each(|(k, b)| *b ^= k as u8);
+        .for_each(|(i, (key, b))| *b = base + 5 * i as u8 + key);
 }
