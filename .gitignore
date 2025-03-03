@@ -3,3 +3,5 @@
 .errorviz-version
 src/proto/lq.rs
 .DS_Store
+.aider*
+.env
