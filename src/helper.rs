@@ -1,17 +1,13 @@
 use crate::{
-    parser::{decode_action, LiqiMessage},
-    settings::Settings,
     ARBITRARY_MD5,
+    parser::{LiqiMessage, decode_action},
+    settings::Settings,
 };
 use anyhow::{Context, Result};
 use reqwest::Client;
 use serde::Serialize;
-use serde_json::{json, Map, Value as JsonValue};
-use std::{
-    borrow::Cow,
-    future::Future,
-    sync::{Arc, LazyLock},
-};
+use serde_json::{Map, Value as JsonValue, json};
+use std::{borrow::Cow, future::Future, sync::LazyLock};
 use tokio::{spawn, sync::mpsc::Receiver, time::sleep};
 use tracing::{debug, error, info};
 
@@ -61,17 +57,13 @@ fn process_message(mut parsed: LiqiMessage, settings: &Settings) -> Result<()> {
                 return Ok(());
             }
             if name == "ActionNewRound" {
-                Arc::<serde_json::Value>::make_mut(&mut parsed.data)["data"]
+                parsed
+                    .data
                     .as_object_mut()
                     .context("data field invalid")?
                     .insert("md5".to_string(), json!(ARBITRARY_MD5));
             }
-            Cow::Owned(
-                Arc::<serde_json::Value>::make_mut(&mut parsed.data)
-                    .get_mut("data")
-                    .context("No data field")?
-                    .take(),
-            )
+            Cow::Owned(parsed.data.get_mut("data").context("No data field")?.take())
         }
         ".lq.FastTest.syncGame" => {
             let game_restore = parsed.data["game_restore"]["actions"]

@@ -13,7 +13,7 @@ mod handler;
 mod helper;
 mod modder;
 mod parser;
-pub(crate) mod proto;
+mod proto;
 mod settings;
 
 pub use crate::{

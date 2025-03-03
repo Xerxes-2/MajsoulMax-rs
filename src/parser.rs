@@ -1,9 +1,9 @@
-use anyhow::{ensure, Context, Result};
+use anyhow::{Context, Result, ensure};
 use base64::prelude::*;
 use bytes::Bytes;
 use prost::Message;
 use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, SerializeOptions};
-use serde_json::{value::Serializer, Value as JsonValue};
+use serde_json::{Value as JsonValue, value::Serializer};
 use std::{collections::HashMap, sync::Arc};
 
 use crate::proto::base::BaseMessage;
@@ -24,7 +24,7 @@ pub struct LiqiMessage {
     pub id: usize,
     pub msg_type: MessageType,
     pub method_name: Arc<str>,
-    pub data: Arc<JsonValue>,
+    pub data: JsonValue,
 }
 
 impl LiqiMessage {
@@ -33,7 +33,7 @@ impl LiqiMessage {
             id,
             msg_type,
             method_name,
-            data: Arc::new(data),
+            data,
         }
     }
 }
