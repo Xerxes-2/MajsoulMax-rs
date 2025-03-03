@@ -60,96 +60,125 @@ impl Parser {
         }
     }
 
+    /// Parses a raw message buffer into a structured LiqiMessage
+    ///
+    /// # Arguments
+    /// * `buf` - The raw message bytes to parse
+    ///
+    /// # Returns
+    /// A Result containing the parsed LiqiMessage or an error
+    ///
+    /// # Errors
+    /// Returns an error if:
+    /// - Invalid message type
+    /// - Failed to decode protobuf message
+    /// - Invalid message structure
     pub fn parse(&mut self, buf: Bytes) -> Result<LiqiMessage> {
-        let msg_type_byte = buf[0];
-        ensure!(
-            (1..=3).contains(&msg_type_byte),
-            "Invalid message type: {msg_type_byte}"
-        );
-        let msg_type = match msg_type_byte {
+        // Validate message type
+        let msg_type = match buf[0] {
             1 => MessageType::Notify,
             2 => MessageType::Request,
             3 => MessageType::Response,
-            _ => unreachable!(),
+            t => anyhow::bail!("Invalid message type: {}", t),
         };
-        let method_name: Arc<str>;
-        let mut data_obj: JsonValue;
-        let msg_id: usize;
-        match msg_type {
-            MessageType::Notify => {
-                let msg_block = BaseMessage::decode(&buf[1..])?;
-                let data = msg_block.data;
-                method_name = Arc::from(msg_block.method_name);
-                let method_name_list: Vec<&str> = method_name.split('.').collect();
-                let message_name = method_name_list[2];
-                let message_type = self
-                    .pool
-                    .get_message_by_name(&to_fqn(message_name))
-                    .context(format!("Invalid message type: {message_name}"))?;
-                let dyn_msg = DynamicMessage::decode(message_type, data.as_ref())?;
-                data_obj = dyn_to_json(&dyn_msg)?;
-                if let Some(b64) = data_obj.get("data") {
-                    let action_name = data_obj["name"].as_str().context("name field invalid")?;
-                    let b64 = b64.as_str().unwrap_or_default();
-                    let action_obj = decode_action(action_name, b64, self.pool)?;
-                    data_obj
-                        .as_object_mut()
-                        .context("data is not an object")?
-                        .insert("data".to_string(), action_obj);
-                }
-                msg_id = self.total;
-            }
-            MessageType::Request => {
-                // little endian, msg_id = unpack("<H", buf[1:3])[0]
-                msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
-                let msg_block = BaseMessage::decode(&buf[3..])?;
-                let data = msg_block.data;
-                method_name = Arc::from(msg_block.method_name);
-                let method_name_list: Vec<&str> = method_name.split('.').collect();
-                let lq = method_name_list[1];
-                let service = method_name_list[2];
-                let rpc = method_name_list[3];
-                let proto_domain =
-                    &self.proto_json["nested"][lq]["nested"][service]["methods"][rpc];
-                let req_type_name = &proto_domain["requestType"]
-                    .as_str()
-                    .context("Invalid request type")?;
-                let req_type = self
-                    .pool
-                    .get_message_by_name(&to_fqn(req_type_name))
-                    .context(format!("Invalid request type: {req_type_name}"))?;
-                let dyn_msg = DynamicMessage::decode(req_type, data.as_ref())?;
-                if method_name.contains("oauth2Login") {
-                    println!("{}", dyn_to_json(&dyn_msg)?);
-                }
-                data_obj = dyn_to_json(&dyn_msg)?;
-                let res_type_name = proto_domain["responseType"]
-                    .as_str()
-                    .context("Invalid response type")?;
-                let resp_type = self
-                    .pool
-                    .get_message_by_name(&to_fqn(res_type_name))
-                    .context(format!("Invalid response type: {res_type_name}"))?;
-                self.respond_type
-                    .insert(msg_id, (method_name.clone(), resp_type));
-            }
-            MessageType::Response => {
-                msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
-                let msg_block = BaseMessage::decode(&buf[3..])?;
-                let data = msg_block.data;
-                let method = msg_block.method_name;
-                assert!(method.is_empty());
-                let resp_type: MessageDescriptor;
-                (method_name, resp_type) = self
-                    .respond_type
-                    .remove(&msg_id)
-                    .context("No corresponding request")?;
-                let dyn_msg = DynamicMessage::decode(resp_type, data.as_ref())?;
-                data_obj = dyn_to_json(&dyn_msg)?;
-            }
-        }
+
+        // Parse based on message type
+        let (msg_id, method_name, data_obj) = match msg_type {
+            MessageType::Notify => self.parse_notify(&buf)?,
+            MessageType::Request => self.parse_request(&buf)?,
+            MessageType::Response => self.parse_response(&buf)?,
+        };
+
         self.total += 1;
         Ok(LiqiMessage::new(msg_id, msg_type, method_name, data_obj))
+    }
+
+    fn parse_notify(&self, buf: &[u8]) -> Result<(usize, Arc<str>, JsonValue)> {
+        let msg_block = BaseMessage::decode(&buf[1..])?;
+        let method_name = Arc::from(msg_block.method_name);
+        
+        // Extract message name from method (e.g. "lq.NotifyRoomMessage" -> "RoomMessage")
+        let message_name = method_name
+            .split('.')
+            .nth(2)
+            .context("Invalid method name format")?;
+
+        // Decode and convert to JSON
+        let message_type = self.pool
+            .get_message_by_name(&to_fqn(message_name))
+            .context(format!("Invalid message type: {}", message_name))?;
+        let dyn_msg = DynamicMessage::decode(message_type, msg_block.data.as_ref())?;
+        let mut data_obj = dyn_to_json(&dyn_msg)?;
+
+        // Handle nested action data if present
+        if let Some(b64) = data_obj.get("data") {
+            let action_name = data_obj["name"]
+                .as_str()
+                .context("name field invalid")?;
+            let b64 = b64.as_str().unwrap_or_default();
+            let action_obj = decode_action(action_name, b64, self.pool)?;
+            data_obj
+                .as_object_mut()
+                .context("data is not an object")?
+                .insert("data".to_string(), action_obj);
+        }
+
+        Ok((self.total, method_name, data_obj))
+    }
+
+    fn parse_request(&mut self, buf: &[u8]) -> Result<(usize, Arc<str>, JsonValue)> {
+        // Extract message ID (little-endian u16)
+        let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
+
+        let msg_block = BaseMessage::decode(&buf[3..])?;
+        let method_name = Arc::from(msg_block.method_name);
+
+        // Split method name into components (e.g. "lq.Lobby.oauth2Login")
+        let parts: Vec<&str> = method_name.split('.').collect();
+        ensure!(parts.len() == 4, "Invalid method name format");
+
+        // Lookup method details in proto JSON
+        let proto_domain = &self.proto_json["nested"][parts[1]]["nested"][parts[2]]["methods"][parts[3]];
+        
+        // Decode request
+        let req_type_name = proto_domain["requestType"]
+            .as_str()
+            .context("Invalid request type")?;
+        let req_type = self.pool
+            .get_message_by_name(&to_fqn(req_type_name))
+            .context(format!("Invalid request type: {}", req_type_name))?;
+        let dyn_msg = DynamicMessage::decode(req_type, msg_block.data.as_ref())?;
+        let data_obj = dyn_to_json(&dyn_msg)?;
+
+        // Store response type for later
+        let res_type_name = proto_domain["responseType"]
+            .as_str()
+            .context("Invalid response type")?;
+        let resp_type = self.pool
+            .get_message_by_name(&to_fqn(res_type_name))
+            .context(format!("Invalid response type: {}", res_type_name))?;
+        self.respond_type
+            .insert(msg_id, (method_name.clone(), resp_type));
+
+        Ok((msg_id, method_name, data_obj))
+    }
+
+    fn parse_response(&mut self, buf: &[u8]) -> Result<(usize, Arc<str>, JsonValue)> {
+        let msg_id = u16::from_le_bytes([buf[1], buf[2]]) as usize;
+
+        let msg_block = BaseMessage::decode(&buf[3..])?;
+        ensure!(msg_block.method_name.is_empty(), "Response should have empty method name");
+
+        // Retrieve stored method info
+        let (method_name, resp_type) = self.respond_type
+            .remove(&msg_id)
+            .context("No corresponding request")?;
+
+        // Decode response
+        let dyn_msg = DynamicMessage::decode(resp_type, msg_block.data.as_ref())?;
+        let data_obj = dyn_to_json(&dyn_msg)?;
+
+        Ok((msg_id, method_name, data_obj))
     }
 }
 
