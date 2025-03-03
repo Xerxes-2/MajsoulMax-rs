@@ -153,8 +153,21 @@ impl Parser {
     }
 }
 
+/// Converts a method name to its fully qualified name (FQN) by prefixing with "lq."
+/// 
+/// # Arguments
+/// * `method_name` - The method name to convert
+/// 
+/// # Returns
+/// A new String with the fully qualified name
+/// 
+/// # Examples
+/// ```
+/// assert_eq!(to_fqn("example"), "lq.example");
+/// ```
 fn to_fqn(method_name: &str) -> String {
-    String::from("lq.") + method_name
+    // Use format! for better readability and performance
+    format!("lq.{}", method_name)
 }
 
 pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<JsonValue> {
