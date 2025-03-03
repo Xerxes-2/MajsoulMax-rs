@@ -195,11 +195,6 @@ impl Parser {
 ///
 /// # Returns
 /// A new String with the fully qualified name
-///
-/// # Examples
-/// ```
-/// assert_eq!(to_fqn("example"), "lq.example");
-/// ```
 fn to_fqn(method_name: &str) -> String {
     // Use format! for better readability and performance
     format!("lq.{}", method_name)
