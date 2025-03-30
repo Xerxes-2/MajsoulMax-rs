@@ -1,5 +1,5 @@
 
-‚†
+ù¢
 
 liqi.protolq"|
 NotifyCaptcha
@@ -3350,7 +3350,7 @@ activityId"›
 RewardData
 resource_id (R
 resourceId
-count (Rcount"û
+count (Rcount"–
 ResCharacterInfo
 error (2	.lq.ErrorRerror-
 
@@ -3364,9 +3364,13 @@ characters
 rewarded_endings (RrewardedEndings%
 character_sort	 (RcharacterSort+
 hidden_characters
- (RhiddenCharacters",
+ (RhiddenCharacters0
+other_character_sort (RotherCharacterSort"x
 ReqUpdateCharacterSort
-sort (Rsort";
+sort (Rsort
+
+other_sort (R	otherSort+
+hidden_characters (RhiddenCharacters";
 ReqChangeMainCharacter!
 character_id (RcharacterId"O
 ReqChangeCharacterSkin!
@@ -3405,24 +3409,27 @@ chara_list (R	charaList"e
 value (Rvalue"?
 ReqChangeCommonView
 slot (Rslot
-value (Rvalue"n
+value (Rvalue"Ç
 ReqSaveCommonViews"
 views (2.lq.ViewSlotRviews
 
 save_index (R	saveIndex
-is_use (RisUse"&
+is_use (RisUse
+name (	Rname"&
 ReqCommonViews
-index (Rindex"U
+index (Rindex"i
 ResCommonViews
 error (2	.lq.ErrorRerror"
-views (2.lq.ViewSlotRviews"æ
+views (2.lq.ViewSlotRviews
+name (	Rname"“
 ResAllcommonViews1
 views (2.lq.ResAllcommonViews.ViewsRviews
 use (Ruse
-error (2	.lq.ErrorRerrorC
+error (2	.lq.ErrorRerrorW
 Views$
 values (2.lq.ViewSlotRvalues
-index (Rindex"(
+index (Rindex
+name (	Rname"(
 ReqUseCommonView
 index (Rindex"8
 ReqUpgradeCharacter!

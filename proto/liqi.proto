@@ -5055,11 +5055,14 @@ message ResCharacterInfo {
     repeated uint32 rewarded_endings = 8;
     repeated uint32 character_sort = 9;
     repeated uint32 hidden_characters = 10;
+    repeated uint32 other_character_sort = 11;
 }
 
 message ReqUpdateCharacterSort {
 
     repeated uint32 sort = 1;
+    repeated uint32 other_sort = 2;
+    repeated uint32 hidden_characters = 3;
 }
 
 message ReqChangeMainCharacter {
@@ -5144,6 +5147,7 @@ message ReqSaveCommonViews {
     repeated ViewSlot views = 1;
     uint32 save_index = 2;
     uint32 is_use = 3;
+    string name = 4;
 }
 
 message ReqCommonViews {
@@ -5155,6 +5159,7 @@ message ResCommonViews {
 
     Error error = 2;
     repeated ViewSlot views = 1;
+    string name = 3;
 }
 
 message ResAllcommonViews {
@@ -5167,6 +5172,7 @@ message ResAllcommonViews {
 
         repeated ViewSlot values = 1;
         uint32 index = 2;
+        string name = 3;
     }
 }
 
