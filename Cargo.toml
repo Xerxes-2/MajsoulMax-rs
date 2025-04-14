@@ -15,7 +15,7 @@ aws-lc-rs = { version = "1", features = ["bindgen"] }
 anyhow = "1"
 base64 = "0.22"
 bytes = "1"
-prost-reflect = { version = "0.14", features = ["serde"] }
+prost-reflect = { version = "0.15", features = ["serde"] }
 reqwest = { version = "0.12", features = [
     "json",
     "rustls-tls",
