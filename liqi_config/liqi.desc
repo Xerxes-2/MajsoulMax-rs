@@ -1,5 +1,5 @@
 
-ù¢
+∂
 
 liqi.protolq"|
 NotifyCaptcha
@@ -249,7 +249,10 @@ activityId
 leaderboard_id (RleaderboardId
 point (Rpoint"9
 NotifySeerReport%
-report (2.lq.SeerBriefRreport"x
+report (2.lq.SeerBriefRreport"M
+NotifyConnectionShutdown
+reason (Rreason
+close_at (RcloseAt"x
 Error
 code (Rcode
 
@@ -560,7 +563,7 @@ detailRuleN
 paixing (Rpaixing
 
 left_count (R	leftCount&
-field_spell_var (RfieldSpellVar"¿
+field_spell_var (RfieldSpellVar"Ò
 GameDetailRule
 
 time_fixed (R	timeFixed
@@ -636,7 +639,8 @@ dora3_mode+ (R	dora3Mode&
 enable_baopai_extend_settingsE (RenableBaopaiExtendSettings%
 yongchang_modeF (RyongchangMode'
 hunzhiyiji_modeG (RhunzhiyijiMode/
-wanxiangxiuluo_modeH (RwanxiangxiuluoMode"–
+wanxiangxiuluo_modeH (RwanxiangxiuluoMode/
+beishuizhizhan_modeI (RbeishuizhizhanMode"–
 Room
 room_id (RroomId
 owner_id (RownerId 
@@ -919,7 +923,7 @@ gift_inbox (2 .lq.FeedActivityData.GiftBoxDataR	giftInboxS
 MineActivityData&
 	dig_point (2	.lq.PointRdigPoint 
 map (2.lq.MineRewardRmap
-id (Rid"Õ
+id (Rid"ë
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -938,7 +942,8 @@ gacha_data (2.lq.ActivityGachaUpdateDataR	gachaDataC
 islandData4
 
 story_data (2.lq.ActivityStoryDataR	storyData>
-choose_up_data (2.lq.ActivityChooseUpDataRchooseUpData"I
+choose_up_data (2.lq.ActivityChooseUpDataRchooseUpDataB
+simulation_v2_data (2.lq.SimulationV2DataRsimulationV2Data"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
 pos (Rpos"æ
@@ -1037,7 +1042,16 @@ activityId
 
 event_list (R	eventList8
 
-buy_record (2.lq.SignedTimeCounterDataR	buyRecord"~
+buy_record (2.lq.SignedTimeCounterDataR	buyRecord"Å
+SimulationV2Data
+activity_id (R
+activityId2
+season (2.lq.SimulationV2SeasonDataRseason#
+highest_score (RhighestScore1
+upgrade (2.lq.SimulationV2AbilityRupgrade
+
+event_pool (R	eventPool!
+season_count (RseasonCount"~
 IslandBagItemData
 id (Rid
 pos (Rpos
@@ -1343,10 +1357,11 @@ login_time (R	loginTime
 logout_time (R
 logoutTime
 	is_online (RisOnline0
-playing (2.lq.AccountPlayingGameRplaying"^
+playing (2.lq.AccountPlayingGameRplaying"v
 Friend&
 base (2.lq.PlayerBaseViewRbase,
-state (2.lq.AccountActiveStateRstate"#
+state (2.lq.AccountActiveStateRstate
+remark (	Rremark"#
 Point
 x (Rx
 y (Ry"f
@@ -1680,7 +1695,7 @@ activityId
 leaderboard_id (RleaderboardId
 point (Rpoint#
 gained_reward (RgainedReward#
-gainable_time (RgainableTime"»
+gainable_time (RgainableTime"Ó
 GameRoundHuData/
 hupai (2.lq.GameRoundHuData.HuPaiRhupai+
 fans (2.lq.GameRoundHuData.FanRfans
@@ -1696,7 +1711,8 @@ activityId
 li_dora_count (RliDoraCount
 babei_count (R
 babeiCount(
-xuan_shang_count (RxuanShangCountC
+xuan_shang_count (RxuanShangCount$
+pai_left_count (RpaiLeftCountC
 HuPai
 tile (	Rtile
 seat (Rseat
@@ -1704,7 +1720,11 @@ babeiCount(
 Fan
 id (Rid
 count (Rcount
-fan (Rfan"˙
+fan (Rfan"l
+GameRoundPlayerFangChongInfo
+seat (Rseat
+tile (	Rtile$
+pai_left_count (RpaiLeftCount"Ñ
 GameRoundPlayerResult
 type (Rtype
 hands (	Rhands
@@ -1714,7 +1734,14 @@ babeiCount(
 is_liujumanguan (RisLiujumanguan
 lian_zhuang (R
 lianZhuang#
-hu (2.lq.GameRoundHuDataRhu"n
+hu (2.lq.GameRoundHuDataRhu@
+
+fangchongs	 (2 .lq.GameRoundPlayerFangChongInfoR
+fangchongs%
+liqi_fangchong
+ (RliqiFangchong
+liqi_failed (R
+liqiFailed"n
 GameRoundPlayer
 score (Rscore
 rank (Rrank1
@@ -2181,7 +2208,7 @@ version_id (R	versionId0
 final_text
  (	R	finalText7
 	questions (2.lq.QuestionnaireQuestionR	questions
-type (Rtype"Ç
+type (Rtype"ª
 QuestionnaireQuestion
 id (Rid
 title (	Rtitle
@@ -2196,7 +2223,8 @@ max_choice	 (R	maxChoiceO
 next_question
  (2*.lq.QuestionnaireQuestion.NextQuestionDataRnextQuestion
 
-matrix_row (	R	matrixRow]
+matrix_row (	R	matrixRow7
+option_random_sort_index (RoptionRandomSortIndex]
 QuestionOption
 label (	Rlabel
 value (	Rvalue
@@ -2260,7 +2288,168 @@ recommends"Y
 expireTime2
 player_scores (2.lq.SeerScoreRplayerScores
 create_time (R
-createTime"r
+createTime" 
+SimulationV2SeasonData
+round (Rround1
+ability (2.lq.SimulationV2AbilityRability7
+effect_list (2.lq.SimulationV2EffectR
+effectList+
+match (2.lq.SimulationV2MatchRmatch+
+event (2.lq.SimulationV2EventReventA
+event_history (2.lq.SimulationV2EventHistoryReventHistory.
+record (2.lq.SimulationV2RecordRrecord
+total_score (R
+totalScore@
+match_history	 (2.lq.SimulationV2MatchRecordRmatchHistory"|
+SimulationV2PlayerRecord
+id (Rid
+main (Rmain
+score (Rscore
+rank (Rrank
+seat (Rseat"g
+SimulationV2MatchRecord6
+players (2.lq.SimulationV2PlayerRecordRplayers
+round (Rround"@
+SimulationV2EventHistory
+id (Rid
+round (Rround"Í
+SimulationV2Event
+id (RidP
+
+selections (20.lq.SimulationV2Event.SimulationV2EventSelectionR
+selections
+
+next_round (R	nextRound”
+SimulationV2EventSelection
+id (Ridb
+results (2H.lq.SimulationV2Event.SimulationV2EventSelection.SimulationV2EventResultRresultsA
+SimulationV2EventResult
+id (Rid
+weight (Rweight"o
+SimulationV2Ability
+luk (Rluk
+tec (Rtec
+ins (Rins
+int (Rint
+res (Rres"N
+SimulationV2Buff
+id (Rid
+round (Rround
+store (Rstore"$
+SimulationV2Effect
+id (Rid"{
+SimulationV2MatchInfo
+chang (Rchang
+ju (Rju
+ben (Rben
+gong (Rgong
+remain (Rremain"§
+SimulationV2Record
+hu_count (RhuCount
+chong_count (R
+chongCount
+
+highest_hu (R	highestHu
+rank (Rrank
+round_count (R
+roundCount"‹	
+SimulationV2MatchHistory
+type (Rtype
+remain (Rremain!
+score_modify (RscoreModifyL
+round_start (2+.lq.SimulationV2MatchHistory.RoundStartArgsR
+roundStart?
+riichi (2'.lq.SimulationV2MatchHistory.RiichiArgsRriichi9
+fulu (2%.lq.SimulationV2MatchHistory.FuluArgsRfulu9
+hule (2%.lq.SimulationV2MatchHistory.HuleArgsRhuleF
+	push_ting (2).lq.SimulationV2MatchHistory.PushTingArgsRpushTingF
+	find_ting	 (2).lq.SimulationV2MatchHistory.FindTingArgsRfindTing<
+liuju
+ (2&.lq.SimulationV2MatchHistory.LiujuArgsRliuju<
+story (2&.lq.SimulationV2MatchHistory.StoryArgsRstoryô
+RoundStartArgs-
+info (2.lq.SimulationV2MatchInfoRinfo
+scores (Rscores
+ting (Rting,
+effected_buff_list (ReffectedBuffList 
+
+RiichiArgs
+seat (RseatF
+FuluArgs
+seat (Rseat
+ting (Rting
+fulu (Rfuluú
+HuleArgs
+seat (Rseat
+zimo (Rzimo
+
+chong_seat (R	chongSeat
+point (Rpoint
+fan (Rfan!
+score_modify (RscoreModify6
+PushTingArgs
+seat (Rseat
+ting (Rting:
+FindTingArgs
+seat (Rseat
+target (Rtarget
+	LiujuArgs
+ting (Rting&
+	StoryArgs
+story_id (RstoryId"®
+SimulationV2Match-
+info (2.lq.SimulationV2MatchInfoRinfoB
+players (2(.lq.SimulationV2Match.SimulationV2PlayerRplayers6
+history (2.lq.SimulationV2MatchHistoryRhistory
+rank (Rrank 
+is_match_end (R
+isMatchEnd2
+actions (2.lq.SimulationActionDataRactions1
+	buff_list	 (2.lq.SimulationV2BuffRbuffList$
+is_first_round
+ (RisFirstRound*
+last_event_remain (RlastEventRemain,
+effected_buff_list (ReffectedBuffList'
+triggered_story (RtriggeredStory°
+SimulationV2Player
+id (Rid
+main (Rmain
+ting (Rting
+score (Rscore
+fulu (Rfulu
+riichi (Rriichi
+	find_ting (RfindTing
+seat	 (Rseat"
+con_push_ting
+ (RconPushTing"
+con_keep_ting (RconKeepTing
+ippatsu (Rippatsu"µ
+SimulationActionData
+type (RtypeA
+riichi (2).lq.SimulationActionData.ActionRiichiDataRriichi;
+hule (2'.lq.SimulationActionData.ActionHuleDataRhule;
+fulu (2'.lq.SimulationActionData.ActionFuluDataRfuluM
+discard_tile (2*.lq.SimulationActionData.ActionDiscardDataRdiscardTileH
+	deal_tile (2+.lq.SimulationActionData.ActionDealTileDataRdealTile&
+ActionRiichiData
+seat (Rseat˘
+ActionHuleDataD
+hule (20.lq.SimulationActionData.ActionHuleData.HuleInfoRhule†
+HuleInfo
+fan (Rfan
+zimo (Rzimo
+point (Rpoint
+oya (Roya
+player (Rplayer
+chong (Rchong
+toutiao (Rtoutiao$
+ActionFuluData
+seat (Rseat?
+ActionDiscardData
+seat (Rseat
+riichi (Rriichi(
+ActionDealTileData
+seat (Rseat"r
 ResConnectionInfo
 error (2	.lq.ErrorRerror<
 client_endpoint (2.lq.NetworkEndpointRclientEndpoint"`
@@ -4241,7 +4430,7 @@ activityId
 	order_pos (RorderPos"p
 ResFinishCombiningOrder
 error (2	.lq.ErrorRerror4
-reward_items (2.lq.ExecuteRewardRrewardItems"˘
+reward_items (2.lq.ExecuteRewardRrewardItems"≈
 ResFetchInfo
 error (2	.lq.ErrorRerror2
 server_time (2.lq.ResServerTimeR
@@ -4279,7 +4468,8 @@ vip_reward (2.lq.ResVipRewardR	vipRewardB
 maintain_notice (2.lq.ResFetchMaintainNoticeRmaintainNoticeA
 random_character (2.lq.ResRandomCharacterRrandomCharacterL
 maintenance_info  (2!.lq.ResFetchServerMaintenanceInfoRmaintenanceInfo1
-	seer_info! (2.lq.ResFetchSeerInfoRseerInfo"ñ
+	seer_info! (2.lq.ResFetchSeerInfoRseerInfoJ
+annual_report_info" (2.lq.ResFetchAnnualReportInfoRannualReportInfo"ñ
 ResFetchSeerInfo
 error (2	.lq.ErrorRerror!
 remain_count (RremainCount
@@ -4856,7 +5046,102 @@ seerReport"r
 activity_id (R
 activityId
 	selection (R	selection
-chest_id (RchestId"ù
+chest_id (RchestId"2
+ReqGenerateAnnualReportToken
+lang (	Rlang"g
+ResGenerateAnnualReportToken
+error (2	.lq.ErrorRerror
+token (	Rtoken
+url (	Rurl"u
+ResFetchAnnualReportInfo
+error (2	.lq.ErrorRerror
+
+start_time (R	startTime
+end_time (RendTime"H
+ReqRemarkFriend
+
+account_id (R	accountId
+remark (	Rremark"<
+ReqSimV2ActivityFetchInfo
+activity_id (R
+activityId"f
+ResSimV2ActivityFetchInfo
+error (2	.lq.ErrorRerror(
+data (2.lq.SimulationV2DataRdata">
+ReqSimV2ActivityStartSeason
+activity_id (R
+activityId"r
+ResSimV2ActivityStartSeason
+error (2	.lq.ErrorRerror2
+season (2.lq.SimulationV2SeasonDataRseason"f
+ReqSimV2ActivityTrain
+activity_id (R
+activityId
+ability (Rability
+skip (Rskip"—
+ResSimV2ActivityTrain
+error (2	.lq.ErrorRerror+
+event (2.lq.SimulationV2EventRevent1
+ability (2.lq.SimulationV2AbilityRability
+round (Rround7
+effect_list (2.lq.SimulationV2EffectR
+effectList!
+train_result (RtrainResult
+is_end (RisEnd.
+record (2.lq.SimulationV2RecordRrecord"a
+ReqSimV2ActivitySelectEvent
+activity_id (R
+activityId!
+selection_id (RselectionId"¨
+ResSimV2ActivitySelectEvent
+error (2	.lq.ErrorRerror+
+event (2.lq.SimulationV2EventRevent1
+ability (2.lq.SimulationV2AbilityRability+
+match (2.lq.SimulationV2MatchRmatch7
+effect_list (2.lq.SimulationV2EffectR
+effectList
+round (Rround
+is_end (RisEnd
+	result_id	 (RresultId.
+record
+ (2.lq.SimulationV2RecordRrecord,
+effected_buff_list (ReffectedBuffList"=
+ReqSimV2ActivityStartMatch
+activity_id (R
+activityId"Ú
+ResSimV2ActivityStartMatch
+error (2	.lq.ErrorRerror+
+event (2.lq.SimulationV2EventRevent+
+match (2.lq.SimulationV2MatchRmatch7
+effect_list (2.lq.SimulationV2EffectR
+effectList 
+is_match_end (R
+isMatchEnd";
+ReqSimV2ActivityEndMatch
+activity_id (R
+activityId"˛
+ResSimV2ActivityEndMatch
+error (2	.lq.ErrorRerror
+round (Rround
+is_end (RisEnd.
+record (2.lq.SimulationV2RecordRrecord
+total_score (R
+totalScore@
+match_history (2.lq.SimulationV2MatchRecordRmatchHistoryN
+rewards (24.lq.ResSimV2ActivityEndMatch.SimulationV2MatchRewardRrewards7
+effect_list (2.lq.SimulationV2EffectR
+effectList1
+ability	 (2.lq.SimulationV2AbilityRabilityE
+SimulationV2MatchReward
+type (Rtype
+params (Rparams"9
+ReqSimV2ActivityGiveUp
+activity_id (R
+activityId"p
+ReqSimV2ActivitySetUpgrade
+activity_id (R
+activityId1
+upgrade (2.lq.SimulationV2AbilityRupgrade"ù
 ReqAuthGame
 
 account_id (R	accountId
@@ -5190,12 +5475,13 @@ game_event (R	gameEvent"µ
 operation_list (2.lq.OptionalOperationRoperationList
 time_add (RtimeAdd
 
-time_fixed (R	timeFixed"k
+time_fixed (R	timeFixed"•
 LiQiSuccess
 seat (Rseat
 score (Rscore
 liqibang (Rliqibang
-failed (Rfailed"?
+failed (Rfailed8
+liqi_type_beishuizhizhan (RliqiTypeBeishuizhizhan"?
 FanInfo
 name (	Rname
 val (Rval
@@ -5350,7 +5636,7 @@ lock_state	 (R	lockState"•
 tingpais (2.lq.TingPaiInfoRtingpais
 doras (	Rdoras
 
-lock_state	 (R	lockState"£
+lock_state	 (R	lockState"›
 ActionDiscardTile
 seat (Rseat
 tile (	Rtile
@@ -5369,7 +5655,8 @@ tile_state
 scores (Rscores
 liqibang (Rliqibang/
 	yongchang (2.lq.YongchangInfoR	yongchangB
-hun_zhi_yi_ji_info (2.lq.HunZhiYiJiBuffInfoRhunZhiYiJiInfo"’
+hun_zhi_yi_ji_info (2.lq.HunZhiYiJiBuffInfoRhunZhiYiJiInfo8
+liqi_type_beishuizhizhan (RliqiTypeBeishuizhizhan"è
 RecordDiscardTile
 seat (Rseat
 tile (	Rtile
@@ -5387,7 +5674,8 @@ operations
 tile_state (R	tileState 
 muyu (2.lq.MuyuInfoRmuyu/
 	yongchang (2.lq.YongchangInfoR	yongchangB
-hun_zhi_yi_ji_info (2.lq.HunZhiYiJiBuffInfoRhunZhiYiJiInfo"»
+hun_zhi_yi_ji_info (2.lq.HunZhiYiJiBuffInfoRhunZhiYiJiInfo8
+liqi_type_beishuizhizhan (RliqiTypeBeishuizhizhan"»
 ActionDealTile
 seat (Rseat
 tile (	Rtile&
@@ -5648,12 +5936,34 @@ old_scores (R	oldScores!
 muyu (2.lq.MuyuInfoRmuyu1
 hules_history	 (2.lq.HuleInfoRhulesHistory"#
 PlayerLeaving
-seat (Rseat*=
+seat (Rseat"c
+ReqRequestConnection
+type (Rtype
+route_id (RrouteId
+	timestamp (R	timestamp"m
+ResRequestConnection
+error (2	.lq.ErrorRerror
+	timestamp (R	timestamp
+result (Rresult"^
+ReqRequestRouteChange
+before (Rbefore
+route_id (RrouteId
+type (Rtype"P
+ResRequestRouteChange
+error (2	.lq.ErrorRerror
+result (Rresult"^
+ReqHeartbeat
+	timestamp (R	timestamp0
+no_operation_counter (RnoOperationCounter"c
+ResHeartbeat
+error (2	.lq.ErrorRerror
+delta (Rdelta
+	timestamp (R	timestamp*=
 GamePlayerState
 NULL 
 AUTH
 SYNCING	
-READY2ßÕ
+READY2û‘
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -6036,7 +6346,18 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 createSeerReport.lq.ReqCreateSeerReport.lq.ResCreateSeerReport@
 fetchSeerReportList.lq.ReqCommon.lq.ResFetchSeerReportList4
 fetchSeerInfo.lq.ReqCommon.lq.ResFetchSeerInfoH
-selectChestChooseUpActivity.lq.ReqSelectChestChooseUp.lq.ReqCommon2ı
+selectChestChooseUpActivity.lq.ReqSelectChestChooseUp.lq.ReqCommon_
+generateAnnualReportToken .lq.ReqGenerateAnnualReportToken .lq.ResGenerateAnnualReportTokenD
+fetchAnnualReportInfo.lq.ReqCommon.lq.ResFetchAnnualReportInfo2
+remarkFriend.lq.ReqRemarkFriend.lq.ResCommonV
+simV2ActivityFetchInfo.lq.ReqSimV2ActivityFetchInfo.lq.ResSimV2ActivityFetchInfo\
+simV2ActivityStartSeason.lq.ReqSimV2ActivityStartSeason.lq.ResSimV2ActivityStartSeasonJ
+simV2ActivityTrain.lq.ReqSimV2ActivityTrain.lq.ResSimV2ActivityTrain\
+simV2ActivitySelectEvent.lq.ReqSimV2ActivitySelectEvent.lq.ResSimV2ActivitySelectEventY
+simV2ActivityStartMatch.lq.ReqSimV2ActivityStartMatch.lq.ResSimV2ActivityStartMatchS
+simV2ActivityEndMatch.lq.ReqSimV2ActivityEndMatch.lq.ResSimV2ActivityEndMatch@
+simV2ActivityGiveUp.lq.ReqSimV2ActivityGiveUp.lq.ResCommonH
+simV2ActivitySetUpgrade.lq.ReqSimV2ActivitySetUpgrade.lq.ResCommon2ı
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,
@@ -6054,4 +6375,8 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 voteGameEnd.lq.ReqVoteGameEnd.lq.ResGameEndVote0
 authObserve.lq.ReqAuthObserve.lq.ResCommon2
 startObserve.lq.ReqCommon.lq.ResStartObserve+
-stopObserve.lq.ReqCommon.lq.ResCommonBZ.;majprotocolbproto3
+stopObserve.lq.ReqCommon.lq.ResCommon2Õ
+RouteG
+requestConnection.lq.ReqRequestConnection.lq.ResRequestConnectionJ
+requestRouteChange.lq.ReqRequestRouteChange.lq.ResRequestRouteChange/
+	heartbeat.lq.ReqHeartbeat.lq.ResHeartbeatBZ.;majprotocolbproto3
