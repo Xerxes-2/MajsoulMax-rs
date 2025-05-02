@@ -212,10 +212,10 @@ pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<Js
 
 fn wtf_decode(data: &mut [u8]) {
     const KEYS: [u8; 9] = [0x84, 0x5E, 0x4E, 0x42, 0x39, 0xA2, 0x1F, 0x60, 0x1C];
-    let base = 23 ^ data.len() as u8;
+    let base = 23 ^ data.len();
     KEYS.iter()
         .cycle()
         .zip(data.iter_mut())
         .enumerate()
-        .for_each(|(i, (key, b))| *b = base + 5 * i as u8 + key);
+        .for_each(|(i, (key, b))| *b ^= (base + 5 * i + *key as usize) as u8);
 }

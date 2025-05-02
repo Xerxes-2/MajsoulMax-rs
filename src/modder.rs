@@ -2,7 +2,7 @@ use crate::{
     proto::{base::BaseMessage, lq, lq_config::ConfigTables, sheets},
     settings::ModSettings,
 };
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{Context, Result, anyhow, bail};
 use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
@@ -228,16 +228,20 @@ impl Modder {
                         .await
                         .char_skin
                         .get(&self.mod_settings.read().await.main_char)
-                    { Some(av) => {
-                        account.avatar_id = *av;
-                    } _ => {
-                        account.avatar_id = {
-                            let id_str = format!("{}", self.mod_settings.read().await.main_char);
-                            let slice = &id_str[4..];
-                            let id_str = format!("40{slice}01");
-                            id_str.parse().context("Failed to parse avatar id")?
+                    {
+                        Some(av) => {
+                            account.avatar_id = *av;
                         }
-                    }}
+                        _ => {
+                            account.avatar_id = {
+                                let id_str =
+                                    format!("{}", self.mod_settings.read().await.main_char);
+                                let slice = &id_str[4..];
+                                let id_str = format!("40{slice}01");
+                                id_str.parse().context("Failed to parse avatar id")?
+                            }
+                        }
+                    }
                     if !self.mod_settings.read().await.nickname.is_empty() {
                         account
                             .nickname
@@ -320,6 +324,7 @@ impl Modder {
                 {
                     let new_view = lq::res_allcommon_views::Views {
                         index: i as u32,
+                        name: format!("{} {}", "View", i),
                         values: view.clone(),
                     };
                     msg.views.push(new_view);
@@ -387,6 +392,7 @@ impl Modder {
                     {
                         let new_view = lq::res_allcommon_views::Views {
                             index: i as u32,
+                            name: format!("{} {}", "View", i),
                             values: view.clone(),
                         };
                         views.views.push(new_view);
