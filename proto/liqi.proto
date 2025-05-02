@@ -387,6 +387,12 @@ message NotifySeerReport {
     SeerBrief report = 1;
 }
 
+message NotifyConnectionShutdown {
+
+    uint32 reason = 1;
+    uint32 close_at = 2;
+}
+
 message Error {
 
     uint32 code = 1;
@@ -855,6 +861,7 @@ message GameDetailRule {
     uint32 yongchang_mode = 70;
     uint32 hunzhiyiji_mode = 71;
     uint32 wanxiangxiuluo_mode = 72;
+    uint32 beishuizhizhan_mode = 73;
 }
 
 message Room {
@@ -1270,6 +1277,7 @@ message AccountActivityUpdate {
     repeated lq.ActivityIslandData island_data = 12;
     repeated lq.ActivityStoryData story_data = 14;
     repeated lq.ActivityChooseUpData choose_up_data = 15;
+    repeated lq.SimulationV2Data simulation_v2_data = 16;
 }
 
 message ActivityCombiningWorkbench {
@@ -1405,6 +1413,16 @@ message ActivityFestivalData {
     repeated FestivalProposalData proposal_list = 3;
     repeated uint32 event_list = 4;
     SignedTimeCounterData buy_record = 5;
+}
+
+message SimulationV2Data {
+
+    uint32 activity_id = 1;
+    lq.SimulationV2SeasonData season = 2;
+    int32 highest_score = 3;
+    lq.SimulationV2Ability upgrade = 4;
+    repeated uint32 event_pool = 5;
+    uint32 season_count = 6;
 }
 
 message IslandBagItemData {
@@ -1814,6 +1832,7 @@ message Friend {
 
     PlayerBaseView base = 1;
     AccountActiveState state = 2;
+    string remark = 3;
 }
 
 message Point {
@@ -2256,6 +2275,7 @@ message GameRoundHuData {
     uint32 li_dora_count = 11;
     uint32 babei_count = 12;
     uint32 xuan_shang_count = 13;
+    uint32 pai_left_count = 14;
 
     message HuPai {
 
@@ -2272,6 +2292,13 @@ message GameRoundHuData {
     }
 }
 
+message GameRoundPlayerFangChongInfo {
+
+    uint32 seat = 1;
+    string tile = 2;
+    uint32 pai_left_count = 3;
+}
+
 message GameRoundPlayerResult {
 
     uint32 type = 1;
@@ -2282,6 +2309,9 @@ message GameRoundPlayerResult {
     bool is_liujumanguan = 6;
     uint32 lian_zhuang = 7;
     GameRoundHuData hu = 8;
+    repeated GameRoundPlayerFangChongInfo fangchongs = 9;
+    bool liqi_fangchong = 10;
+    bool liqi_failed = 11;
 }
 
 message GameRoundPlayer {
@@ -2899,6 +2929,7 @@ message QuestionnaireQuestion {
     uint32 max_choice = 9;
     repeated NextQuestionData next_question = 10;
     repeated string matrix_row = 11;
+    int32 option_random_sort_index = 12;
 
     message QuestionOption {
 
@@ -2985,6 +3016,242 @@ message SeerBrief {
     uint32 expire_time = 3;
     repeated SeerScore player_scores = 4;
     uint32 create_time = 5;
+}
+
+message SimulationV2SeasonData {
+
+    uint32 round = 1;
+    SimulationV2Ability ability = 2;
+    repeated SimulationV2Effect effect_list = 3;
+    SimulationV2Match match = 4;
+    SimulationV2Event event = 5;
+    repeated SimulationV2EventHistory event_history = 6;
+    SimulationV2Record record = 7;
+    int32 total_score = 8;
+    repeated SimulationV2MatchRecord match_history = 9;
+}
+
+message SimulationV2PlayerRecord {
+
+    uint32 id = 1;
+    bool main = 2;
+    int32 score = 3;
+    uint32 rank = 4;
+    uint32 seat = 5;
+}
+
+message SimulationV2MatchRecord {
+
+    repeated SimulationV2PlayerRecord players = 1;
+    uint32 round = 2;
+}
+
+message SimulationV2EventHistory {
+
+    uint32 id = 1;
+    uint32 round = 2;
+}
+
+message SimulationV2Event {
+
+    uint32 id = 1;
+    repeated SimulationV2EventSelection selections = 2;
+    uint32 next_round = 3;
+
+    message SimulationV2EventSelection {
+
+        uint32 id = 1;
+        repeated SimulationV2EventResult results = 2;
+
+        message SimulationV2EventResult {
+
+            uint32 id = 1;
+            uint32 weight = 2;
+        }
+    }
+}
+
+message SimulationV2Ability {
+
+    uint32 luk = 1;
+    uint32 tec = 2;
+    uint32 ins = 3;
+    uint32 int = 4;
+    uint32 res = 5;
+}
+
+message SimulationV2Buff {
+
+    uint32 id = 1;
+    uint32 round = 2;
+    repeated uint32 store = 3;
+}
+
+message SimulationV2Effect {
+
+    uint32 id = 1;
+}
+
+message SimulationV2MatchInfo {
+
+    uint32 chang = 1;
+    uint32 ju = 2;
+    uint32 ben = 3;
+    uint32 gong = 4;
+    uint32 remain = 5;
+}
+
+message SimulationV2Record {
+
+    uint32 hu_count = 1;
+    uint32 chong_count = 2;
+    uint32 highest_hu = 3;
+    repeated uint32 rank = 4;
+    uint32 round_count = 5;
+}
+
+message SimulationV2MatchHistory {
+
+    uint32 type = 1;
+    uint32 remain = 2;
+    repeated int32 score_modify = 3;
+    RoundStartArgs round_start = 4;
+    RiichiArgs riichi = 5;
+    FuluArgs fulu = 6;
+    repeated HuleArgs hule = 7;
+    PushTingArgs push_ting = 8;
+    FindTingArgs find_ting = 9;
+    LiujuArgs liuju = 10;
+    StoryArgs story = 11;
+
+    message RoundStartArgs {
+
+        SimulationV2MatchInfo info = 1;
+        repeated int32 scores = 2;
+        uint32 ting = 3;
+        repeated uint32 effected_buff_list = 4;
+    }
+
+    message RiichiArgs {
+
+        uint32 seat = 1;
+    }
+
+    message FuluArgs {
+
+        uint32 seat = 1;
+        uint32 ting = 2;
+        uint32 fulu = 3;
+    }
+
+    message HuleArgs {
+
+        uint32 seat = 1;
+        bool zimo = 2;
+        uint32 chong_seat = 3;
+        int32 point = 4;
+        int32 fan = 5;
+        repeated int32 score_modify = 6;
+    }
+
+    message PushTingArgs {
+
+        uint32 seat = 1;
+        uint32 ting = 2;
+    }
+
+    message FindTingArgs {
+
+        uint32 seat = 1;
+        uint32 target = 2;
+    }
+
+    message LiujuArgs {
+
+        repeated uint32 ting = 1;
+    }
+
+    message StoryArgs {
+
+        uint32 story_id = 1;
+    }
+}
+
+message SimulationV2Match {
+
+    SimulationV2MatchInfo info = 1;
+    repeated SimulationV2Player players = 2;
+    repeated SimulationV2MatchHistory history = 3;
+    repeated uint32 rank = 4;
+    bool is_match_end = 5;
+    repeated SimulationActionData actions = 6;
+    repeated SimulationV2Buff buff_list = 9;
+    bool is_first_round = 10;
+    uint32 last_event_remain = 11;
+    repeated uint32 effected_buff_list = 12;
+    repeated uint32 triggered_story = 13;
+
+    message SimulationV2Player {
+
+        uint32 id = 1;
+        bool main = 2;
+        uint32 ting = 4;
+        int32 score = 5;
+        uint32 fulu = 6;
+        bool riichi = 7;
+        repeated uint32 find_ting = 8;
+        uint32 seat = 9;
+        uint32 con_push_ting = 10;
+        uint32 con_keep_ting = 11;
+        bool ippatsu = 12;
+    }
+}
+
+message SimulationActionData {
+
+    uint32 type = 1;
+    ActionRiichiData riichi = 2;
+    ActionHuleData hule = 3;
+    ActionFuluData fulu = 4;
+    ActionDiscardData discard_tile = 5;
+    ActionDealTileData deal_tile = 6;
+
+    message ActionRiichiData {
+
+        uint32 seat = 1;
+    }
+
+    message ActionHuleData {
+
+        repeated HuleInfo hule = 1;
+
+        message HuleInfo {
+
+            uint32 fan = 1;
+            bool zimo = 2;
+            uint32 point = 3;
+            bool oya = 4;
+            uint32 player = 5;
+            uint32 chong = 6;
+            bool toutiao = 7;
+        }
+    }
+
+    message ActionFuluData {
+
+        uint32 seat = 1;
+    }
+
+    message ActionDiscardData {
+
+        uint32 seat = 1;
+        bool riichi = 2;
+    }
+
+    message ActionDealTileData {
+
+        uint32 seat = 1;
+    }
 }
 service Lobby {
     rpc fetchConnectionInfo (ReqCommon) returns (ResConnectionInfo);
@@ -3359,6 +3626,17 @@ service Lobby {
     rpc fetchSeerReportList (ReqCommon) returns (ResFetchSeerReportList);
     rpc fetchSeerInfo (ReqCommon) returns (ResFetchSeerInfo);
     rpc selectChestChooseUpActivity (ReqSelectChestChooseUp) returns (ReqCommon);
+    rpc generateAnnualReportToken (ReqGenerateAnnualReportToken) returns (ResGenerateAnnualReportToken);
+    rpc fetchAnnualReportInfo (ReqCommon) returns (ResFetchAnnualReportInfo);
+    rpc remarkFriend (ReqRemarkFriend) returns (ResCommon);
+    rpc simV2ActivityFetchInfo (ReqSimV2ActivityFetchInfo) returns (ResSimV2ActivityFetchInfo);
+    rpc simV2ActivityStartSeason (ReqSimV2ActivityStartSeason) returns (ResSimV2ActivityStartSeason);
+    rpc simV2ActivityTrain (ReqSimV2ActivityTrain) returns (ResSimV2ActivityTrain);
+    rpc simV2ActivitySelectEvent (ReqSimV2ActivitySelectEvent) returns (ResSimV2ActivitySelectEvent);
+    rpc simV2ActivityStartMatch (ReqSimV2ActivityStartMatch) returns (ResSimV2ActivityStartMatch);
+    rpc simV2ActivityEndMatch (ReqSimV2ActivityEndMatch) returns (ResSimV2ActivityEndMatch);
+    rpc simV2ActivityGiveUp (ReqSimV2ActivityGiveUp) returns (ResCommon);
+    rpc simV2ActivitySetUpgrade (ReqSimV2ActivitySetUpgrade) returns (ResCommon);
 }
 
 message ResConnectionInfo {
@@ -6539,6 +6817,7 @@ message ResFetchInfo {
     ResRandomCharacter random_character = 31;
     ResFetchServerMaintenanceInfo maintenance_info = 32;
     ResFetchSeerInfo seer_info = 33;
+    ResFetchAnnualReportInfo annual_report_info = 34;
 }
 
 message ResFetchSeerInfo {
@@ -7395,6 +7674,141 @@ message ReqSelectChestChooseUp {
     uint32 selection = 2;
     uint32 chest_id = 3;
 }
+
+message ReqGenerateAnnualReportToken {
+
+    string lang = 1;
+}
+
+message ResGenerateAnnualReportToken {
+
+    Error error = 1;
+    string token = 2;
+    string url = 3;
+}
+
+message ResFetchAnnualReportInfo {
+
+    Error error = 1;
+    uint32 start_time = 2;
+    uint32 end_time = 3;
+}
+
+message ReqRemarkFriend {
+
+    uint32 account_id = 1;
+    string remark = 2;
+}
+
+message ReqSimV2ActivityFetchInfo {
+
+    uint32 activity_id = 1;
+}
+
+message ResSimV2ActivityFetchInfo {
+
+    Error error = 1;
+    SimulationV2Data data = 2;
+}
+
+message ReqSimV2ActivityStartSeason {
+
+    uint32 activity_id = 1;
+}
+
+message ResSimV2ActivityStartSeason {
+
+    Error error = 1;
+    SimulationV2SeasonData season = 2;
+}
+
+message ReqSimV2ActivityTrain {
+
+    uint32 activity_id = 1;
+    uint32 ability = 2;
+    uint32 skip = 3;
+}
+
+message ResSimV2ActivityTrain {
+
+    Error error = 1;
+    SimulationV2Event event = 2;
+    SimulationV2Ability ability = 3;
+    uint32 round = 4;
+    repeated SimulationV2Effect effect_list = 5;
+    uint32 train_result = 6;
+    bool is_end = 7;
+    SimulationV2Record record = 8;
+}
+
+message ReqSimV2ActivitySelectEvent {
+
+    uint32 activity_id = 1;
+    uint32 selection_id = 2;
+}
+
+message ResSimV2ActivitySelectEvent {
+
+    Error error = 1;
+    SimulationV2Event event = 2;
+    SimulationV2Ability ability = 3;
+    SimulationV2Match match = 4;
+    repeated SimulationV2Effect effect_list = 5;
+    uint32 round = 7;
+    bool is_end = 8;
+    uint32 result_id = 9;
+    SimulationV2Record record = 10;
+    repeated uint32 effected_buff_list = 11;
+}
+
+message ReqSimV2ActivityStartMatch {
+
+    uint32 activity_id = 1;
+}
+
+message ResSimV2ActivityStartMatch {
+
+    Error error = 1;
+    SimulationV2Event event = 2;
+    SimulationV2Match match = 4;
+    repeated SimulationV2Effect effect_list = 5;
+    bool is_match_end = 6;
+}
+
+message ReqSimV2ActivityEndMatch {
+
+    uint32 activity_id = 1;
+}
+
+message ResSimV2ActivityEndMatch {
+
+    Error error = 1;
+    uint32 round = 2;
+    bool is_end = 3;
+    SimulationV2Record record = 4;
+    int32 total_score = 5;
+    repeated SimulationV2MatchRecord match_history = 6;
+    repeated SimulationV2MatchReward rewards = 7;
+    repeated SimulationV2Effect effect_list = 8;
+    SimulationV2Ability ability = 9;
+
+    message SimulationV2MatchReward {
+
+        uint32 type = 1;
+        repeated uint32 params = 2;
+    }
+}
+
+message ReqSimV2ActivityGiveUp {
+
+    uint32 activity_id = 1;
+}
+
+message ReqSimV2ActivitySetUpgrade {
+
+    uint32 activity_id = 1;
+    SimulationV2Ability upgrade = 2;
+}
 service FastTest {
     rpc authGame (ReqAuthGame) returns (ResAuthGame);
     rpc enterGame (ReqCommon) returns (ResEnterGame);
@@ -7894,6 +8308,7 @@ message LiQiSuccess {
     int32 score = 2;
     uint32 liqibang = 3;
     bool failed = 4;
+    uint32 liqi_type_beishuizhizhan = 5;
 }
 
 message FanInfo {
@@ -8111,6 +8526,7 @@ message ActionDiscardTile {
     uint32 liqibang = 14;
     YongchangInfo yongchang = 25;
     HunZhiYiJiBuffInfo hun_zhi_yi_ji_info = 26;
+    uint32 liqi_type_beishuizhizhan = 27;
 }
 
 message RecordDiscardTile {
@@ -8128,6 +8544,7 @@ message RecordDiscardTile {
     MuyuInfo muyu = 12;
     YongchangInfo yongchang = 13;
     HunZhiYiJiBuffInfo hun_zhi_yi_ji_info = 14;
+    uint32 liqi_type_beishuizhizhan = 27;
 }
 
 message ActionDealTile {
@@ -8437,4 +8854,49 @@ message RecordNoTile {
 message PlayerLeaving {
 
     uint32 seat = 1;
+}
+service Route {
+    rpc requestConnection (ReqRequestConnection) returns (ResRequestConnection);
+    rpc requestRouteChange (ReqRequestRouteChange) returns (ResRequestRouteChange);
+    rpc heartbeat (ReqHeartbeat) returns (ResHeartbeat);
+}
+
+message ReqRequestConnection {
+
+    uint32 type = 2;
+    uint32 route_id = 3;
+    uint64 timestamp = 4;
+}
+
+message ResRequestConnection {
+
+    Error error = 1;
+    uint64 timestamp = 2;
+    uint32 result = 3;
+}
+
+message ReqRequestRouteChange {
+
+    uint32 before = 1;
+    uint32 route_id = 2;
+    uint32 type = 3;
+}
+
+message ResRequestRouteChange {
+
+    Error error = 1;
+    uint32 result = 3;
+}
+
+message ReqHeartbeat {
+
+    uint64 timestamp = 1;
+    uint32 no_operation_counter = 2;
+}
+
+message ResHeartbeat {
+
+    Error error = 1;
+    int64 delta = 2;
+    uint64 timestamp = 3;
 }
