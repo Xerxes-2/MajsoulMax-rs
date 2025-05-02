@@ -324,7 +324,7 @@ impl Modder {
                 {
                     let new_view = lq::res_allcommon_views::Views {
                         index: i as u32,
-                        name: format!("{} {}", "View", i),
+                        name: format!("{}{}", "View", i),
                         values: view.clone(),
                     };
                     msg.views.push(new_view);
@@ -556,15 +556,16 @@ impl Modder {
                         .clone(),
                 );
                 p.views.iter_mut().for_each(|v| match v.r#type {
-                    1 => {}
-                    _ => {
-                        v.item_id = v.item_id_list.choose(&mut rng()).unwrap_or(&0).to_owned();
-                    }
+                    1 => v.item_id = v.item_id_list.choose(&mut rng()).unwrap_or(&0).to_owned(),
+                    _ => {}
                 });
                 // avatar_frame id is view.item_id which view.slot is 5
-                if let Some(frame) = p.views.iter().find(|v| v.slot == 5) {
-                    p.avatar_frame = frame.item_id;
-                }
+                p.avatar_frame = self.mod_settings.read().await.views_presets
+                    [self.mod_settings.read().await.preset_index as usize]
+                    .iter()
+                    .find(|v| v.slot == 5)
+                    .map(|v| v.item_id)
+                    .unwrap_or_default();
                 p.verified = self.mod_settings.read().await.verified;
             }
         }
