@@ -1541,7 +1541,7 @@ dependencies = [
  "petgraph",
  "prettyplease",
  "prost 0.14.0",
- "prost-types 0.14.0",
+ "prost-types",
  "regex",
  "syn",
  "tempfile",
@@ -1575,24 +1575,15 @@ dependencies = [
 
 [[package]]
 name = "prost-reflect"
-version = "0.15.3"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "37587d5a8a1b3dc9863403d084fc2254b91ab75a702207098837950767e2260b"
+checksum = "6e6b545c556471033fc1099868fca468bff8cf034f7bb9153b445f24d00aa28d"
 dependencies = [
  "base64",
- "prost 0.13.5",
- "prost-types 0.13.5",
+ "prost 0.14.0",
+ "prost-types",
  "serde",
  "serde-value",
-]
-
-[[package]]
-name = "prost-types"
-version = "0.13.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52c2c1bf36ddb1a1c396b3601a3cec27c2462e45f07c386894ec3ccf5332bd16"
-dependencies = [
- "prost 0.13.5",
 ]
 
 [[package]]
