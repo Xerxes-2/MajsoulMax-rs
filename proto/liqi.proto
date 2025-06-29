@@ -4,14 +4,6 @@ package lq;
 
 option go_package = ".;majprotocol";
 
-message NotifyCaptcha {
-
-    uint32 check_id = 1;
-    uint32 start_time = 2;
-    string random_str = 3;
-    uint32 type = 4;
-}
-
 message NotifyRoomGameStart {
 
     string game_url = 1;
@@ -1290,6 +1282,7 @@ message ActivityCombiningMenuData {
 
     uint32 menu_group = 1;
     repeated MenuRequire generated = 2;
+    repeated MenuRequire multi_generated = 3;
 
     message MenuRequire {
 
@@ -1302,8 +1295,10 @@ message ActivityCombiningOrderData {
 
     uint32 id = 1;
     uint32 pos = 2;
-    uint32 craft_id = 3;
     uint32 unlock_day = 4;
+    uint32 char_id = 5;
+    repeated uint32 finished_craft_id = 6;
+    repeated uint32 craft_id = 7;
 }
 
 message ActivityCombiningLQData {
@@ -1313,6 +1308,7 @@ message ActivityCombiningLQData {
     repeated ActivityCombiningOrderData orders = 3;
     ActivityCombiningWorkbench recycle_bin = 4;
     repeated uint32 unlocked_craft = 5;
+    uint32 daily_bonus_count = 6;
 }
 
 message ActivityCombiningPoolData {
@@ -2162,6 +2158,7 @@ message RecordGame {
     repeated AccountInfo accounts = 11;
     GameEndResult result = 12;
     repeated AccountInfo robots = 13;
+    uint32 standard_rule = 14;
 
     message AccountInfo {
 
@@ -2188,6 +2185,7 @@ message RecordListEntry {
     uint32 tag = 5;
     uint32 subtag = 6;
     repeated RecordPlayerResult players = 7;
+    uint32 standard_rule = 8;
 }
 
 message RecordPlayerResult {
@@ -3446,6 +3444,7 @@ service Lobby {
     rpc createMyCardWebOrder (ReqCreateMyCardOrder) returns (ResCreateMyCardOrder);
     rpc createPaypalOrder (ReqCreatePaypalOrder) returns (ResCreatePaypalOrder);
     rpc createXsollaOrder (ReqCreateXsollaOrder) returns (ResCreateXsollaOrder);
+    rpc createXsollaV4Order (ReqCreateXsollaOrder) returns (ResCreateXsollaOrder);
     rpc verifyMyCardOrder (ReqVerifyMyCardOrder) returns (ResCommon);
     rpc verificationIAPOrder (ReqVerificationIAPOrder) returns (ResVerificationIAPOrder);
     rpc createYostarSDKOrder (ReqCreateYostarOrder) returns (ResCreateYostarOrder);
@@ -3522,7 +3521,6 @@ service Lobby {
     rpc digMine (ReqDigMine) returns (ResDigMine);
     rpc fetchLastPrivacy (ReqFetchLastPrivacy) returns (ResFetchLastPrivacy);
     rpc checkPrivacy (ReqCheckPrivacy) returns (ResCommon);
-    rpc responseCaptcha (ReqResponseCaptcha) returns (ResCommon);
     rpc fetchRPGBattleHistory (ReqFetchRPGBattleHistory) returns (ResFetchRPGBattleHistory);
     rpc fetchRPGBattleHistoryV2 (ReqFetchRPGBattleHistory) returns (ResFetchRPGBattleHistoryV2);
     rpc receiveRPGRewards (ReqReceiveRPGRewards) returns (ResReceiveRPGRewards);
@@ -5244,6 +5242,7 @@ message ReqCreateXsollaOrder {
     uint32 payment_method = 4;
     string debt_order_id = 5;
     string client_version_string = 6;
+    string account_ip = 7;
 }
 
 message ResCreateXsollaOrder {
@@ -6298,15 +6297,6 @@ message ReqCheckPrivacy {
         string version = 1;
         uint32 type = 3;
     }
-}
-
-message ReqResponseCaptcha {
-
-    uint32 check_id = 1;
-    uint32 check_time = 2;
-    string result = 3;
-    string client_version_string = 4;
-    uint32 type = 5;
 }
 
 message ReqFetchRPGBattleHistory {

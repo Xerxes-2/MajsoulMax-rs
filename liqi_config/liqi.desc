@@ -1,14 +1,7 @@
 
-¶ð
+Çð
 
-liqi.protolq"|
-NotifyCaptcha
-check_id (RcheckId
-
-start_time (R	startTime
-
-random_str (	R	randomStr
-type (Rtype"Ž
+liqi.protolq"Ž
 NotifyRoomGameStart
 game_url (	RgameUrl#
 connect_token (	RconnectToken
@@ -946,20 +939,23 @@ story_data (2.lq.ActivityStoryDataR	storyData>
 simulation_v2_data (2.lq.SimulationV2DataRsimulationV2Data"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
-pos (Rpos"¾
+pos (Rpos"’
 ActivityCombiningMenuData
 
 menu_group (R	menuGroupG
-	generated (2).lq.ActivityCombiningMenuData.MenuRequireR	generated9
+	generated (2).lq.ActivityCombiningMenuData.MenuRequireR	generatedR
+multi_generated (2).lq.ActivityCombiningMenuData.MenuRequireRmultiGenerated9
 MenuRequire
 level (Rlevel
-count (Rcount"x
+count (Rcount"½
 ActivityCombiningOrderData
 id (Rid
-pos (Rpos
-craft_id (RcraftId
+pos (Rpos
 
-unlock_day (R	unlockDay"˜
+unlock_day (R	unlockDay
+char_id (RcharId*
+finished_craft_id (RfinishedCraftId
+craft_id (RcraftId"Ä
 ActivityCombiningLQData
 activity_id (R
 activityId<
@@ -967,7 +963,8 @@ activityId<
 orders (2.lq.ActivityCombiningOrderDataRorders?
 recycle_bin (2.lq.ActivityCombiningWorkbenchR
 recycleBin%
-unlocked_craft (RunlockedCraft"G
+unlocked_craft (RunlockedCraft*
+daily_bonus_count (RdailyBonusCount"G
 ActivityCombiningPoolData
 group (Rgroup
 count (Rcount"î
@@ -1607,7 +1604,7 @@ auto_match (R	autoMatch"¯
 point (Rpoint
 
 game_ranks (R	gameRanks(
-total_game_count (RtotalGameCount"
+total_game_count (RtotalGameCount"²
 
 RecordGame
 uuid (	Ruuid
@@ -1617,7 +1614,8 @@ start_time (R	startTime
 config (2.lq.GameConfigRconfig6
 accounts (2.lq.RecordGame.AccountInfoRaccounts)
 result (2.lq.GameEndResultRresult2
-robots (2.lq.RecordGame.AccountInfoRrobotsñ
+robots (2.lq.RecordGame.AccountInfoRrobots#
+standard_rule (RstandardRuleñ
 AccountInfo
 
 account_id (R	accountId
@@ -1631,7 +1629,7 @@ account_id (R	accountId
 avatar_frame	 (RavatarFrame
 verified
  (Rverified"
-views (2.lq.ViewSlotRviews"Õ
+views (2.lq.ViewSlotRviews"ú
 RecordListEntry
 version (Rversion
 uuid (	Ruuid
@@ -1640,7 +1638,8 @@ start_time (R	startTime
 end_time (RendTime
 tag (Rtag
 subtag (Rsubtag0
-players (2.lq.RecordPlayerResultRplayers"±
+players (2.lq.RecordPlayerResultRplayers#
+standard_rule (RstandardRule"±
 RecordPlayerResult
 rank (Rrank
 
@@ -3480,7 +3479,7 @@ account_id (R	accountId"
 ResCreatePaypalOrder
 error (2	.lq.ErrorRerror
 order_id (	RorderId
-url (	Rurl"ð
+url (	Rurl"
 ReqCreateXsollaOrder
 goods_id (RgoodsId
 client_type (R
@@ -3489,7 +3488,9 @@ clientType
 account_id (R	accountId%
 payment_method (RpaymentMethod"
 debt_order_id (	RdebtOrderId2
-client_version_string (	RclientVersionString"d
+client_version_string (	RclientVersionString
+
+account_ip (	R	accountIp"d
 ResCreateXsollaOrder
 error (2	.lq.ErrorRerror
 order_id (	RorderId
@@ -4126,14 +4127,7 @@ deviceType8
 versions (2.lq.ReqCheckPrivacy.VersionsRversions8
 Versions
 version (	Rversion
-type (Rtype"®
-ReqResponseCaptcha
-check_id (RcheckId
-
-check_time (R	checkTime
-result (	Rresult2
-client_version_string (	RclientVersionString
-type (Rtype";
+type (Rtype";
 ReqFetchRPGBattleHistory
 activity_id (R
 activityId"ö
@@ -5963,7 +5957,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2žÔ
+READY2¯Ô
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -6164,7 +6158,8 @@ buyFromZHP.lq.ReqBuyFromZHP.lq.ResCommon;
 createMyCardAndroidOrder.lq.ReqCreateMyCardOrder.lq.ResCreateMyCardOrderJ
 createMyCardWebOrder.lq.ReqCreateMyCardOrder.lq.ResCreateMyCardOrderG
 createPaypalOrder.lq.ReqCreatePaypalOrder.lq.ResCreatePaypalOrderG
-createXsollaOrder.lq.ReqCreateXsollaOrder.lq.ResCreateXsollaOrder<
+createXsollaOrder.lq.ReqCreateXsollaOrder.lq.ResCreateXsollaOrderI
+createXsollaV4Order.lq.ReqCreateXsollaOrder.lq.ResCreateXsollaOrder<
 verifyMyCardOrder.lq.ReqVerifyMyCardOrder.lq.ResCommonP
 verificationIAPOrder.lq.ReqVerificationIAPOrder.lq.ResVerificationIAPOrderJ
 createYostarSDKOrder.lq.ReqCreateYostarOrder.lq.ResCreateYostarOrderJ
@@ -6240,8 +6235,7 @@ buyFromZHP.lq.ReqBuyFromZHP.lq.ResCommon;
 likeSNS.lq.ReqLikeSNS.lq.ResLikeSNS)
 digMine.lq.ReqDigMine.lq.ResDigMineD
 fetchLastPrivacy.lq.ReqFetchLastPrivacy.lq.ResFetchLastPrivacy2
-checkPrivacy.lq.ReqCheckPrivacy.lq.ResCommon8
-responseCaptcha.lq.ReqResponseCaptcha.lq.ResCommonS
+checkPrivacy.lq.ReqCheckPrivacy.lq.ResCommonS
 fetchRPGBattleHistory.lq.ReqFetchRPGBattleHistory.lq.ResFetchRPGBattleHistoryW
 fetchRPGBattleHistoryV2.lq.ReqFetchRPGBattleHistory.lq.ResFetchRPGBattleHistoryV2G
 receiveRPGRewards.lq.ReqReceiveRPGRewards.lq.ResReceiveRPGRewardsE
