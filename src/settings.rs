@@ -1,7 +1,8 @@
 use crate::proto::lq::ViewSlot;
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use bytes::Bytes;
-use prost_reflect::DescriptorPool;
+use prost::Message;
+use prost_reflect::{DescriptorPool, prost_types::FileDescriptorSet};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{
@@ -64,9 +65,11 @@ impl Settings {
         settings.actions_set = settings.send_action.iter().cloned().collect();
 
         // read desc from file
-        let bytes = std::fs::read(dir.join("liqi.desc")).context("无法读取liqi.desc")?;
-
-        settings.desc = DescriptorPool::decode(bytes.as_slice()).context("无法解析liqi.desc")?;
+        let file_descriptor_set_bytes = include_bytes!(concat!(env!("OUT_DIR"), "/liqi_desc.bin"));
+        let file_descriptor_set =
+            FileDescriptorSet::decode(&file_descriptor_set_bytes[..]).unwrap();
+        settings.desc = DescriptorPool::from_file_descriptor_set(file_descriptor_set)
+            .context("无法解析liqi.desc")?;
 
         // read liqi.json from file
         settings.proto_json = serde_json::from_str(
