@@ -9,7 +9,7 @@ use prost::Message;
 use rand::{rng, seq::IndexedRandom};
 use std::collections::HashMap;
 use tokio::sync::RwLock;
-use tracing::{debug, error, info};
+use tracing::{debug, error, info, warn};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const ANNOUNCEMENT: &str = formatcp!(
@@ -58,9 +58,10 @@ pub fn capitalize(s: &str) -> String {
 
 fn to_vec<T: Message + std::default::Default>(buf: &[Vec<u8>]) -> Vec<T> {
     buf.iter()
-        .map(|d| {
+        .filter_map(|d| {
             T::decode(d.as_ref())
-                .unwrap_or_else(|_| panic!("Failed to decode {}", std::any::type_name::<T>()))
+                .inspect_err(|_| warn!("Failed to decode {}", std::any::type_name::<T>()))
+                .ok()
         })
         .collect()
 }
@@ -555,7 +556,11 @@ impl Modder {
                         [self.mod_settings.read().await.preset_index as usize]
                         .clone(),
                 );
-                p.views.iter_mut().for_each(|v| if v.r#type == 1 { v.item_id = v.item_id_list.choose(&mut rng()).unwrap_or(&0).to_owned() });
+                p.views.iter_mut().for_each(|v| {
+                    if v.r#type == 1 {
+                        v.item_id = v.item_id_list.choose(&mut rng()).unwrap_or(&0).to_owned()
+                    }
+                });
                 // avatar_frame id is view.item_id which view.slot is 5
                 p.avatar_frame = self.mod_settings.read().await.views_presets
                     [self.mod_settings.read().await.preset_index as usize]
