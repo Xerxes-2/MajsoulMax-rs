@@ -107,7 +107,7 @@ impl Parser {
         let message_type = self
             .pool
             .get_message_by_name(&to_fqn(message_name))
-            .context(format!("Invalid message type: {}", message_name))?;
+            .context(format!("Invalid message type: {message_name}"))?;
         let dyn_msg = DynamicMessage::decode(message_type, msg_block.data.as_ref())?;
         let mut data_obj = dyn_to_json(&dyn_msg)?;
 
@@ -147,7 +147,7 @@ impl Parser {
         let req_type = self
             .pool
             .get_message_by_name(&to_fqn(req_type_name))
-            .context(format!("Invalid request type: {}", req_type_name))?;
+            .context(format!("Invalid request type: {req_type_name}"))?;
         let dyn_msg = DynamicMessage::decode(req_type, msg_block.data.as_ref())?;
         let data_obj = dyn_to_json(&dyn_msg)?;
 
@@ -158,7 +158,7 @@ impl Parser {
         let resp_type = self
             .pool
             .get_message_by_name(&to_fqn(res_type_name))
-            .context(format!("Invalid response type: {}", res_type_name))?;
+            .context(format!("Invalid response type: {res_type_name}"))?;
         self.respond_type
             .insert(msg_id, (method_name.clone(), resp_type));
 
@@ -197,7 +197,7 @@ impl Parser {
 /// A new String with the fully qualified name
 fn to_fqn(method_name: &str) -> String {
     // Use format! for better readability and performance
-    format!("lq.{}", method_name)
+    format!("lq.{method_name}")
 }
 
 pub fn decode_action(name: &str, data: &str, pool: &DescriptorPool) -> Result<JsonValue> {

@@ -555,10 +555,7 @@ impl Modder {
                         [self.mod_settings.read().await.preset_index as usize]
                         .clone(),
                 );
-                p.views.iter_mut().for_each(|v| match v.r#type {
-                    1 => v.item_id = v.item_id_list.choose(&mut rng()).unwrap_or(&0).to_owned(),
-                    _ => {}
-                });
+                p.views.iter_mut().for_each(|v| if v.r#type == 1 { v.item_id = v.item_id_list.choose(&mut rng()).unwrap_or(&0).to_owned() });
                 // avatar_frame id is view.item_id which view.slot is 5
                 p.avatar_frame = self.mod_settings.read().await.views_presets
                     [self.mod_settings.read().await.preset_index as usize]
