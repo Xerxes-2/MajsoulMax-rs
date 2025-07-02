@@ -1416,13 +1416,13 @@ message ItemDefinitionSkin {
    int32 spine_height = 60;
    int32 pivot_x = 61;
    int32 pivot_y = 62;
-   uint32 idle = 63;
-   uint32 greeting = 64;
-   uint32 celebrate = 65;
-   uint32 click = 66;
-   uint32 greeting_init = 67;
-   uint32 click2 = 68;
-   uint32 celebrate_idle = 69;
+   int32 idle = 63;
+   int32 greeting = 64;
+   int32 celebrate = 65;
+   int32 click = 66;
+   int32 greeting_init = 67;
+   int32 click2 = 68;
+   int32 celebrate_idle = 69;
    string field_70 = 70;
 }
 
