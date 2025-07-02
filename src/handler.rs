@@ -6,7 +6,7 @@ use hudsucker::{
     *,
 };
 use std::sync::Arc;
-use tokio::sync::{mpsc::Sender, RwLock};
+use tokio::sync::{RwLock, mpsc::Sender};
 use tracing::*;
 
 use crate::{

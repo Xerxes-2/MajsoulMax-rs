@@ -2,9 +2,10 @@ use anyhow::Context;
 use handler::Handler;
 use helper::helper_worker;
 use hudsucker::{
+    Proxy,
     certificate_authority::RcgenAuthority,
     rcgen::{CertificateParams, KeyPair},
-    rustls, Proxy,
+    rustls,
 };
 use std::{future::Future, net::SocketAddr, str::FromStr, sync::Arc};
 use tokio::sync::mpsc::channel;
