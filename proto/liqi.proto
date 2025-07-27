@@ -1139,6 +1139,8 @@ message ClientDeviceInfo {
     string model_number = 9;
     uint32 screen_width = 10;
     uint32 screen_height = 11;
+    string user_agent = 12;
+    uint32 screen_type = 13;
 }
 
 message ClientVersionInfo {
@@ -3279,6 +3281,7 @@ service Lobby {
     rpc bindAccount (ReqBindAccount) returns (ResCommon);
     rpc logout (ReqLogout) returns (ResLogout);
     rpc heatbeat (ReqHeatBeat) returns (ResCommon);
+    rpc searchAccountByEid (ReqSearchAccountByEid) returns (ResSearchAccountbyEid);
     rpc loginBeat (ReqLoginBeat) returns (ResCommon);
     rpc createNickname (ReqCreateNickname) returns (ResCommon);
     rpc modifyNickname (ReqModifyNickname) returns (ResCommon);
@@ -3865,6 +3868,17 @@ message ResLogout {
 message ReqHeatBeat {
 
     uint32 no_operation_counter = 1;
+}
+
+message ReqSearchAccountByEid {
+
+    uint32 eid = 1;
+}
+
+message ResSearchAccountbyEid {
+
+    Error error = 1;
+    uint32 account_id = 2;
 }
 
 message ReqLoginBeat {
