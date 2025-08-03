@@ -4,7 +4,7 @@ use bytes::Bytes;
 use prost::Message;
 use prost_reflect::{DescriptorPool, DynamicMessage, MessageDescriptor, SerializeOptions};
 use serde_json::{Value as JsonValue, value::Serializer};
-use std::{collections::HashMap, sync::Arc};
+use std::{collections::HashMap, fmt::Display, sync::Arc};
 
 use crate::proto::base::BaseMessage;
 
@@ -25,6 +25,16 @@ pub struct LiqiMessage {
     pub msg_type: MessageType,
     pub method_name: Arc<str>,
     pub data: JsonValue,
+}
+
+impl Display for LiqiMessage {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "LiqiMessage(id: {}, type: {:?}, method: {}, data: {})",
+            self.id, self.msg_type, self.method_name, self.data
+        )
+    }
 }
 
 impl LiqiMessage {

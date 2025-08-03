@@ -7,7 +7,7 @@ use anyhow::{Context, Result};
 use reqwest::Client;
 use serde::Serialize;
 use serde_json::{Map, Value as JsonValue, json};
-use std::{borrow::Cow, future::Future, sync::LazyLock};
+use std::{future::Future, sync::LazyLock};
 use tokio::{spawn, sync::mpsc::Receiver, time::sleep};
 use tracing::{debug, error, info};
 
@@ -50,26 +50,23 @@ fn process_message(mut parsed: LiqiMessage, settings: &Settings) -> Result<()> {
     if !settings.is_method(&parsed.method_name) {
         return Ok(());
     }
-    let json_data: Cow<JsonValue> = match parsed.method_name.as_ref() {
+    let json_data: JsonValue = match parsed.method_name.as_ref() {
         ".lq.ActionPrototype" => {
             let name = parsed.data["name"].as_str().context("name field invalid")?;
             if !settings.is_action(name) {
                 return Ok(());
             }
             if name == "ActionNewRound" {
-                parsed
-                    .data
-                    .as_object_mut()
-                    .context("data field invalid")?
-                    .insert("md5".to_string(), json!(ARBITRARY_MD5));
+                info!("New Round: {}", parsed);
+                parsed.data["data"]["md5"] = ARBITRARY_MD5.into();
             }
-            Cow::Owned(parsed.data.get_mut("data").context("No data field")?.take())
+            parsed.data["data"].take()
         }
         ".lq.FastTest.syncGame" => {
             let game_restore = parsed.data["game_restore"]["actions"]
                 .as_array()
                 .context("actions field invalid")?;
-            let mut actions: Vec<Action> = vec![];
+            let mut actions = Vec::with_capacity(game_restore.len());
             for item in game_restore.iter() {
                 let action_name = item["name"].as_str().context("name field invalid")?;
                 let action_data = item["data"].as_str().unwrap_or_default();
@@ -82,10 +79,7 @@ fn process_message(mut parsed: LiqiMessage, settings: &Settings) -> Result<()> {
                 } else {
                     let mut value = decode_action(action_name, action_data, &settings.desc)?;
                     if action_name == "ActionNewRound" {
-                        value
-                            .as_object_mut()
-                            .context("data is not an object")?
-                            .insert("md5".to_string(), json!(ARBITRARY_MD5));
+                        value["md5"] = ARBITRARY_MD5.into();
                     }
                     let action = Action {
                         name: action_name.to_string(),
@@ -94,14 +88,11 @@ fn process_message(mut parsed: LiqiMessage, settings: &Settings) -> Result<()> {
                     actions.push(action);
                 }
             }
-            let mut map = Map::with_capacity(1);
-            map.insert(
-                "sync_game_actions".to_string(),
-                serde_json::to_value(actions)?,
-            );
-            Cow::Owned(JsonValue::Object(map))
+            json!({
+                "sync_game_actions": actions,
+            })
         }
-        _ => Cow::Borrowed(&parsed.data),
+        _ => parsed.data,
     };
 
     // post data to API, no verification
