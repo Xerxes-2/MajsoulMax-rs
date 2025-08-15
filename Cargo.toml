@@ -11,7 +11,6 @@ name = "majsoul_max_rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-aws-lc-rs = { version = "1", features = ["bindgen"] }
 anyhow = "1"
 base64 = "0.22"
 bytes = "1"

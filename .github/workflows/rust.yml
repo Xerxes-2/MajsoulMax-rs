@@ -44,17 +44,14 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-  
-      - name: Install Rust
-        # Or @nightly if you want
-        uses: dtolnay/rust-toolchain@stable
-        # Arguments to pass in
-        with:
-          # Make Rust compile to our target (defined in the matrix)
-          targets: ${{ matrix.target }}
 
-      - name: Install protoc
-        uses: Noelware/setup-protoc@1.2.0
+      - name: Install Rust
+        run: |
+          rustup target add ${{ matrix.target }}
+          rustup update
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -64,47 +61,43 @@ jobs:
         run: |
           chmod 755 $(which protoc)
           echo "PROTOC=$(which protoc)" >> $GITHUB_ENV
-    
+
       - name: Setup protoc Windows
         if: ${{ matrix.os == 'windows-latest' }}
         run: echo "PROTOC=$((Get-Command protoc).Path)" >> $env:GITHUB_ENV
-            
+
       - name: Get the release version from the tag
+        if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Prepare Android NDK
         if: ${{ matrix.target  == 'aarch64-linux-android' }}
-        run: |
-          sudo apt-get update
-          wget https://dl.google.com/android/repository/android-ndk-r27-linux.zip -O android-ndk.zip
-          unzip android-ndk.zip
-          export ANDROID_NDK_HOME=$PWD/android-ndk-r27
-          export ANDROID_NDK_ROOT=$PWD/android-ndk-r27
-          export ANDROID_NDK=$PWD/android-ndk-r27
-          export BINDGEN_EXTRA_CLANG_ARGS="--sysroot=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
-          export PATH=$ANDROID_NDK_HOME:$PATH
-          rustup target add aarch64-linux-android
-          cargo install cargo-ndk
-          sudo apt-get install -y gcc-multilib
+        uses: nttld/setup-ndk@v1.5.0
+        id: setup-ndk
+        with:
+          ndk-version: r27c
+          add-to-path: true
 
       - name: Build
         if: ${{ matrix.target  != 'aarch64-linux-android' }}
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --verbose --release --target ${{ matrix.target }}
+        run: cargo build --verbose --release --target ${{ matrix.target }}
 
       - name: Build Android
         if: ${{ matrix.target  == 'aarch64-linux-android' }}
-        run: cargo ndk -t arm64-v8a build --verbose --release
+        run: |
+          cargo install cargo-ndk
+          cargo ndk -t arm64-v8a build --verbose --release
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Build archive
         shell: bash
         run: |
           # Replace with the name of your binary
           binary_name="majsoul_max_rs"
-      
+
           dirname="$binary_name-${{ env.VERSION }}-${{ matrix.target }}"
           mkdir "$dirname"
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
@@ -113,7 +106,7 @@ jobs:
             mv "target/${{ matrix.target }}/release/$binary_name" "$dirname"
           fi
           cp -r "liqi_config" "$dirname"
-      
+
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             7z a "$dirname.zip" "$dirname"
             echo "ASSET=$dirname.zip" >> $GITHUB_ENV
@@ -123,6 +116,7 @@ jobs:
           fi
 
       - name: Upload the binaries
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: |
