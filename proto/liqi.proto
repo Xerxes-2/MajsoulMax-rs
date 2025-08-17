@@ -3260,6 +3260,8 @@ service Lobby {
     rpc openidCheck (ReqOpenidCheck) returns (ResOauth2Check);
     rpc signup (ReqSignupAccount) returns (ResSignupAccount);
     rpc login (ReqLogin) returns (ResLogin);
+    rpc prepareLogin (ReqPrepareLogin) returns (ResCommon);
+    rpc fastLogin (ReqCommon) returns (ResFastLogin);
     rpc fetchInfo (ReqCommon) returns (ResFetchInfo);
     rpc loginSuccess (ReqCommon) returns (ResCommon);
     rpc fetchServerMaintenanceInfo (ReqCommon) returns (ResFetchServerMaintenanceInfo);
@@ -3281,7 +3283,7 @@ service Lobby {
     rpc bindAccount (ReqBindAccount) returns (ResCommon);
     rpc logout (ReqLogout) returns (ResLogout);
     rpc heatbeat (ReqHeatBeat) returns (ResCommon);
-    rpc searchAccountByEid (ReqSearchAccountByEid) returns (ResSearchAccountbyEid);
+    rpc searchAccountByEid (ReqSearchAccountByEidLobby) returns (ResSearchAccountbyEidLobby);
     rpc loginBeat (ReqLoginBeat) returns (ResCommon);
     rpc createNickname (ReqCreateNickname) returns (ResCommon);
     rpc modifyNickname (ReqModifyNickname) returns (ResCommon);
@@ -3706,6 +3708,19 @@ message ResLogin {
     repeated uint32 rewarded_version = 11;
 }
 
+message ReqPrepareLogin {
+
+    string access_token = 1;
+    uint32 type = 2;
+}
+
+message ResFastLogin {
+
+    Error error = 1;
+    GameConnectInfo game_info = 2;
+    Room room = 3;
+}
+
 message ReqEmailLogin {
 
     string email = 1;
@@ -3870,12 +3885,12 @@ message ReqHeatBeat {
     uint32 no_operation_counter = 1;
 }
 
-message ReqSearchAccountByEid {
+message ReqSearchAccountByEidLobby {
 
     uint32 eid = 1;
 }
 
-message ResSearchAccountbyEid {
+message ResSearchAccountbyEidLobby {
 
     Error error = 1;
     uint32 account_id = 2;
@@ -8868,7 +8883,7 @@ service Route {
 message ReqRequestConnection {
 
     uint32 type = 2;
-    uint32 route_id = 3;
+    string route_id = 3;
     uint64 timestamp = 4;
 }
 
@@ -8881,8 +8896,8 @@ message ResRequestConnection {
 
 message ReqRequestRouteChange {
 
-    uint32 before = 1;
-    uint32 route_id = 2;
+    string before = 1;
+    string route_id = 2;
     uint32 type = 3;
 }
 
@@ -8894,13 +8909,13 @@ message ResRequestRouteChange {
 
 message ReqHeartbeat {
 
-    uint64 timestamp = 1;
+    uint32 delay = 1;
     uint32 no_operation_counter = 2;
+    uint32 platform = 3;
+    uint32 network_quality = 4;
 }
 
 message ResHeartbeat {
 
     Error error = 1;
-    int64 delta = 2;
-    uint64 timestamp = 3;
 }

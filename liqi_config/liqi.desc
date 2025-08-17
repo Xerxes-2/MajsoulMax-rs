@@ -1,5 +1,5 @@
 
-×ò
+¢õ
 
 liqi.protolq"Ž
 NotifyRoomGameStart
@@ -2502,7 +2502,14 @@ signupTime)
 country	 (	Rcountry'
 logined_version
  (RloginedVersion)
-rewarded_version (RrewardedVersion"¬
+rewarded_version (RrewardedVersion"H
+ReqPrepareLogin!
+access_token (	RaccessToken
+type (Rtype"
+ResFastLogin
+error (2	.lq.ErrorRerror0
+	game_info (2.lq.GameConnectInfoRgameInfo
+room (2.lq.RoomRroom"¬
 ReqEmailLogin
 email (	Remail
 password (	Rpassword
@@ -2601,10 +2608,10 @@ finish_url (	R	finishUrl"O
 	ResLogout
 error (2	.lq.ErrorRerror"?
 ReqHeatBeat0
-no_operation_counter (RnoOperationCounter")
-ReqSearchAccountByEid
-eid (Reid"W
-ResSearchAccountbyEid
+no_operation_counter (RnoOperationCounter".
+ReqSearchAccountByEidLobby
+eid (Reid"\
+ResSearchAccountbyEidLobby
 error (2	.lq.ErrorRerror
 
 account_id (R	accountId"*
@@ -5943,38 +5950,40 @@ old_scores (R	oldScores!
 seat (Rseat"c
 ReqRequestConnection
 type (Rtype
-route_id (RrouteId
+route_id (	RrouteId
 	timestamp (R	timestamp"m
 ResRequestConnection
 error (2	.lq.ErrorRerror
 	timestamp (R	timestamp
 result (Rresult"^
 ReqRequestRouteChange
-before (Rbefore
-route_id (RrouteId
+before (	Rbefore
+route_id (	RrouteId
 type (Rtype"P
 ResRequestRouteChange
 error (2	.lq.ErrorRerror
-result (Rresult"^
-ReqHeartbeat
-	timestamp (R	timestamp0
-no_operation_counter (RnoOperationCounter"c
+result (Rresult"›
+ReqHeartbeat
+delay (Rdelay0
+no_operation_counter (RnoOperationCounter
+platform (Rplatform'
+network_quality (RnetworkQuality"/
 ResHeartbeat
-error (2	.lq.ErrorRerror
-delta (Rdelta
-	timestamp (R	timestamp*=
+error (2	.lq.ErrorRerror*=
 GamePlayerState
 NULL 
 AUTH
 SYNCING	
-READY2ûÔ
+READY2çÕ
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
 cancelQueue.lq.ReqCommon.lq.ResCommon5
 openidCheck.lq.ReqOpenidCheck.lq.ResOauth2Check4
 signup.lq.ReqSignupAccount.lq.ResSignupAccount#
-login.lq.ReqLogin.lq.ResLogin,
+login.lq.ReqLogin.lq.ResLogin2
+prepareLogin.lq.ReqPrepareLogin.lq.ResCommon,
+	fastLogin.lq.ReqCommon.lq.ResFastLogin,
 	fetchInfo.lq.ReqCommon.lq.ResFetchInfo,
 loginSuccess.lq.ReqCommon.lq.ResCommonN
 fetchServerMaintenanceInfo.lq.ReqCommon!.lq.ResFetchServerMaintenanceInfo-
@@ -5997,8 +6006,8 @@ oauth2Auth.lq.ReqOauth2Auth.lq.ResOauth2Auth5
 modifyPassword.lq.ReqModifyPassword.lq.ResCommon0
 bindAccount.lq.ReqBindAccount.lq.ResCommon&
 logout.lq.ReqLogout.lq.ResLogout*
-heatbeat.lq.ReqHeatBeat.lq.ResCommonJ
-searchAccountByEid.lq.ReqSearchAccountByEid.lq.ResSearchAccountbyEid,
+heatbeat.lq.ReqHeatBeat.lq.ResCommonT
+searchAccountByEid.lq.ReqSearchAccountByEidLobby.lq.ResSearchAccountbyEidLobby,
 	loginBeat.lq.ReqLoginBeat.lq.ResCommon6
 createNickname.lq.ReqCreateNickname.lq.ResCommon6
 modifyNickname.lq.ReqModifyNickname.lq.ResCommon6
