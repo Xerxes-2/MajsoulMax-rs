@@ -8,7 +8,6 @@ use serde_json::Value;
 use std::{
     collections::{HashMap, HashSet},
     path::{Path, PathBuf},
-    sync::LazyLock,
 };
 use tokio::spawn;
 use tracing::{error, info};
@@ -25,6 +24,8 @@ pub struct Settings {
     auto_update: bool,
     liqi_version: String,
     github_token: String,
+    #[serde(default)]
+    req_proxy: String,
     #[serde(skip)]
     methods_set: HashSet<String>,
     #[serde(skip)]
@@ -38,14 +39,22 @@ pub struct Settings {
 }
 
 const APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-static REQUEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
-    reqwest::Client::builder()
-        .user_agent(APP_USER_AGENT)
-        .build()
-        .expect("An error occured in building request client.")
-});
+
+
 
 impl Settings {
+    pub fn get_request_client(&self) -> reqwest::Client {
+        let mut builder = reqwest::Client::builder().user_agent(APP_USER_AGENT);
+        
+        if !self.req_proxy.is_empty() {
+            if let Ok(proxy) = reqwest::Proxy::all(&self.req_proxy) {
+                builder = builder.proxy(proxy);
+            }
+        }
+        
+        builder.build().expect("An error occured in building request client.")
+    }
+
     pub fn new(arg_dir: &Path) -> Result<Self> {
         let exe = std::env::current_exe().context("无法获取当前可执行文件路径")?;
         let dir = if arg_dir.is_dir() {
@@ -101,8 +110,9 @@ impl Settings {
     }
 
     pub async fn update(&mut self) -> Result<bool> {
-        let version = get_version().await?;
-        let prefix = get_proto_prefix(&version).await?;
+        let client = self.get_request_client();
+        let version = get_version(&client).await?;
+        let prefix = get_proto_prefix(&version, &client).await?;
         if self.liqi_version == prefix {
             info!("无需更新liqi, 当前版本: {version}");
             return Ok(false);
@@ -112,16 +122,18 @@ impl Settings {
             self.liqi_version
         );
 
+        let api_url = "https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest".to_string();
+
         let resp = if self.github_token.is_empty() {
-            REQUEST_CLIENT
-                .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
+            self.get_request_client()
+                .get(&api_url)
                 .timeout(std::time::Duration::from_secs(10))
                 .send()
                 .await
                 .context("Failed to get latest release")?
         } else {
-            REQUEST_CLIENT
-                .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
+            self.get_request_client()
+                .get(&api_url)
                 .header("Authorization", format!("Bearer {}", self.github_token))
                 .header("X-GitHub-Api-Version", "2022-11-28")
                 .timeout(std::time::Duration::from_secs(10))
@@ -166,16 +178,17 @@ impl Settings {
         let url = asset_item["browser_download_url"]
             .as_str()
             .context("No download url found in asset")?;
+        let url = url.to_string();
         let resp = if self.github_token.is_empty() {
-            REQUEST_CLIENT
-                .get(url)
+            self.get_request_client()
+                .get(&url)
                 .timeout(std::time::Duration::from_secs(10))
                 .send()
                 .await
                 .context("Failed to download asset")?
         } else {
-            REQUEST_CLIENT
-                .get(url)
+            self.get_request_client()
+                .get(&url)
                 .header("Authorization", format!("Bearer {}", self.github_token))
                 .header("X-GitHub-Api-Version", "2022-11-28")
                 .timeout(std::time::Duration::from_secs(10))
@@ -196,8 +209,8 @@ impl Settings {
     }
 }
 
-async fn get_version() -> Result<String> {
-    let resp = REQUEST_CLIENT
+async fn get_version(client: &reqwest::Client) -> Result<String> {
+    let resp = client
         .get("https://game.maj-soul.com/1/version.json")
         .timeout(std::time::Duration::from_secs(10))
         .send()
@@ -208,8 +221,8 @@ async fn get_version() -> Result<String> {
     Ok(version.to_string())
 }
 
-async fn get_proto_prefix(version: &str) -> Result<String> {
-    let resp = REQUEST_CLIENT
+async fn get_proto_prefix(version: &str, client: &reqwest::Client) -> Result<String> {
+    let resp = client
         .get(format!(
             "https://game.maj-soul.com/1/resversion{version}.json",
         ))
@@ -224,8 +237,8 @@ async fn get_proto_prefix(version: &str) -> Result<String> {
     Ok(prefix.to_string())
 }
 
-pub async fn get_lqbin_prefix(version: &str) -> Result<String> {
-    let resp = REQUEST_CLIENT
+pub async fn get_lqbin_prefix(version: &str, client: &reqwest::Client) -> Result<String> {
+    let resp = client
         .get(format!(
             "https://game.maj-soul.com/1/resversion{version}.json"
         ))
@@ -340,10 +353,10 @@ impl ModSettings {
         self.anti_nickname_censorship
     }
 
-    pub async fn get_lqc(&mut self) -> Result<bool> {
+    pub async fn get_lqc(&mut self, client: &reqwest::Client) -> Result<bool> {
         // get lqc.lqbin prefix from https://game.maj-soul.com/1/{prefix}/res/config/lqc.lqbin
-        let version = get_version().await?;
-        let prefix = get_lqbin_prefix(&version).await?;
+        let version = get_version(client).await?;
+        let prefix = get_lqbin_prefix(&version, client).await?;
 
         if self.version == prefix {
             info!("无需更新lqc.lqbin, 当前版本: {version}");
@@ -354,7 +367,7 @@ impl ModSettings {
             self.version
         );
 
-        let resp = REQUEST_CLIENT
+        let resp = client
             .get(format!(
                 "https://game.maj-soul.com/1/{prefix}/res/config/lqc.lqbin",
             ))

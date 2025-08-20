@@ -35,6 +35,7 @@
   "helperSwitch": true,
   "modSwitch": true,
   "autoUpdate": true,
-  "liqiVersion": "v0.11.170.w",
-  "githubToken": ""
+  "liqiVersion": "v0.11.172.w",
+  "githubToken": "",
+  "reqProxy": ""
 }
