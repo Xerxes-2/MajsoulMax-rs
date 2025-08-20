@@ -25,6 +25,8 @@ pub struct Settings {
     auto_update: bool,
     liqi_version: String,
     github_token: String,
+    #[serde(default)]
+    req_proxy: String,
     #[serde(skip)]
     methods_set: HashSet<String>,
     #[serde(skip)]
@@ -46,6 +48,18 @@ static REQUEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
 });
 
 impl Settings {
+    fn create_github_client(&self) -> Result<reqwest::Client> {
+        let mut builder = reqwest::Client::builder().user_agent(APP_USER_AGENT);
+        
+        if !self.req_proxy.is_empty() {
+            let proxy = reqwest::Proxy::all(&self.req_proxy)
+                .context("Failed to create proxy from req_proxy")?;
+            builder = builder.proxy(proxy);
+        }
+        
+        builder.build().context("Failed to build HTTP client")
+    }
+
     pub fn new(arg_dir: &Path) -> Result<Self> {
         let exe = std::env::current_exe().context("无法获取当前可执行文件路径")?;
         let dir = if arg_dir.is_dir() {
@@ -113,14 +127,16 @@ impl Settings {
         );
 
         let resp = if self.github_token.is_empty() {
-            REQUEST_CLIENT
+            let client = self.create_github_client()?;
+            client
                 .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
                 .timeout(std::time::Duration::from_secs(10))
                 .send()
                 .await
                 .context("Failed to get latest release")?
         } else {
-            REQUEST_CLIENT
+            let client = self.create_github_client()?;
+            client
                 .get("https://api.github.com/repos/Xerxes-2/AutoLiqi/releases/latest")
                 .header("Authorization", format!("Bearer {}", self.github_token))
                 .header("X-GitHub-Api-Version", "2022-11-28")
@@ -167,14 +183,16 @@ impl Settings {
             .as_str()
             .context("No download url found in asset")?;
         let resp = if self.github_token.is_empty() {
-            REQUEST_CLIENT
+            let client = self.create_github_client()?;
+            client
                 .get(url)
                 .timeout(std::time::Duration::from_secs(10))
                 .send()
                 .await
                 .context("Failed to download asset")?
         } else {
-            REQUEST_CLIENT
+            let client = self.create_github_client()?;
+            client
                 .get(url)
                 .header("Authorization", format!("Bearer {}", self.github_token))
                 .header("X-GitHub-Api-Version", "2022-11-28")
