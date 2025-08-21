@@ -26,7 +26,7 @@ pub struct Settings {
     liqi_version: String,
     github_token: String,
     #[serde(default)]
-    req_proxy: String,
+    req_proxy: Option<url::Url>,
     #[serde(skip)]
     methods_set: HashSet<String>,
     #[serde(skip)]
@@ -50,13 +50,13 @@ static REQUEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
 impl Settings {
     fn create_github_client(&self) -> Result<reqwest::Client> {
         let mut builder = reqwest::Client::builder().user_agent(APP_USER_AGENT);
-        
-        if !self.req_proxy.is_empty() {
-            let proxy = reqwest::Proxy::all(&self.req_proxy)
+
+        if let Some(req_proxy) = &self.req_proxy {
+            let proxy = reqwest::Proxy::all(req_proxy.clone())
                 .context("Failed to create proxy from req_proxy")?;
             builder = builder.proxy(proxy);
         }
-        
+
         builder.build().context("Failed to build HTTP client")
     }
 
