@@ -58,6 +58,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install APT packages
+        if: ${{ matrix.os == 'linux' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ${{
+            matrix.musl_packages || ''
+          }}
+
       - name: Add Rust target
         shell: bash
         id: target
