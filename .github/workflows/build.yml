@@ -85,6 +85,7 @@ jobs:
         run: |
           if [ ${{ matrix.os }} == "musllinux" ]; then
             export CXX=${{ matrix.target_arch }}-linux-gnu-g++
+            export CC=${{ matrix.target_arch }}-linux-gnu-gcc
             export CFLAGS="-D_FORTIFY_SOURCE=0"
             export CXXFLAGS="-D_FORTIFY_SOURCE=0"
           fi
@@ -109,7 +110,11 @@ jobs:
           mkdir -p release-package
           mv ${{ env.BIN_NAME}} release-package/
           cd release-package
-          zip -r ../${{ env.BIN_NAME}}-${{ matrix.os }}-${{matrix.target_arch}} .
+          if [ ${{ matrix.os }} == "windows" ]; then
+            7z a -tzip ../${{ env.BIN_NAME}}-${{ matrix.os }}-${{matrix.target_arch}}.zip .
+          else
+            zip -r ../${{ env.BIN_NAME}}-${{ matrix.os }}-${{matrix.target_arch}} .
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
