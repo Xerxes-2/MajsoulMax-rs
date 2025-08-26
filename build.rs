@@ -2,6 +2,7 @@ use std::{env, io::Result, path::PathBuf};
 
 fn main() -> Result<()> {
     prost_build::Config::new()
+        .type_attribute(".", "#[allow(dead_code)]")
         .type_attribute(
             "lq.ViewSlot",
             "#[derive(::serde::Serialize, ::serde::Deserialize)]",
