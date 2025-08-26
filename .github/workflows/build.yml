@@ -79,12 +79,6 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Download static files
-        uses: actions/download-artifact@v4
-        with:
-          name: static-files
-          path: static
-
       - name: Build ${{ steps.target.outputs.triple }}
         if: ${{ matrix.os != 'android' }}
         shell: bash
