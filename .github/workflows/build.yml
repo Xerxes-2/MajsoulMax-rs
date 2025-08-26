@@ -13,6 +13,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  APT_PACKAGES: "build-essential pkg-config libclang-dev"
   BIN_NAME: majsoul_max_rs
 permissions:
   contents: write
@@ -64,6 +65,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ${{
             matrix.musl_packages || ''
+          }} ${{
+            env.APT_PACKAGES || ''
           }}
 
       - name: Add Rust target
