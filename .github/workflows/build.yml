@@ -51,7 +51,7 @@ jobs:
             runner: macos-latest
           # musl packages
           - os: musllinux
-            musl_packages: "clang musl-tools"
+            musl_packages: "clang musl-tools musl-dev"
         exclude:
           - os: android
             target_arch: x86_64
