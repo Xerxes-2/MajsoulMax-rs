@@ -97,7 +97,6 @@ jobs:
         run: |
           if [ ${{ matrix.os }} == "musllinux" ]; then
             export CXX=${{ matrix.target_arch }}-linux-gnu-g++
-            export CC=${{ matrix.target_arch }}-linux-gnu-gcc
             export CFLAGS="-D_FORTIFY_SOURCE=0"
             export CXXFLAGS="-D_FORTIFY_SOURCE=0"
           fi
