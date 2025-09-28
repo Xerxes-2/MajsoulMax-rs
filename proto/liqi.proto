@@ -694,11 +694,24 @@ message AccountUpdate {
     }
 }
 
+message ContestGameMetaData {
+
+    repeated ContestTypeZoneData type_list = 1;
+    uint32 rank_type = 2;
+
+    message ContestTypeZoneData {
+
+        uint32 zone = 1;
+        uint32 contest_type = 2;
+    }
+}
+
 message GameMetaData {
 
     uint32 room_id = 1;
     uint32 mode_id = 2;
     uint32 contest_uid = 3;
+    ContestGameMetaData contest_info = 4;
 }
 
 message AccountPlayingGame {
@@ -761,6 +774,8 @@ message PlayerGameView {
     uint32 avatar_frame = 8;
     uint32 verified = 9;
     repeated ViewSlot views = 10;
+    uint32 team_id = 11;
+    string team_name = 12;
 }
 
 message GameSetting {
@@ -1272,6 +1287,7 @@ message AccountActivityUpdate {
     repeated lq.ActivityStoryData story_data = 14;
     repeated lq.ActivityChooseUpData choose_up_data = 15;
     repeated lq.SimulationV2Data simulation_v2_data = 16;
+    repeated lq.ActivityShootData shoot_data = 17;
 }
 
 message ActivityCombiningWorkbench {
@@ -1792,6 +1808,13 @@ message ShopInfo {
     ZHPShop zhp = 1;
     repeated BuyRecord buy_records = 2;
     uint32 last_refresh_time = 3;
+    repeated SelectedPackageBuyRecord selected_package_records = 4;
+
+    message SelectedPackageBuyRecord {
+
+        uint32 package_id = 1;
+        repeated BuyRecord buy_records = 2;
+    }
 }
 
 message ChangeNicknameRecord {
@@ -1908,6 +1931,8 @@ message CustomizedContestBase {
     string public_notice = 11;
     uint32 check_state = 12;
     string checking_name = 13;
+    uint32 rank_type = 14;
+    bool show_team_rank = 15;
 }
 
 message CustomizedContestExtend {
@@ -1953,6 +1978,8 @@ message CustomizedContestDetail {
     uint32 signup_end_time = 18;
     uint32 signup_type = 19;
     uint32 auto_match = 20;
+    uint32 rank_type = 21;
+    bool show_team_rank = 22;
 }
 
 message CustomizedContestPlayerReport {
@@ -2955,6 +2982,46 @@ message SimulationActionData {
         uint32 seat = 1;
     }
 }
+
+message ActivityShootValueChange {
+
+    Uint32ValueDirty level = 1;
+    ActivityShootEnemyInfoDirty enemies = 2;
+    RewardArrayDirty rewarded_ids = 3;
+
+    message Uint32ValueDirty {
+
+        uint32 value = 1;
+        uint32 dirty = 2;
+    }
+
+    message RewardArrayDirty {
+
+        repeated uint32 reward_ids = 1;
+        uint32 dirty = 2;
+    }
+}
+
+message ActivityShootEnemyInfoDirty {
+
+    uint32 dirty = 1;
+    repeated ActivityShootEnemyInfo enemies = 2;
+}
+
+message ActivityShootData {
+
+    uint32 activity_id = 1;
+    uint32 level = 2;
+    repeated ActivityShootEnemyInfo enemies = 3;
+    repeated uint32 rewarded_ids = 4;
+}
+
+message ActivityShootEnemyInfo {
+
+    uint32 group_id = 1;
+    uint32 enemy_id = 2;
+    uint32 hp = 3;
+}
 service Lobby {
     rpc fetchConnectionInfo (ReqCommon) returns (ResConnectionInfo);
     rpc fetchQueueInfo (ReqCommon) returns (ResFetchQueueInfo);
@@ -3182,6 +3249,10 @@ service Lobby {
     rpc fetchCustomizedContestGameLiveList (ReqFetchCustomizedContestGameLiveList) returns (ResFetchCustomizedContestGameLiveList);
     rpc followCustomizedContest (ReqTargetCustomizedContest) returns (ResCommon);
     rpc unfollowCustomizedContest (ReqTargetCustomizedContest) returns (ResCommon);
+    rpc fetchContestTeamRank (ReqFetchContestTeamRank) returns (ResFetchContestTeamRank);
+    rpc fetchContestTeamMember (ReqFetchContestTeamMember) returns (ResFetchContestTeamMember);
+    rpc fetchContestTeamPlayerRank (ReqFetchContestTeamPlayerRank) returns (ResFetchContestPlayerRank);
+    rpc fetchContestPlayerRank (ReqFetchContestPlayerRank) returns (ResFetchContestPlayerRank);
     rpc fetchActivityList (ReqCommon) returns (ResActivityList);
     rpc fetchAccountActivityData (ReqCommon) returns (ResAccountActivityData);
     rpc exchangeActivityItem (ReqExchangeActivityItem) returns (ResExchangeActivityItem);
@@ -3276,6 +3347,7 @@ service Lobby {
     rpc getFriendVillageData (ReqGetFriendVillageData) returns (ResGetFriendVillageData);
     rpc setVillageWorker (ReqSetVillageWorker) returns (ResSetVillageWorker);
     rpc nextRoundVillage (ReqNextRoundVillage) returns (ResNextRoundVillage);
+    rpc shootActivityAttackEnemies (ReqShootActivityAttackEnemies) returns (ResShootActivityAttackEnemies);
     rpc resolveFestivalActivityProposal (ReqResolveFestivalActivityProposal) returns (ResResolveFestivalActivityProposal);
     rpc resolveFestivalActivityEvent (ReqResolveFestivalActivityEvent) returns (ResResolveFestivalActivityEvent);
     rpc buyFestivalProposal (ReqBuyFestivalProposal) returns (ResBuyFestivalProposal);
@@ -3288,7 +3360,6 @@ service Lobby {
     rpc fetchManagerCustomizedContestList (ReqFetchmanagerCustomizedContestList) returns (ResFetchManagerCustomizedContestList);
     rpc fetchManagerCustomizedContest (ReqFetchManagerCustomizedContest) returns (ResFetchManagerCustomizedContest);
     rpc updateManagerCustomizedContest (ReqUpdateManagerCustomizedContest) returns (ResCommon);
-    rpc fetchContestPlayerRank (ReqFetchContestPlayerRank) returns (ResFetchContestPlayerRank);
     rpc fetchReadyPlayerList (ReqFetchReadyPlayerList) returns (ResFetchReadyPlayerList);
     rpc createGamePlan (ReqCreateGamePlan) returns (ResCommon);
     rpc generateContestManagerLoginCode (ReqCommon) returns (ResGenerateContestManagerLoginCode);
@@ -5225,6 +5296,7 @@ message ReqBuyFromShop {
     uint32 count = 2;
     repeated Item ver_price = 3;
     repeated Item ver_goods = 4;
+    repeated Item package_goods = 5;
 
     message Item {
 
@@ -5537,6 +5609,7 @@ message ResAccountActivityData {
     repeated lq.ActivityStoryData story_data = 29;
     repeated lq.ActivityChooseUpData choose_up_data = 30;
     repeated lq.ActivityProgressRewardData progress_reward_data = 32;
+    repeated lq.ActivityShootData shoot_data = 33;
 
     message ActivitySignInData {
 
@@ -6789,6 +6862,7 @@ message ReqCreateCustomizedContest {
     uint32 auto_match = 6;
     uint32 rank_rule = 7;
     ContestSetting contest_setting = 8;
+    uint32 rank_type = 9;
 }
 
 message ResCreateCustomizedContest {
@@ -6826,6 +6900,7 @@ message ResFetchManagerCustomizedContest {
     uint32 check_state = 9;
     string checking_name = 10;
     ContestSetting contest_setting = 11;
+    uint32 rank_type = 12;
 }
 
 message ReqUpdateManagerCustomizedContest {
@@ -6860,6 +6935,7 @@ message ResFetchContestPlayerRank {
         uint32 total_game_count = 1;
         repeated ContestGameResult recent_games = 2;
         repeated ContestSeriesGameResult highest_series_points = 3;
+        int32 accumulate_point = 4;
 
         message ContestGameResult {
 
@@ -6879,12 +6955,74 @@ message ResFetchContestPlayerRank {
         uint32 account_id = 1;
         string nickname = 2;
         ContestPlayerAccountData data = 3;
+        string team_name = 4;
     }
 
     message PlayerData {
 
         uint32 rank = 1;
         ContestPlayerAccountData data = 2;
+        string team_name = 3;
+    }
+}
+
+message ReqFetchContestTeamRank {
+
+    uint32 unique_id = 1;
+    uint32 limit = 2;
+    uint32 offset = 3;
+}
+
+message ResFetchContestTeamRank {
+
+    Error error = 1;
+    uint32 total = 2;
+    repeated SeasonTeamRank rank = 3;
+    SeasonTeamRank self_team_rank = 4;
+
+    message ContestTeamData {
+
+        int32 total_point = 1;
+        uint32 total_game_count = 2;
+        uint32 member_count = 3;
+    }
+
+    message SeasonTeamRank {
+
+        uint32 team_id = 1;
+        string name = 2;
+        ContestTeamData data = 3;
+        uint32 rank = 4;
+    }
+}
+
+message ReqFetchContestTeamPlayerRank {
+
+    uint32 unique_id = 1;
+    uint32 offset = 2;
+    uint32 limit = 3;
+}
+
+message ReqFetchContestTeamMember {
+
+    uint32 unique_id = 1;
+    uint32 team_id = 2;
+    uint32 offset = 3;
+    uint32 limit = 4;
+}
+
+message ResFetchContestTeamMember {
+
+    Error error = 1;
+    uint32 total = 2;
+    repeated ContestTeamMemberRank rank = 3;
+
+    message ContestTeamMemberRank {
+
+        uint32 account_id = 1;
+        uint32 total_game_count = 3;
+        int32 total_score = 4;
+        string nickname = 5;
     }
 }
 
@@ -6902,6 +7040,7 @@ message ResFetchReadyPlayerList {
 
         uint32 account_id = 1;
         string nickname = 2;
+        string team_name = 3;
     }
 }
 
@@ -7465,6 +7604,29 @@ message ResFetchProgressRewardActivityInfo {
 
     Error error = 1;
     uint32 progress = 2;
+}
+
+message ReqShootActivityAttackEnemies {
+
+    uint32 activity_id = 1;
+    uint32 bullets_count = 2;
+    uint32 position = 3;
+}
+
+message ResShootActivityAttackEnemies {
+
+    Error error = 1;
+    repeated ActivityShootAttackRecord records = 2;
+    ActivityShootValueChange value_change = 3;
+
+    message ActivityShootAttackRecord {
+
+        uint32 position = 1;
+        ActivityShootEnemyInfo enemy = 2;
+        uint32 level = 3;
+        repeated uint32 reward_ids = 4;
+        repeated ExecuteReward rewards = 5;
+    }
 }
 
 message AmuletBadgeData {
