@@ -1,5 +1,5 @@
 
-™¬
+¢Ê
 
 liqi.protolq"Ž
 NotifyRoomGameStart
@@ -479,12 +479,19 @@ progresses
 BadgeUpdate8
 
 progresses (2.lq.BadgeAchieveProgressR
-progresses"a
+progresses"Ê
+ContestGameMetaDataH
+	type_list (2+.lq.ContestGameMetaData.ContestTypeZoneDataRtypeList
+	rank_type (RrankTypeL
+ContestTypeZoneData
+zone (Rzone!
+contest_type (RcontestType"
 GameMetaData
 room_id (RroomId
 mode_id (RmodeId
 contest_uid (R
-contestUid"s
+contestUid:
+contest_info (2.lq.ContestGameMetaDataRcontestInfo"s
 AccountPlayingGame
 	game_uuid (	RgameUuid
 category (Rcategory$
@@ -526,7 +533,7 @@ account_id (R	accountId
 level3 (2.lq.AccountLevelRlevel3!
 avatar_frame (RavatarFrame
 verified (Rverified
-	is_banned	 (RisBanned"à
+	is_banned	 (RisBanned"–
 PlayerGameView
 
 account_id (R	accountId
@@ -539,7 +546,9 @@ account_id (R	accountId
 avatar_frame (RavatarFrame
 verified	 (Rverified"
 views
- (2.lq.ViewSlotRviews"0
+ (2.lq.ViewSlotRviews
+team_id (RteamId
+	team_name (	RteamName"0
 GameSetting!
 emoji_switch (RemojiSwitch"‡
 GameMode
@@ -920,7 +929,7 @@ gift_inbox (2 .lq.FeedActivityData.GiftBoxDataR	giftInboxS
 MineActivityData&
 	dig_point (2	.lq.PointRdigPoint 
 map (2.lq.MineRewardRmap
-id (Rid"‘
+id (Rid"Ç
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -940,7 +949,9 @@ islandData4
 
 story_data (2.lq.ActivityStoryDataR	storyData>
 choose_up_data (2.lq.ActivityChooseUpDataRchooseUpDataB
-simulation_v2_data (2.lq.SimulationV2DataRsimulationV2Data"I
+simulation_v2_data (2.lq.SimulationV2DataRsimulationV2Data4
+
+shoot_data (2.lq.ActivityShootDataR	shootData"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
 pos (Rpos"’
@@ -1312,12 +1323,18 @@ buyRecords;
 MonthTicketInfo
 id (Rid
 end_time (RendTime"
-last_pay_time (RlastPayTime"…
+last_pay_time (RlastPayTime"Ñ
 ShopInfo
 zhp (2.lq.ZHPShopRzhp.
 buy_records (2.lq.BuyRecordR
 buyRecords*
-last_refresh_time (RlastRefreshTime"N
+last_refresh_time (RlastRefreshTime_
+selected_package_records (2%.lq.ShopInfo.SelectedPackageBuyRecordRselectedPackageRecordsi
+SelectedPackageBuyRecord
+
+package_id (R	packageId.
+buy_records (2.lq.BuyRecordR
+buyRecords"N
 ChangeNicknameRecord
 from (	Rfrom
 to (	Rto
@@ -1381,7 +1398,7 @@ AlipayData%
 faith_id (RfaithId(
 total_open_count (RtotalOpenCount#
 consume_count (RconsumeCount!
-modify_count (RmodifyCount"®
+modify_count (RmodifyCount"ñ
 CustomizedContestBase
 	unique_id (RuniqueId
 
@@ -1402,7 +1419,9 @@ finishTime
 public_notice (	RpublicNotice
 check_state (R
 checkState#
-checking_name (	RcheckingName"[
+checking_name (	RcheckingName
+	rank_type (RrankType$
+show_team_rank (RshowTeamRank"[
 CustomizedContestExtend
 	unique_id (RuniqueId#
 public_notice (	RpublicNotice"ì
@@ -1423,7 +1442,7 @@ finishTime
 open	 (Ropen#
 public_notice
  (	RpublicNotice!
-contest_type (RcontestType"Á
+contest_type (RcontestType"„
 CustomizedContestDetail
 	unique_id (RuniqueId
 
@@ -1452,7 +1471,9 @@ finishTime
 signup_type (R
 signupType
 
-auto_match (R	autoMatch"¯
+auto_match (R	autoMatch
+	rank_type (RrankType$
+show_team_rank (RshowTeamRank"¯
 CustomizedContestPlayerReport
 	rank_rule (RrankRule
 rank (Rrank
@@ -2219,7 +2240,31 @@ isMatchEnd2
 seat (Rseat
 riichi (Rriichi(
 ActionDealTileData
-seat (Rseat"r
+seat (Rseat"õ
+ActivityShootValueChangeC
+level (2-.lq.ActivityShootValueChange.Uint32ValueDirtyRlevel9
+enemies (2.lq.ActivityShootEnemyInfoDirtyRenemiesP
+rewarded_ids (2-.lq.ActivityShootValueChange.RewardArrayDirtyRrewardedIds>
+Uint32ValueDirty
+value (Rvalue
+dirty (RdirtyG
+RewardArrayDirty
+
+reward_ids (R	rewardIds
+dirty (Rdirty"i
+ActivityShootEnemyInfoDirty
+dirty (Rdirty4
+enemies (2.lq.ActivityShootEnemyInfoRenemies"£
+ActivityShootData
+activity_id (R
+activityId
+level (Rlevel4
+enemies (2.lq.ActivityShootEnemyInfoRenemies!
+rewarded_ids (RrewardedIds"^
+ActivityShootEnemyInfo
+group_id (RgroupId
+enemy_id (RenemyId
+hp (Rhp"r
 ResConnectionInfo
 error (2	.lq.ErrorRerror<
 client_endpoint (2.lq.NetworkEndpointRclientEndpoint"`
@@ -3419,12 +3464,13 @@ save_index (R	saveIndex
 command (	Rcommand"Y
 ResShopInfo
 error (2	.lq.ErrorRerror)
-	shop_info (2.lq.ShopInfoRshopInfo"Û
+	shop_info (2.lq.ShopInfoRshopInfo"™
 ReqBuyFromShop
 goods_id (RgoodsId
 count (Rcount4
 	ver_price (2.lq.ReqBuyFromShop.ItemRverPrice4
-	ver_goods (2.lq.ReqBuyFromShop.ItemRverGoods,
+	ver_goods (2.lq.ReqBuyFromShop.ItemRverGoods<
+package_goods (2.lq.ReqBuyFromShop.ItemRpackageGoods,
 Item
 id (Rid
 count (Rcount"[
@@ -3576,7 +3622,7 @@ recordList"9
 error (2	.lq.ErrorRerror,
 
 activities (2.lq.ActivityR
-activities"º
+activities"ð
 ResAccountActivityData
 error (2	.lq.ErrorRerror=
 exchange_records (2.lq.ExchangeRecordRexchangeRecords>
@@ -3613,7 +3659,9 @@ islandData4
 
 story_data (2.lq.ActivityStoryDataR	storyData>
 choose_up_data (2.lq.ActivityChooseUpDataRchooseUpDataP
-progress_reward_data  (2.lq.ActivityProgressRewardDataRprogressRewardData„
+progress_reward_data  (2.lq.ActivityProgressRewardDataRprogressRewardData4
+
+shoot_data! (2.lq.ActivityShootDataR	shootData„
 ActivitySignInData
 activity_id (R
 activityId"
@@ -4403,7 +4451,7 @@ game_limit (R	gameLimit)
 
 LevelLimit
 type (Rtype
-value (Rvalue"º
+value (Rvalue"×
 ReqCreateCustomizedContest
 name (	Rname
 	open_show (RopenShow8
@@ -4414,7 +4462,8 @@ start_time (R	startTime
 
 auto_match (R	autoMatch
 	rank_rule (RrankRule;
-contest_setting (2.lq.ContestSettingRcontestSetting"Z
+contest_setting (2.lq.ContestSettingRcontestSetting
+	rank_type	 (RrankType"Z
 ResCreateCustomizedContest
 error (2	.lq.ErrorRerror
 	unique_id (RuniqueId":
@@ -4424,7 +4473,7 @@ $ResFetchManagerCustomizedContestList
 error (2	.lq.ErrorRerror5
 contests (2.lq.CustomizedContestBaseRcontests"?
  ReqFetchManagerCustomizedContest
-	unique_id (RuniqueId"§
+	unique_id (RuniqueId"Ä
  ResFetchManagerCustomizedContest
 error (2	.lq.ErrorRerror
 name (	Rname
@@ -4440,7 +4489,8 @@ auto_match (R	autoMatch
 checkState#
 checking_name
  (	RcheckingName;
-contest_setting (2.lq.ContestSettingRcontestSetting"Þ
+contest_setting (2.lq.ContestSettingRcontestSetting
+	rank_type (RrankType"Þ
 !ReqUpdateManagerCustomizedContest
 name (	Rname
 	open_show (RopenShow8
@@ -4456,43 +4506,86 @@ auto_match (R	autoMatch
 ReqFetchContestPlayerRank
 	unique_id (RuniqueId
 limit (Rlimit
-offset (Roffset"ô
+offset (Roffset"Ú
 ResFetchContestPlayerRank
 error (2	.lq.ErrorRerror
 total (Rtotal<
 rank (2(.lq.ResFetchContestPlayerRank.SeasonRankRrankI
 player_data (2(.lq.ResFetchContestPlayerRank.PlayerDataR
-playerData’
+playerData½
 ContestPlayerAccountData(
 total_game_count (RtotalGameCountk
 recent_games (2H.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestGameResultRrecentGames‚
-highest_series_points (2N.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestSeriesGameResultRhighestSeriesPointsH
+highest_series_points (2N.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestSeriesGameResultRhighestSeriesPoints)
+accumulate_point (RaccumulatePointH
 ContestGameResult
 rank (Rrank
 total_point (R
 totalPoint
 ContestSeriesGameResult
 key (Rkeyb
-results (2H.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestGameResultRresults“
+results (2H.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestGameResultRresults°
 
 SeasonRank
 
 account_id (R	accountId
 nickname (	RnicknameJ
-data (26.lq.ResFetchContestPlayerRank.ContestPlayerAccountDataRdatal
+data (26.lq.ResFetchContestPlayerRank.ContestPlayerAccountDataRdata
+	team_name (	RteamName‰
 
 PlayerData
 rank (RrankJ
-data (26.lq.ResFetchContestPlayerRank.ContestPlayerAccountDataRdata"6
+data (26.lq.ResFetchContestPlayerRank.ContestPlayerAccountDataRdata
+	team_name (	RteamName"d
+ReqFetchContestTeamRank
+	unique_id (RuniqueId
+limit (Rlimit
+offset (Roffset"ø
+ResFetchContestTeamRank
+error (2	.lq.ErrorRerror
+total (Rtotal>
+rank (2*.lq.ResFetchContestTeamRank.SeasonTeamRankRrankP
+self_team_rank (2*.lq.ResFetchContestTeamRank.SeasonTeamRankRselfTeamRank
+ContestTeamData
+total_point (R
+totalPoint(
+total_game_count (RtotalGameCount!
+member_count (RmemberCount’
+SeasonTeamRank
+team_id (RteamId
+name (	Rname?
+data (2+.lq.ResFetchContestTeamRank.ContestTeamDataRdata
+rank (Rrank"j
+ReqFetchContestTeamPlayerRank
+	unique_id (RuniqueId
+offset (Roffset
+limit (Rlimit"
+ReqFetchContestTeamMember
+	unique_id (RuniqueId
+team_id (RteamId
+offset (Roffset
+limit (Rlimit"»
+ResFetchContestTeamMember
+error (2	.lq.ErrorRerror
+total (RtotalG
+rank (23.lq.ResFetchContestTeamMember.ContestTeamMemberRankRrank
+ContestTeamMemberRank
+
+account_id (R	accountId(
+total_game_count (RtotalGameCount
+total_score (R
+totalScore
+nickname (	Rnickname"6
 ReqFetchReadyPlayerList
-	unique_id (RuniqueId"·
+	unique_id (RuniqueId"Ô
 ResFetchReadyPlayerList
 error (2	.lq.ErrorRerror6
-list (2".lq.ResFetchReadyPlayerList.PlayerRlistC
+list (2".lq.ResFetchReadyPlayerList.PlayerRlist`
 Player
 
 account_id (R	accountId
-nickname (	Rnickname"»
+nickname (	Rnickname
+	team_name (	RteamName"»
 ReqCreateGamePlan
 	unique_id (RuniqueId!
 account_list (RaccountList&
@@ -4859,7 +4952,23 @@ progresses"y
 activityId"a
 "ResFetchProgressRewardActivityInfo
 error (2	.lq.ErrorRerror
-progress (Rprogress"a
+progress (Rprogress"
+ReqShootActivityAttackEnemies
+activity_id (R
+activityId#
+bullets_count (RbulletsCount
+position (Rposition"¦
+ResShootActivityAttackEnemies
+error (2	.lq.ErrorRerrorU
+records (2;.lq.ResShootActivityAttackEnemies.ActivityShootAttackRecordRrecords?
+value_change (2.lq.ActivityShootValueChangeRvalueChangeË
+ActivityShootAttackRecord
+position (Rposition0
+enemy (2.lq.ActivityShootEnemyInfoRenemy
+level (Rlevel
+
+reward_ids (R	rewardIds+
+rewards (2.lq.ExecuteRewardRrewards"a
 AmuletBadgeData
 id (Rid
 uid (Ruid
@@ -6155,7 +6264,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2œÖ
+READY2ŠÙ
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -6390,7 +6499,11 @@ buyFromZHP.lq.ReqBuyFromZHP.lq.ResCommon;
 !fetchCustomizedContestGameRecords(.lq.ReqFetchCustomizedContestGameRecords(.lq.ResFetchCustomizedContestGameRecordsz
 "fetchCustomizedContestGameLiveList).lq.ReqFetchCustomizedContestGameLiveList).lq.ResFetchCustomizedContestGameLiveListH
 followCustomizedContest.lq.ReqTargetCustomizedContest.lq.ResCommonJ
-unfollowCustomizedContest.lq.ReqTargetCustomizedContest.lq.ResCommon7
+unfollowCustomizedContest.lq.ReqTargetCustomizedContest.lq.ResCommonP
+fetchContestTeamRank.lq.ReqFetchContestTeamRank.lq.ResFetchContestTeamRankV
+fetchContestTeamMember.lq.ReqFetchContestTeamMember.lq.ResFetchContestTeamMember^
+fetchContestTeamPlayerRank!.lq.ReqFetchContestTeamPlayerRank.lq.ResFetchContestPlayerRankV
+fetchContestPlayerRank.lq.ReqFetchContestPlayerRank.lq.ResFetchContestPlayerRank7
 fetchActivityList.lq.ReqCommon.lq.ResActivityListE
 fetchAccountActivityData.lq.ReqCommon.lq.ResAccountActivityDataP
 exchangeActivityItem.lq.ReqExchangeActivityItem.lq.ResExchangeActivityItemB
@@ -6486,7 +6599,8 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 completeVillageTask.lq.ReqCompleteVillageTask.lq.ResCompleteVillageTaskP
 getFriendVillageData.lq.ReqGetFriendVillageData.lq.ResGetFriendVillageDataD
 setVillageWorker.lq.ReqSetVillageWorker.lq.ResSetVillageWorkerD
-nextRoundVillage.lq.ReqNextRoundVillage.lq.ResNextRoundVillageq
+nextRoundVillage.lq.ReqNextRoundVillage.lq.ResNextRoundVillageb
+shootActivityAttackEnemies!.lq.ReqShootActivityAttackEnemies!.lq.ResShootActivityAttackEnemiesq
 resolveFestivalActivityProposal&.lq.ReqResolveFestivalActivityProposal&.lq.ResResolveFestivalActivityProposalh
 resolveFestivalActivityEvent#.lq.ReqResolveFestivalActivityEvent#.lq.ResResolveFestivalActivityEventM
 buyFestivalProposal.lq.ReqBuyFestivalProposal.lq.ResBuyFestivalProposal>
@@ -6498,8 +6612,7 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 createCustomizedContest.lq.ReqCreateCustomizedContest.lq.ResCreateCustomizedContestw
 !fetchManagerCustomizedContestList(.lq.ReqFetchmanagerCustomizedContestList(.lq.ResFetchManagerCustomizedContestListk
 fetchManagerCustomizedContest$.lq.ReqFetchManagerCustomizedContest$.lq.ResFetchManagerCustomizedContestV
-updateManagerCustomizedContest%.lq.ReqUpdateManagerCustomizedContest.lq.ResCommonV
-fetchContestPlayerRank.lq.ReqFetchContestPlayerRank.lq.ResFetchContestPlayerRankP
+updateManagerCustomizedContest%.lq.ReqUpdateManagerCustomizedContest.lq.ResCommonP
 fetchReadyPlayerList.lq.ReqFetchReadyPlayerList.lq.ResFetchReadyPlayerList6
 createGamePlan.lq.ReqCreateGamePlan.lq.ResCommonX
 generateContestManagerLoginCode.lq.ReqCommon&.lq.ResGenerateContestManagerLoginCodeY
