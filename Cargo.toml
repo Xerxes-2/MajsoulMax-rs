@@ -29,7 +29,7 @@ tracing-subscriber = { version = "0.3", features = [
 ], default-features = false }
 tracing = { version = "0.1", default-features = false }
 prost = { version = "0.14", default-features = false }
-hudsucker = { version = "0.23", features = [
+hudsucker = { version = "0.24", features = [
     "rcgen-ca",
     "rustls-client",
 ], default-features = false }
