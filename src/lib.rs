@@ -1,12 +1,7 @@
 use anyhow::Context;
 use handler::Handler;
 use helper::helper_worker;
-use hudsucker::{
-    Proxy,
-    certificate_authority::RcgenAuthority,
-    rcgen::{CertificateParams, KeyPair},
-    rustls,
-};
+use hudsucker::{Proxy, certificate_authority::RcgenAuthority, rcgen::KeyPair, rustls};
 use std::{future::Future, net::SocketAddr, str::FromStr, sync::Arc};
 use tokio::sync::mpsc::channel;
 
@@ -45,17 +40,10 @@ fn generate_ca() -> Result<RcgenAuthority> {
     const KEY_PAIR: &str = include_str!("./ca/hudsucker.key");
     const CA_CERT: &str = include_str!("./ca/hudsucker.cer");
     let key_pair = KeyPair::from_pem(KEY_PAIR).context("Failed to parse key pair")?;
-    let ca_cert = CertificateParams::from_ca_cert_pem(CA_CERT)
-        .context("Failed to parse CA certificate")?
-        .self_signed(&key_pair)
-        .context("Failed to sign CA certificate")?;
+    let issuer = hudsucker::rcgen::Issuer::from_ca_cert_pem(CA_CERT, key_pair)
+        .expect("Failed to parse CA certificate");
 
-    let ca = RcgenAuthority::new(
-        key_pair,
-        ca_cert,
-        1_000,
-        rustls::crypto::aws_lc_rs::default_provider(),
-    );
+    let ca = RcgenAuthority::new(issuer, 1_000, rustls::crypto::aws_lc_rs::default_provider());
     Ok(ca)
 }
 
@@ -85,7 +73,7 @@ where
     let proxy = Proxy::builder()
         .with_addr(proxy_addr)
         .with_ca(ca)
-        .with_rustls_client(rustls::crypto::aws_lc_rs::default_provider())
+        .with_rustls_connector(rustls::crypto::aws_lc_rs::default_provider())
         .with_websocket_handler(Handler::new(tx, modder, settings))
         .with_graceful_shutdown(async {
             graceful_shutdown.await;
