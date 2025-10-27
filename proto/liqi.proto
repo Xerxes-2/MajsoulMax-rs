@@ -414,6 +414,30 @@ message ResCommon {
     Error error = 1;
 }
 
+message StringDirty {
+
+    bool dirty = 1;
+    string value = 2;
+}
+
+message StringArrayDirty {
+
+    bool dirty = 1;
+    repeated string value = 2;
+}
+
+message UInt32ArrayDirty {
+
+    bool dirty = 1;
+    repeated uint32 value = 2;
+}
+
+message UInt32Dirty {
+
+    bool dirty = 1;
+    uint32 value = 2;
+}
+
 message ResAccountUpdate {
 
     Error error = 1;
@@ -869,6 +893,7 @@ message GameDetailRule {
     uint32 hunzhiyiji_mode = 71;
     uint32 wanxiangxiuluo_mode = 72;
     uint32 beishuizhizhan_mode = 73;
+    repeated uint32 amusement_switches = 74;
 }
 
 message Room {
@@ -1287,7 +1312,8 @@ message AccountActivityUpdate {
     repeated lq.ActivityStoryData story_data = 14;
     repeated lq.ActivityChooseUpData choose_up_data = 15;
     repeated lq.SimulationV2Data simulation_v2_data = 16;
-    repeated lq.ActivityShootData shoot_data = 17;
+    repeated lq.ActivityQuestCrewChanges quest_crew_data = 17;
+    repeated lq.ActivityShootData shoot_data = 18;
 }
 
 message ActivityCombiningWorkbench {
@@ -1522,6 +1548,72 @@ message ActivityProgressRewardData {
 
     uint32 activity_id = 1;
     repeated uint32 rewarded_progresses = 2;
+}
+
+message QCMember {
+
+    uint32 member_id = 1;
+    TimeCounterData consumed_sta = 2;
+}
+
+message ActivityQuestCrewEffectResult {
+
+    QCQuestResultChange result_change = 1;
+    repeated QCQuestConsumeChange consumed_change = 2;
+    QCItemReward reward = 3;
+
+    message QCQuestResultChange {
+
+        uint32 from = 1;
+        uint32 to = 2;
+    }
+
+    message QCQuestConsumeChange {
+
+        uint32 member_id = 1;
+        uint32 from = 2;
+        uint32 to = 3;
+    }
+
+    message QCItemReward {
+
+        repeated ExecuteReward execute_reward = 1;
+    }
+}
+
+message QCQuest {
+
+    uint32 quest_id = 1;
+    uint32 finished = 2;
+    uint32 finished_time = 3;
+}
+
+message ActivityQuestCrewData {
+
+    uint32 activity_id = 1;
+    repeated QCMember members = 2;
+    repeated QCQuest quest_board = 3;
+    repeated uint32 market_board = 4;
+}
+
+message ActivityQuestCrewChanges {
+
+    uint32 activity_id = 1;
+    QCMemberArrayDirty members = 2;
+    QCQuestArrayDirty quest_board = 3;
+    UInt32ArrayDirty market_board = 4;
+
+    message QCMemberArrayDirty {
+
+        bool dirty = 1;
+        repeated QCMember value = 2;
+    }
+
+    message QCQuestArrayDirty {
+
+        bool dirty = 1;
+        repeated QCQuest value = 2;
+    }
 }
 
 message ActivityChooseUpData {
@@ -3030,7 +3122,7 @@ service Lobby {
     rpc signup (ReqSignupAccount) returns (ResSignupAccount);
     rpc login (ReqLogin) returns (ResLogin);
     rpc prepareLogin (ReqPrepareLogin) returns (ResCommon);
-    rpc fastLogin (ReqCommon) returns (ResFastLogin);
+    rpc fastLogin (ReqFastLogin) returns (ResFastLogin);
     rpc fetchInfo (ReqCommon) returns (ResFetchInfo);
     rpc loginSuccess (ReqCommon) returns (ResCommon);
     rpc fetchServerMaintenanceInfo (ReqCommon) returns (ResFetchServerMaintenanceInfo);
@@ -3414,6 +3506,10 @@ service Lobby {
     rpc simV2ActivitySetUpgrade (ReqSimV2ActivitySetUpgrade) returns (ResCommon);
     rpc progressRewardActivityReceive (ReqProgressRewardActivityReceive) returns (ResProgressRewardActivityReceive);
     rpc fetchProgressRewardActivityInfo (ReqFetchProgressRewardActivityInfo) returns (ResFetchProgressRewardActivityInfo);
+    rpc questCrewActivityStartQuest (ReqQuestCrewActivityStartQuest) returns (ResQuestCrewActivityStartQuest);
+    rpc questCrewActivityHire (ReqQuestCrewActivityHire) returns (ResQuestCrewActivityHire);
+    rpc questCrewActivityFeed (ReqQuestCrewActivityFeed) returns (ResQuestCrewActivityFeed);
+    rpc questCrewActivityRefreshMarket (ReqQuestCrewActivityRefreshMarket) returns (ResQuestCrewActivityRefreshMarket);
 }
 
 message ResConnectionInfo {
@@ -3486,6 +3582,11 @@ message ReqPrepareLogin {
 
     string access_token = 1;
     uint32 type = 2;
+}
+
+message ReqFastLogin {
+
+    string client_version_string = 1;
 }
 
 message ResFastLogin {
@@ -5609,7 +5710,8 @@ message ResAccountActivityData {
     repeated lq.ActivityStoryData story_data = 29;
     repeated lq.ActivityChooseUpData choose_up_data = 30;
     repeated lq.ActivityProgressRewardData progress_reward_data = 32;
-    repeated lq.ActivityShootData shoot_data = 33;
+    repeated lq.ActivityQuestCrewData quest_crew_data = 33;
+    repeated lq.ActivityShootData shoot_data = 34;
 
     message ActivitySignInData {
 
@@ -7629,6 +7731,66 @@ message ResShootActivityAttackEnemies {
     }
 }
 
+message ReqQuestCrewActivityStartQuest {
+
+    uint32 activity_id = 1;
+    repeated uint32 joined_members = 2;
+    uint32 quest_id = 3;
+}
+
+message ResQuestCrewActivityStartQuest {
+
+    Error error = 1;
+    uint32 result = 2;
+    ActivityQuestCrewChanges value_changes = 3;
+    repeated ActivityQuestCrewEffectInfo effect_info = 4;
+
+    message ActivityQuestCrewEffectInfo {
+
+        uint32 member_id = 1;
+        uint32 effect_id = 2;
+        ActivityQuestCrewEffectResult result = 3;
+    }
+}
+
+message ReqQuestCrewActivityHire {
+
+    uint32 activity_id = 1;
+    uint32 member_id = 2;
+}
+
+message ResQuestCrewActivityHire {
+
+    Error error = 1;
+    ActivityQuestCrewChanges value_changes = 2;
+    repeated ExecuteResult execute_result = 3;
+}
+
+message ReqQuestCrewActivityFeed {
+
+    uint32 activity_id = 1;
+    repeated uint32 member_id = 2;
+}
+
+message ResQuestCrewActivityFeed {
+
+    Error error = 1;
+    ActivityQuestCrewChanges value_changes = 2;
+    repeated ExecuteResult execute_result = 3;
+}
+
+message ReqQuestCrewActivityRefreshMarket {
+
+    uint32 activity_id = 1;
+}
+
+message ResQuestCrewActivityRefreshMarket {
+
+    Error error = 1;
+    ActivityQuestCrewChanges value_changes = 2;
+    repeated ExecuteResult execute_result = 3;
+}
+
 message AmuletBadgeData {
 
     uint32 id = 1;
@@ -8024,34 +8186,10 @@ message AmuletTileArrayDirty {
     repeated AmuletTile value = 2;
 }
 
-message StringDirty {
-
-    bool dirty = 1;
-    string value = 2;
-}
-
-message StringArrayDirty {
-
-    bool dirty = 1;
-    repeated string value = 2;
-}
-
-message UInt32ArrayDirty {
-
-    bool dirty = 1;
-    repeated uint32 value = 2;
-}
-
 message AmuletMingInfoArrayDirty {
 
     bool dirty = 1;
     repeated AmuletMingInfo value = 2;
-}
-
-message UInt32Dirty {
-
-    bool dirty = 1;
-    uint32 value = 2;
 }
 
 message AmuletGameOperationArrayDirty {
@@ -8570,6 +8708,11 @@ message YongchangInfo {
     uint32 shouqie_bonus = 5;
 }
 
+message XiaKeShangInfo {
+
+    repeated uint32 score_coefficients = 1;
+}
+
 message ActionNewCard {
 
     uint32 field_spell = 1;
@@ -8603,6 +8746,7 @@ message ActionNewRound {
     string sha256 = 19;
     YongchangInfo yongchang = 20;
     string salt_sha256 = 21;
+    XiaKeShangInfo xia_ke_shang = 26;
 }
 
 message RecordNewRound {
@@ -8632,6 +8776,7 @@ message RecordNewRound {
     YongchangInfo yongchang = 23;
     string salt_sha256 = 24;
     string salt = 25;
+    XiaKeShangInfo xia_ke_shang = 26;
 
     message TingPai {
 
@@ -8762,6 +8907,7 @@ message LiQiSuccess {
     uint32 liqibang = 3;
     bool failed = 4;
     uint32 liqi_type_beishuizhizhan = 5;
+    XiaKeShangInfo xia_ke_shang = 6;
 }
 
 message FanInfo {
@@ -8799,6 +8945,7 @@ message HuleInfo {
     uint32 tianming_bonus = 24;
     repeated string baida_changed = 25;
     string hu_tile_bai_da_changed = 26;
+    uint32 xia_ke_shang_coefficient = 27;
 }
 
 message TingPaiInfo {

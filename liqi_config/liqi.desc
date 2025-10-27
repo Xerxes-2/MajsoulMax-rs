@@ -1,5 +1,5 @@
 
-¢Ê
+¿æ
 
 liqi.protolq"Ž
 NotifyRoomGameStart
@@ -263,7 +263,19 @@ json_param (	R	jsonParam"1
 port (Rport"
 	ReqCommon",
 	ResCommon
-error (2	.lq.ErrorRerror"^
+error (2	.lq.ErrorRerror"9
+StringDirty
+dirty (Rdirty
+value (	Rvalue">
+StringArrayDirty
+dirty (Rdirty
+value (	Rvalue">
+UInt32ArrayDirty
+dirty (Rdirty
+value (Rvalue"9
+UInt32Dirty
+dirty (Rdirty
+value (Rvalue"^
 ResAccountUpdate
 error (2	.lq.ErrorRerror)
 update (2.lq.AccountUpdateRupdate"8
@@ -565,7 +577,7 @@ detailRuleN
 paixing (Rpaixing
 
 left_count (R	leftCount&
-field_spell_var (RfieldSpellVar"ñ
+field_spell_var (RfieldSpellVar" 
 GameDetailRule
 
 time_fixed (R	timeFixed
@@ -642,7 +654,8 @@ dora3_mode+ (R	dora3Mode&
 yongchang_modeF (RyongchangMode'
 hunzhiyiji_modeG (RhunzhiyijiMode/
 wanxiangxiuluo_modeH (RwanxiangxiuluoMode/
-beishuizhizhan_modeI (RbeishuizhizhanMode"Ð
+beishuizhizhan_modeI (RbeishuizhizhanMode-
+amusement_switchesJ (RamusementSwitches"Ð
 Room
 room_id (RroomId
 owner_id (RownerId 
@@ -929,7 +942,7 @@ gift_inbox (2 .lq.FeedActivityData.GiftBoxDataR	giftInboxS
 MineActivityData&
 	dig_point (2	.lq.PointRdigPoint 
 map (2.lq.MineRewardRmap
-id (Rid"Ç
+id (Rid"
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -949,9 +962,10 @@ islandData4
 
 story_data (2.lq.ActivityStoryDataR	storyData>
 choose_up_data (2.lq.ActivityChooseUpDataRchooseUpDataB
-simulation_v2_data (2.lq.SimulationV2DataRsimulationV2Data4
+simulation_v2_data (2.lq.SimulationV2DataRsimulationV2DataD
+quest_crew_data (2.lq.ActivityQuestCrewChangesRquestCrewData4
 
-shoot_data (2.lq.ActivityShootDataR	shootData"I
+shoot_data (2.lq.ActivityShootDataR	shootData"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
 pos (Rpos"’
@@ -1123,7 +1137,47 @@ activityId<
 ActivityProgressRewardData
 activity_id (R
 activityId/
-rewarded_progresses (RrewardedProgresses"‡
+rewarded_progresses (RrewardedProgresses"_
+QCMember
+	member_id (RmemberId6
+consumed_sta (2.lq.TimeCounterDataRconsumedSta"‚
+ActivityQuestCrewEffectResultZ
+result_change (25.lq.ActivityQuestCrewEffectResult.QCQuestResultChangeRresultChange_
+consumed_change (26.lq.ActivityQuestCrewEffectResult.QCQuestConsumeChangeRconsumedChangeF
+reward (2..lq.ActivityQuestCrewEffectResult.QCItemRewardRreward9
+QCQuestResultChange
+from (Rfrom
+to (RtoW
+QCQuestConsumeChange
+	member_id (RmemberId
+from (Rfrom
+to (RtoH
+QCItemReward8
+execute_reward (2.lq.ExecuteRewardRexecuteReward"e
+QCQuest
+quest_id (RquestId
+finished (Rfinished#
+finished_time (RfinishedTime"±
+ActivityQuestCrewData
+activity_id (R
+activityId&
+members (2.lq.QCMemberRmembers,
+quest_board (2.lq.QCQuestR
+questBoard!
+market_board (RmarketBoard"®
+ActivityQuestCrewChanges
+activity_id (R
+activityIdI
+members (2/.lq.ActivityQuestCrewChanges.QCMemberArrayDirtyRmembersO
+quest_board (2..lq.ActivityQuestCrewChanges.QCQuestArrayDirtyR
+questBoard7
+market_board (2.lq.UInt32ArrayDirtyRmarketBoardN
+QCMemberArrayDirty
+dirty (Rdirty"
+value (2.lq.QCMemberRvalueL
+QCQuestArrayDirty
+dirty (Rdirty!
+value (2.lq.QCQuestRvalue"‡
 ActivityChooseUpData
 activity_id (R
 activityId
@@ -2317,7 +2371,9 @@ signupTime)
 rewarded_version (RrewardedVersion"H
 ReqPrepareLogin!
 access_token (	RaccessToken
-type (Rtype"
+type (Rtype"B
+ReqFastLogin2
+client_version_string (	RclientVersionString"
 ResFastLogin
 error (2	.lq.ErrorRerror0
 	game_info (2.lq.GameConnectInfoRgameInfo
@@ -3622,7 +3678,7 @@ recordList"9
 error (2	.lq.ErrorRerror,
 
 activities (2.lq.ActivityR
-activities"ð
+activities"³
 ResAccountActivityData
 error (2	.lq.ErrorRerror=
 exchange_records (2.lq.ExchangeRecordRexchangeRecords>
@@ -3659,9 +3715,10 @@ islandData4
 
 story_data (2.lq.ActivityStoryDataR	storyData>
 choose_up_data (2.lq.ActivityChooseUpDataRchooseUpDataP
-progress_reward_data  (2.lq.ActivityProgressRewardDataRprogressRewardData4
+progress_reward_data  (2.lq.ActivityProgressRewardDataRprogressRewardDataA
+quest_crew_data! (2.lq.ActivityQuestCrewDataRquestCrewData4
 
-shoot_data! (2.lq.ActivityShootDataR	shootData„
+shoot_data" (2.lq.ActivityShootDataR	shootData„
 ActivitySignInData
 activity_id (R
 activityId"
@@ -4968,7 +5025,45 @@ activityId#
 level (Rlevel
 
 reward_ids (R	rewardIds+
-rewards (2.lq.ExecuteRewardRrewards"a
+rewards (2.lq.ExecuteRewardRrewards"ƒ
+ReqQuestCrewActivityStartQuest
+activity_id (R
+activityId%
+joined_members (RjoinedMembers
+quest_id (RquestId"’
+ResQuestCrewActivityStartQuest
+error (2	.lq.ErrorRerror
+result (RresultA
+value_changes (2.lq.ActivityQuestCrewChangesRvalueChanges_
+effect_info (2>.lq.ResQuestCrewActivityStartQuest.ActivityQuestCrewEffectInfoR
+effectInfo’
+ActivityQuestCrewEffectInfo
+	member_id (RmemberId
+	effect_id (ReffectId9
+result (2!.lq.ActivityQuestCrewEffectResultRresult"X
+ReqQuestCrewActivityHire
+activity_id (R
+activityId
+	member_id (RmemberId"¸
+ResQuestCrewActivityHire
+error (2	.lq.ErrorRerrorA
+value_changes (2.lq.ActivityQuestCrewChangesRvalueChanges8
+execute_result (2.lq.ExecuteResultRexecuteResult"X
+ReqQuestCrewActivityFeed
+activity_id (R
+activityId
+	member_id (RmemberId"¸
+ResQuestCrewActivityFeed
+error (2	.lq.ErrorRerrorA
+value_changes (2.lq.ActivityQuestCrewChangesRvalueChanges8
+execute_result (2.lq.ExecuteResultRexecuteResult"D
+!ReqQuestCrewActivityRefreshMarket
+activity_id (R
+activityId"Á
+!ResQuestCrewActivityRefreshMarket
+error (2	.lq.ErrorRerrorA
+value_changes (2.lq.ActivityQuestCrewChangesRvalueChanges8
+execute_result (2.lq.ExecuteResultRexecuteResult"a
 AmuletBadgeData
 id (Rid
 uid (Ruid
@@ -5277,22 +5372,10 @@ lockedTile
 value (2.lq.AmuletEffectCandidateRvalue"R
 AmuletTileArrayDirty
 dirty (Rdirty$
-value (2.lq.AmuletTileRvalue"9
-StringDirty
-dirty (Rdirty
-value (	Rvalue">
-StringArrayDirty
-dirty (Rdirty
-value (	Rvalue">
-UInt32ArrayDirty
-dirty (Rdirty
-value (Rvalue"Z
+value (2.lq.AmuletTileRvalue"Z
 AmuletMingInfoArrayDirty
 dirty (Rdirty(
-value (2.lq.AmuletMingInfoRvalue"9
-UInt32Dirty
-dirty (Rdirty
-value (Rvalue"d
+value (2.lq.AmuletMingInfoRvalue"d
 AmuletGameOperationArrayDirty
 dirty (Rdirty-
 value (2.lq.AmuletGameOperationRvalue"b
@@ -5625,13 +5708,15 @@ moqieCount
 moqie_bonus (R
 moqieBonus#
 shouqie_count (RshouqieCount#
-shouqie_bonus (RshouqieBonus"0
+shouqie_bonus (RshouqieBonus"?
+XiaKeShangInfo-
+score_coefficients (RscoreCoefficients"0
 ActionNewCard
 field_spell (R
 fieldSpell"0
 RecordNewCard
 field_spell (R
-fieldSpell"›
+fieldSpell"Ñ
 ActionNewRound
 chang (Rchang
 ju (Rju
@@ -5656,7 +5741,9 @@ fieldSpell
 sha256 (	Rsha256/
 	yongchang (2.lq.YongchangInfoR	yongchang
 salt_sha256 (	R
-saltSha256"Ý
+saltSha2564
+xia_ke_shang (2.lq.XiaKeShangInfoR
+xiaKeShang"“
 RecordNewRound
 chang (Rchang
 ju (Rju
@@ -5687,7 +5774,9 @@ fieldSpell
 	yongchang (2.lq.YongchangInfoR	yongchang
 salt_sha256 (	R
 saltSha256
-salt (	RsaltL
+salt (	Rsalt4
+xia_ke_shang (2.lq.XiaKeShangInfoR
+xiaKeShangL
 TingPai
 seat (Rseat-
 	tingpais1 (2.lq.TingPaiInfoR	tingpais1"¯
@@ -5776,17 +5865,19 @@ game_event (R	gameEvent"µ
 operation_list (2.lq.OptionalOperationRoperationList
 time_add (RtimeAdd
 
-time_fixed (R	timeFixed"¥
+time_fixed (R	timeFixed"Û
 LiQiSuccess
 seat (Rseat
 score (Rscore
 liqibang (Rliqibang
 failed (Rfailed8
-liqi_type_beishuizhizhan (RliqiTypeBeishuizhizhan"?
+liqi_type_beishuizhizhan (RliqiTypeBeishuizhizhan4
+xia_ke_shang (2.lq.XiaKeShangInfoR
+xiaKeShang"?
 FanInfo
 name (	Rname
 val (Rval
-id (Rid"Ñ
+id (Rid"Š
 HuleInfo
 hand (	Rhand
 ming (	Rming
@@ -5815,7 +5906,8 @@ point_rong (R	pointRong$
 lines (	Rlines%
 tianming_bonus (RtianmingBonus#
 baida_changed (	RbaidaChanged2
-hu_tile_bai_da_changed (	RhuTileBaiDaChanged"ô
+hu_tile_bai_da_changed (	RhuTileBaiDaChanged7
+xia_ke_shang_coefficient (RxiaKeShangCoefficient"ô
 TingPaiInfo
 tile (	Rtile
 haveyi (Rhaveyi
@@ -6264,7 +6356,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2ŠÙ
+READY2ŽÜ
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -6272,8 +6364,8 @@ old_scores (R	oldScores!
 openidCheck.lq.ReqOpenidCheck.lq.ResOauth2Check4
 signup.lq.ReqSignupAccount.lq.ResSignupAccount#
 login.lq.ReqLogin.lq.ResLogin2
-prepareLogin.lq.ReqPrepareLogin.lq.ResCommon,
-	fastLogin.lq.ReqCommon.lq.ResFastLogin,
+prepareLogin.lq.ReqPrepareLogin.lq.ResCommon/
+	fastLogin.lq.ReqFastLogin.lq.ResFastLogin,
 	fetchInfo.lq.ReqCommon.lq.ResFetchInfo,
 loginSuccess.lq.ReqCommon.lq.ResCommonN
 fetchServerMaintenanceInfo.lq.ReqCommon!.lq.ResFetchServerMaintenanceInfo-
@@ -6666,7 +6758,11 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 simV2ActivityGiveUp.lq.ReqSimV2ActivityGiveUp.lq.ResCommonH
 simV2ActivitySetUpgrade.lq.ReqSimV2ActivitySetUpgrade.lq.ResCommonk
 progressRewardActivityReceive$.lq.ReqProgressRewardActivityReceive$.lq.ResProgressRewardActivityReceiveq
-fetchProgressRewardActivityInfo&.lq.ReqFetchProgressRewardActivityInfo&.lq.ResFetchProgressRewardActivityInfo2õ
+fetchProgressRewardActivityInfo&.lq.ReqFetchProgressRewardActivityInfo&.lq.ResFetchProgressRewardActivityInfoe
+questCrewActivityStartQuest".lq.ReqQuestCrewActivityStartQuest".lq.ResQuestCrewActivityStartQuestS
+questCrewActivityHire.lq.ReqQuestCrewActivityHire.lq.ResQuestCrewActivityHireS
+questCrewActivityFeed.lq.ReqQuestCrewActivityFeed.lq.ResQuestCrewActivityFeedn
+questCrewActivityRefreshMarket%.lq.ReqQuestCrewActivityRefreshMarket%.lq.ResQuestCrewActivityRefreshMarket2õ
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,
