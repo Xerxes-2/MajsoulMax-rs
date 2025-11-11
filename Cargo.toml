@@ -16,7 +16,7 @@ base64 = { version = "0.22", default-features = false }
 bytes = { version = "1", default-features = false }
 prost-reflect = { version = "0.16", features = ["serde"] }
 reqwest = { version = "0.12", features = [
-    "__rustls",
+    "rustls-tls",
     "json",
 ], default-features = false }
 serde_json = "1"
