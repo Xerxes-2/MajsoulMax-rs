@@ -166,8 +166,8 @@ impl Modder {
         match method_name {
             ".lq.Lobby.fetchAccountInfo" => {
                 let mut msg = lq::ResAccountInfo::decode(msg_block.data.as_ref())?;
-                if let Some(ref mut acc) = msg.account {
-                    if acc.account_id == self.safe.read().await.account_id {
+                if let Some(ref mut acc) = msg.account
+                    && acc.account_id == self.safe.read().await.account_id {
                         acc.avatar_frame = self.mod_settings.read().await.views_presets
                             [self.mod_settings.read().await.preset_index as usize]
                             .iter()
@@ -179,7 +179,6 @@ impl Modder {
                         acc.verified = self.mod_settings.read().await.verified;
                         modified_data = Some(msg.encode_to_vec());
                     }
-                }
             }
             ".lq.Lobby.fetchCharacterInfo" => {
                 let mut msg = lq::ResCharacterInfo::decode(msg_block.data.as_ref())?;
@@ -268,8 +267,8 @@ impl Modder {
             }
             ".lq.FastTest.authGame" => {
                 let mut msg = lq::ResAuthGame::decode(msg_block.data.as_ref())?;
-                if self.mod_settings.read().await.hint_on() {
-                    if let Some(c) = msg.game_config.as_mut() {
+                if self.mod_settings.read().await.hint_on()
+                    && let Some(c) = msg.game_config.as_mut() {
                         if let Some(r) = c.mode.as_mut().and_then(|m| m.detail_rule.as_mut()) {
                             r.bianjietishi = true;
                         }
@@ -281,7 +280,6 @@ impl Modder {
                             }
                         }
                     }
-                }
                 for p in &mut msg.players {
                     self.change_player(p).await?;
                 }
@@ -374,12 +372,11 @@ impl Modder {
                         .rewarded_endings
                         .extend(self.endings.iter().map(|e| e.id));
                 }
-                if let Some(ref mut bag_info) = msg.bag_info {
-                    if let Some(ref mut bag) = bag_info.bag {
+                if let Some(ref mut bag_info) = msg.bag_info
+                    && let Some(ref mut bag) = bag_info.bag {
                         bag.items.clear();
                         self.fill_bag(bag).await;
                     }
-                }
                 if let Some(ref mut views) = msg.all_common_views {
                     views.views.clear();
                     views.r#use = self.mod_settings.read().await.preset_index;
@@ -422,15 +419,13 @@ impl Modder {
             }
             ".lq.Lobby.fetchServerSettings" => {
                 let mut msg = lq::ResServerSettings::decode(msg_block.data.as_ref())?;
-                if self.mod_settings.read().await.anti_nickname_censorship() {
-                    if let Some(ref mut settings) = msg.settings {
-                        if let Some(ref mut nick_setting) = settings.nickname_setting {
+                if self.mod_settings.read().await.anti_nickname_censorship()
+                    && let Some(ref mut settings) = msg.settings
+                        && let Some(ref mut nick_setting) = settings.nickname_setting {
                             nick_setting.enable = 0;
                             nick_setting.nicknames.clear();
                             modified_data = Some(msg.encode_to_vec());
                         }
-                    }
-                }
             }
             ".lq.Lobby.fetchGameRecord" => {
                 let msg = lq::ResGameRecord::decode(msg_block.data.as_ref())?;
@@ -758,15 +753,14 @@ impl Modder {
         match method_name.as_str() {
             ".lq.NotifyAccountUpdate" => {
                 let msg = lq::NotifyAccountUpdate::decode(msg_block.data.as_ref())?;
-                if let Some(ref update) = msg.update {
-                    if update.character.is_some() {
+                if let Some(ref update) = msg.update
+                    && update.character.is_some() {
                         // drop message if character is updated
                         return Ok(ModifyResult {
                             msg: None,
                             inject_msg: None,
                         });
                     }
-                }
             }
             ".lq.NotifyRoomPlayerUpdate" => {
                 let mut msg = lq::NotifyRoomPlayerUpdate::decode(msg_block.data.as_ref())?;

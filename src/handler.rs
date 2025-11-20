@@ -1,5 +1,4 @@
 use anyhow::Result;
-use bytes::Bytes;
 use hudsucker::{
     futures::{Sink, SinkExt, Stream, StreamExt},
     tokio_tungstenite::tungstenite::{self, Message},
@@ -48,12 +47,11 @@ impl WebSocketHandler for Handler {
         mut stream: impl Stream<Item = Result<Message, tungstenite::Error>> + Unpin + Send + 'static,
         mut sink: impl Sink<Message, Error = tungstenite::Error> + Unpin + Send + 'static,
     ) {
-        if let WebSocketContext::ServerToClient { .. } = ctx {
-            if let Some(msg) = self.inject_msg.take() {
-                if let Err(e) = sink.send(msg).await {
-                    error!("Failed to send injected message: {e}");
-                }
-            }
+        if let WebSocketContext::ServerToClient { .. } = ctx
+            && let Some(msg) = self.inject_msg.take()
+            && let Err(e) = sink.send(msg).await
+        {
+            error!("Failed to send injected message: {e}");
         }
         while let Some(message) = stream.next().await {
             match message {
@@ -100,22 +98,21 @@ impl WebSocketHandler for Handler {
             return Some(msg);
         };
 
-        let buf: Bytes = buf.into();
         let mut parser = self.parser.write().await;
         let Ok(parsed) = parser.parse(buf.clone()) else {
             error!("Failed to parse message");
-            return Some(Message::Binary(buf.into()));
+            return Some(Message::Binary(buf));
         };
         drop(parser);
 
         let method_name = parsed.method_name.clone();
-        if let Some(tx) = &self.sender {
-            if let Err(e) = tx.send((parsed, direction_char)).await {
-                error!("Failed to send message to channel: {e}");
-            }
+        if let Some(tx) = &self.sender
+            && let Err(e) = tx.send((parsed, direction_char)).await
+        {
+            error!("Failed to send message to channel: {e}");
         }
         let Some(ref modder) = self.modder else {
-            return Some(Message::Binary(buf.into()));
+            return Some(Message::Binary(buf));
         };
         let parser = self.parser.read().await;
         let res = modder
@@ -123,8 +120,8 @@ impl WebSocketHandler for Handler {
             .await;
         drop(parser);
         if let Some(inj) = res.inject_msg {
-            self.inject_msg = Some(Message::Binary(inj.into()));
+            self.inject_msg = Some(Message::Binary(inj));
         }
-        res.msg.map(|msg| Message::Binary(msg.into()))
+        res.msg.map(Message::Binary)
     }
 }
