@@ -114,17 +114,19 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
 
-      - name: Move artifact to work dir and zip
+      - name: Move artifacts to work dir and zip
         shell: bash
         run: |
           mv target/${{ steps.target.outputs.triple }}/release/${{ env.BIN_NAME}} .
           mkdir -p release-package
           mv ${{ env.BIN_NAME}} release-package/
+          # Include Liqi configuration directory in the packaged artifact
+          cp -r liqi_config release-package/
           cd release-package
           if [ ${{ matrix.os }} == "windows" ]; then
             7z a -tzip ../${{ env.BIN_NAME}}-${{ matrix.os }}-${{matrix.target_arch}}.zip .
           else
-            zip -r ../${{ env.BIN_NAME}}-${{ matrix.os }}-${{matrix.target_arch}} .
+            zip -r ../${{ env.BIN_NAME}}-${{ matrix.os }}-${{matrix.target_arch}}.zip .
           fi
 
       - name: Upload artifact

@@ -1,5 +1,5 @@
 
-¿æ
+´ò
 
 liqi.protolq"Ž
 NotifyRoomGameStart
@@ -942,7 +942,7 @@ gift_inbox (2 .lq.FeedActivityData.GiftBoxDataR	giftInboxS
 MineActivityData&
 	dig_point (2	.lq.PointRdigPoint 
 map (2.lq.MineRewardRmap
-id (Rid"
+id (Rid"Ã
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -965,7 +965,9 @@ story_data (2.lq.ActivityStoryDataR	storyData>
 simulation_v2_data (2.lq.SimulationV2DataRsimulationV2DataD
 quest_crew_data (2.lq.ActivityQuestCrewChangesRquestCrewData4
 
-shoot_data (2.lq.ActivityShootDataR	shootData"I
+shoot_data (2.lq.ActivityShootDataR	shootData4
+
+bingo_data (2.lq.ActivityBingoDataR	bingoData"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
 pos (Rpos"’
@@ -2308,17 +2310,40 @@ reward_ids (R	rewardIds
 dirty (Rdirty"i
 ActivityShootEnemyInfoDirty
 dirty (Rdirty4
-enemies (2.lq.ActivityShootEnemyInfoRenemies"£
+enemies (2.lq.ActivityShootEnemyInfoRenemies"ƒ
 ActivityShootData
 activity_id (R
 activityId
 level (Rlevel4
 enemies (2.lq.ActivityShootEnemyInfoRenemies!
-rewarded_ids (RrewardedIds"^
+rewarded_ids (RrewardedIds
+ended (RendedH
+rewarded_records (2.lq.ActivityShootRewardRecordRrewardedRecords"^
 ActivityShootEnemyInfo
 group_id (RgroupId
 enemy_id (RenemyId
-hp (Rhp"r
+hp (Rhp"x
+ActivityShootRewardRecord
+enemy_id (RenemyId
+	reward_id (RrewardId#
+rewarded_time (RrewardedTime"°
+ActivityBingoCardData
+card_id (RcardId!
+achieved_pos (RachievedPos!
+rewarded_ids (RrewardedIds
+state (RstateX
+achieved_records (2-.lq.ActivityBingoCardData.BingoAchievedRecordRachievedRecordsR
+reward_records (2+.lq.ActivityBingoCardData.BingoRewardRecordRrewardRecords;
+BingoAchievedRecord
+pos (Rpos
+time (Rtime7
+BingoRewardRecord
+id (Rid
+time (Rtime"e
+ActivityBingoData
+activity_id (R
+activityId/
+cards (2.lq.ActivityBingoCardDataRcards"r
 ResConnectionInfo
 error (2	.lq.ErrorRerror<
 client_endpoint (2.lq.NetworkEndpointRclientEndpoint"`
@@ -3678,7 +3703,7 @@ recordList"9
 error (2	.lq.ErrorRerror,
 
 activities (2.lq.ActivityR
-activities"³
+activities"é
 ResAccountActivityData
 error (2	.lq.ErrorRerror=
 exchange_records (2.lq.ExchangeRecordRexchangeRecords>
@@ -3718,7 +3743,9 @@ story_data (2.lq.ActivityStoryDataR	storyData>
 progress_reward_data  (2.lq.ActivityProgressRewardDataRprogressRewardDataA
 quest_crew_data! (2.lq.ActivityQuestCrewDataRquestCrewData4
 
-shoot_data" (2.lq.ActivityShootDataR	shootData„
+shoot_data" (2.lq.ActivityShootDataR	shootData4
+
+bingo_data# (2.lq.ActivityBingoDataR	bingoData„
 ActivitySignInData
 activity_id (R
 activityId"
@@ -4530,7 +4557,7 @@ $ResFetchManagerCustomizedContestList
 error (2	.lq.ErrorRerror5
 contests (2.lq.CustomizedContestBaseRcontests"?
  ReqFetchManagerCustomizedContest
-	unique_id (RuniqueId"Ä
+	unique_id (RuniqueId"ö
  ResFetchManagerCustomizedContest
 error (2	.lq.ErrorRerror
 name (	Rname
@@ -4547,7 +4574,15 @@ checkState#
 checking_name
  (	RcheckingName;
 contest_setting (2.lq.ContestSettingRcontestSetting
-	rank_type (RrankType"Þ
+	rank_type (RrankTypeG
+season (2/.lq.ResFetchManagerCustomizedContest.SeasonInfoRseasong
+
+SeasonInfo
+create_time (R
+createTime
+
+start_time (R	startTime
+end_time (RendTime"Þ
 !ReqUpdateManagerCustomizedContest
 name (	Rname
 	open_show (RopenShow8
@@ -5063,7 +5098,18 @@ activityId"Á
 !ResQuestCrewActivityRefreshMarket
 error (2	.lq.ErrorRerrorA
 value_changes (2.lq.ActivityQuestCrewChangesRvalueChanges8
-execute_result (2.lq.ExecuteResultRexecuteResult"a
+execute_result (2.lq.ExecuteResultRexecuteResult"Î
+ReqBingoActivityReceiveReward
+activity_id (R
+activityIdG
+rewards (2-.lq.ReqBingoActivityReceiveReward.BingoRewardRrewardsC
+BingoReward
+	reward_id (RrewardId
+card_id (RcardId"«
+ResBingoActivityReceiveReward
+error (2	.lq.ErrorRerror8
+execute_result (2.lq.ExecuteResultRexecuteResult/
+cards (2.lq.ActivityBingoCardDataRcards"a
 AmuletBadgeData
 id (Rid
 uid (Ruid
@@ -6356,7 +6402,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2ŽÜ
+READY2òÜ
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -6762,7 +6808,8 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 questCrewActivityStartQuest".lq.ReqQuestCrewActivityStartQuest".lq.ResQuestCrewActivityStartQuestS
 questCrewActivityHire.lq.ReqQuestCrewActivityHire.lq.ResQuestCrewActivityHireS
 questCrewActivityFeed.lq.ReqQuestCrewActivityFeed.lq.ResQuestCrewActivityFeedn
-questCrewActivityRefreshMarket%.lq.ReqQuestCrewActivityRefreshMarket%.lq.ResQuestCrewActivityRefreshMarket2õ
+questCrewActivityRefreshMarket%.lq.ReqQuestCrewActivityRefreshMarket%.lq.ResQuestCrewActivityRefreshMarketb
+bingoActivityReceiveReward!.lq.ReqBingoActivityReceiveReward!.lq.ResBingoActivityReceiveReward2õ
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,

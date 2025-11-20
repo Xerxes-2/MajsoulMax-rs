@@ -76,6 +76,21 @@ message AchievementAchievementGroup {
    uint32 sort = 11;
 }
 
+message AchievementBadge {
+   uint32 id = 1;
+   uint32 base_task = 2;
+   uint32 deprecated = 3;
+}
+
+message AchievementBadgeGroup {
+   uint32 id = 1;
+   repeated uint32 badge_id = 2;
+   uint32 name = 3;
+   uint32 desc = 4;
+   uint32 type = 5;
+   string img = 6;
+}
+
 message ActivityActivity {
    uint32 id = 1;
    string name_chs = 2;
@@ -109,6 +124,7 @@ message ActivityExchange {
    int32 exchange_limit = 7;
    uint32 item_limit_id = 8;
    uint32 item_limit_count = 9;
+   string unlock_day = 10;
 }
 
 message ActivityChestUp {
@@ -120,9 +136,14 @@ message ActivityChestUp {
    uint32 item_str_id = 7;
    string img = 8;
    string title_img = 9;
-   uint32 typeset = 10;
-   uint32 up_items_type = 11;
-  repeated uint32 up_items = 12;
+   string title_img_2 = 10;
+   uint32 typeset = 11;
+   string enter_animation = 12;
+   string special_effect_front = 13;
+   string special_effect_back = 14;
+   uint32 special_audio = 15;
+   uint32 up_items_type = 16;
+   repeated uint32 up_items = 17;
 }
 
 message ActivityGameTask {
@@ -229,7 +250,7 @@ message ActivityRichmanEvent {
    uint32 activity_id = 2;
    uint32 event_type = 3;
    uint32 weight = 4;
-  repeated uint32 param = 5;
+   repeated uint32 param = 5;
 }
 
 message ActivityPeriodTask {
@@ -245,6 +266,7 @@ message ActivityPeriodTask {
    uint32 unlock_day = 10;
    uint32 deprecated = 11;
    uint32 node_mark = 12;
+   uint32 omit_mail_reward = 13;
 }
 
 message ActivityRandomTaskPool {
@@ -261,7 +283,7 @@ message ActivityRandomTaskPool {
 
 message ActivityRandomTaskInfo {
    uint32 activity_id = 1;
-  repeated uint32 pool_id = 2;
+   repeated uint32 pool_id = 2;
 }
 
 message ActivityRichmanRewardSeq {
@@ -278,8 +300,11 @@ message ActivityActivityBuff {
    uint32 upgrade_resource_id = 5;
    uint32 upgrade_resource_count = 6;
    uint32 effect = 7;
-  repeated uint32 unlock_params = 8;
+   repeated uint32 unlock_params = 8;
    uint32 effect_desc = 9;
+   uint32 effect_desc_2 = 10;
+   uint32 limit_count = 11;
+   uint32 limit_interval = 12;
 }
 
 message ActivityBuffCondition {
@@ -314,19 +339,23 @@ message ActivityActivityRoom {
    uint32 sort = 2;
    string str_name = 3;
    string str_rule = 4;
-   uint32 dora3_mode = 5;
-   uint32 begin_open_mode = 6;
-   uint32 muyu_mode = 7;
-   uint32 xuezhan_mode = 8;
-   uint32 huanzhang_mode = 9;
-   uint32 chuanma_mode = 10;
-   uint32 jiuchao_mode = 11;
-   uint32 reveal_discard = 12;
-   uint32 field_spell_mode = 13;
-   uint32 zhanxing_mode = 14;
-   uint32 tianming_mode = 15;
-   uint32 yongchang_mode = 16;
-   uint32 hunzhiyiji_mode = 17;
+   uint32 friend_room_id = 5;
+   uint32 dora3_mode = 6;
+   uint32 begin_open_mode = 7;
+   uint32 muyu_mode = 8;
+   uint32 xuezhan_mode = 9;
+   uint32 huanzhang_mode = 10;
+   uint32 chuanma_mode = 11;
+   uint32 jiuchao_mode = 12;
+   uint32 reveal_discard = 13;
+   uint32 field_spell_mode = 14;
+   uint32 zhanxing_mode = 15;
+   uint32 tianming_mode = 16;
+   uint32 yongchang_mode = 17;
+   uint32 hunzhiyiji_mode = 18;
+   uint32 wanxiangxiuluo_mode = 19;
+   uint32 beishuizhizhan_mode = 20;
+   uint32 xiakeshang_mode = 21;
 }
 
 message ActivitySnsActivity {
@@ -346,7 +375,7 @@ message ActivitySnsActivity {
    string unlock_time = 14;
    uint32 unlock_item_id = 15;
    uint32 unlock_item_count = 16;
-  repeated string content_image = 17;
+   repeated string content_image = 17;
 }
 
 message ActivityMineActivity {
@@ -374,7 +403,7 @@ message ActivityRpgActivity {
    uint32 base_luk = 5;
    uint32 ds_atk = 6;
    uint32 special_heal = 7;
-  repeated uint32 chain_atk = 8;
+   repeated uint32 chain_atk = 8;
    uint32 monster_group = 9;
    uint32 sanma_debuff = 10;
    uint32 has_robot = 11;
@@ -449,7 +478,7 @@ message ActivityFeedActivityInfo {
    uint32 feed_reward_id = 3;
    uint32 friend_send_limit = 4;
    uint32 friend_recv_limit = 5;
-  repeated uint32 food_item_id = 6;
+   repeated uint32 food_item_id = 6;
 }
 
 message ActivityFeedActivityReward {
@@ -485,15 +514,20 @@ message ActivitySpotActivity {
    uint32 activity_id = 2;
    uint32 dep = 3;
    uint32 limit_day = 4;
-   uint32 spot_group = 5;
-   string unlock_spot_item = 6;
-   string content_path = 7;
-   string unlock_item = 8;
-   uint32 unlock_by_ending_id = 9;
-  repeated string unlock_ending_id = 10;
-  repeated uint32 ending_id = 11;
-  repeated uint32 ending_id_dep = 12;
-   string reward = 13;
+   uint32 unlock_task_id = 5;
+   uint32 unlock_task_activity_id = 6;
+   uint32 spot_group = 7;
+   string unlock_spot_item = 8;
+   string content_path = 9;
+   uint32 title = 10;
+   uint32 subtitle_title = 11;
+   string unlock_item = 12;
+   uint32 unlock_by_ending_id = 13;
+   repeated string unlock_ending_id = 14;
+   repeated uint32 ending_id = 15;
+   string ending_res = 16;
+   repeated uint32 ending_id_dep = 17;
+   string reward = 18;
 }
 
 message ActivityActivityItem {
@@ -506,7 +540,7 @@ message ActivityUpgradeActivity {
    uint32 mail_id = 2;
    string consume_item = 3;
    uint32 total_reward_id = 4;
-  repeated uint32 reward_id = 5;
+   repeated uint32 reward_id = 5;
 }
 
 message ActivityUpgradeActivityReward {
@@ -523,7 +557,7 @@ message ActivityFriendGiftActivity {
    uint32 friend_send_consume = 3;
    uint32 friend_recv_limit = 4;
    uint32 extra_gift = 5;
-  repeated uint32 gift_item_id = 6;
+   repeated uint32 gift_item_id = 6;
 }
 
 message ActivityUpgradeActivityDisplay {
@@ -582,10 +616,14 @@ message ActivityRewardMail {
 
 message ActivityCombiningActivityInfo {
    uint32 activity_id = 1;
-  repeated uint32 craft_bin = 2;
-  repeated string craft_bin_price = 3;
-  repeated uint32 craft_bin_unlock = 4;
+   repeated uint32 craft_bin = 2;
+   repeated string craft_bin_price = 3;
+   repeated uint32 craft_bin_unlock = 4;
    uint32 point_item = 5;
+   uint32 bonus_daily_limit = 8;
+   uint32 multi_order_rate = 9;
+   uint32 one_coin_num = 10;
+   uint32 coin_num_max = 11;
 }
 
 message ActivityCombiningCraftPool {
@@ -607,11 +645,24 @@ message ActivityCombiningCraft {
    uint32 id = 1;
    uint32 activity_id = 2;
    uint32 group = 3;
+   string recycling_price = 4;
    uint32 level = 5;
    uint32 upgrade_craft_id = 6;
    string order_price = 8;
    uint32 if_bonus = 9;
    string img_name = 10;
+   uint32 craft_name = 11;
+   uint32 craft_desc = 12;
+}
+
+message ActivityCombiningCustomer {
+   uint32 customer_id = 1;
+   uint32 activity_id = 2;
+   uint32 order_type = 3;
+   uint32 customer_location = 4;
+   string customer_skin = 5;
+   uint32 customer_loading = 6;
+   string complete_sound = 7;
 }
 
 message ActivityChestReplaceUp {
@@ -627,8 +678,8 @@ message ActivityVillageActivityInfo {
    uint32 trip_consume = 6;
    uint32 trip_cold_down = 7;
    uint32 trip_round = 8;
-  repeated string trip_reward = 9;
-  repeated string stage_require = 10;
+   repeated string trip_reward = 9;
+   repeated string stage_require = 10;
 }
 
 message ActivityVillageBuilding {
@@ -646,7 +697,7 @@ message ActivityVillageBuilding {
    uint32 building_stage = 12;
    uint32 worker_consume = 13;
    string func = 14;
-  repeated uint32 args = 15;
+   repeated uint32 args = 15;
    uint32 type = 16;
 }
 
@@ -711,7 +762,7 @@ message ActivityFestivalProposal {
    uint32 activity_id = 1;
    uint32 proposal_id = 2;
    uint32 unlock_level = 3;
-  repeated uint32 ending_group = 4;
+   repeated uint32 ending_group = 4;
    uint32 client_name = 5;
    string client_icon = 6;
    uint32 proposal_text = 7;
@@ -724,7 +775,7 @@ message ActivityFestivalEvent {
    uint32 event_id = 2;
    uint32 position = 3;
    uint32 unlock_level = 4;
-  repeated uint32 ending_group = 5;
+   repeated uint32 ending_group = 5;
    uint32 event_title = 6;
    uint32 client_name = 7;
    string client_icon = 8;
@@ -744,13 +795,332 @@ message ActivityFestivalEnding {
    uint32 ending_text = 8;
 }
 
+message ActivityIslandActivity {
+   uint32 activity_id = 1;
+   uint32 food_id = 2;
+   uint32 currency_id = 3;
+   uint32 food_consume = 4;
+   uint32 sell_discount = 5;
+   uint32 guide_bottle_price = 6;
+}
+
+message ActivityIslandGoods {
+   uint32 activity_id = 1;
+   uint32 goods_id = 2;
+   uint32 goods_name = 3;
+   string matrix = 4;
+   uint32 price = 5;
+   string goods_res = 6;
+   string icon = 7;
+}
+
+message ActivityIslandBag {
+   uint32 activity_id = 1;
+   uint32 bag_id = 2;
+   uint32 bag_name = 3;
+   uint32 bag_desc = 4;
+   string bag_icon_locked = 5;
+   string bag_icon_unlocked = 6;
+   string matrix = 7;
+   string max_matrix = 8;
+   string unlock_consume = 9;
+   uint32 initial = 10;
+   uint32 unlock_task_id = 11;
+}
+
+message ActivityIslandMap {
+   uint32 activity_id = 1;
+   uint32 zone_id = 2;
+   uint32 zone_name = 3;
+   string zone_icon_unlocked = 4;
+   uint32 currency_amount = 5;
+   uint32 initial = 6;
+   repeated uint32 distance = 7;
+   repeated string route = 8;
+   uint32 unlock_task_id = 9;
+}
+
+message ActivityIslandShop {
+   uint32 activity_id = 1;
+   uint32 day = 2;
+   uint32 zone_id = 3;
+   uint32 goods_id = 4;
+   uint32 count = 5;
+   uint32 discount = 6;
+}
+
+message ActivityIslandNews {
+   uint32 activity_id = 1;
+   uint32 day = 2;
+   uint32 show_day = 3;
+   uint32 news_date = 4;
+   uint32 news_week = 5;
+   int32 zone = 6;
+   uint32 news_desc = 7;
+   int32 goods_id = 8;
+   uint32 effect = 9;
+}
+
+message ActivitySummerStory {
+   uint32 activity_id = 1;
+   uint32 id = 2;
+   uint32 story_name = 3;
+   uint32 building = 4;
+   uint32 building_name = 5;
+   uint32 exchange_activity = 6;
+   uint32 building_unlock = 7;
+   string story_unlock = 8;
+   string story_id = 9;
+   uint32 story_desc = 10;
+   string show_character = 11;
+}
+
+message ActivityStoryActivity {
+   uint32 activity_id = 1;
+   uint32 story_id = 2;
+   uint32 unlock_day = 3;
+   string unlock_item = 4;
+   string unlock_story = 5;
+   string unlock_ending = 6;
+   string unlock_consume = 7;
+   string finish_reward = 8;
+   string all_finish_reward = 9;
+   string content_path = 10;
+   uint32 title = 11;
+   uint32 subtitle_title = 12;
+}
+
+message ActivityStoryEnding {
+   uint32 story_id = 1;
+   uint32 ending_id = 2;
+   uint32 unlock_day = 3;
+   string unlock_item = 4;
+   string unlock_story = 5;
+   string unlock_ending = 6;
+   string unlock_consume = 7;
+   string reward = 8;
+}
+
+message ActivityActivityBanner {
+   uint32 id = 1;
+   uint32 sort = 2;
+   uint32 banner_type = 3;
+   string enter_icon = 4;
+   string banner_big = 5;
+   string banner_left = 6;
+   string banner_left_selected = 7;
+   string banner_left_icon = 8;
+   uint32 time_remind = 9;
+}
+
+message ActivityActivityGuide {
+   uint32 guide_id = 1;
+   uint32 activity_id = 2;
+   uint32 guide_location = 3;
+   uint32 char_id = 4;
+   uint32 char_str_id = 5;
+   uint32 content_str_id = 6;
+}
+
+message ActivitySummerStoryReward {
+   uint32 activity_id = 1;
+   uint32 period_task_id = 2;
+   string building_icon = 3;
+   uint32 click_notice = 4;
+}
+
+message ActivityChooseUpActivity {
+   uint32 activity_id = 1;
+   uint32 replace_id = 2;
+   repeated uint32 base_chest_id = 3;
+   repeated string choose_type = 4;
+   uint32 sort = 5;
+   uint32 title_str_id = 6;
+   string str_id = 7;
+   uint32 chara_str_id = 8;
+   uint32 item_str_id = 9;
+   string img = 10;
+   string title_img = 11;
+   string title_img_2 = 12;
+   uint32 typeset = 13;
+   string enter_animation = 14;
+   string special_effect_front = 15;
+   string special_effect_back = 16;
+   uint32 special_audio = 17;
+   uint32 up_items_type = 18;
+   repeated uint32 up_items = 19;
+}
+
+message ActivityChooseUpReplace {
+   uint32 id = 1;
+   repeated uint32 chest_id = 2;
+}
+
+message ActivityProgressReward {
+   uint32 activity_id = 1;
+   uint32 progress = 3;
+   string reward = 4;
+}
+
+message AmuletAmuletActivity {
+   uint32 activity_id = 1;
+   uint32 skill_item = 2;
+   uint32 init_coin = 3;
+   uint32 shop_count = 4;
+   uint32 record_level = 5;
+   uint32 book_unlock_level = 6;
+   uint32 free_effect_goods_id = 7;
+   uint32 shop_refresh_coin = 8;
+   uint32 effect_max_count = 9;
+   uint32 init_dora_indicator = 10;
+   uint32 init_change_hand = 11;
+   uint32 init_desktop_count = 12;
+   uint32 init_open_desktop_count = 13;
+   uint32 init_shupai_point = 14;
+   uint32 init_zipai_point = 15;
+   uint32 init_mount_count = 16;
+   uint32 init_level = 17;
+   uint32 init_tian_count = 18;
+   repeated uint32 init_badge_weight = 19;
+}
+
+message AmuletAmuletGames {
+   uint32 activity_id = 1;
+   uint32 level = 2;
+   string target_point = 3;
+   string reward_pack = 4;
+   uint32 reward = 5;
+   uint32 boss = 6;
+   uint32 next_level = 7;
+   uint32 round = 8;
+   uint32 clear_mark = 9;
+   uint32 level_group = 10;
+   string level_name = 11;
+   uint32 guaranteed_goods = 12;
+   uint32 level_amulet_pool = 13;
+}
+
+message AmuletAmuletRewards {
+   uint32 activity_id = 1;
+   uint32 target_point = 2;
+   uint32 reward_coin = 3;
+}
+
+message AmuletAmuletBuff {
+   uint32 id = 1;
+   uint32 type = 2;
+   uint32 deprecated = 3;
+   uint32 common_weight = 4;
+   uint32 ex_weight = 5;
+   uint32 desc = 6;
+   uint32 invalid_type = 7;
+   repeated int32 args = 8;
+}
+
+message AmuletAmuletEffect {
+   uint32 id = 1;
+   uint32 book_enabled = 2;
+   uint32 deprecated = 3;
+   uint32 weight = 4;
+   uint32 effect_group = 5;
+   uint32 shop_badge = 6;
+   uint32 duplicate_enabled = 7;
+   uint32 upgrade = 8;
+   uint32 rarity = 9;
+   uint32 price = 10;
+   uint32 sell_price = 11;
+   uint32 name = 12;
+   uint32 desc = 13;
+   string card_image = 14;
+   uint32 card_remark = 15;
+   repeated uint32 init_param_view = 16;
+   repeated int32 args = 17;
+   repeated uint32 tag_id = 18;
+}
+
+message AmuletAmuletEffectGroup {
+   uint32 id = 1;
+   uint32 merge_card = 2;
+}
+
+message AmuletAmuletFan {
+   uint32 id = 1;
+   uint32 val = 2;
+   uint32 desc = 3;
+}
+
+message AmuletAmuletGoods {
+   uint32 id = 1;
+   uint32 weight = 2;
+   uint32 guaranteed = 3;
+   uint32 pack_name = 4;
+   uint32 pack_desc = 5;
+   uint32 price = 6;
+   repeated uint32 rarity_weight = 7;
+   repeated uint32 badge_weight = 8;
+}
+
+message AmuletAmuletShopUpgrade {
+   uint32 id = 1;
+   uint32 level = 2;
+   uint32 price = 3;
+   uint32 display_value = 4;
+}
+
+message AmuletAmuletUpgrade {
+   uint32 id = 1;
+   uint32 level = 2;
+   uint32 skill_point = 3;
+   uint32 buff_id = 4;
+   uint32 display_value = 5;
+}
+
+message AmuletAmuletTask {
+   uint32 id = 1;
+   uint32 amulet_id = 2;
+   uint32 activity_id = 3;
+   uint32 base_task_id = 4;
+   string reward = 5;
+}
+
+message AmuletAmuletPool {
+   uint32 level_amulet_pool_id = 1;
+   uint32 amulet_id = 2;
+   uint32 amulet_weight = 3;
+}
+
+message AmuletAmuletBadge {
+   uint32 id = 1;
+   uint32 deprecated = 2;
+   uint32 coverable = 3;
+   uint32 weight = 4;
+   uint32 rarity = 5;
+   uint32 volume = 6;
+   uint32 badge_name = 7;
+   uint32 badge_desc = 8;
+   string badge_image = 9;
+   repeated int32 args = 10;
+}
+
+message AmuletAmuletTag {
+   uint32 tag_id = 1;
+   uint32 tag_name = 2;
+   uint32 tag_desc = 3;
+}
+
+message AmuletAmuletLargeNumber {
+   string number_id = 1;
+   string number_unit_cn = 2;
+   string number_unit_en = 3;
+}
+
 message AnimationAnimation {
    uint32 id = 1;
    string name = 2;
    string type = 3;
    uint32 lifetime = 4;
    float speed = 5;
-  repeated uint32 keypoint = 6;
+   repeated uint32 keypoint = 6;
 }
 
 message AudioAudio {
@@ -796,7 +1166,7 @@ message CharacterEmoji {
    string after_unlock_desc_en = 14;
    string after_unlock_desc_kr = 15;
    uint32 unlock_type = 16;
-  repeated uint32 unlock_param = 17;
+   repeated uint32 unlock_param = 17;
 }
 
 message CharacterCutin {
@@ -808,16 +1178,20 @@ message CharacterCutin {
    int32 char_y = 6;
    uint32 char_width = 7;
    uint32 char_height = 8;
+   uint32 type = 9;
 }
 
 message CharacterSkin {
    uint32 skinid = 1;
    uint32 spine_layers = 2;
-  repeated string effects = 3;
+   repeated string effects = 3;
    string audio_celebrate = 4;
-   string audio_idle = 5;
-   string audio_greeting = 6;
-   string audio_click = 7;
+   string audio_celebrate_idle = 5;
+   string audio_idle = 6;
+   string audio_greeting = 7;
+   string audio_click = 8;
+   string audio_click2 = 9;
+   uint32 celebrate_delay = 10;
 }
 
 message ChestChest {
@@ -929,36 +1303,42 @@ message DesktopMatchmode {
    uint32 tianming_mode = 17;
    uint32 yongchang_mode = 18;
    uint32 hunzhiyiji_mode = 19;
-   uint32 room = 20;
-   uint32 mode = 21;
-   uint32 can_sumup = 22;
-   string room_name_chs = 23;
-   string room_name_chs_t = 24;
-   string room_name_jp = 25;
-   string room_name_en = 26;
-   string room_name_kr = 27;
-   int32 glimit_floor = 28;
-   int32 glimit_ceil = 29;
-   int32 gcarry = 30;
-   int32 exchange_rate = 31;
-   int32 levelpoint1 = 32;
-   int32 levelpoint2 = 33;
-   int32 levelpoint3 = 34;
-   int32 levelpoint4 = 35;
-   int32 fish_point = 36;
-   int32 init_point = 37;
-   int32 back_point = 38;
-   int32 count_point = 39;
-  repeated int32 buchang = 40;
-   uint32 level_limit = 41;
-   uint32 level_limit_ceil = 42;
-   int32 tip = 43;
-   int32 friendship = 44;
-   uint32 chest_id = 45;
-  repeated uint32 chest_exp_add = 46;
-   uint32 level_match = 47;
-   uint32 level_match_range = 48;
-   uint32 level_match_max = 49;
+   uint32 wanxiangxiuluo_mode = 20;
+   uint32 beishuizhizhan_mode = 21;
+   uint32 xiakeshang_mode = 22;
+   uint32 room = 23;
+   uint32 mode = 24;
+   uint32 can_sumup = 25;
+   string room_name_chs = 26;
+   string room_name_chs_t = 27;
+   string room_name_jp = 28;
+   string room_name_en = 29;
+   string room_name_kr = 30;
+   string str_rule = 31;
+   string interval_image = 32;
+   repeated string rule_images = 33;
+   int32 glimit_floor = 34;
+   int32 glimit_ceil = 35;
+   int32 gcarry = 36;
+   int32 exchange_rate = 37;
+   int32 levelpoint1 = 38;
+   int32 levelpoint2 = 39;
+   int32 levelpoint3 = 40;
+   int32 levelpoint4 = 41;
+   int32 fish_point = 42;
+   int32 init_point = 43;
+   int32 back_point = 44;
+   int32 count_point = 45;
+   repeated int32 buchang = 46;
+   uint32 level_limit = 47;
+   uint32 level_limit_ceil = 48;
+   int32 tip = 49;
+   int32 friendship = 50;
+   uint32 chest_id = 51;
+   repeated uint32 chest_exp_add = 52;
+   uint32 level_match = 53;
+   uint32 level_match_range = 54;
+   uint32 level_match_max = 55;
 }
 
 message DesktopChest {
@@ -987,6 +1367,22 @@ message DesktopFieldSpell {
    uint32 sord_card_id = 5;
 }
 
+message DesktopFriendRoom {
+   uint32 id = 1;
+   string pre_rule = 2;
+   uint32 sort = 3;
+   string str_name = 4;
+   string str_rule = 5;
+   uint32 set_jushu = 6;
+   repeated string rule_images = 7;
+}
+
+message DesktopTourPresetRule {
+   uint32 id = 1;
+   uint32 preset_rule = 2;
+   repeated int32 params = 3;
+}
+
 message EventsSoscoin {
    uint32 id = 1;
    uint32 level_limit = 2;
@@ -1012,7 +1408,7 @@ message EventsDailyevent {
    uint32 active_type = 9;
    uint32 type = 11;
    uint32 target = 12;
-  repeated string param = 13;
+   repeated string param = 13;
    string level_limit = 14;
 }
 
@@ -1025,7 +1421,7 @@ message EventsBaseTask {
    string desc_kr = 6;
    uint32 type = 7;
    uint32 target = 8;
-  repeated string param = 9;
+   repeated string param = 9;
 }
 
 message ExchangeExchange {
@@ -1100,9 +1496,10 @@ message FanFan {
    string sound = 12;
    uint32 is_guyi = 13;
    uint32 rarity = 14;
-   uint32 show_range_1 = 15;
+   string show_range_1 = 15;
    string show_range_2 = 16;
    uint32 merge_id = 17;
+   uint32 mark = 18;
 }
 
 message FandescFandesc {
@@ -1146,6 +1543,11 @@ message GameLiveSelectFilters {
    string name2_jp = 15;
    string name2_en = 16;
    string name2_kr = 17;
+}
+
+message GlobalGlobal {
+   uint32 id = 1;
+   string args = 2;
 }
 
 message InfoError {
@@ -1232,8 +1634,8 @@ message ItemDefinitionItem {
    string access = 26;
    uint32 accessinfo = 27;
    string func = 28;
-  repeated uint32 iargs = 29;
-  repeated string sargs = 30;
+   repeated uint32 iargs = 29;
+   repeated string sargs = 30;
    uint32 can_sell = 31;
    uint32 sell_reward_id = 32;
    uint32 sell_reward_count = 33;
@@ -1264,7 +1666,7 @@ message ItemDefinitionTitle {
    string icon_item = 13;
    uint32 priority = 14;
    uint32 unlock_type = 15;
-  repeated uint32 unlock_param = 16;
+   repeated uint32 unlock_param = 16;
    uint32 cross_view = 17;
 }
 
@@ -1293,56 +1695,58 @@ message ItemDefinitionCharacter {
    string emo = 22;
    uint32 sound = 23;
    float sound_volume = 24;
-   uint32 sex = 25;
-   string desc_stature_chs = 26;
-   string desc_stature_chs_t = 27;
-   string desc_stature_jp = 28;
-   string desc_stature_en = 29;
-   string desc_stature_kr = 30;
-   string desc_birth_chs = 31;
-   string desc_birth_chs_t = 32;
-   string desc_birth_jp = 33;
-   string desc_birth_en = 34;
-   string desc_birth_kr = 35;
-   string desc_age_chs = 36;
-   string desc_age_chs_t = 37;
-   string desc_age_jp = 38;
-   string desc_age_en = 39;
-   string desc_age_kr = 40;
-   string desc_bloodtype_chs = 41;
-   string desc_bloodtype_chs_t = 42;
-   string desc_bloodtype_jp = 43;
-   string desc_bloodtype_en = 44;
-   string desc_bloodtype_kr = 45;
-   string desc_cv_chs = 46;
-   string desc_cv_chs_t = 47;
-   string desc_cv_jp = 48;
-   string desc_cv_en = 49;
-   string desc_cv_kr = 50;
-   string desc_hobby_chs = 51;
-   string desc_hobby_chs_t = 52;
-   string desc_hobby_jp = 53;
-   string desc_hobby_en = 54;
-   string desc_hobby_kr = 55;
-   string desc_chs = 56;
-   string desc_item_chs = 57;
-   string desc_chs_t = 58;
-   string desc_item_chs_t = 59;
-   string desc_jp = 60;
-   string desc_item_jp = 61;
-   string desc_en = 62;
-   string desc_item_en = 63;
-   string desc_kr = 64;
-   string desc_item_kr = 65;
-   uint32 collaboration = 66;
-   uint32 region_limit = 67;
-  repeated uint32 skin_lib = 68;
-   uint32 ur = 69;
-   uint32 ur_ron = 70;
-   uint32 ur_liqi = 71;
-   string ur_cutin = 72;
-   uint32 limited = 73;
-   uint32 treasure_sp = 74;
+   string sound_folder = 25;
+   uint32 sex = 26;
+   string desc_stature_chs = 27;
+   string desc_stature_chs_t = 28;
+   string desc_stature_jp = 29;
+   string desc_stature_en = 30;
+   string desc_stature_kr = 31;
+   string desc_birth_chs = 32;
+   string desc_birth_chs_t = 33;
+   string desc_birth_jp = 34;
+   string desc_birth_en = 35;
+   string desc_birth_kr = 36;
+   string desc_age_chs = 37;
+   string desc_age_chs_t = 38;
+   string desc_age_jp = 39;
+   string desc_age_en = 40;
+   string desc_age_kr = 41;
+   string desc_bloodtype_chs = 42;
+   string desc_bloodtype_chs_t = 43;
+   string desc_bloodtype_jp = 44;
+   string desc_bloodtype_en = 45;
+   string desc_bloodtype_kr = 46;
+   string desc_cv_chs = 47;
+   string desc_cv_chs_t = 48;
+   string desc_cv_jp = 49;
+   string desc_cv_en = 50;
+   string desc_cv_kr = 51;
+   string desc_hobby_chs = 52;
+   string desc_hobby_chs_t = 53;
+   string desc_hobby_jp = 54;
+   string desc_hobby_en = 55;
+   string desc_hobby_kr = 56;
+   string desc_chs = 57;
+   string desc_item_chs = 58;
+   string desc_chs_t = 59;
+   string desc_item_chs_t = 60;
+   string desc_jp = 61;
+   string desc_item_jp = 62;
+   string desc_en = 63;
+   string desc_item_en = 64;
+   string desc_kr = 65;
+   string desc_item_kr = 66;
+   uint32 collaboration = 67;
+   uint32 region_limit = 68;
+   repeated uint32 skin_lib = 69;
+   uint32 ur = 70;
+   uint32 ur_ron = 71;
+   uint32 ur_liqi = 72;
+   string ur_cutin = 73;
+   uint32 limited = 74;
+   uint32 treasure_sp = 75;
+   uint32 blink = 76;
 }
 
 message ItemDefinitionView {
@@ -1350,7 +1754,10 @@ message ItemDefinitionView {
    string res_name = 2;
    uint32 audio_id = 3;
    uint32 character_id = 4;
-  repeated string sargs = 5;
+   repeated string sargs = 5;
+   uint32 old_effect_mark = 6;
+   uint32 hand_version = 7;
+   uint32 seat_related = 8;
 }
 
 message ItemDefinitionSkin {
@@ -1364,15 +1771,15 @@ message ItemDefinitionSkin {
    string desc_chs = 8;
    string desc_chs_t = 9;
    string desc_jp = 10;
-   string desc_en = 11;
-   string desc_kr = 12;
-   string lock_tips_chs = 13;
+   string desc_jp2 = 11;
+   string desc_en = 12;
+   string desc_kr = 13;
    uint32 character_id = 14;
-   string lock_tips_chs_t = 15;
-   string lock_tips_jp = 16;
-   string lock_tips_en = 17;
-   string lock_tips_kr = 18;
-   string spot_scale = 19;
+   string lock_tips_chs = 15;
+   string lock_tips_chs_t = 16;
+   string lock_tips_jp = 17;
+   string lock_tips_en = 18;
+   string lock_tips_kr = 19;
    string path = 20;
    uint32 exchange_item_id = 21;
    int32 exchange_item_num = 22;
@@ -1381,25 +1788,25 @@ message ItemDefinitionSkin {
    uint32 lock_reverse = 25;
    int32 offset_x = 26;
    int32 offset_y = 27;
-   string effective_time = 28;
-   string lobby_offset = 29;
-   string liaoshe_offset = 30;
-   string shop_offset = 31;
-   string win_offset = 32;
-   string gameend_offset = 33;
-   string starup_offset = 34;
-   string treasure_offset = 35;
-   string ck_full_0_offset = 36;
-   string ck_full_1_offset = 37;
-   string ck_full_2_offset = 38;
-   string ck_full_3_offset = 39;
-   string ck_full_single_offset = 40;
-   string ck_half_0_offset = 41;
-   string ck_half_1_offset = 42;
-   string ck_half_2_offset = 43;
-   string ck_half_3_offset = 44;
-   string ck_half_single_offset = 45;
-   string field_46 = 46;
+   string spot_scale = 28;
+   string effective_time = 29;
+   string lobby_offset = 30;
+   string liaoshe_offset = 31;
+   string shop_offset = 32;
+   string win_offset = 33;
+   string gameend_offset = 34;
+   string starup_offset = 35;
+   string treasure_offset = 36;
+   string ck_full_0_offset = 37;
+   string ck_full_1_offset = 38;
+   string ck_full_2_offset = 39;
+   string ck_full_3_offset = 40;
+   string ck_full_single_offset = 41;
+   string ck_half_0_offset = 42;
+   string ck_half_1_offset = 43;
+   string ck_half_2_offset = 44;
+   string ck_half_3_offset = 45;
+   string ck_half_single_offset = 46;
    int32 smallhead_x = 47;
    int32 smallhead_y = 48;
    int32 smallhead_width = 49;
@@ -1423,7 +1830,7 @@ message ItemDefinitionSkin {
    int32 greeting_init = 67;
    int32 click2 = 68;
    int32 celebrate_idle = 69;
-   string field_70 = 70;
+   string illust_data = 70;
 }
 
 message ItemDefinitionItemRecovery {
@@ -1449,8 +1856,8 @@ message ItemDefinitionItemPackage {
 
 message ItemDefinitionFakeRandomPool {
    uint32 id = 1;
-  repeated uint32 stage_count = 2;
-  repeated uint32 stage_weight = 3;
+   repeated uint32 stage_count = 2;
+   repeated uint32 stage_weight = 3;
 }
 
 message ItemDefinitionLoadingImage {
@@ -1458,13 +1865,14 @@ message ItemDefinitionLoadingImage {
    string img_path = 2;
    string thumb_path = 3;
    uint32 sort = 4;
-  repeated uint32 unlock_items = 5;
+   repeated uint32 unlock_items = 5;
+   repeated uint32 args = 6;
 }
 
 message ItemDefinitionFunctionItem {
    uint32 id = 1;
    uint32 type = 2;
-  repeated uint32 args = 3;
+   repeated uint32 args = 3;
    uint32 name = 4;
    uint32 desc_func = 5;
    uint32 desc = 6;
@@ -1530,8 +1938,8 @@ message LevelDefinitionTrail {
 
 message LevelDefinitionTopRank {
    uint32 id = 1;
-  repeated int32 rank_pt = 2;
-  repeated int32 top_rank_pt = 3;
+   repeated int32 rank_pt = 2;
+   repeated int32 top_rank_pt = 3;
    uint32 mode = 4;
 }
 
@@ -1673,14 +2081,106 @@ message MiscFunctionDailySignIn {
    uint32 reward_count = 3;
 }
 
+message OutfitConfigRon {
+   uint32 id = 1;
+   uint32 is_fullscreen = 2;
+   uint32 queue_change_delay = 3;
+}
+
+message OutfitConfigLiqi {
+   uint32 id = 1;
+   string hide_direction = 2;
+}
+
+message OutfitConfigEffectLiqi {
+   uint32 id = 1;
+}
+
+message OutfitConfigMpzs {
+   uint32 id = 1;
+}
+
+message OutfitConfigTablecloth {
+   uint32 id = 1;
+}
+
+message OutfitConfigMjp {
+   uint32 id = 1;
+}
+
+message OutfitConfigMjpface {
+   uint32 id = 1;
+}
+
+message OutfitConfigHeadframe {
+   uint32 id = 1;
+}
+
+message OutfitConfigHand {
+   uint32 id = 1;
+}
+
+message QuestCrewQcInfo {
+   uint32 id = 1;
+   uint32 character_pool_id = 2;
+   uint32 quest_pool_id = 3;
+   string refresh_market_price = 4;
+   uint32 market_count = 5;
+   string character_charging_price = 6;
+   uint32 great_success_effect_ceo = 7;
+   uint32 great_success_ceo = 8;
+   repeated uint32 init_character_id = 9;
+}
+
+message QuestCrewQcCharacterPool {
+   uint32 id = 1;
+   uint32 character_id = 2;
+   uint32 sta = 3;
+   uint32 str = 4;
+   uint32 spd = 5;
+   uint32 luc = 6;
+   uint32 effect = 7;
+   uint32 show_in_market = 8;
+   string hiring_price = 9;
+   uint32 item_id = 10;
+   uint32 name = 11;
+   uint32 skill = 12;
+   string npc_code = 13;
+   uint32 display_change = 14;
+}
+
+message QuestCrewQcEffect {
+   uint32 id = 1;
+   uint32 type = 2;
+   repeated int32 args = 3;
+}
+
+message QuestCrewQcQuestPool {
+   uint32 id = 1;
+   uint32 quest_id = 2;
+   uint32 sort = 3;
+   uint32 type = 4;
+   uint32 str = 5;
+   uint32 spd = 6;
+   uint32 luc = 7;
+   uint32 unlock_days = 8;
+   uint32 consume = 9;
+   uint32 rewards = 10;
+   uint32 client = 11;
+   uint32 character_id = 12;
+   uint32 client_name = 13;
+   uint32 quest_desc = 14;
+   string npc_code = 15;
+}
+
 message RankIntroduceRank {
    uint32 id = 1;
-  repeated string info = 2;
+   repeated string info = 2;
 }
 
 message RankIntroduceRank3 {
    uint32 id = 1;
-  repeated string info = 2;
+   repeated string info = 2;
 }
 
 message SeasonSeason {
@@ -1694,10 +2194,11 @@ message SeasonSeason {
    uint32 point_item_id = 8;
    uint32 point_consume = 9;
    string desc_chs = 10;
-   string desc_jp = 11;
-   string desc_en = 12;
-   string desc_chs_t = 13;
-   uint32 desktop_type = 14;
+   string desc_chs_t = 11;
+   string desc_jp = 12;
+   string desc_en = 13;
+   string desc_kr = 14;
+   uint32 desktop_type = 15;
 }
 
 message SeasonLevelTicket {
@@ -1705,7 +2206,7 @@ message SeasonLevelTicket {
    uint32 level = 2;
    uint32 game_count = 3;
    uint32 weight = 4;
-  repeated uint32 task = 5;
+   repeated uint32 task = 5;
    string reward = 6;
 }
 
@@ -1727,6 +2228,39 @@ message SeasonSeasonReward {
    uint32 rank_lower = 2;
    uint32 rank_upper = 3;
    string rewards = 4;
+}
+
+message ShootShootInfo {
+   uint32 activity_id = 1;
+   uint32 missions_group_id = 2;
+   uint32 level_count = 3;
+   uint32 bullet_item_id = 4;
+}
+
+message ShootShootMission {
+   uint32 group_id = 1;
+   uint32 level = 2;
+   uint32 enemy_group_id = 3;
+}
+
+message ShootShootEnemy {
+   uint32 group_id = 1;
+   uint32 enemy_id = 2;
+   uint32 hp = 3;
+   uint32 reward_group_id = 4;
+   uint32 x = 5;
+   uint32 y = 6;
+   uint32 width = 7;
+}
+
+message ShootShootReward {
+   uint32 group_id = 1;
+   uint32 reward_id = 2;
+   string reward = 3;
+   uint32 reward_level = 4;
+   uint32 star_num = 5;
+   uint32 reward_merge = 6;
+   uint32 activity_id = 7;
 }
 
 message ShopsZhpGoods {
@@ -1770,16 +2304,17 @@ message ShopsGoods {
    string desc_kr = 14;
    uint32 item_id = 15;
    string price = 16;
-   uint32 need_amount = 17;
-   int32 buy_limit = 18;
-   int32 show_has = 19;
-   uint32 sort = 20;
-   uint32 discount = 21;
-   uint32 sell_activity = 22;
-   string launch_time = 23;
-   string func = 24;
-   uint32 discount_activity = 25;
-   string zone = 26;
+   string show_original_price = 17;
+   uint32 need_amount = 18;
+   int32 buy_limit = 19;
+   int32 show_has = 20;
+   uint32 sort = 21;
+   uint32 discount = 22;
+   uint32 sell_activity = 23;
+   string launch_time = 24;
+   string func = 25;
+   uint32 discount_activity = 26;
+   string zone = 27;
 }
 
 message ShopsGoodsPackage {
@@ -1798,6 +2333,144 @@ message ShopsIntervalRefreshGoods {
 message ShopsItemPackage {
    uint32 id = 1;
    string item_info = 2;
+}
+
+message ShopsSelectedPackage {
+   uint32 id = 1;
+   uint32 goods_id = 2;
+   string price = 3;
+}
+
+message SimulationSimV2Info {
+   uint32 activity_id = 1;
+   uint32 player_chara_id = 2;
+   uint32 event_group_id = 3;
+   uint32 train_result_fail = 4;
+   uint32 train_result_normal = 5;
+   uint32 train_result_great = 6;
+   uint32 train_cap = 7;
+   uint32 find_ting_adj = 8;
+   int32 shunweima_2 = 9;
+   int32 shunweima_3 = 10;
+   int32 shunweima_4 = 11;
+   uint32 match_event_cd = 12;
+   string show_arrow_buff = 13;
+   string add_sub_buff = 14;
+   string attribute_add_buff = 15;
+   uint32 arrow_amount_12001 = 16;
+   uint32 arrow_amount_12002 = 17;
+   uint32 arrow_amount_12004 = 18;
+   uint32 arrow_amount_12005 = 19;
+   uint32 arrow_amount_12014 = 20;
+}
+
+message SimulationSimV2Round {
+   uint32 activity_id = 1;
+   uint32 round_id = 2;
+   uint32 round_type = 3;
+}
+
+message SimulationSimV2Character {
+   uint32 activity_id = 1;
+   uint32 id = 2;
+   uint32 luk = 3;
+   uint32 tec = 4;
+   uint32 ins = 5;
+   uint32 int = 6;
+   uint32 res = 7;
+   uint32 leaderboard_score = 8;
+   string show_round = 9;
+}
+
+message SimulationSimV2Roll {
+   uint32 event_group_id = 1;
+   uint32 name = 2;
+   uint32 value = 3;
+   uint32 weight = 4;
+}
+
+message SimulationSimV2Event {
+   uint32 event_group_id = 1;
+   uint32 event_id = 2;
+   uint32 event_title = 3;
+   uint32 event_desc = 4;
+   uint32 type = 5;
+   uint32 cd_round = 6;
+   uint32 trigger_rate = 7;
+   uint32 trigger_sort = 8;
+   repeated uint32 trigger = 9;
+}
+
+message SimulationSimV2Trigger {
+   uint32 trigger_id = 1;
+   uint32 type = 2;
+   repeated string param = 3;
+}
+
+message SimulationSimV2Selection {
+   uint32 event_id = 1;
+   uint32 selection_id = 2;
+   uint32 selection_desc = 3;
+   uint32 type = 4;
+   repeated string check = 5;
+   repeated uint32 args = 6;
+}
+
+message SimulationSimV2Effect {
+   uint32 effect_id = 1;
+   int32 luk = 2;
+   int32 tec = 3;
+   int32 ins = 4;
+   int32 int = 5;
+   int32 res = 6;
+   int32 effect_title = 7;
+   int32 effect_desc = 8;
+}
+
+message SimulationSimV2SelectionResult {
+   uint32 selection_id = 1;
+   uint32 selection_result_id = 2;
+   uint32 selection_result_type = 3;
+   uint32 initial_weight = 4;
+   int32 luk = 5;
+   int32 tec = 6;
+   int32 ins = 7;
+   int32 int = 8;
+   int32 res = 9;
+   repeated uint32 effect = 10;
+   repeated uint32 buff = 11;
+}
+
+message SimulationSimV2Buff {
+   uint32 buff_id = 1;
+   uint32 buff_result_desc = 2;
+   uint32 buff_desc = 3;
+   uint32 type = 4;
+   uint32 match_effect = 5;
+   repeated string param = 6;
+}
+
+message SimulationSimV2Upgrade {
+   uint32 activity_id = 1;
+   uint32 skill_point = 2;
+   uint32 limit = 3;
+   uint32 item_id = 4;
+}
+
+message SimulationSimV2Story {
+   uint32 activity_id = 1;
+   uint32 story_id = 2;
+   uint32 trigger_type = 3;
+   uint32 weight = 4;
+   uint32 str_id = 5;
+   repeated uint32 args = 6;
+}
+
+message SimulationSimV2Reward {
+   uint32 activity_id = 1;
+   uint32 rank = 2;
+   uint32 ability = 3;
+   uint32 random_effect = 4;
 }
 
 message SpotSpot {
@@ -1823,7 +2496,7 @@ message SpotSpot {
    string content_en = 20;
    string content_kr = 21;
    string content_path = 22;
-  repeated uint32 jieju = 23;
+   repeated uint32 jieju = 23;
 }
 
 message SpotRewards {
@@ -1842,24 +2515,27 @@ message SpotEvent {
    uint32 activity_id = 2;
    uint32 key_item_id = 3;
    uint32 key_amount = 4;
-   uint32 sort = 5;
-   string unlock_time = 6;
-   string content_path = 7;
-   string title_chs = 8;
-   string title_chs_t = 9;
-   string title_jp = 10;
-   string title_en = 11;
-   string title_kr = 12;
-   string subtitle_chs = 13;
-   string subtitle_chs_t = 14;
-   string subtitle_jp = 15;
-   string subtitle_en = 16;
-   string subtitle_kr = 17;
-   string content_chs = 18;
-   string content_chs_t = 19;
-   string content_jp = 20;
-   string content_en = 21;
-   string content_kr = 22;
+   uint32 unlock_task_id = 5;
+   uint32 sort = 6;
+   string unlock_time = 7;
+   string content_path = 8;
+   string title_chs = 9;
+   string title_chs_t = 10;
+   string title_jp = 11;
+   string title_en = 12;
+   string title_kr = 13;
+   string subtitle_chs = 14;
+   string subtitle_chs_t = 15;
+   string subtitle_jp = 16;
+   string subtitle_en = 17;
+   string subtitle_kr = 18;
+   string content_chs = 19;
+   string content_chs_t = 20;
+   string content_jp = 21;
+   string content_en = 22;
+   string content_kr = 23;
+   repeated uint32 ending_id = 24;
+   string ending_res = 25;
 }
 
 message SpotCharacterSpot {
@@ -1928,7 +2604,7 @@ message SpotCharacterSpot {
    string desc_kr = 63;
    string desc_item_kr = 64;
    uint32 collaboration = 65;
-  repeated uint32 skin_lib = 66;
+   repeated uint32 skin_lib = 66;
    uint32 ur = 67;
    uint32 ur_ron = 68;
    uint32 ur_liqi = 69;
@@ -2006,6 +2682,7 @@ message SpotSkinSpot {
    int32 greeting_init = 66;
    int32 click2 = 67;
    int32 celebrate_idle = 68;
+   string illust_data = 69;
 }
 
 message SpotAudioSpot {
@@ -2103,7 +2780,7 @@ message VipVip {
    uint32 buddy_bonus = 18;
    uint32 favourite_limit = 19;
    uint32 title_id = 20;
-  repeated string rewards = 21;
+   repeated string rewards = 21;
 }
 
 message VoiceSound {
@@ -2148,5 +2825,6 @@ message VoiceSpot {
    uint32 character = 2;
    uint32 type = 3;
    string path = 4;
+   string type_desc = 5;
 }
 
