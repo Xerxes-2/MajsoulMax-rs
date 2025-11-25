@@ -103,11 +103,12 @@ macOS 或 Linux 用户，可以参考 Windows 的步骤，步骤 3 有所不同�
 在配置分流规则前，请先在系统中导入并信任 `hudsucker.cer` 根证书（可从 [omjadas/hudsucker](https://github.com/omjadas/hudsucker/blob/main/examples/ca/hudsucker.cer) 下载），否则 HTTPS 流量可能会因为证书校验失败而无法正常工作。
 
 > [!CAUTION]
-> 本地客户端 / Steam 端等进程需要在代理软件中开启 `TUN` / 增强模式，才能保证进程流量经过 `majsoul_max_rs`；
+> 
+> 本地客户端 / Steam 端等进程需要在代理软件中开启 `TUN` / 增强模式，才能保证进程流量经过 `majsoul_max_rs`；但请务必注意避免回环代理，即你要保证从 `majsoul_max_rs` 发出的流量不会被分流回自身。
 >
 > 网页版（浏览器）一般只要正确配置系统代理或域名规则即可，通常不需要开启增强模式。
 
-### 使用 Clash 分流（本地 Rust 版本）
+### 使用 Clash 分流
 
 ```yml
 proxies:
@@ -125,13 +126,25 @@ proxy-groups:
           - DIRECT
 
 rules:
-    # 客户端 / Steam（推荐）
+    # 必须有这两条，否则会导致回环代理
+    - PROCESS-NAME,majsoul_max_rs,DIRECT
+    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
+    # 下面两部分可选，根据你的游戏平台选择其一即可
+    # 客户端 / Steam
     - PROCESS-NAME,雀魂麻將,🀄 雀魂麻将
     - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 雀魂麻将
     - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 雀魂麻将
+    # 网页版（浏览器）
+    - DOMAIN-KEYWORD,majsoul,🀄 雀魂麻将
+    - DOMAIN-KEYWORD,maj-soul,🀄 雀魂麻将
+    - DOMAIN-KEYWORD,catmjstudio,🀄 雀魂麻将
+    - DOMAIN-KEYWORD,catmajsoul,🀄 雀魂麻将
+    - IP-CIDR,146.66.155.0/24,🀄 雀魂麻将
+    - IP-CIDR,185.25.182.18/32,🀄 雀魂麻将
+    - IP-CIDR,203.107.63.200/32,🀄 雀魂麻将
 ```
 
-### 使用 Surge 分流（本地 Rust 版本）
+### 使用 Surge 分流
 
 ```text
 [Proxy]
@@ -141,14 +154,24 @@ MajsoulMax-rs = http, 127.0.0.1, 23410
 🀄 雀魂麻将 = select, MajsoulMax-rs, DIRECT
 
 [Rule]
+# 必须有这条，否则会导致回环代理
+PROCESS-NAME,majsoul_max_rs,DIRECT
+# 下面两部分可选，根据你的游戏平台选择其一即可
+# 客户端 / Steam
 PROCESS-NAME,雀魂麻將,🀄 雀魂麻将
-PROCESS-NAME,jantama_mahjongsoul.exe,🀄 雀魂麻将
-PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 雀魂麻将
+# 网页版（浏览器）
+DOMAIN-KEYWORD,majsoul,🀄 雀魂麻将
+DOMAIN-KEYWORD,maj-soul,🀄 雀魂麻将
+DOMAIN-KEYWORD,catmjstudio,🀄 雀魂麻将
+DOMAIN-KEYWORD,catmajsoul,🀄 雀魂麻将
+IP-CIDR,146.66.155.0/24,🀄 雀魂麻将
+IP-CIDR,185.25.182.18/32,🀄 雀魂麻将
+IP-CIDR,203.107.63.200/32,🀄 雀魂麻将
 ```
 
-### 网页版 / 无法使用进程名规则的场景
+### 无法使用进程名规则的场景
 
-如果你是网页版、iOS / iPadOS 等无法使用 `PROCESS-NAME` 规则的平台，可以改用域名关键字或 IP 分流（Clash 示例）：
+如果你是 iOS / iPadOS 等无法使用 `PROCESS-NAME` 规则的平台，可以仿照网页版使用域名关键字或 IP 分流（Clash 示例），但此时需要分离部署 `majsoul_max_rs`，也即其不能和你的主机在同一机子上，否则会导致回环代理，分离部署可以考虑将代理节点部署在 VPS 上，参见 [MajsoulMax-rs-docker](https://github.com/zhuozhiyongde/MajsoulMax-rs-docker)
 
 ```yml
 rules:
@@ -160,6 +183,8 @@ rules:
     - IP-CIDR,185.25.182.18/32,🀄 雀魂麻将
     - IP-CIDR,203.107.63.200/32,🀄 雀魂麻将
 ```
+
+### 覆写配置示例
 
 如果你使用的是支持覆写的代理客户端（如 `Clash Verge`、`Mihomo Party` 或支持覆写配置的 `Surge`），建议将上述节点与规则写在单独的覆写文件中，需要玩雀魂时再一键启用。
 
@@ -179,11 +204,17 @@ rules:
          - MajsoulMax-rs
          - DIRECT
 +rules:
-    # 客户端 / Steam（推荐）
+    # 必须有这两条，否则会导致回环代理
+    - PROCESS-NAME,majsoul_max_rs,DIRECT
+    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
+    # 下面两部分可选，根据你的游戏平台选择其一即可
+    # 客户端 / Steam
+    - PROCESS-NAME,majsoul_max_rs,DIRECT
+    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
     - PROCESS-NAME,雀魂麻將,🀄 雀魂麻将
     - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 雀魂麻将
     - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 雀魂麻将
-    # 网页版（浏览器 / iOS / iPadOS）
+    # 网页版（浏览器）
     - DOMAIN-KEYWORD,majsoul,🀄 雀魂麻将
     - DOMAIN-KEYWORD,maj-soul,🀄 雀魂麻将
     - DOMAIN-KEYWORD,catmjstudio,🀄 雀魂麻将

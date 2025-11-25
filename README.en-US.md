@@ -31,16 +31,20 @@ This tool is completely free and open-source. If you paid for it, you've been sc
 
 ## 📢 Before You Start
 
-Note: Unlocking characters is only effective locally; others will still see your original character and emojis.
+Note: Unlocking characters is only effective locally; others will still see your original character and emojis. For example, sending the 3rd emoji of the new character still appears as the 3rd emoji of your original character to everyone else.
 
 > [!CAUTION]
-> Mod at your own risk — safety comes first.
+> Mod responsibly—safety always comes first.
 >
-> This project is for learning and research only; delete it within 24 hours of download and do not use it for commercial purposes.
+> Improper use or careless configuration may get your account banned.
 >
-> The official Mahjong Soul service may detect this and ban your account.
+> This project is for learning, research, and communication only; delete it within 24 hours of download and never use it for commercial purposes, otherwise you bear all consequences.
 >
-> Any consequences are solely your responsibility; using this project means you accept these terms.
+> Mahjong Soul's official servers may detect this project and ban your account; the authors assume no liability for any result.
+>
+> Using this project means you acknowledge and agree to all of the above.
+
+![Deal-in meme](https://memeprod.ap-south-1.linodeobjects.com/user-gif-post/1647655593730.gif)
 
 ## ✈️ Telegram Channel & Group
 
@@ -52,7 +56,7 @@ You can click the images to join or scan the QR codes.
 
 ## 🥰 Current Features
 
-The program consists of two parts: `mod` and `helper`, which are a combination of [Mahjong Soul mod_plus](https://github.com/Avenshy/mahjong_mod_plus) and [mahjong-helper-mahjong-mitmproxy](https://github.com/Avenshy/mahjong-helper-mahjong-mitmproxy).
+The program consists of two parts: `mod` and `helper`, combining [Majsoul mod_plus](https://github.com/Avenshy/majsoul_mod_plus) and [mahjong-helper-majsoul-mitmproxy](https://github.com/Avenshy/mahjong-helper-majsoul-mitmproxy).
 
 The default configuration enables `helper` and disables `mod`. To customize, modify the `mod_switch` and `helper_switch` in `./liqi_config/settings.json`.
 
@@ -82,10 +86,12 @@ The default configuration enables `helper` and disables `mod`. To customize, mod
     - In `liqi_config/settings.json`, set the universal settings including toggles for Helper and Mod—`modSwitch` and `helperSwitch`, `false` is off, `true` is on.
     - In `liqi_config/settings.mod.json`, set the Mod-specific settings.
 2. Start the program by running the executable file.
-3. Start the game, either the web version or the client/Steam version. Make sure Mahjong Soul traffic goes through the local `majsoul_max_rs` HTTP proxy (listening on `127.0.0.1:23410`). It is recommended to use a rule-based proxy client such as `Clash` or `Surge` (with configuration overrides) — see the “Proxy & Routing” section below for examples.
+3. Start the game (web or client/Steam) and make sure all Mahjong Soul traffic goes through the local `majsoul_max_rs` HTTP proxy (it listens on `127.0.0.1:23410` by default). A rule-based proxy client such as `Clash` or `Surge` (with configuration overrides) makes this easy—see “Proxy & Routing” for concrete examples.
+    - Web version: usually you only need the browser to honor the system proxy or apply the domain rules, without enabling `TUN` / enhanced mode.
+    - Client / Steam: likewise split the game process traffic to `majsoul_max_rs` via `Clash` / `Surge`, but you **must** enable `TUN` / enhanced mode in the proxy client or the local process traffic will not be hijacked.
 4. Log in to the game and enjoy.
 
-Instructions for macOS and Linux are similar.
+macOS or Linux users can follow the same flow; only the proxy setup in step 3 differs slightly.
 
 For the Android version, assuming you are technically proficient, only key terms are provided here: `Termux`, `NekoBox`, effective only on game route 1.
 
@@ -96,11 +102,11 @@ For the Android version, assuming you are technically proficient, only key terms
 Before routing traffic through it, import and trust the `hudsucker.cer` root certificate in your operating system (you can download it from the [hudsucker](https://github.com/omjadas/hudsucker/blob/main/examples/ca/hudsucker.cer)); otherwise HTTPS handshakes may fail due to certificate verification.
 
 > [!CAUTION]
-> For native clients / Steam, enable `TUN` / enhanced mode in your proxy client so that the game process traffic actually passes through `majsoul_max_rs`.
+> For native clients / Steam, enable `TUN` / enhanced mode in your proxy client so the game process traffic actually passes through `majsoul_max_rs`, and make sure traffic leaving `majsoul_max_rs` is not routed back to itself (avoiding loopback proxies).
 >
 > For the web version in a browser, enhanced mode is usually unnecessary as long as the browser follows the system proxy or correct domain rules.
 
-### Clash example (local Rust version)
+### Using Clash for Routing
 
 ```yml
 proxies:
@@ -118,13 +124,25 @@ proxy-groups:
           - DIRECT
 
 rules:
-    # Client / Steam (recommended)
+    # Required to avoid loopback routing
+    - PROCESS-NAME,majsoul_max_rs,DIRECT
+    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
+    # Choose the section below that matches your platform
+    # Client / Steam
     - PROCESS-NAME,雀魂麻將,🀄 Majsoul
     - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 Majsoul
     - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 Majsoul
+    # Web (browser)
+    - DOMAIN-KEYWORD,majsoul,🀄 Majsoul
+    - DOMAIN-KEYWORD,maj-soul,🀄 Majsoul
+    - DOMAIN-KEYWORD,catmjstudio,🀄 Majsoul
+    - DOMAIN-KEYWORD,catmajsoul,🀄 Majsoul
+    - IP-CIDR,146.66.155.0/24,🀄 Majsoul
+    - IP-CIDR,185.25.182.18/32,🀄 Majsoul
+    - IP-CIDR,203.107.63.200/32,🀄 Majsoul
 ```
 
-### Surge example (local Rust version)
+### Using Surge for Routing
 
 ```text
 [Proxy]
@@ -134,14 +152,26 @@ MajsoulMax-rs = http, 127.0.0.1, 23410
 🀄 Majsoul = select, MajsoulMax-rs, DIRECT
 
 [Rule]
+# Required to avoid loopback routing
+PROCESS-NAME,majsoul_max_rs,DIRECT
+# Choose the section below that matches your platform
+# Client / Steam
 PROCESS-NAME,雀魂麻將,🀄 Majsoul
 PROCESS-NAME,jantama_mahjongsoul.exe,🀄 Majsoul
 PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 Majsoul
+# Web (browser)
+DOMAIN-KEYWORD,majsoul,🀄 Majsoul
+DOMAIN-KEYWORD,maj-soul,🀄 Majsoul
+DOMAIN-KEYWORD,catmjstudio,🀄 Majsoul
+DOMAIN-KEYWORD,catmajsoul,🀄 Majsoul
+IP-CIDR,146.66.155.0/24,🀄 Majsoul
+IP-CIDR,185.25.182.18/32,🀄 Majsoul
+IP-CIDR,203.107.63.200/32,🀄 Majsoul
 ```
 
-### Web / platforms without PROCESS-NAME rules
+### Web / Platforms Without PROCESS-NAME Rules
 
-If you play in a browser or on platforms that ignore `PROCESS-NAME` (e.g. iOS / iPadOS), use domain/IP rules instead (Clash example):
+If you play in a browser or on platforms that cannot use `PROCESS-NAME` rules (e.g. iOS / iPadOS), mimic the domain/IP rules used for the web version (Clash example below). In this scenario you must deploy `majsoul_max_rs` on a different machine (for example via [MajsoulMax-rs-docker](https://github.com/zhuozhiyongde/MajsoulMax-rs-docker) on a VPS), otherwise routing Mahjong Soul traffic to a local `majsoul_max_rs` node will create a loopback proxy.
 
 ```yml
 rules:
@@ -172,7 +202,11 @@ Override example:
          - MajsoulMax-rs
          - DIRECT
 +rules:
-    # Client / Steam (recommended)
+    # Required to avoid loopback routing
+    - PROCESS-NAME,majsoul_max_rs,DIRECT
+    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
+    # Choose the section below that matches your platform
+    # Client / Steam
     - PROCESS-NAME,雀魂麻將,🀄 Majsoul
     - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 Majsoul
     - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 Majsoul
