@@ -1,5 +1,5 @@
 
-´ò
+³ô
 
 liqi.protolq"Ž
 NotifyRoomGameStart
@@ -5109,7 +5109,13 @@ activityIdG
 ResBingoActivityReceiveReward
 error (2	.lq.ErrorRerror8
 execute_result (2.lq.ExecuteResultRexecuteResult/
-cards (2.lq.ActivityBingoCardDataRcards"a
+cards (2.lq.ActivityBingoCardDataRcards"<
+ReqFetchBingoActivityData
+activity_id (R
+activityId"g
+ResFetchBingoActivityData
+error (2	.lq.ErrorRerror)
+data (2.lq.ActivityBingoDataRdata"a
 AmuletBadgeData
 id (Rid
 uid (Ruid
@@ -6402,7 +6408,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2òÜ
+READY2ÊÝ
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -6809,7 +6815,8 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 questCrewActivityHire.lq.ReqQuestCrewActivityHire.lq.ResQuestCrewActivityHireS
 questCrewActivityFeed.lq.ReqQuestCrewActivityFeed.lq.ResQuestCrewActivityFeedn
 questCrewActivityRefreshMarket%.lq.ReqQuestCrewActivityRefreshMarket%.lq.ResQuestCrewActivityRefreshMarketb
-bingoActivityReceiveReward!.lq.ReqBingoActivityReceiveReward!.lq.ResBingoActivityReceiveReward2õ
+bingoActivityReceiveReward!.lq.ReqBingoActivityReceiveReward!.lq.ResBingoActivityReceiveRewardV
+fetchBingoActivityData.lq.ReqFetchBingoActivityData.lq.ResFetchBingoActivityData2õ
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,
