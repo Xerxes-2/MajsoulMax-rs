@@ -190,17 +190,17 @@ Override example:
 
 ```yml
 +proxies:
-   - name: MajsoulMax-rs
-   type: http
-   server: 127.0.0.1
-   port: 23410
-   tls: false
+    - name: MajsoulMax-rs
+      type: http
+      server: 127.0.0.1
+      port: 23410
+      tls: false
 +proxy-groups:
-   - name: 🀄 Majsoul
-   type: select
-   proxies:
-         - MajsoulMax-rs
-         - DIRECT
+    - name: 🀄 Majsoul
+      type: select
+      proxies:
+          - MajsoulMax-rs
+          - DIRECT
 +rules:
     # Required to avoid loopback routing
     - PROCESS-NAME,majsoul_max_rs,DIRECT
@@ -218,6 +218,7 @@ Override example:
     - IP-CIDR,146.66.155.0/24,🀄 Majsoul
     - IP-CIDR,185.25.182.18/32,🀄 Majsoul
     - IP-CIDR,203.107.63.200/32,🀄 Majsoul
+
 ```
 
 ## 🤔 Q&A

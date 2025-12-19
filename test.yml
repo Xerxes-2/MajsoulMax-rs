@@ -1,0 +1,29 @@
++proxies:
+    - name: MajsoulMax-rs
+      type: http
+      server: 127.0.0.1
+      port: 23410
+      tls: false
++proxy-groups:
+    - name: 🀄 Majsoul
+      type: select
+      proxies:
+          - MajsoulMax-rs
+          - DIRECT
++rules:
+    # Required to avoid loopback routing
+    - PROCESS-NAME,majsoul_max_rs,DIRECT
+    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
+    # Choose the section below that matches your platform
+    # Client / Steam
+    - PROCESS-NAME,雀魂麻將,🀄 Majsoul
+    - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 Majsoul
+    - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 Majsoul
+    # Web version (browser / iOS / iPadOS)
+    - DOMAIN-KEYWORD,majsoul,🀄 Majsoul
+    - DOMAIN-KEYWORD,maj-soul,🀄 Majsoul
+    - DOMAIN-KEYWORD,catmjstudio,🀄 Majsoul
+    - DOMAIN-KEYWORD,catmajsoul,🀄 Majsoul
+    - IP-CIDR,146.66.155.0/24,🀄 Majsoul
+    - IP-CIDR,185.25.182.18/32,🀄 Majsoul
+    - IP-CIDR,203.107.63.200/32,🀄 Majsoul
