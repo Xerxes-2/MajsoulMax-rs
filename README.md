@@ -126,9 +126,8 @@ proxy-groups:
           - DIRECT
 
 rules:
-    # 必须有这两条，否则会导致回环代理
-    - PROCESS-NAME,majsoul_max_rs,DIRECT
-    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
+    # 必须有这条，否则会导致回环代理
+    - PROCESS-NAME-REGEX,majsoul_max_rs.*?,DIRECT
     # 下面两部分可选，根据你的游戏平台选择其一即可
     # 客户端 / Steam
     - PROCESS-NAME,雀魂麻將,🀄 雀魂麻将
@@ -137,11 +136,9 @@ rules:
     # 网页版（浏览器）
     - DOMAIN-KEYWORD,majsoul,🀄 雀魂麻将
     - DOMAIN-KEYWORD,maj-soul,🀄 雀魂麻将
+    - DOMAIN-KEYWORD,mahjongsoul.com,🀄 雀魂麻将
     - DOMAIN-KEYWORD,catmjstudio,🀄 雀魂麻将
     - DOMAIN-KEYWORD,catmajsoul,🀄 雀魂麻将
-    - IP-CIDR,146.66.155.0/24,🀄 雀魂麻将
-    - IP-CIDR,185.25.182.18/32,🀄 雀魂麻将
-    - IP-CIDR,203.107.63.200/32,🀄 雀魂麻将
 ```
 
 ### 使用 Surge 分流
@@ -159,14 +156,12 @@ PROCESS-NAME,majsoul_max_rs,DIRECT
 # 下面两部分可选，根据你的游戏平台选择其一即可
 # 客户端 / Steam
 PROCESS-NAME,雀魂麻將,🀄 雀魂麻将
-# 网页版（浏览器）
+# 网页版
 DOMAIN-KEYWORD,majsoul,🀄 雀魂麻将
 DOMAIN-KEYWORD,maj-soul,🀄 雀魂麻将
+DOMAIN-KEYWORD,mahjongsoul.com,🀄 雀魂麻将
 DOMAIN-KEYWORD,catmjstudio,🀄 雀魂麻将
 DOMAIN-KEYWORD,catmajsoul,🀄 雀魂麻将
-IP-CIDR,146.66.155.0/24,🀄 雀魂麻将
-IP-CIDR,185.25.182.18/32,🀄 雀魂麻将
-IP-CIDR,203.107.63.200/32,🀄 雀魂麻将
 ```
 
 ### 无法使用进程名规则的场景
@@ -177,18 +172,67 @@ IP-CIDR,203.107.63.200/32,🀄 雀魂麻将
 rules:
     - DOMAIN-KEYWORD,majsoul,🀄 雀魂麻将
     - DOMAIN-KEYWORD,maj-soul,🀄 雀魂麻将
+    - DOMAIN-KEYWORD,mahjongsoul.com,🀄 雀魂麻将
     - DOMAIN-KEYWORD,catmjstudio,🀄 雀魂麻将
     - DOMAIN-KEYWORD,catmajsoul,🀄 雀魂麻将
-    - IP-CIDR,146.66.155.0/24,🀄 雀魂麻将
-    - IP-CIDR,185.25.182.18/32,🀄 雀魂麻将
-    - IP-CIDR,203.107.63.200/32,🀄 雀魂麻将
 ```
 
 ### 覆写配置示例
 
-如果你使用的是支持覆写的代理客户端（如 `Clash Verge`、`Mihomo Party` 或支持覆写配置的 `Surge`），建议将上述节点与规则写在单独的覆写文件中，需要玩雀魂时再一键启用。
 
-覆写示例：
+如果你使用的是支持覆写的代理客户端（如 `Clash Verge`、`Clash Party` 或支持覆写配置的 `Surge`），建议将上述节点与规则写在单独的覆写文件 / 全局脚本中，需要玩雀魂时再一键启用。
+
+#### Clash Verge 全局扩展脚本（JS）示例
+
+参考 [官方文档](https://www.clashverge.dev/guide/script.html)，可以按照如下方法进行配置。
+
+在 “订阅” 页面右键 `全局扩展脚本`，选择 “编辑文件”:
+
+```js
+function main(config) {
+    config.proxies.push({
+        name: 'MajsoulMax',
+        type: 'http',
+        server: '127.0.0.1',
+        port: 23410,
+        tls: false,
+    });
+
+    config['proxy-groups'].push({
+        name: '🀄 雀魂麻将',
+        type: 'select',
+        proxies: ['DIRECT', 'MajsoulMax'],
+        icon: 'https://www.maj-soul.com/homepage/img/logotaiwan.png',
+    });
+
+    const bypass = [
+        'PROCESS-NAME-REGEX,majsoul_max_rs.*?,DIRECT',
+    ];
+
+    const clientRules = [
+        'PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 雀魂麻将',
+        'PROCESS-NAME,jantama_mahjongsoul.exe,🀄 雀魂麻将',
+        'PROCESS-NAME,雀魂麻將,🀄 雀魂麻将',
+    ];
+
+    const webRules = [
+        'DOMAIN-KEYWORD,majsoul,🀄 雀魂麻将',
+        'DOMAIN-KEYWORD,maj-soul,🀄 雀魂麻将',
+        'DOMAIN-KEYWORD,mahjongsoul.com,🀄 雀魂麻将',
+        'DOMAIN-KEYWORD,catmjstudio,🀄 雀魂麻将',
+        'DOMAIN-KEYWORD,catmajsoul,🀄 雀魂麻将',
+    ];
+
+    config.rules.unshift(...bypass, ...clientRules, ...webRules);
+    return config;
+}
+```
+
+#### Clash Party（原 Mihomo Party）覆写示例：
+
+参考 [官方文档](https://clashparty.org/docs/guide/override/yaml)），可以按照如下方式进行配置。
+
+在 Clash Party 左侧 `覆写` 页面点击 `+` 号，选择 `新建 YAML`，然后复制如下内容，点击 `确认` 保存，然后点击对应覆写卡片右上角的 `...` 图标，选择 `编辑信息` - `全局启用`。
 
 ```yml
 +proxies:
@@ -204,24 +248,19 @@ rules:
           - MajsoulMax-rs
           - DIRECT
 +rules:
-    # 必须有这两条，否则会导致回环代理
-    - PROCESS-NAME,majsoul_max_rs,DIRECT
-    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
+    # 必须有这条，否则会导致回环代理
+    - PROCESS-NAME-REGEX,majsoul_max_rs.*?,DIRECT
     # 下面两部分可选，根据你的游戏平台选择其一即可
     # 客户端 / Steam
-    - PROCESS-NAME,majsoul_max_rs,DIRECT
-    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
     - PROCESS-NAME,雀魂麻將,🀄 雀魂麻将
     - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 雀魂麻将
     - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 雀魂麻将
     # 网页版（浏览器）
     - DOMAIN-KEYWORD,majsoul,🀄 雀魂麻将
     - DOMAIN-KEYWORD,maj-soul,🀄 雀魂麻将
+    - DOMAIN-KEYWORD,mahjongsoul.com,🀄 雀魂麻将
     - DOMAIN-KEYWORD,catmjstudio,🀄 雀魂麻将
     - DOMAIN-KEYWORD,catmajsoul,🀄 雀魂麻将
-    - IP-CIDR,146.66.155.0/24,🀄 雀魂麻将
-    - IP-CIDR,185.25.182.18/32,🀄 雀魂麻将
-    - IP-CIDR,203.107.63.200/32,🀄 雀魂麻将
 
 ```
 

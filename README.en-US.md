@@ -1,50 +1,50 @@
-# MajsoulMax-rs
+# Majsoul Max-rs
 
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/README.en-US.md)
 [![cn](https://img.shields.io/badge/lang-cn-green.svg)](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/README.md)
 
 **This project is inspired by [MajsoulMax](https://github.com/Avenshy/MajsoulMax)**
 
-Unlock all characters, skins, and decorations in Mahjong Soul, using a man-in-the-middle attack based on [hudsucker](https://github.com/omjadas/hudsucker). Supports both the web version and the PC/Android client.
+Unlock all Mahjong Soul characters, skins, outfits, and more via a man-in-the-middle approach powered by [hudsucker](https://github.com/omjadas/hudsucker). Supports both the web version and the PC / Android client.
 
-Also capable of sending real time Mahjong Soul game data to [Japanese Mahjong Assistant mahjong-helper](https://github.com/EndlessCheng/mahjong-helper), but does not support game log analysis.
+Also supports sending live Mahjong Soul games to the [Japanese Mahjong Assistant mahjong-helper](https://github.com/EndlessCheng/mahjong-helper); game log analysis is not supported.
 
-This tool is completely free and open-source. If you paid for it, you've been scammed!
+This tool is completely free and open-source—if you paid for it, you were scammed!
 
-## 🤔 Why Reinvent the Wheel?
+## 🤔 Why Reinvent the Wheel
 
 ### 🥰 Advantages
 
--   This project is written in Rust, which offers better performance and smaller size compared to Python (the Python version often suffers from high latency and poor user experience).
--   Utilizes multi-threaded asynchronous processing to improve performance.
--   Natively supports multiple platforms including Windows, Linux, macOS, and Android; just download and run the binary.
+-   Written in Rust for better performance and a smaller binary than Python (the Python version often feels laggy due to high latency).
+-   Uses multi-threaded async processing for higher performance.
+-   Native support for Windows, Linux, macOS, and Android—just download the binary and run.
 -   Supports the Android client (via Termux and NekoBox).
 
 ### 🥲 Disadvantages
 
--   Unlike mitmproxy, hudsucker does not support upstream proxies and requires the help of Clash.
--   Cannot dynamically update `lq.rs`, requiring recompilation.
+-   Compared with mitmproxy, hudsucker does not support upstream proxies and needs Clash.
+-   `lq.rs` cannot be updated dynamically; recompilation is required.
 
-## 🧭 Current Mahjong Soul Versions (Updated in Real Time)
+## 🧭 Current Mahjong Soul Versions (Real Time)
 
 ![CHINESE](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgame.maj-soul.com%2F1%2Fversion.json&label=CHINESE&query=$.version&color=FF8C00&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACsklEQVQ4ja2Tf0zMcRjHX9/7Ud0l59RCFssWmemGom5mNysbLb+GuM2G8mOMCGu0rD9aNuRHymxnNqbGqcwMG1lrRLmkRXOESoit311X1/34+MO37YY/vf96Pu89z+f5fJ73+5H4G1nAWWAPkAzoZL4LeAiU+SdLfrESKAZOAzeAVpl3AiogABgD5gImwPNn5yYgDngAXANKgZbbFw+J+jsnBdAJvA8KUNnNqUYBaP2LrwFXgQrAAtjmzAwfFG23RHtNkUhNinMaYiJ7gI6c3SkeoA4Q/l+oAdqB/mPpSVsLTu3US6FpXwDF9nVL9RmbVwSHaCTcPiV5xZUj96oaPsp1lSpg/vSwENdhc+KGyHCdtmvIKxYkZA51PyucUf36Kxv3n+uKmBqqWGVapPGM9JG5KUFzr6ohWJ7NAQnIBmI1geoge/mh9f29fdR+HPZGTZ2kmBwRKRmiI3jywi6Mi2ZL+oXbPztsRbOiV+b2dnUPdAIxKmBKmE4b8qgwLZUxF0XWl+4Rj9LF4hiNVxGkvPGuQxgXRkt371f7ANWrNx84l71Jv/mopRMYVAE/50TqjZ9+OCi50+i+cnytOj79yvDwqMtRaUnR2Vvs0r7cy85qW2s3oG77Nugzxc1UAG5gIrJ0pUBFaU6KAL5PC9P1lOWbReaWZaOXcs2eoaarwmErEsD36yczPG+tBwXQCAyMy/gcsALNQFNZvlkAn0ae5ouHJXt98fOi+svPZIhtqxOd9ttZotayS8hS5qnkC6xALBBoWhA1wdnf7QUCghRuQrWSlGQI11Q+fuk4f2TNhJp6OxesdX3AEiDB30x1QEvBjqVe+XnNQGN6imFsoOqEuHlijVApFe2ATbZxqL+RxmEBlgOjgE/mBOAC1PLZAIz74J9IloczCgzLcScwxO8N/b/4BZ4sCAP6Ouu4AAAAAElFTkSuQmCC&logoWidth=16) ![ENGLISH](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmahjongsoul.game.yo-star.com%2Fversion.json&label=ENGLISH&query=$.version&color=FF8C00&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADT0lEQVQ4jUXN2WtcVQDA4d+520xmsbOkM5OYNJkak5hJNQtE2mCgkj6ILUVEoTSIG0KVgpT4oIjig4qi5k0U8cWttr5IoUGoFBrRSilN1DRdNBMbkzTNNklmJplz7tx7fPDB7x/4BMDJZ0/kDw4fznquj1/1AM3Ia5/hyQpVDQDzi7OkExl2ptLUJOKcuzbO2V8vCOv1x+s/MKans3LuIyIdRynd0ly7uoTcKpPt7mN2coKqlLRm2/B8jTYExcIa+1v28Ol7J7TIf9hRCaVigfDunQR2JHA3lxl+qYxhaBKpDCuLC3QPPgJas3j9KoZpQjhMOl1H+K4Y1sJs0agrCUztM/zxGMeH2gjYEaSSzM3O4FgO4+dGEQLC4Si1u5qRrqK0WUQrhTW3IrmnM45lC159vp1kMoowobauntvzc9i2hVKKUDiMcl0W/84jXUm5JowhQIzk7leTRW0fGfA4m0/QfsegIRpgNKDJZOqZmvmdvs5u1gvbuK6ivFXGlRLbMBGAtb5hkAraXPzRZSkh6acGUXbZdMu8eWyIny63MDVxk3+W5onVxHBxaWxuZGlhhYrcRjzduU/llGl3KY0SJnlHcysTx/VW+eP6DZoMh0LI4eT571GywtTYz1y8fIWp8VlCdg1W0AkS3VYULJMzVolUIkMgaPHOyLv8cPo8k59/SeqhfRTXitS2t/DgkQYSjfWE1Rl+ufIXljAMqgEHp1RBahfTsdHKRxgWj77wBLmeNpr2H0AIF9Bow+C7T74l29fL1tgkVkVJNu7OMDjQT/TUN6B9TMNEBwJQkTQ/cB+itASRHSAEIGgtbhOrzbArlUYcasqpunjSLhTXiIaieNojFkvSmmvj2NvHwXbAMEEDAnTVhdI6zww+RyaewPJ9g9urKwRtC9NyuLO6zuDe3RSki7YCCK1B6/92IRCmBaEohmUQb85iKe2vVIqbdenaDOubCoFg8OWnyJ8eRXo+QeGDAIQBmOAp3nrxDfDgz/wMAuDeUFL31LewXZGEgkFeOfoYyT2NLE/cxGpvpuvQAbTvUcXgyd6H0VWH3q5+Jm78tiH431pnvCGeSzZxsKODvQM9mKEwSkne/+Ir5pYXiVgRpCoSCcY4NX3paw1D/wJx5WDqjkxa0wAAAABJRU5ErkJggg==&logoWidth=16) ![JAPANESE](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgame.mahjongsoul.com%2Fversion.json&label=JAPANESE&query=$.version&color=FF8C00&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADT0lEQVQ4jUXN2WtcVQDA4d+520xmsbOkM5OYNJkak5hJNQtE2mCgkj6ILUVEoTSIG0KVgpT4oIjig4qi5k0U8cWttr5IoUGoFBrRSilN1DRdNBMbkzTNNklmJplz7tx7fPDB7x/4BMDJZ0/kDw4fznquj1/1AM3Ia5/hyQpVDQDzi7OkExl2ptLUJOKcuzbO2V8vCOv1x+s/MKans3LuIyIdRynd0ly7uoTcKpPt7mN2coKqlLRm2/B8jTYExcIa+1v28Ol7J7TIf9hRCaVigfDunQR2JHA3lxl+qYxhaBKpDCuLC3QPPgJas3j9KoZpQjhMOl1H+K4Y1sJs0agrCUztM/zxGMeH2gjYEaSSzM3O4FgO4+dGEQLC4Si1u5qRrqK0WUQrhTW3IrmnM45lC159vp1kMoowobauntvzc9i2hVKKUDiMcl0W/84jXUm5JowhQIzk7leTRW0fGfA4m0/QfsegIRpgNKDJZOqZmvmdvs5u1gvbuK6ivFXGlRLbMBGAtb5hkAraXPzRZSkh6acGUXbZdMu8eWyIny63MDVxk3+W5onVxHBxaWxuZGlhhYrcRjzduU/llGl3KY0SJnlHcysTx/VW+eP6DZoMh0LI4eT571GywtTYz1y8fIWp8VlCdg1W0AkS3VYULJMzVolUIkMgaPHOyLv8cPo8k59/SeqhfRTXitS2t/DgkQYSjfWE1Rl+ufIXljAMqgEHp1RBahfTsdHKRxgWj77wBLmeNpr2H0AIF9Bow+C7T74l29fL1tgkVkVJNu7OMDjQT/TUN6B9TMNEBwJQkTQ/cB+itASRHSAEIGgtbhOrzbArlUYcasqpunjSLhTXiIaieNojFkvSmmvj2NvHwXbAMEEDAnTVhdI6zww+RyaewPJ9g9urKwRtC9NyuLO6zuDe3RSki7YCCK1B6/92IRCmBaEohmUQb85iKe2vVIqbdenaDOubCoFg8OWnyJ8eRXo+QeGDAIQBmOAp3nrxDfDgz/wMAuDeUFL31LewXZGEgkFeOfoYyT2NLE/cxGpvpuvQAbTvUcXgyd6H0VWH3q5+Jm78tiH431pnvCGeSzZxsKODvQM9mKEwSkne/+Ir5pYXiVgRpCoSCcY4NX3paw1D/wJx5WDqjkxa0wAAAABJRU5ErkJggg==&logoWidth=16)
 
 ## 📢 Before You Start
 
-Note: Unlocking characters is only effective locally; others will still see your original character and emojis. For example, sending the 3rd emoji of the new character still appears as the 3rd emoji of your original character to everyone else.
+Note: Unlocking characters is only effective locally; others will still see your original character and emojis. For example, sending the 3rd emoji of the new character will still show the 3rd emoji of your original character to everyone else.
 
 > [!CAUTION]
-> Mod responsibly—safety always comes first.
+> Mod responsibly—safety first.
 >
-> Improper use or careless configuration may get your account banned.
+> Improper use may get your account banned.
 >
-> This project is for learning, research, and communication only; delete it within 24 hours of download and never use it for commercial purposes, otherwise you bear all consequences.
+> This project is for learning and communication only; delete it within 24 hours of download and never use it for commercial purposes, otherwise you bear all consequences.
 >
-> Mahjong Soul's official servers may detect this project and ban your account; the authors assume no liability for any result.
+> Mahjong Soul may detect this project and ban accounts; the authors assume no liability for any outcome.
 >
 > Using this project means you acknowledge and agree to all of the above.
 
-![Deal-in meme](https://memeprod.ap-south-1.linodeobjects.com/user-gif-post/1647655593730.gif)
+![Deal-in](https://memeprod.ap-south-1.linodeobjects.com/user-gif-post/1647655593730.gif)
 
 ## ✈️ Telegram Channel & Group
 
@@ -56,55 +56,56 @@ You can click the images to join or scan the QR codes.
 
 ## 🥰 Current Features
 
-The program consists of two parts: `mod` and `helper`, combining [Majsoul mod_plus](https://github.com/Avenshy/majsoul_mod_plus) and [mahjong-helper-majsoul-mitmproxy](https://github.com/Avenshy/mahjong-helper-majsoul-mitmproxy).
+The program contains two parts: `mod` and `helper`, essentially combining [majsoul_mod_plus](https://github.com/Avenshy/majsoul_mod_plus) and [mahjong-helper-majsoul-mitmproxy](https://github.com/Avenshy/mahjong-helper-majsoul-mitmproxy).
 
-The default configuration enables `helper` and disables `mod`. To customize, modify the `mod_switch` and `helper_switch` in `./liqi_config/settings.json`.
+By default `helper` is enabled and `mod` is disabled. To customize, edit `modSwitch` and `helperSwitch` in `./liqi_config/settings.json`.
 
 ### `mod` Features
 
--   Unlock all characters and skins.
--   Unlock all decorations.
--   Unlock all voices (announce yakus).
--   Unlock all titles.
--   Unlock all loading CGs.
--   Unlock all emojis (not recommended).
--   Force enable convenient hints.
-    -   Due to Mahjong Soul's own code restrictions, the Throne Room cannot enable convenient hints normally, thus, **entering Throne Room matches will change the top-left corner to "Jade Room"**. Please note, this is not a BUG!
--   Support for favorite characters.
--   Customizable names.
--   Display player's server.
+-   Unlock all characters and skins
+-   Unlock all decorations
+-   Unlock all voices (callouts)
+-   Unlock all titles
+-   Unlock all loading CGs
+-   Unlock all emojis (not recommended)
+-   Force-enable convenient hints
+    -   Due to Mahjong Soul's own code restrictions, the Throne Room cannot normally enable convenient hints, so **after enabling this feature, entering Throne Room games will change the top-left corner to “Jade Room”**. This is not a bug!
+-   Favorite/star characters
+-   Custom names
+-   Display the player's server
 -   TODO...
 
 ### `helper` Features
 
--   Sends game data to [mahjong-helper](https://github.com/EndlessCheng/mahjong-helper).
+-   Send live games to [mahjong-helper](https://github.com/EndlessCheng/mahjong-helper)
 
 ## 🧐 Instructions for Use (Windows)
 
-1. Modify the configuration:
-    - Follow program prompts and personal needs.
-    - In `liqi_config/settings.json`, set the universal settings including toggles for Helper and Mod—`modSwitch` and `helperSwitch`, `false` is off, `true` is on.
-    - In `liqi_config/settings.mod.json`, set the Mod-specific settings.
-2. Start the program by running the executable file.
-3. Start the game (web or client/Steam) and make sure all Mahjong Soul traffic goes through the local `majsoul_max_rs` HTTP proxy (it listens on `127.0.0.1:23410` by default). A rule-based proxy client such as `Clash` or `Surge` (with configuration overrides) makes this easy—see “Proxy & Routing” for concrete examples.
-    - Web version: usually you only need the browser to honor the system proxy or apply the domain rules, without enabling `TUN` / enhanced mode.
-    - Client / Steam: likewise split the game process traffic to `majsoul_max_rs` via `Clash` / `Surge`, but you **must** enable `TUN` / enhanced mode in the proxy client or the local process traffic will not be hijacked.
-4. Log in to the game and enjoy.
+1. Modify the configuration
+    - Adjust based on program prompts and your own needs
+    - `liqi_config/settings.json` holds general settings, including the Helper and Mod toggles—`modSwitch` and `helperSwitch`; `false` means off, `true` means on
+    - `liqi_config/settings.mod.json` holds Mod-specific settings
+2. Start the program by running the executable
+3. Start the game (web or client / Steam). Make sure Mahjong Soul traffic goes through the local `majsoul_max_rs` proxy (it listens on `127.0.0.1:23410` by default). A rule-based proxy app with override support such as `Clash` / `Surge` is recommended; see “Proxy & Routing” below for examples.
+    - Web: usually you only need the browser to honor the system proxy or routing rules; no need to enable `TUN` / enhanced mode.
+    - Client / Steam: likewise split the process traffic to `majsoul_max_rs` via `Clash` / `Surge`, but enable `TUN` / enhanced mode in the proxy app or the local process traffic will not be hijacked.
+4. Log in and enjoy
 
-macOS or Linux users can follow the same flow; only the proxy setup in step 3 differs slightly.
+macOS or Linux users can follow the same steps as Windows; step 3 differs slightly for proxy setup.
 
-For the Android version, assuming you are technically proficient, only key terms are provided here: `Termux`, `NekoBox`, effective only on game route 1.
+If you want to use the Android version, we assume you already have the technical know-how—keywords: `Termux`, `NekoBox`, only effective on route 1.
 
 ## 🌐 Proxy & Routing
 
-`majsoul_max_rs` starts a local HTTP proxy on `127.0.0.1:23410`. It is recommended to use a rule-based proxy client such as `Clash` or `Surge` (preferably with override support) and route Mahjong Soul traffic into this proxy.
+`majsoul_max_rs` starts a local HTTP proxy on `127.0.0.1:23410`. Use a rule-based proxy client that supports routing/override (such as `Clash` / `Surge`) to send Mahjong Soul traffic through this proxy.
 
-Before routing traffic through it, import and trust the `hudsucker.cer` root certificate in your operating system (you can download it from the [hudsucker](https://github.com/omjadas/hudsucker/blob/main/examples/ca/hudsucker.cer)); otherwise HTTPS handshakes may fail due to certificate verification.
+Before configuring routing rules, import and trust the `hudsucker.cer` root certificate in your operating system (you can download it from [omjadas/hudsucker](https://github.com/omjadas/hudsucker/blob/main/examples/ca/hudsucker.cer)), otherwise HTTPS traffic may fail certificate verification.
 
 > [!CAUTION]
-> For native clients / Steam, enable `TUN` / enhanced mode in your proxy client so the game process traffic actually passes through `majsoul_max_rs`, and make sure traffic leaving `majsoul_max_rs` is not routed back to itself (avoiding loopback proxies).
 >
-> For the web version in a browser, enhanced mode is usually unnecessary as long as the browser follows the system proxy or correct domain rules.
+> For native clients / Steam, enable `TUN` / enhanced mode in your proxy client to ensure the process traffic goes through `majsoul_max_rs`. Be sure to avoid loopback routing—traffic leaving `majsoul_max_rs` must not be routed back into itself.
+>
+> For the web version (browser), correctly configuring the system proxy or domain rules is usually sufficient; enhanced mode is typically unnecessary.
 
 ### Using Clash for Routing
 
@@ -117,7 +118,7 @@ proxies:
       tls: false
 
 proxy-groups:
-    - name: 🀄 Majsoul
+    - name: 🀄 MahjongSoul
       type: select
       proxies:
           - MajsoulMax-rs
@@ -125,21 +126,18 @@ proxy-groups:
 
 rules:
     # Required to avoid loopback routing
-    - PROCESS-NAME,majsoul_max_rs,DIRECT
-    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
-    # Choose the section below that matches your platform
+    - PROCESS-NAME-REGEX,majsoul_max_rs.*?,DIRECT
+    # Choose one of the following based on your platform
     # Client / Steam
-    - PROCESS-NAME,雀魂麻將,🀄 Majsoul
-    - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 Majsoul
-    - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 Majsoul
+    - PROCESS-NAME,雀魂麻將,🀄 MahjongSoul
+    - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 MahjongSoul
+    - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 MahjongSoul
     # Web (browser)
-    - DOMAIN-KEYWORD,majsoul,🀄 Majsoul
-    - DOMAIN-KEYWORD,maj-soul,🀄 Majsoul
-    - DOMAIN-KEYWORD,catmjstudio,🀄 Majsoul
-    - DOMAIN-KEYWORD,catmajsoul,🀄 Majsoul
-    - IP-CIDR,146.66.155.0/24,🀄 Majsoul
-    - IP-CIDR,185.25.182.18/32,🀄 Majsoul
-    - IP-CIDR,203.107.63.200/32,🀄 Majsoul
+    - DOMAIN-KEYWORD,majsoul,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul
 ```
 
 ### Using Surge for Routing
@@ -149,44 +147,86 @@ rules:
 MajsoulMax-rs = http, 127.0.0.1, 23410
 
 [Proxy Group]
-🀄 Majsoul = select, MajsoulMax-rs, DIRECT
+🀄 MahjongSoul = select, MajsoulMax-rs, DIRECT
 
 [Rule]
 # Required to avoid loopback routing
 PROCESS-NAME,majsoul_max_rs,DIRECT
-# Choose the section below that matches your platform
+# Choose one of the following based on your platform
 # Client / Steam
-PROCESS-NAME,雀魂麻將,🀄 Majsoul
-PROCESS-NAME,jantama_mahjongsoul.exe,🀄 Majsoul
-PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 Majsoul
-# Web (browser)
-DOMAIN-KEYWORD,majsoul,🀄 Majsoul
-DOMAIN-KEYWORD,maj-soul,🀄 Majsoul
-DOMAIN-KEYWORD,catmjstudio,🀄 Majsoul
-DOMAIN-KEYWORD,catmajsoul,🀄 Majsoul
-IP-CIDR,146.66.155.0/24,🀄 Majsoul
-IP-CIDR,185.25.182.18/32,🀄 Majsoul
-IP-CIDR,203.107.63.200/32,🀄 Majsoul
+PROCESS-NAME,雀魂麻將,🀄 MahjongSoul
+# Web
+DOMAIN-KEYWORD,majsoul,🀄 MahjongSoul
+DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul
+DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul
+DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul
+DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul
 ```
 
-### Web / Platforms Without PROCESS-NAME Rules
+### Scenarios Without PROCESS-NAME Rules
 
-If you play in a browser or on platforms that cannot use `PROCESS-NAME` rules (e.g. iOS / iPadOS), mimic the domain/IP rules used for the web version (Clash example below). In this scenario you must deploy `majsoul_max_rs` on a different machine (for example via [MajsoulMax-rs-docker](https://github.com/zhuozhiyongde/MajsoulMax-rs-docker) on a VPS), otherwise routing Mahjong Soul traffic to a local `majsoul_max_rs` node will create a loopback proxy.
+If you are on iOS / iPadOS or any platform that cannot use `PROCESS-NAME` rules, mimic the domain keyword routing used for the web version (Clash example below). In this scenario, you must deploy `majsoul_max_rs` separately—that is, not on the same machine as your main host—to avoid loopback routing. Consider running the proxy node on a VPS, for example via [MajsoulMax-rs-docker](https://github.com/zhuozhiyongde/MajsoulMax-rs-docker).
 
 ```yml
 rules:
-    - DOMAIN-KEYWORD,majsoul,🀄 Majsoul
-    - DOMAIN-KEYWORD,maj-soul,🀄 Majsoul
-    - DOMAIN-KEYWORD,catmjstudio,🀄 Majsoul
-    - DOMAIN-KEYWORD,catmajsoul,🀄 Majsoul
-    - IP-CIDR,146.66.155.0/24,🀄 Majsoul
-    - IP-CIDR,185.25.182.18/32,🀄 Majsoul
-    - IP-CIDR,203.107.63.200/32,🀄 Majsoul
+    - DOMAIN-KEYWORD,majsoul,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul
 ```
 
-Clients that support configuration overrides (such as `Clash Verge`, `Mihomo Party` or `Surge` with override files) can keep the above nodes and rules in a separate override and toggle it only when playing Mahjong Soul.
+### Override Examples
 
-Override example:
+If you use a proxy client that supports overrides (such as `Clash Verge`, `Clash Party`, or `Surge` with override files), put the above node and rules into a separate override file / global script and enable it only when you play Mahjong Soul.
+
+#### Clash Verge Global Extension Script (JS) Example
+
+See the [official docs](https://www.clashverge.dev/guide/script.html) for configuration. On the “Subscriptions” page, right-click `Global Extension Script` and choose “Edit file”:
+
+```js
+function main(config) {
+    config.proxies.push({
+        name: 'MajsoulMax',
+        type: 'http',
+        server: '127.0.0.1',
+        port: 23410,
+        tls: false,
+    });
+
+    config['proxy-groups'].push({
+        name: '🀄 MahjongSoul',
+        type: 'select',
+        proxies: ['DIRECT', 'MajsoulMax'],
+        icon: 'https://www.maj-soul.com/homepage/img/logotaiwan.png',
+    });
+
+    const bypass = [
+        'PROCESS-NAME-REGEX,majsoul_max_rs.*?,DIRECT',
+    ];
+
+    const clientRules = [
+        'PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 MahjongSoul',
+        'PROCESS-NAME,jantama_mahjongsoul.exe,🀄 MahjongSoul',
+        'PROCESS-NAME,雀魂麻將,🀄 MahjongSoul',
+    ];
+
+    const webRules = [
+        'DOMAIN-KEYWORD,majsoul,🀄 MahjongSoul',
+        'DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul',
+        'DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul',
+        'DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul',
+        'DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul',
+    ];
+
+    config.rules.unshift(...bypass, ...clientRules, ...webRules);
+    return config;
+}
+```
+
+#### Clash Party (formerly Mihomo Party) Override Example
+
+See the [official docs](https://clashparty.org/docs/guide/override/yaml)). In Clash Party, click `+` on the left `Override` page, choose `New YAML`, paste the following, save, then click the `...` on that override card and set `Enable globally`.
 
 ```yml
 +proxies:
@@ -196,28 +236,25 @@ Override example:
       port: 23410
       tls: false
 +proxy-groups:
-    - name: 🀄 Majsoul
+    - name: 🀄 MahjongSoul
       type: select
       proxies:
           - MajsoulMax-rs
           - DIRECT
 +rules:
     # Required to avoid loopback routing
-    - PROCESS-NAME,majsoul_max_rs,DIRECT
-    - PROCESS-NAME,majsoul_max_rs.exe,DIRECT
-    # Choose the section below that matches your platform
+    - PROCESS-NAME-REGEX,majsoul_max_rs.*?,DIRECT
+    # Choose one of the following based on your platform
     # Client / Steam
-    - PROCESS-NAME,雀魂麻將,🀄 Majsoul
-    - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 Majsoul
-    - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 Majsoul
-    # Web version (browser / iOS / iPadOS)
-    - DOMAIN-KEYWORD,majsoul,🀄 Majsoul
-    - DOMAIN-KEYWORD,maj-soul,🀄 Majsoul
-    - DOMAIN-KEYWORD,catmjstudio,🀄 Majsoul
-    - DOMAIN-KEYWORD,catmajsoul,🀄 Majsoul
-    - IP-CIDR,146.66.155.0/24,🀄 Majsoul
-    - IP-CIDR,185.25.182.18/32,🀄 Majsoul
-    - IP-CIDR,203.107.63.200/32,🀄 Majsoul
+    - PROCESS-NAME,雀魂麻將,🀄 MahjongSoul
+    - PROCESS-NAME,jantama_mahjongsoul.exe,🀄 MahjongSoul
+    - PROCESS-NAME,Jantama_MahjongSoul.exe,🀄 MahjongSoul
+    # Web version (browser)
+    - DOMAIN-KEYWORD,majsoul,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul
+    - DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul
 
 ```
 
@@ -225,17 +262,17 @@ Override example:
 
 1. Why are `liqi` and `lqc.lqbin` updated automatically? What if the update fails?
     - liqi:
-        - Consists of 3 files including `liqi.json` and its derivatives `liqi.proto` and `liqi.desc`, used for parsing Mahjong Soul protobuf messages.
-        - If the update fails, message parsing might fail (e.g., new event messages).
+        - Consists of three files, including `liqi.json` and the generated `liqi.proto` and `liqi.desc`, used to parse Mahjong Soul protobuf messages
+        - If the update fails, some messages may not parse (for example, new event messages)
     - lqc.lqbin:
-        - Used to obtain all characters, decorations, and game items.
-        - If the update fails, new items (like new characters, items) may not be retrievable.
-    - If auto-update fails, download manually from [AutoLiqi > Releases](https://github.com/Xerxes-2/AutoLiqi/releases/latest) and replace the same name files under `./liqi_config`.
-2. How do I use this together with my existing proxy/VPN?
-    - Use a rule-based proxy such as `Clash` or `Surge` and create a dedicated group (e.g. `🀄 Majsoul`) that first routes Mahjong Soul traffic to the local `MajsoulMax-rs` node, then from there to your normal proxy nodes if needed.
-    - See the “Proxy & Routing” section for example configurations; putting them into a separate override file makes it easy to toggle.
+        - Used to obtain all characters, outfits, items, and other game assets
+        - If the update fails, new assets (such as new characters and items) may not be available
+    - If auto-update fails, download them from [AutoLiqi > Releases](https://github.com/Xerxes-2/AutoLiqi/releases/latest) and manually replace the files with the same name under `./liqi_config`
+2. How do I use this together with my own proxy (VPN / airport)?
+    - Use a rule-based proxy with override support (such as `Clash` / `Surge`) to first route Mahjong Soul traffic to the local `MajsoulMax-rs` node, then forward from that node to your original proxy nodes.
+    - See “Proxy & Routing” above for example configurations; you can also keep the examples in a separate override file and enable it only when needed.
 3. Other questions?
-   Join our [Telegram group](https://github.com/Xerxes-2/MajsoulMax-rs/blob/master/README.en-US.md#%EF%B8%8F-telegram-channel--group) linked above.
+   Join our [Telegram group](README.en-US.md#%EF%B8%8F-telegram-channel--group).
 
 ## 🛠️ Development Dependencies
 
