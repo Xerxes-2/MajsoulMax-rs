@@ -95,11 +95,44 @@ macOS or Linux users can follow the same steps as Windows; step 3 differs slight
 
 If you want to use the Android version, we assume you already have the technical know-how—keywords: `Termux`, `NekoBox`, only effective on route 1.
 
+## 📦 Install the Certificate
+
+Before configuring routing rules, import and trust the `hudsucker.cer` root certificate in your operating system (you can download it from [omjadas/hudsucker](https://github.com/omjadas/hudsucker/blob/main/examples/ca/hudsucker.cer)), otherwise HTTPS traffic may fail certificate verification.
+
+### Windows
+
+1. Locate the certificate file named `hudsucker.cer`
+2. Double-click the certificate file
+3. Click the `Install Certificate` button
+4. If prompted, choose `Local Machine`, then click Next
+5. Select `Place all certificates in the following store`, then click `Browse...`
+6. Choose `Trusted Root Certification Authorities`, confirm, then click Next and Finish
+7. If the system asks for permission, click Yes
+
+### macOS
+
+1. Locate the `hudsucker.cer` certificate file
+2. Double-click the certificate file to open Keychain Access
+3. In the left sidebar, select `System Keychain` -> `System`, search for `hudsucker`, and find the imported certificate (it will be untrusted)
+4. Right-click the certificate named `hudsucker`, choose `Get Info`, and expand `Trust`
+5. Set `When using this certificate` to `Always Trust`
+6. Close the window and complete authentication when prompted
+
+### iOS / iPadOS
+
+If you deploy this project as a separate proxy node, you can use it on iOS / iPadOS, but you still need to trust the certificate on the device.
+
+1. Send the `hudsucker.cer` certificate from your computer to your iPhone/iPad via AirDrop or another method. AirDrop is preferred because it imports automatically. For other methods, save it to Files first, then open the certificate from Files.
+2. Go to `Settings -> Profile Downloaded` and tap Install
+3. Go to `General -> About -> Certificate Trust Settings` and enable the `hudsucker` option
+
+### Android
+
+No test environment available; please search for the steps yourself.
+
 ## 🌐 Proxy & Routing
 
 `majsoul_max_rs` starts a local HTTP proxy on `127.0.0.1:23410`. Use a rule-based proxy client that supports routing/override (such as `Clash` / `Surge`) to send Mahjong Soul traffic through this proxy.
-
-Before configuring routing rules, import and trust the `hudsucker.cer` root certificate in your operating system (you can download it from [omjadas/hudsucker](https://github.com/omjadas/hudsucker/blob/main/examples/ca/hudsucker.cer)), otherwise HTTPS traffic may fail certificate verification.
 
 > [!CAUTION]
 >
@@ -137,7 +170,6 @@ rules:
     - DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul
     - DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul
     - DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul
-    - DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul
 ```
 
 ### Using Surge for Routing
@@ -160,7 +192,6 @@ DOMAIN-KEYWORD,majsoul,🀄 MahjongSoul
 DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul
 DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul
 DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul
-DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul
 ```
 
 ### Scenarios Without PROCESS-NAME Rules
@@ -173,7 +204,6 @@ rules:
     - DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul
     - DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul
     - DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul
-    - DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul
 ```
 
 ### Override Examples
@@ -216,7 +246,6 @@ function main(config) {
         'DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul',
         'DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul',
         'DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul',
-        'DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul',
     ];
 
     config.rules.unshift(...bypass, ...clientRules, ...webRules);
@@ -254,7 +283,6 @@ See the [official docs](https://clashparty.org/docs/guide/override/yaml)). In Cl
     - DOMAIN-KEYWORD,maj-soul,🀄 MahjongSoul
     - DOMAIN-KEYWORD,mahjongsoul.com,🀄 MahjongSoul
     - DOMAIN-KEYWORD,catmjstudio,🀄 MahjongSoul
-    - DOMAIN-KEYWORD,catmajsoul,🀄 MahjongSoul
 
 ```
 
@@ -278,3 +306,7 @@ See the [official docs](https://clashparty.org/docs/guide/override/yaml)). In Cl
 
 -   [Rust](https://www.rust-lang.org/) >= 1.85
 -   [Protoc](https://github.com/protocolbuffers/protobuf)
+
+## 📜 License
+
+[GNU General Public License v3.0](./LICENSE)
