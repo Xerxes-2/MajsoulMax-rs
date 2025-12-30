@@ -1,5 +1,5 @@
 
-³ô
+¨–
 
 liqi.protolq"Ž
 NotifyRoomGameStart
@@ -245,7 +245,15 @@ activityId
 report (2.lq.SeerBriefRreport"M
 NotifyConnectionShutdown
 reason (Rreason
-close_at (RcloseAt"x
+close_at (RcloseAt"i
+NotifyCustomizedContestReady
+	unique_id (RuniqueId
+ready (Rready
+reason (Rreason"_
+!NotifyCustomizedContestRuleModify
+	unique_id (RuniqueId
+
+auto_match (R	autoMatch"Ž
 Error
 code (Rcode
 
@@ -253,7 +261,8 @@ u32_params (R	u32Params
 
 str_params (	R	strParams
 
-json_param (	R	jsonParam"1
+json_param (	R	jsonParam
+level (Rlevel"1
 Wrapper
 name (	Rname
 data (Rdata"W
@@ -942,7 +951,7 @@ gift_inbox (2 .lq.FeedActivityData.GiftBoxDataR	giftInboxS
 MineActivityData&
 	dig_point (2	.lq.PointRdigPoint 
 map (2.lq.MineRewardRmap
-id (Rid"Ã
+id (Rid"Š	
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -967,7 +976,8 @@ story_data (2.lq.ActivityStoryDataR	storyData>
 
 shoot_data (2.lq.ActivityShootDataR	shootData4
 
-bingo_data (2.lq.ActivityBingoDataR	bingoData"I
+bingo_data (2.lq.ActivityBingoDataR	bingoDataE
+snowball_data (2 .lq.ActivitySnowballValueChangesRsnowballData"I
 ActivityCombiningWorkbench
 craft_id (RcraftId
 pos (Rpos"’
@@ -1498,7 +1508,7 @@ finishTime
 open	 (Ropen#
 public_notice
  (	RpublicNotice!
-contest_type (RcontestType"„
+contest_type (RcontestType"ñ
 CustomizedContestDetail
 	unique_id (RuniqueId
 
@@ -1529,7 +1539,10 @@ signupType
 
 auto_match (R	autoMatch
 	rank_type (RrankType$
-show_team_rank (RshowTeamRank"¯
+show_team_rank (RshowTeamRank
+	tied_rank (RtiedRank(
+match_start_time (RmatchStartTime$
+match_end_time (RmatchEndTime"¯
 CustomizedContestPlayerReport
 	rank_rule (RrankRule
 rank (Rrank
@@ -2343,7 +2356,65 @@ activityId
 ActivityBingoData
 activity_id (R
 activityId/
-cards (2.lq.ActivityBingoCardDataRcards"r
+cards (2.lq.ActivityBingoCardDataRcards":
+ActivityIdTimeRecord
+id (Rid
+time (Rtime"ç
+ActivitySnowballData
+activity_id (R
+activityId
+level (Rlevel5
+upgrade (2.lq.ActivitySnowballUpgradeRupgrade%
+rewarded_level (RrewardedLevel%
+finished_level (RfinishedLevel
+random_seed (R
+randomSeed
+	battle_id (	RbattleId0
+level_finished_count (RlevelFinishedCount!
+player_combo	 (RplayerCombo?
+reward_records
+ (2.lq.ActivityIdTimeRecordRrewardRecords?
+finish_records (2.lq.ActivityIdTimeRecordRfinishRecords")
+ActivitySnowballUpgrade
+id (Rid"g
+ActivitySnowballUpgradeDirty1
+value (2.lq.ActivitySnowballUpgradeRvalue
+dirty (Rdirty"ò
+ActivitySnowballValueChanges%
+level (2.lq.UInt32DirtyRlevel:
+upgrade (2 .lq.ActivitySnowballUpgradeDirtyRupgrade;
+rewarded_level (2.lq.UInt32ArrayDirtyRrewardedLevel;
+finished_level (2.lq.UInt32ArrayDirtyRfinishedLevelA
+level_finished_count (2.lq.UInt32DirtyRlevelFinishedCount2
+player_combo (2.lq.UInt32DirtyRplayerCombo"‚
+"ActivitySnowballPlayerAttackedInfo
+target (Rtarget
+track (Rtrack
+damage (Rdamage
+critia (Rcritia"H
+ActivitySnowballPlayerAction
+tick (Rtick
+track (Rtrack"U
+ActivitySnowballPlayerState
+player (Rplayer
+hp (Rhp
+mp (Rmp"‹
+SnowballActivityBossAction
+tick (Rtick
+type (Rtype
+track (Rtrack^
+attack_info (2=.lq.SnowballActivityBossAction.SnowballActivityBossAttackInfoR
+attackInfoh
+mp_consume_info (2@.lq.SnowballActivityBossAction.SnowballActivityBossMPConsumeInfoRmpConsumeInfo\
+SnowballActivityBossAttackInfo
+damage (Rdamage"
+is_con_attack (RisConAttack†
+!SnowballActivityBossMPConsumeInfo
+
+mp_consume (R	mpConsume!
+before_delay (RbeforeDelay
+after_delay (R
+afterDelay"r
 ResConnectionInfo
 error (2	.lq.ErrorRerror<
 client_endpoint (2.lq.NetworkEndpointRclientEndpoint"`
@@ -3703,7 +3774,7 @@ recordList"9
 error (2	.lq.ErrorRerror,
 
 activities (2.lq.ActivityR
-activities"é
+activities"¨
 ResAccountActivityData
 error (2	.lq.ErrorRerror=
 exchange_records (2.lq.ExchangeRecordRexchangeRecords>
@@ -3745,7 +3816,8 @@ story_data (2.lq.ActivityStoryDataR	storyData>
 
 shoot_data" (2.lq.ActivityShootDataR	shootData4
 
-bingo_data# (2.lq.ActivityBingoDataR	bingoData„
+bingo_data# (2.lq.ActivityBingoDataR	bingoData=
+snowball_data$ (2.lq.ActivitySnowballDataRsnowballData„
 ActivitySignInData
 activity_id (R
 activityId"
@@ -4391,11 +4463,15 @@ vip_reward (2.lq.ResVipRewardR	vipRewardB
 
 date_limit (R	dateLimit
 expire_time (R
-expireTime"Ü
+expireTime"ª
 ResFetchServerMaintenanceInfor
-function_maintenance (2?.lq.ResFetchServerMaintenanceInfo.ServerFunctionMaintenanceInfoRfunctionMaintenanceG
+function_maintenance (2?.lq.ResFetchServerMaintenanceInfo.ServerFunctionMaintenanceInfoRfunctionMaintenancer
+activity_maintenance (2?.lq.ResFetchServerMaintenanceInfo.ServerActivityMaintenanceInfoRactivityMaintenanceG
 ServerFunctionMaintenanceInfo
 name (	Rname
+open (RopenX
+ServerActivityMaintenanceInfo#
+activity_type (	RactivityType
 open (Ropen"]
 ReqUpgradeVillageBuilding
 building_id (R
@@ -4525,17 +4601,18 @@ activityId?
 activity_id (R
 activityId
 bag_id (RbagId
-pos (Rpos"Ò
+pos (Rpos"ì
 ContestSetting>
 level_limit (2.lq.ContestSetting.LevelLimitR
 levelLimit
 
 game_limit (R	gameLimit)
-system_broadcast (RsystemBroadcast6
+system_broadcast (RsystemBroadcastP
 
 LevelLimit
 type (Rtype
-value (Rvalue"×
+value (Rvalue
+operate (Roperate"×
 ReqCreateCustomizedContest
 name (	Rname
 	open_show (RopenShow8
@@ -4557,7 +4634,7 @@ $ResFetchManagerCustomizedContestList
 error (2	.lq.ErrorRerror5
 contests (2.lq.CustomizedContestBaseRcontests"?
  ReqFetchManagerCustomizedContest
-	unique_id (RuniqueId"ö
+	unique_id (RuniqueId"Æ
  ResFetchManagerCustomizedContest
 error (2	.lq.ErrorRerror
 name (	Rname
@@ -4575,7 +4652,9 @@ checkState#
  (	RcheckingName;
 contest_setting (2.lq.ContestSettingRcontestSetting
 	rank_type (RrankTypeG
-season (2/.lq.ResFetchManagerCustomizedContest.SeasonInfoRseasong
+season (2/.lq.ResFetchManagerCustomizedContest.SeasonInfoRseason(
+match_start_time (RmatchStartTime$
+match_end_time (RmatchEndTimeg
 
 SeasonInfo
 create_time (R
@@ -4598,7 +4677,7 @@ auto_match (R	autoMatch
 ReqFetchContestPlayerRank
 	unique_id (RuniqueId
 limit (Rlimit
-offset (Roffset"Ú
+offset (Roffset" 	
 ResFetchContestPlayerRank
 error (2	.lq.ErrorRerror
 total (Rtotal<
@@ -4616,19 +4695,21 @@ playerData½
 totalPoint
 ContestSeriesGameResult
 key (Rkeyb
-results (2H.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestGameResultRresults°
+results (2H.lq.ResFetchContestPlayerRank.ContestPlayerAccountData.ContestGameResultRresultsÓ
 
 SeasonRank
 
 account_id (R	accountId
 nickname (	RnicknameJ
 data (26.lq.ResFetchContestPlayerRank.ContestPlayerAccountDataRdata
-	team_name (	RteamName‰
+	team_name (	RteamName!
+modify_score (RmodifyScore¬
 
 PlayerData
 rank (RrankJ
 data (26.lq.ResFetchContestPlayerRank.ContestPlayerAccountDataRdata
-	team_name (	RteamName"d
+	team_name (	RteamName!
+modify_score (RmodifyScore"d
 ReqFetchContestTeamRank
 	unique_id (RuniqueId
 limit (Rlimit
@@ -5115,7 +5196,44 @@ activityIdG
 activityId"g
 ResFetchBingoActivityData
 error (2	.lq.ErrorRerror)
-data (2.lq.ActivityBingoDataRdata"a
+data (2.lq.ActivityBingoDataRdata"A
+ReqSnowballActivityStartBattle
+activity_id (R
+activityId"£
+ResSnowballActivityStartBattle
+error (2	.lq.ErrorRerror
+random_seed (R
+randomSeed?
+boss_action (2.lq.SnowballActivityBossActionR
+bossAction
+	battle_id (	RbattleIdB
+player_state (2.lq.ActivitySnowballPlayerStateRplayerState
+
+random_seq (R	randomSeq"¾
+ReqSnowballActivityFinishBattle
+activity_id (R
+activityIdE
+player_action (2 .lq.ActivitySnowballPlayerActionRplayerAction
+result (Rresult
+	battle_id (	RbattleId"~
+ResSnowballActivityFinishBattle
+error (2	.lq.ErrorRerror:
+changes (2 .lq.ActivitySnowballValueChangesRchanges"t
+ReqSnowballActivityUpgrade
+activity_id (R
+activityId5
+upgrade (2.lq.ActivitySnowballUpgradeRupgrade"y
+ResSnowballActivityUpgrade
+error (2	.lq.ErrorRerror:
+changes (2 .lq.ActivitySnowballValueChangesRchanges"Y
+ ReqSnowballActivityReceiveReward
+activity_id (R
+activityId
+level (Rlevel"¬
+ ResSnowballActivityReceiveReward
+error (2	.lq.ErrorRerror:
+changes (2 .lq.ActivitySnowballValueChangesRchanges+
+rewards (2.lq.ExecuteRewardRrewards"a
 AmuletBadgeData
 id (Rid
 uid (Ruid
@@ -6408,7 +6526,7 @@ old_scores (R	oldScores!
 NULL 
 AUTH
 SYNCING	
-READY2ÊÝ
+READY2ãà
 Lobby;
 fetchConnectionInfo.lq.ReqCommon.lq.ResConnectionInfo6
 fetchQueueInfo.lq.ReqCommon.lq.ResFetchQueueInfo+
@@ -6816,7 +6934,11 @@ bindOauth2.lq.ReqBindOauth2.lq.ResCommon9
 questCrewActivityFeed.lq.ReqQuestCrewActivityFeed.lq.ResQuestCrewActivityFeedn
 questCrewActivityRefreshMarket%.lq.ReqQuestCrewActivityRefreshMarket%.lq.ResQuestCrewActivityRefreshMarketb
 bingoActivityReceiveReward!.lq.ReqBingoActivityReceiveReward!.lq.ResBingoActivityReceiveRewardV
-fetchBingoActivityData.lq.ReqFetchBingoActivityData.lq.ResFetchBingoActivityData2õ
+fetchBingoActivityData.lq.ReqFetchBingoActivityData.lq.ResFetchBingoActivityDatae
+snowballActivityStartBattle".lq.ReqSnowballActivityStartBattle".lq.ResSnowballActivityStartBattleh
+snowballActivityFinishBattle#.lq.ReqSnowballActivityFinishBattle#.lq.ResSnowballActivityFinishBattleY
+snowballActivityUpgrade.lq.ReqSnowballActivityUpgrade.lq.ResSnowballActivityUpgradek
+snowballActivityReceiveReward$.lq.ReqSnowballActivityReceiveReward$.lq.ResSnowballActivityReceiveReward2õ
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame,
 	enterGame.lq.ReqCommon.lq.ResEnterGame,

@@ -385,12 +385,26 @@ message NotifyConnectionShutdown {
     uint32 close_at = 2;
 }
 
+message NotifyCustomizedContestReady {
+
+    uint32 unique_id = 1;
+    uint32 ready = 2;
+    uint32 reason = 3;
+}
+
+message NotifyCustomizedContestRuleModify {
+
+    uint32 unique_id = 1;
+    uint32 auto_match = 2;
+}
+
 message Error {
 
     uint32 code = 1;
     repeated uint32 u32_params = 2;
     repeated string str_params = 3;
     string json_param = 4;
+    uint32 level = 5;
 }
 
 message Wrapper {
@@ -1315,6 +1329,7 @@ message AccountActivityUpdate {
     repeated lq.ActivityQuestCrewChanges quest_crew_data = 17;
     repeated lq.ActivityShootData shoot_data = 18;
     repeated lq.ActivityBingoData bingo_data = 19;
+    repeated lq.ActivitySnowballValueChanges snowball_data = 20;
 }
 
 message ActivityCombiningWorkbench {
@@ -2073,6 +2088,9 @@ message CustomizedContestDetail {
     uint32 auto_match = 20;
     uint32 rank_type = 21;
     bool show_team_rank = 22;
+    uint32 tied_rank = 23;
+    uint32 match_start_time = 24;
+    uint32 match_end_time = 25;
 }
 
 message CustomizedContestPlayerReport {
@@ -3152,6 +3170,91 @@ message ActivityBingoData {
     uint32 activity_id = 1;
     repeated ActivityBingoCardData cards = 2;
 }
+
+message ActivityIdTimeRecord {
+
+    uint32 id = 1;
+    uint32 time = 2;
+}
+
+message ActivitySnowballData {
+
+    uint32 activity_id = 1;
+    uint32 level = 2;
+    repeated ActivitySnowballUpgrade upgrade = 3;
+    repeated uint32 rewarded_level = 4;
+    repeated uint32 finished_level = 5;
+    uint32 random_seed = 6;
+    string battle_id = 7;
+    uint32 level_finished_count = 8;
+    uint32 player_combo = 9;
+    repeated ActivityIdTimeRecord reward_records = 10;
+    repeated ActivityIdTimeRecord finish_records = 11;
+}
+
+message ActivitySnowballUpgrade {
+
+    uint32 id = 1;
+}
+
+message ActivitySnowballUpgradeDirty {
+
+    repeated ActivitySnowballUpgrade value = 1;
+    bool dirty = 2;
+}
+
+message ActivitySnowballValueChanges {
+
+    UInt32Dirty level = 1;
+    ActivitySnowballUpgradeDirty upgrade = 2;
+    UInt32ArrayDirty rewarded_level = 3;
+    UInt32ArrayDirty finished_level = 4;
+    UInt32Dirty level_finished_count = 5;
+    UInt32Dirty player_combo = 6;
+}
+
+message ActivitySnowballPlayerAttackedInfo {
+
+    uint32 target = 1;
+    uint32 track = 2;
+    uint32 damage = 3;
+    uint32 critia = 4;
+}
+
+message ActivitySnowballPlayerAction {
+
+    uint32 tick = 1;
+    uint32 track = 2;
+}
+
+message ActivitySnowballPlayerState {
+
+    uint32 player = 1;
+    uint32 hp = 2;
+    uint32 mp = 3;
+}
+
+message SnowballActivityBossAction {
+
+    uint32 tick = 1;
+    uint32 type = 2;
+    uint32 track = 3;
+    SnowballActivityBossAttackInfo attack_info = 4;
+    SnowballActivityBossMPConsumeInfo mp_consume_info = 5;
+
+    message SnowballActivityBossAttackInfo {
+
+        uint32 damage = 1;
+        uint32 is_con_attack = 2;
+    }
+
+    message SnowballActivityBossMPConsumeInfo {
+
+        uint32 mp_consume = 1;
+        uint32 before_delay = 2;
+        uint32 after_delay = 3;
+    }
+}
 service Lobby {
     rpc fetchConnectionInfo (ReqCommon) returns (ResConnectionInfo);
     rpc fetchQueueInfo (ReqCommon) returns (ResFetchQueueInfo);
@@ -3550,6 +3653,10 @@ service Lobby {
     rpc questCrewActivityRefreshMarket (ReqQuestCrewActivityRefreshMarket) returns (ResQuestCrewActivityRefreshMarket);
     rpc bingoActivityReceiveReward (ReqBingoActivityReceiveReward) returns (ResBingoActivityReceiveReward);
     rpc fetchBingoActivityData (ReqFetchBingoActivityData) returns (ResFetchBingoActivityData);
+    rpc snowballActivityStartBattle (ReqSnowballActivityStartBattle) returns (ResSnowballActivityStartBattle);
+    rpc snowballActivityFinishBattle (ReqSnowballActivityFinishBattle) returns (ResSnowballActivityFinishBattle);
+    rpc snowballActivityUpgrade (ReqSnowballActivityUpgrade) returns (ResSnowballActivityUpgrade);
+    rpc snowballActivityReceiveReward (ReqSnowballActivityReceiveReward) returns (ResSnowballActivityReceiveReward);
 }
 
 message ResConnectionInfo {
@@ -5753,6 +5860,7 @@ message ResAccountActivityData {
     repeated lq.ActivityQuestCrewData quest_crew_data = 33;
     repeated lq.ActivityShootData shoot_data = 34;
     repeated lq.ActivityBingoData bingo_data = 35;
+    repeated lq.ActivitySnowballData snowball_data = 36;
 
     message ActivitySignInData {
 
@@ -6777,10 +6885,17 @@ message ResFetchSeerInfo {
 message ResFetchServerMaintenanceInfo {
 
     repeated ServerFunctionMaintenanceInfo function_maintenance = 1;
+    repeated ServerActivityMaintenanceInfo activity_maintenance = 2;
 
     message ServerFunctionMaintenanceInfo {
 
         string name = 1;
+        bool open = 2;
+    }
+
+    message ServerActivityMaintenanceInfo {
+
+        string activity_type = 1;
         bool open = 2;
     }
 }
@@ -6992,6 +7107,7 @@ message ContestSetting {
 
         uint32 type = 1;
         uint32 value = 2;
+        uint32 operate = 3;
     }
 }
 
@@ -7045,6 +7161,8 @@ message ResFetchManagerCustomizedContest {
     ContestSetting contest_setting = 11;
     uint32 rank_type = 12;
     SeasonInfo season = 13;
+    uint32 match_start_time = 14;
+    uint32 match_end_time = 15;
 
     message SeasonInfo {
 
@@ -7107,6 +7225,7 @@ message ResFetchContestPlayerRank {
         string nickname = 2;
         ContestPlayerAccountData data = 3;
         string team_name = 4;
+        int32 modify_score = 5;
     }
 
     message PlayerData {
@@ -7114,6 +7233,7 @@ message ResFetchContestPlayerRank {
         uint32 rank = 1;
         ContestPlayerAccountData data = 2;
         string team_name = 3;
+        int32 modify_score = 4;
     }
 }
 
@@ -7868,6 +7988,60 @@ message ResFetchBingoActivityData {
 
     Error error = 1;
     ActivityBingoData data = 2;
+}
+
+message ReqSnowballActivityStartBattle {
+
+    uint32 activity_id = 1;
+}
+
+message ResSnowballActivityStartBattle {
+
+    Error error = 1;
+    uint32 random_seed = 2;
+    repeated SnowballActivityBossAction boss_action = 3;
+    string battle_id = 4;
+    repeated ActivitySnowballPlayerState player_state = 5;
+    repeated uint32 random_seq = 6;
+}
+
+message ReqSnowballActivityFinishBattle {
+
+    uint32 activity_id = 1;
+    repeated ActivitySnowballPlayerAction player_action = 2;
+    uint32 result = 3;
+    string battle_id = 4;
+}
+
+message ResSnowballActivityFinishBattle {
+
+    Error error = 1;
+    ActivitySnowballValueChanges changes = 2;
+}
+
+message ReqSnowballActivityUpgrade {
+
+    uint32 activity_id = 1;
+    repeated ActivitySnowballUpgrade upgrade = 2;
+}
+
+message ResSnowballActivityUpgrade {
+
+    Error error = 1;
+    ActivitySnowballValueChanges changes = 2;
+}
+
+message ReqSnowballActivityReceiveReward {
+
+    uint32 activity_id = 1;
+    repeated uint32 level = 2;
+}
+
+message ResSnowballActivityReceiveReward {
+
+    Error error = 1;
+    ActivitySnowballValueChanges changes = 2;
+    repeated ExecuteReward rewards = 3;
 }
 
 message AmuletBadgeData {
