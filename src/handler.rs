@@ -1,6 +1,8 @@
 use anyhow::Result;
 use hudsucker::{
+    Body, HttpContext, RequestOrResponse,
     futures::{Sink, SinkExt, Stream, StreamExt},
+    hyper::{Request, Response, StatusCode},
     tokio_tungstenite::tungstenite::{self, Message},
     *,
 };
@@ -36,6 +38,24 @@ impl Handler {
                 &settings.proto_json,
                 &settings.desc,
             ))),
+        }
+    }
+}
+
+impl HttpHandler for Handler {
+    async fn handle_request(
+        &mut self,
+        _ctx: &HttpContext,
+        req: Request<Body>,
+    ) -> RequestOrResponse {
+        if req.uri().path() == "/ping" {
+            Response::builder()
+                .status(StatusCode::OK)
+                .body(Body::from("pong"))
+                .expect("Failed to build ping response")
+                .into()
+        } else {
+            req.into()
         }
     }
 }

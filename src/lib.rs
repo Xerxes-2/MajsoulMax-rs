@@ -70,11 +70,13 @@ where
     } else {
         (None, None)
     };
+    let handler = Handler::new(tx, modder, settings);
     let proxy = Proxy::builder()
         .with_addr(proxy_addr)
         .with_ca(ca)
         .with_rustls_connector(rustls::crypto::aws_lc_rs::default_provider())
-        .with_websocket_handler(Handler::new(tx, modder, settings))
+        .with_http_handler(handler.clone())
+        .with_websocket_handler(handler)
         .with_graceful_shutdown(async {
             graceful_shutdown.await;
             if let Some(helper) = helper {
