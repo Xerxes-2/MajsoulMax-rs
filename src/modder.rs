@@ -198,6 +198,14 @@ impl Modder {
                 msg.character_sort
                     .extend(self.mod_settings.read().await.star_character.iter());
                 msg.hidden_characters.clear();
+                msg.hidden_characters.extend(
+                    self.mod_settings
+                        .read()
+                        .await
+                        .hidden_characters
+                        .iter()
+                        .copied(),
+                );
                 msg.finished_endings.clear();
                 msg.rewarded_endings.clear();
                 msg.finished_endings
@@ -363,6 +371,14 @@ impl Modder {
                         .character_sort
                         .extend(self.mod_settings.read().await.star_character.iter());
                     char_info.hidden_characters.clear();
+                    char_info.hidden_characters.extend(
+                        self.mod_settings
+                            .read()
+                            .await
+                            .hidden_characters
+                            .iter()
+                            .copied(),
+                    );
                     char_info.finished_endings.clear();
                     char_info.rewarded_endings.clear();
                     char_info
@@ -472,6 +488,11 @@ impl Modder {
                         skin_id: *s,
                     })
                     .collect();
+                modified_data = Some(msg.encode_to_vec());
+            }
+            ".lq.Lobby.setHiddenCharacter" => {
+                let mut msg = lq::ResSetHiddenCharacter::decode(msg_block.data.as_ref())?;
+                msg.hidden_characters = self.mod_settings.read().await.hidden_characters.clone();
                 modified_data = Some(msg.encode_to_vec());
             }
             _ => {}
@@ -663,6 +684,7 @@ impl Modder {
                 fake = true;
                 let msg = lq::ReqUpdateCharacterSort::decode(msg_block.data.as_ref())?;
                 self.mod_settings.write().await.star_character = msg.sort;
+                self.mod_settings.write().await.hidden_characters = msg.hidden_characters;
                 self.mod_settings.read().await.write();
             }
             ".lq.Lobby.useTitle" => {
@@ -720,6 +742,12 @@ impl Modder {
                     .iter()
                     .map(|c| (c.character_id, c.skin_id))
                     .collect();
+                self.mod_settings.read().await.write();
+            }
+            ".lq.Lobby.setHiddenCharacter" => {
+                fake = true;
+                let msg = lq::ReqSetHiddenCharacter::decode(msg_block.data.as_ref())?;
+                self.mod_settings.write().await.hidden_characters = msg.chara_list;
                 self.mod_settings.read().await.write();
             }
             _ => {}

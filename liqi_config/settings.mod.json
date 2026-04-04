@@ -118,6 +118,7 @@
   },
   "nickname": "",
   "starCharacter": [],
+  "hiddenCharacters": [],
   "hintSwitch": true,
   "title": 0,
   "loadingBg": [],
