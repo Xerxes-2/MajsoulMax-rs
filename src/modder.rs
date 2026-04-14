@@ -7,7 +7,7 @@ use bytes::Bytes;
 use const_format::formatcp;
 use prost::Message;
 use rand::{rng, seq::IndexedRandom};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use tokio::sync::RwLock;
 use tracing::{debug, error, info, warn};
 
@@ -390,6 +390,7 @@ impl Modder {
                 }
                 if let Some(ref mut bag_info) = msg.bag_info
                     && let Some(ref mut bag) = bag_info.bag {
+                        self.safe.write().await.items.clone_from(&bag.items);
                         bag.items.clear();
                         self.fill_bag(bag).await;
                     }
@@ -514,16 +515,16 @@ impl Modder {
     }
 
     async fn fill_bag(&self, bag: &mut lq::Bag) {
-        for item in self.safe.read().await.items.iter() {
-            if !self.items.iter().any(|i| i.id == item.item_id) {
-                let new_item = lq::Item {
-                    item_id: item.item_id,
-                    stack: item.stack,
-                };
-                bag.items.push(new_item);
-            }
-        }
+        bag.items.extend(self.safe.read().await.items.iter().cloned());
+        let mut seen = bag.items.iter().map(|item| item.item_id).collect::<HashSet<_>>();
+
         for item in self.items.iter() {
+            if matches!(item.category, 1 | 2) {
+                continue;
+            }
+            if !seen.insert(item.id) {
+                continue;
+            }
             let new_item = lq::Item {
                 item_id: item.id,
                 stack: 1,
@@ -531,6 +532,9 @@ impl Modder {
             bag.items.push(new_item);
         }
         for item in self.loading_images.iter() {
+            if !seen.insert(item.id) {
+                continue;
+            }
             let new_item = lq::Item {
                 item_id: item.id,
                 stack: 1,
