@@ -2109,6 +2109,7 @@ message CustomizedContestDetail {
     uint32 tied_rank = 23;
     uint32 match_start_time = 24;
     uint32 match_end_time = 25;
+    uint32 open_rank_percent = 26;
 }
 
 message CustomizedContestGamePlan {
@@ -2128,6 +2129,7 @@ message CustomizedContestPlayerReport {
     int32 point = 3;
     repeated uint32 game_ranks = 4;
     uint32 total_game_count = 5;
+    uint32 rank_percent = 6;
 }
 
 message RecordGame {
@@ -3328,6 +3330,21 @@ message ActivityMarathonCheckData {
     uint32 point = 5;
     uint32 time_end = 6;
 }
+
+message BannerActivityData {
+
+    uint32 activity_id = 1;
+    string tag_img_url = 2;
+    string banner_background_url = 3;
+    string banner_button_url = 4;
+    string tag_name = 5;
+    uint32 start_time = 6;
+    uint32 end_time = 7;
+    string url = 8;
+    uint32 type = 9;
+    uint32 sort = 10;
+    uint32 need_popout = 11;
+}
 service Lobby {
     rpc fetchConnectionInfo (ReqCommon) returns (ResConnectionInfo);
     rpc fetchQueueInfo (ReqCommon) returns (ResFetchQueueInfo);
@@ -3528,6 +3545,7 @@ service Lobby {
     rpc verifyMyCardOrder (ReqVerifyMyCardOrder) returns (ResCommon);
     rpc verificationIAPOrder (ReqVerificationIAPOrder) returns (ResVerificationIAPOrder);
     rpc createYostarSDKOrder (ReqCreateYostarOrder) returns (ResCreateYostarOrder);
+    rpc createYostarV4SDKOrder (ReqCreateYostarV4SDKOrder) returns (ResCreateYostarV4SDKOrder);
     rpc createBillingOrder (ReqCreateBillingOrder) returns (ResCreateBillingOrder);
     rpc solveGooglePlayOrder (ReqSolveGooglePlayOrder) returns (ResCommon);
     rpc solveGooglePayOrderV3 (ReqSolveGooglePlayOrderV3) returns (ResCommon);
@@ -3638,6 +3656,7 @@ service Lobby {
     rpc fetchRecentFriend (ReqCommon) returns (ResFetchrecentFriend);
     rpc openGacha (ReqOpenGacha) returns (ResOpenGacha);
     rpc taskRequest (ReqTaskRequest) returns (ResCommon);
+    rpc yostarDeleteAccount (ReqYostarDeleteAccount) returns (ResYostarDeleteAccount);
     rpc simulationActivityTrain (ReqSimulationActivityTrain) returns (ResSimulationActivityTrain);
     rpc fetchSimulationGameRecord (ReqFetchSimulationGameRecord) returns (ResFetchSimulationGameRecord);
     rpc startSimulationActivityGame (ReqStartSimulationActivityGame) returns (ResStartSimulationActivityGame);
@@ -3733,6 +3752,7 @@ service Lobby {
     rpc snowballActivityFinishBattle (ReqSnowballActivityFinishBattle) returns (ResSnowballActivityFinishBattle);
     rpc snowballActivityUpgrade (ReqSnowballActivityUpgrade) returns (ResSnowballActivityUpgrade);
     rpc snowballActivityReceiveReward (ReqSnowballActivityReceiveReward) returns (ResSnowballActivityReceiveReward);
+    rpc fetchBannerActivityData (ReqFetchBannerActivityData) returns (ResFetchBannerActivityData);
     rpc marathonActivityStartRace (ReqMarathonActivityStartRace) returns (ResMarathonActivityStartRace);
     rpc marathonActivityFinishRace (ReqMarathonActivityFinishRace) returns (ResMarathonActivityFinishRace);
 }
@@ -5077,6 +5097,23 @@ message ResCreateYostarOrder {
 
     Error error = 1;
     string order_id = 2;
+}
+
+message ReqCreateYostarV4SDKOrder {
+
+    uint32 goods_id = 1;
+    uint32 client_type = 2;
+    uint32 account_id = 3;
+    uint32 order_type = 4;
+    string client_version_string = 5;
+}
+
+message ResCreateYostarV4SDKOrder {
+
+    Error error = 1;
+    string order_id = 2;
+    string notify_url = 3;
+    string extra_data = 4;
 }
 
 message ReqCreateENPaypalOrder {
@@ -6815,6 +6852,17 @@ message ReqTaskRequest {
     repeated uint32 params = 1;
 }
 
+message ReqYostarDeleteAccount {
+
+    uint32 server = 1;
+}
+
+message ResYostarDeleteAccount {
+
+    Error error = 1;
+    string notify_url = 2;
+}
+
 message ReqSimulationActivityTrain {
 
     uint32 activity_id = 1;
@@ -7330,6 +7378,8 @@ message ResFetchContestPlayerRank {
         ContestPlayerAccountData data = 3;
         string team_name = 4;
         int32 modify_score = 5;
+        uint32 rank = 6;
+        uint32 rank_percent = 7;
     }
 
     message PlayerData {
@@ -7338,6 +7388,7 @@ message ResFetchContestPlayerRank {
         ContestPlayerAccountData data = 2;
         string team_name = 3;
         int32 modify_score = 4;
+        uint32 rank_percent = 5;
     }
 }
 
@@ -7368,6 +7419,7 @@ message ResFetchContestTeamRank {
         string name = 2;
         ContestTeamData data = 3;
         uint32 rank = 4;
+        uint32 rank_percent = 5;
     }
 }
 
@@ -8153,6 +8205,18 @@ message ResSnowballActivityReceiveReward {
     Error error = 1;
     ActivitySnowballValueChanges changes = 2;
     repeated ExecuteReward rewards = 3;
+}
+
+message ReqFetchBannerActivityData {
+
+    repeated uint32 activity_id_list = 1;
+    string lang = 2;
+}
+
+message ResFetchBannerActivityData {
+
+    Error error = 1;
+    repeated BannerActivityData activity_list = 2;
 }
 
 message ReqMarathonActivityStartRace {
