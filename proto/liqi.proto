@@ -416,6 +416,8 @@ message Error {
     repeated string str_params = 3;
     string json_param = 4;
     uint32 level = 5;
+    string message = 6;
+    string args = 7;
 }
 
 message Wrapper {
@@ -1342,6 +1344,14 @@ message AccountActivityUpdate {
     repeated lq.ActivityBingoData bingo_data = 19;
     repeated lq.ActivitySnowballValueChanges snowball_data = 20;
     repeated lq.ActivityChooseGroupData choose_group_up_data = 21;
+    repeated lq.ActivityMMODataChanges mmo_data = 22;
+    ActivityBuffDataArrayDirty activity_buff = 23;
+
+    message ActivityBuffDataArrayDirty {
+
+        bool dirty = 1;
+        repeated lq.ActivityBuffData value = 2;
+    }
 }
 
 message ActivityCombiningWorkbench {
@@ -1657,6 +1667,153 @@ message ActivityChooseGroupData {
     uint32 activity_id = 1;
     uint32 chest_id = 2;
     uint32 selection_id = 3;
+}
+
+message ActivityMMODataChanges {
+
+    uint32 activity_id = 1;
+    ActivityMMOCharacterDataChanges character = 2;
+    ActivityMMOTeamDataChanges team = 3;
+    ActivityMMOBagDataChanges bag = 4;
+    ActivityMMOMapDataChanges map = 5;
+    ActivityMMOSupportDataChanges support = 6;
+
+    message ActivityMMOCharacterDataChanges {
+
+        UInt32Dirty character_id = 1;
+        UInt32ArrayDirty equipments = 2;
+    }
+
+    message ActivityMMOTeamMemberArrayDirty {
+
+        bool dirty = 1;
+        repeated ActivityMMOTeamMember value = 2;
+    }
+
+    message ActivityMMOTeamDataChanges {
+
+        ActivityMMOTeamMemberArrayDirty members = 1;
+    }
+
+    message ActivityMMOEquipmentsArrayDirty {
+
+        bool dirty = 1;
+        repeated ActivityMMOEquipmentData value = 2;
+    }
+
+    message ActivityMMOBagDataChanges {
+
+        ActivityMMOEquipmentsArrayDirty equipments = 1;
+        UInt32Dirty total_gain_count = 2;
+        UInt32Dirty total_fusion_count = 3;
+    }
+
+    message ActivityMMOMapDataChanges {
+
+        UInt32Dirty level = 1;
+        UInt32Dirty random_seed = 2;
+        UInt32Dirty won = 3;
+        UInt32Dirty failed = 4;
+    }
+
+    message ActivityMMOSupportDataChanges {
+
+        UInt32Dirty last_receive_time = 1;
+        ActivityMMOSupportRecordDirty most_supporter = 2;
+        UInt32Dirty receive_support_count = 3;
+    }
+}
+
+message ActivityMMOTeamMember {
+
+    uint32 character_id = 1;
+    repeated uint32 equipments = 2;
+    uint32 id = 3;
+    uint32 type = 4;
+}
+
+message ActivityMMOEquipmentData {
+
+    uint32 id = 1;
+    uint32 stack = 2;
+}
+
+message MMOActivityTeamCandidateData {
+
+    uint32 character_id = 1;
+    repeated uint32 equipments = 2;
+    uint32 id = 3;
+}
+
+message ActivityMMOSupportRecord {
+
+    uint32 id = 1;
+    uint32 count = 2;
+    uint32 type = 3;
+    uint32 character_id = 4;
+    repeated uint32 equipments = 5;
+}
+
+message ActivityMMOSupportRecordDirty {
+
+    bool dirty = 1;
+    ActivityMMOSupportRecord value = 2;
+}
+
+message ActivityMMOData {
+
+    uint32 activity_id = 1;
+    ActivityMMOCharacterData character = 2;
+    ActivityMMOTeamData team = 3;
+    ActivityMMOBagData bag = 4;
+    ActivityMMOMapData map = 5;
+    ActivityMMOSupportData support = 6;
+
+    message ActivityMMOCharacterData {
+
+        uint32 character_id = 1;
+        repeated uint32 equipments = 2;
+    }
+
+    message ActivityMMOTeamData {
+
+        repeated ActivityMMOTeamMember members = 1;
+        repeated MMOActivityTeamCandidateData friend_list = 100;
+        uint32 friend_list_expire = 101;
+        repeated MMOActivityTeamCandidateData random_friends = 102;
+        uint32 daily_update_time = 103;
+        repeated MMOActivityTeamCandidateData npc_list = 104;
+    }
+
+    message ActivityMMOBagData {
+
+        repeated ActivityMMOEquipmentData equipments = 1;
+        uint32 total_gain_count = 2;
+        uint32 total_fusion_count = 3;
+        repeated ActivityMMORandomRecord random_record = 100;
+
+        message ActivityMMORandomRecord {
+
+            uint32 rarity = 1;
+            uint32 count = 2;
+        }
+    }
+
+    message ActivityMMOMapData {
+
+        uint32 level = 1;
+        uint32 random_seed = 2;
+        uint32 won = 3;
+        uint32 failed = 4;
+    }
+
+    message ActivityMMOSupportData {
+
+        uint32 last_receive_time = 1;
+        ActivityMMOSupportRecord most_supporter = 2;
+        uint32 receive_support_count = 3;
+        repeated ActivityMMOSupportRecord support_record = 100;
+    }
 }
 
 message ActivityFriendGiftData {
@@ -3603,6 +3760,7 @@ service Lobby {
     rpc refreshGameObserveAuth (ReqRefreshGameObserveAuth) returns (ResRefreshGameObserveAuth);
     rpc fetchActivityBuff (ReqCommon) returns (ResActivityBuff);
     rpc upgradeActivityBuff (ReqUpgradeActivityBuff) returns (ResActivityBuff);
+    rpc setActivityBuff (ReqSetActivityBuff) returns (ResActivityBuff);
     rpc upgradeActivityLevel (ReqUpgradeActivityLevel) returns (ResUpgradeActivityLevel);
     rpc receiveUpgradeActivityReward (ReqReceiveUpgradeActivityReward) returns (ResReceiveUpgradeActivityReward);
     rpc upgradeChallenge (ReqCommon) returns (ResUpgradeChallenge);
@@ -3755,6 +3913,15 @@ service Lobby {
     rpc fetchBannerActivityData (ReqFetchBannerActivityData) returns (ResFetchBannerActivityData);
     rpc marathonActivityStartRace (ReqMarathonActivityStartRace) returns (ResMarathonActivityStartRace);
     rpc marathonActivityFinishRace (ReqMarathonActivityFinishRace) returns (ResMarathonActivityFinishRace);
+    rpc mmoActivityFetchData (ReqMMOActivityFetchData) returns (ResMMOActivityFetchData);
+    rpc mmoActivityEquipFusion (ReqMMOActivityEquipFusion) returns (ResMMOActivityEquipFusion);
+    rpc mmoActivitySetCharacter (ReqMMOActivitySetCharacter) returns (ResMMOActivitySetCharacter);
+    rpc mmoActivitySetTeamMember (ReqMMOActivitySetTeamMember) returns (ResMMOActivitySetTeamMember);
+    rpc mmoActivityStartBattle (ReqMMOActivityStartBattle) returns (ResMMOActivityStartBattle);
+    rpc mmoActivityFinishBattle (ReqMMOActivityFinishBattle) returns (ResMMOActivityFinishBattle);
+    rpc mmoActivitySetEquip (ReqMMOActivitySetEquip) returns (ResMMOActivitySetEquip);
+    rpc mmoActivityUpdateFriendList (ReqMMOActivityUpdatehFriendList) returns (ResMMOActivityUpdatehFriendList);
+    rpc mmoActivityReceiveSupportReward (ReqMMOActivityReceiveSupportReward) returns (ResMMOActivityReceiveSupportReward);
 }
 
 message ResConnectionInfo {
@@ -5980,6 +6147,7 @@ message ResAccountActivityData {
     repeated lq.ActivitySnowballData snowball_data = 36;
     repeated lq.ActivityMarathonData marathon_data = 37;
     repeated lq.ActivityChooseGroupData choose_group_up_data = 38;
+    repeated lq.ActivityMMOData mmo_data = 39;
 
     message ActivitySignInData {
 
@@ -6258,6 +6426,18 @@ message ReqUpgradeActivityLevel {
     uint32 activity_id = 1;
     uint32 group = 2;
     uint32 count = 3;
+}
+
+message ReqSetActivityBuff {
+
+    repeated BuffInfo buff_list = 1;
+    uint32 activity_id = 2;
+
+    message BuffInfo {
+
+        uint32 buff_id = 1;
+        uint32 level = 2;
+    }
 }
 
 message ResUpgradeActivityLevel {
@@ -8246,6 +8426,160 @@ message ResMarathonActivityFinishRace {
     repeated ExecuteReward rewards = 3;
 }
 
+message ReqMMOActivityFetchData {
+
+    uint32 activity_id = 1;
+}
+
+message ResMMOActivityFetchData {
+
+    Error error = 1;
+    ActivityMMOData mmo_data = 2;
+}
+
+message ReqMMOActivityEquipFusion {
+
+    uint32 activity_id = 1;
+    repeated uint32 equip_list = 2;
+    uint32 target_type = 3;
+}
+
+message ResMMOActivityEquipFusion {
+
+    Error error = 1;
+    uint32 result = 2;
+    ActivityMMODataChanges changes = 3;
+}
+
+message ReqMMOActivitySetCharacter {
+
+    uint32 activity_id = 1;
+    uint32 character_id = 2;
+}
+
+message ResMMOActivitySetCharacter {
+
+    Error error = 1;
+    ActivityMMODataChanges changes = 2;
+}
+
+message ReqMMOActivitySetTeamMember {
+
+    uint32 activity_id = 1;
+    repeated MMOActivityTeamMember members = 2;
+
+    message MMOActivityTeamMember {
+
+        uint32 character_id = 1;
+        uint32 id = 2;
+        uint32 type = 3;
+    }
+}
+
+message ResMMOActivitySetTeamMember {
+
+    Error error = 1;
+    ActivityMMODataChanges changes = 2;
+}
+
+message ReqMMOActivityStartBattle {
+
+    uint32 activity_id = 1;
+}
+
+message ResMMOActivityStartBattle {
+
+    Error error = 1;
+    repeated MMOActivityBattleAction actions = 2;
+    repeated MMOActivityBattleUnit units = 3;
+    ActivityMMODataChanges changes = 4;
+    uint32 result = 5;
+
+    message MMOActivityBattleAction {
+
+        uint32 type = 1;
+        uint32 target = 2;
+        uint32 from = 3;
+        uint32 value = 4;
+        uint32 tick = 5;
+        uint32 critical = 6;
+    }
+
+    message MMOActivityBattleUnit {
+
+        uint32 id = 1;
+        uint32 hp = 2;
+        repeated uint32 equipments = 3;
+    }
+}
+
+message ReqMMOActivityFinishBattle {
+
+    uint32 activity_id = 1;
+}
+
+message ResMMOActivityFinishBattle {
+
+    Error error = 1;
+    ActivityMMODataChanges changes = 2;
+    repeated ExecuteReward rewards = 3;
+}
+
+message ReqMMOActivitySetEquip {
+
+    uint32 activity_id = 1;
+    repeated uint32 equipments = 2;
+}
+
+message ResMMOActivitySetEquip {
+
+    Error error = 1;
+    ActivityMMODataChanges changes = 5;
+}
+
+message ReqMMOActivityUpdatehFriendList {
+
+    uint32 activity_id = 1;
+}
+
+message ResMMOActivityUpdatehFriendList {
+
+    Error error = 1;
+    repeated MMOActivityTeamCandidateData friend_list = 2;
+    repeated MMOActivityTeamCandidateData random_friends = 3;
+    repeated MMOActivityTeamCandidateData npc_list = 4;
+    uint32 expire_time = 5;
+    ActivityMMODataChanges changes = 6;
+}
+
+message ReqMMOActivityReceiveSupportReward {
+
+    uint32 activity_id = 1;
+}
+
+message ResMMOActivityReceiveSupportReward {
+
+    Error error = 1;
+    repeated ExecuteReward rewards = 2;
+    ActivityMMODataChanges changes = 3;
+    uint32 support_count = 4;
+    uint32 total_support_count = 5;
+}
+
+message ReqMMOActivityDebugSetTeamCandidate {
+
+    uint32 activity_id = 1;
+    repeated MMOActivityTeamCandidateData friend_list = 2;
+    repeated MMOActivityTeamCandidateData random_friends = 3;
+    repeated MMOActivityTeamCandidateData npc_list = 4;
+}
+
+message ResMMOActivityDebugSetTeamCandidate {
+
+    Error error = 1;
+    ActivityMMODataChanges changes = 2;
+}
+
 message AmuletBadgeData {
 
     uint32 id = 1;
@@ -9907,6 +10241,58 @@ message RecordNoTile {
 message PlayerLeaving {
 
     uint32 seat = 1;
+}
+
+message SubmitGroup {
+
+    uint32 count = 1;
+    repeated string tiles = 2;
+}
+
+message SubmitInfo {
+
+    uint32 submit_seat = 1;
+    repeated SubmitGroup groups = 2;
+}
+
+message ActionSubmit {
+
+    repeated SubmitInfo submits = 1;
+}
+
+message RecordSubmit {
+
+    repeated SubmitInfo submits = 1;
+}
+
+message TakeInfo {
+
+    uint32 take_seat = 1;
+    uint32 from_seat = 2;
+    uint32 count = 3;
+    repeated string tiles = 4;
+}
+
+message ActionTake {
+
+    repeated TakeInfo takes = 1;
+    repeated TingPaiDiscardInfo tingpais0 = 2;
+    repeated TingPaiInfo tingpais1 = 3;
+    OptionalOperationList operation = 4;
+}
+
+message RecordTake {
+
+    repeated TakeInfo takes = 1;
+    repeated TingPaiDiscardInfo tingpais0 = 2;
+    repeated TingPai tingpai = 3;
+    OptionalOperationList operation = 4;
+
+    message TingPai {
+
+        uint32 seat = 1;
+        repeated TingPaiInfo tingpais1 = 2;
+    }
 }
 service Route {
     rpc requestConnection (ReqRequestConnection) returns (ResRequestConnection);
