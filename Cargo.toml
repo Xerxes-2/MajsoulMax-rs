@@ -12,7 +12,7 @@ name = "majsoul_max_rs"
 
 [dependencies]
 anyhow = { version = "1", default-features = false }
-base64 = { version = "0.22", default-features = false }
+base64 = { version = "0.23", default-features = false }
 bytes = { version = "1", default-features = false }
 prost-reflect = { version = "0.16", features = ["serde"] }
 # 0.13 起 rustls-tls 拆成 rustls + 证书源；0.12 的 rustls-tls 等价于二者之和
