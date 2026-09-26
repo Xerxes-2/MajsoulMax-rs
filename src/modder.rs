@@ -32,6 +32,8 @@ pub struct Safe {
     pub title: u32,
     pub loading_image: Vec<u32>,
     pub items: Vec<lq::Item>,
+    /// 当前对局中服务器登记的本人角色（未经 Mod 改写），0 表示未知。
+    pub game_character_id: u32,
 }
 
 #[derive(Default)]
@@ -197,6 +199,16 @@ impl Modder {
                         }
                     }
                 }
+                let account_id = self.safe.read().await.account_id;
+                // 必须在 change_player 改写之前读取，服务器按这个角色校验表情。
+                let game_character_id = msg
+                    .players
+                    .iter()
+                    .find(|p| p.account_id == account_id)
+                    .and_then(|p| p.character.as_ref())
+                    .map_or(0, |c| c.charid);
+                self.safe.write().await.game_character_id = game_character_id;
+                debug!("本局服务器登记的本人角色：{game_character_id}");
                 for p in &mut msg.players {
                     self.change_player(p).await?;
                 }
@@ -538,6 +550,7 @@ impl Modder {
             bail!("Invalid request message id: {msg_id}");
         }
         let mut fake = false;
+        let mut rewritten = false;
         let method_name = &msg_block.method_name;
         debug!("Request method: {method_name}");
         let mut inject_data: Option<Vec<u8>> = None;
@@ -654,6 +667,22 @@ impl Modder {
             ".lq.Lobby.receiveCharacterRewards" => {
                 fake = true;
             }
+            ".lq.FastTest.broadcastInGame" => {
+                // In-game emoji are sent as a JSON broadcast such as {"emo_id":1240005}.
+                let mut msg = lq::ReqBroadcastInGame::decode(msg_block.data.as_ref())?;
+                debug!(
+                    "发送对局广播（表情）：{} except_self={}",
+                    msg.content, msg.except_self
+                );
+                // 服务器只认它登记的角色，把 Mod 角色的第 n 个表情换成登记角色的第 n 个。
+                let game_character_id = self.safe.read().await.game_character_id;
+                if let Some(content) = remap_emoji_content(&msg.content, game_character_id) {
+                    debug!("表情改写为登记角色 {game_character_id}：{content}");
+                    msg.content = content;
+                    msg_block.data = msg.encode_to_vec();
+                    rewritten = true;
+                }
+            }
             ".lq.Lobby.setRandomCharacter" => {
                 fake = true;
                 let msg = lq::ReqRandomCharacter::decode(msg_block.data.as_ref())?;
@@ -679,6 +708,8 @@ impl Modder {
             };
             msg_block.method_name = ".lq.Lobby.loginBeat".to_string();
             msg_block.data = data.encode_to_vec();
+        }
+        if fake || rewritten {
             let mut buf = buf[..3].to_vec();
             buf.extend(msg_block.encode_to_vec());
             Ok(ModifyResult {
@@ -788,6 +819,30 @@ impl Modder {
             })
         }
     }
+}
+
+/// 角色 ID 有两种编码：序号 1..=99 为 `200000 + 序号`，100 起为 `20000000 + 序号`。
+fn character_index(character_id: u32) -> Option<u32> {
+    match character_id {
+        200_001..=299_999 => Some(character_id - 200_000),
+        20_000_100..=29_999_999 => Some(character_id - 20_000_000),
+        _ => None,
+    }
+}
+
+/// 表情 ID 编码为 `角色序号 * 10000 + 表情序号`。
+/// 把广播中的表情换成 `character_id` 的同序号表情；无需改写时返回 `None`。
+fn remap_emoji_content(content: &str, character_id: u32) -> Option<String> {
+    const EMOJI_STRIDE: u64 = 10_000;
+    let index = u64::from(character_index(character_id)?);
+    let mut json: serde_json::Value = serde_json::from_str(content).ok()?;
+    let emo_id = json.get("emo_id")?.as_u64()?;
+    let remapped = index * EMOJI_STRIDE + emo_id % EMOJI_STRIDE;
+    if remapped == emo_id {
+        return None;
+    }
+    json["emo_id"] = remapped.into();
+    serde_json::to_string(&json).ok()
 }
 
 fn add_zone_id(id: u32, name: &str) -> String {
@@ -986,5 +1041,82 @@ mod tests {
             .await;
 
         assert_eq!(modder.mod_settings.read().await.preset_index, 0);
+    }
+
+    #[test]
+    fn remap_emoji_keeps_index_and_switches_character() {
+        // 角色 200124 的 5 号表情 -> 角色 200017 的 5 号表情
+        assert_eq!(
+            remap_emoji_content(r#"{"emo_id":1240005}"#, 200017).as_deref(),
+            Some(r#"{"emo_id":170005}"#)
+        );
+        // 额外表情序号（如 888）同样保留
+        assert_eq!(
+            remap_emoji_content(r#"{"emo_id":1240888}"#, 200001).as_deref(),
+            Some(r#"{"emo_id":10888}"#)
+        );
+        // 登记角色为 8 位 ID（序号 >= 100）
+        assert_eq!(
+            remap_emoji_content(r#"{"emo_id":20008}"#, 20000117).as_deref(),
+            Some(r#"{"emo_id":1170008}"#)
+        );
+        // 已是登记角色、角色未知、非表情广播：都不改写
+        assert_eq!(remap_emoji_content(r#"{"emo_id":170005}"#, 200017), None);
+        assert_eq!(remap_emoji_content(r#"{"emo_id":1240005}"#, 0), None);
+        assert_eq!(remap_emoji_content(r#"{"other":1}"#, 200017), None);
+        assert_eq!(remap_emoji_content("not json", 200017), None);
+    }
+
+    #[test]
+    fn character_index_covers_both_id_formats() {
+        assert_eq!(character_index(200001), Some(1));
+        assert_eq!(character_index(200099), Some(99));
+        assert_eq!(character_index(20000100), Some(100));
+        assert_eq!(character_index(20000125), Some(125));
+        assert_eq!(character_index(0), None);
+        assert_eq!(character_index(200000), None);
+    }
+
+    #[tokio::test]
+    async fn broadcast_emoji_uses_server_registered_character() {
+        let modder = fresh_modder().await;
+        // 服务器登记的本人角色是 200017，Mod 会把它改写成 main_char(200001)
+        let auth = lq::ResAuthGame {
+            players: vec![lq::PlayerGameView {
+                account_id: 0,
+                character: Some(lq::Character {
+                    charid: 200017,
+                    ..Default::default()
+                }),
+                ..Default::default()
+            }],
+            ..Default::default()
+        };
+        modder
+            .modify(
+                wrap(0x03, "", auth.encode_to_vec()),
+                false,
+                ".lq.FastTest.authGame",
+            )
+            .await;
+        assert_eq!(modder.safe.read().await.game_character_id, 200017);
+
+        let req = lq::ReqBroadcastInGame {
+            content: r#"{"emo_id":1240005}"#.into(),
+            except_self: false,
+        };
+        let out = modder
+            .modify(
+                wrap(0x02, ".lq.FastTest.broadcastInGame", req.encode_to_vec()),
+                true,
+                "",
+            )
+            .await;
+
+        let body = out.msg.expect("应返回消息体");
+        let block = BaseMessage::decode(&body[3..]).unwrap();
+        assert_eq!(block.method_name, ".lq.FastTest.broadcastInGame");
+        let sent = lq::ReqBroadcastInGame::decode(&block.data[..]).unwrap();
+        assert_eq!(sent.content, r#"{"emo_id":170005}"#);
     }
 }
