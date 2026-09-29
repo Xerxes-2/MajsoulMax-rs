@@ -1076,6 +1076,7 @@ dependencies = [
  "base64 0.22.1",
  "bytes",
  "const_format",
+ "http-body-util",
  "hudsucker",
  "prost",
  "prost-build",

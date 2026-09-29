@@ -14,6 +14,7 @@ use crate::{
     modder::Modder,
     parser::{LiqiMessage, Parser},
     settings::Settings,
+    yiman,
 };
 
 #[derive(Clone)]
@@ -22,6 +23,8 @@ pub struct Handler {
     modder: Option<Arc<Modder>>,
     inject_msg: Option<Message>,
     parser: Arc<RwLock<Parser>>,
+    // Hudsucker uses the same handler for an HTTP request and its response.
+    inject_yiman: bool,
 }
 
 impl Handler {
@@ -34,6 +37,7 @@ impl Handler {
             sender,
             modder,
             inject_msg: None,
+            inject_yiman: false,
             parser: Arc::new(RwLock::new(Parser::new(
                 &settings.proto_json,
                 &settings.desc,
@@ -46,8 +50,9 @@ impl HttpHandler for Handler {
     async fn handle_request(
         &mut self,
         _ctx: &HttpContext,
-        req: Request<Body>,
+        mut req: Request<Body>,
     ) -> RequestOrResponse {
+        self.inject_yiman = false;
         if req.uri().path() == "/ping" {
             Response::builder()
                 .status(StatusCode::OK)
@@ -55,7 +60,22 @@ impl HttpHandler for Handler {
                 .expect("Failed to build ping response")
                 .into()
         } else {
+            if yiman::is_page(req.method(), req.uri())
+                && let Some(modder) = self.modder.as_ref()
+                && modder.yiman_effect_on().await
+            {
+                yiman::prepare_request(&mut req);
+                self.inject_yiman = true;
+            }
             req.into()
+        }
+    }
+
+    async fn handle_response(&mut self, _ctx: &HttpContext, res: Response<Body>) -> Response<Body> {
+        if std::mem::take(&mut self.inject_yiman) {
+            yiman::inject_response(res).await
+        } else {
+            res
         }
     }
 }

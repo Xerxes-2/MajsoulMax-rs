@@ -11,6 +11,7 @@ mod modder;
 mod parser;
 mod proto;
 mod settings;
+mod yiman;
 
 pub use crate::{
     modder::Modder,
