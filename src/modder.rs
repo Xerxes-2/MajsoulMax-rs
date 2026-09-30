@@ -57,6 +57,10 @@ impl Modder {
         Ok(modder)
     }
 
+    pub(crate) async fn yiman_effect_on(&self) -> bool {
+        self.mod_settings.read().await.yiman_effect_on()
+    }
+
     pub async fn modify(
         &self,
         buf: Bytes,

@@ -358,6 +358,18 @@ mod tests {
     }
 
     #[test]
+    fn yiman_effect_uses_camel_case_key() {
+        let settings: ModSettings =
+            serde_json::from_str(r#"{"mainChar":200017,"yimanEffect":true}"#).unwrap();
+        assert!(settings.yiman_effect_on());
+        let saved = serde_json::to_value(&settings).unwrap();
+        assert_eq!(saved["yimanEffect"], true);
+        let loaded: ModSettings = serde_json::from_value(saved).unwrap();
+        assert!(loaded.yiman_effect_on());
+        assert_eq!(loaded.main_char, 200017);
+    }
+
+    #[test]
     fn partial_mod_settings_keeps_known_fields_and_defaults_the_rest() {
         // Regression: 无 serde(default) 时缺任一字段都会整体解析失败，
         // 进而被默认值覆写 —— 用户配置被静默清空。
@@ -451,6 +463,7 @@ pub struct ModSettings {
     pub title: u32,
     pub loading_bg: Vec<u32>,
     emoji_switch: bool,
+    yiman_effect: bool,
     pub views_presets: [Vec<ViewSlot>; 10],
     pub preset_index: u32,
     show_server: bool,
@@ -474,6 +487,7 @@ impl Default for ModSettings {
             title: 0,
             loading_bg: Vec::new(),
             emoji_switch: false,
+            yiman_effect: false,
             views_presets: Default::default(),
             preset_index: 0,
             show_server: true,
@@ -564,6 +578,9 @@ impl ModSettings {
     }
     pub fn emoji_on(&self) -> bool {
         self.emoji_switch
+    }
+    pub fn yiman_effect_on(&self) -> bool {
+        self.yiman_effect
     }
     pub fn show_server(&self) -> bool {
         self.show_server

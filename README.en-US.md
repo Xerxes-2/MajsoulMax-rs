@@ -65,6 +65,7 @@ By default `helper` is enabled and `mod` is disabled. To customize, edit `modSwi
 -   Unlock all characters and skins
 -   Unlock all decorations
 -   Unlock all voices (callouts)
+-   Unlock yakuman animations
 -   Unlock all titles
 -   Unlock all loading CGs
 -   Unlock all emojis (not recommended)
