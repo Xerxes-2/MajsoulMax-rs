@@ -1,5 +1,5 @@
 
-õ¦
+ô§
 com_struct.protolq"è
 Account
 
@@ -1044,7 +1044,7 @@ sortWeight"R
 ChangeNicknameRecord
 from (	Rfrom
 to (	Rto
-time (Rtime"ì
+time (Rtime"‘
 	Character
 charid (Rcharid
 level (Rlevel
@@ -1055,7 +1055,8 @@ sortWeight"R
 isUpgraded
 extra_emoji (R
 extraEmoji%
-rewarded_level (RrewardedLevel"Ÿ
+rewarded_level (RrewardedLevel#
+enabled_emoji	 (RenabledEmoji"Ÿ
 	ChestData
 chest_id (RchestId(
 total_open_count (RtotalOpenCount#
@@ -1722,17 +1723,18 @@ WechatData%
 
 AlipayData%
 disable_create (RdisableCreate6
-payment_source_platform (RpaymentSourcePlatform"Ã
+payment_source_platform (RpaymentSourcePlatform"
 PaymentSettingV2!
 open_payment (RopenPaymentT
-payment_platforms (2'.lq.PaymentSettingV2.PaymentSettingUnitRpaymentPlatformsÌ
+payment_platforms (2'.lq.PaymentSettingV2.PaymentSettingUnitRpaymentPlatformsù
 PaymentMaintain
 
 start_time (R	startTime
 end_time (RendTime,
 goods_click_action (RgoodsClickAction(
 goods_click_text (	RgoodsClickText'
-enabled_channel (	RenabledChannelæ
+enabled_channel (	RenabledChannel+
+disabled_platform (	RdisabledPlatform“
 PaymentSettingUnit
 platform (	Rplatform
 is_show (RisShow,
@@ -1742,7 +1744,8 @@ start_time (R	startTime
 enable_for_frozen_account (RenableForFrozenAccount
 
 extra_data (	R	extraData'
-enabled_channel (	RenabledChannel"¬
+enabled_channel (	RenabledChannel+
+disabled_platform	 (	RdisabledPlatform"¬
 PlayerBaseView
 
 account_id (R	accountId
@@ -3064,7 +3067,7 @@ node_event
 highest_level (RhighestLevel#
 highest_score (	RhighestScore,
 highest_level_node (RhighestLevelNodebproto3
-¥Ž
+¼Ž
 liqi_struct.protolq"
 ActionAnGangAddGang
 seat (Rseat
@@ -3363,11 +3366,12 @@ tileStates
 from (Rfrom"7
 GameUserEvent
 seat (Rseat
-type (Rtype"Î
+type (Rtype"å
 GameUserInput
 seat (Rseat
 type (Rtype
-emo (Remo3
+emo (Remo
+emo_id (RemoId3
 	operation
  (2.lq.GameSelfOperationR	operation%
 cpg (2.lq.GameChiPengGangRcpg'
@@ -3906,7 +3910,7 @@ state_list (2.lq.GamePlayerStateR	stateList"d
 is_end (RisEnd
 step (Rstep2
 game_restore (2.lq.GameRestoreRgameRestorebproto3
-Òª
+ò¬
 cli_lobby.protolqamulet_struct.protocom_struct.proto"ì
 ContestSetting>
 level_limit (2.lq.ContestSetting.LevelLimitR
@@ -4776,10 +4780,26 @@ random_key (	R	randomKey<
 tag (	Rtag"*
 ReqLoginBeat
 contract (	Rcontract"
-	ReqLogout"@
-ReqLogReport
-success (Rsuccess
-failed (Rfailed">
+	ReqLogout"Å
+ReqLogReport0
+emoji (2.lq.ReqLogReport.EmojiStatRemoji
+m (Rm
+d (Rd
+e (Re
+f (Rf
+t (Rt
+g	 (Rg
+uuid
+ (	Ruuid
+x (Rx
+y (Ry
+z (Rz
+a (Ra"
+c (2.lq.ClientDeviceInfoRc
+v (Rv1
+	EmojiStat
+id (Rid
+count (Rcount">
 ReqMajClubActivityFetchData
 activity_id (R
 activityId"š
@@ -6147,7 +6167,7 @@ vip_reward (2.lq.ResVipRewardR	vipRewardB
 version (	Rversion"e
 ResFetchMaintainNotice
 error (2	.lq.ErrorRerror*
-notice (2.lq.MaintainNoticeRnotice"Æ
+notice (2.lq.MaintainNoticeRnotice"à
  ResFetchManagerCustomizedContest
 error (2	.lq.ErrorRerror
 name (	Rname
@@ -6167,7 +6187,8 @@ checkState#
 	rank_type (RrankTypeG
 season (2/.lq.ResFetchManagerCustomizedContest.SeasonInfoRseason(
 match_start_time (RmatchStartTime$
-match_end_time (RmatchEndTimeg
+match_end_time (RmatchEndTime
+version (Rversiong
 
 SeasonInfo
 create_time (R
