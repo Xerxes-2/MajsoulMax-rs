@@ -1,5 +1,5 @@
 
-õ¦
+ü¸
 com_struct.protolq"è
 Account
 
@@ -72,7 +72,7 @@ login_time (R	loginTime
 logout_time (R
 logoutTime
 	is_online (RisOnline0
-playing (2.lq.AccountPlayingGameRplaying"Ê
+playing (2.lq.AccountPlayingGameRplaying"
 AccountActivityUpdate1
 	mine_data (2.lq.MineActivityDataRmineData*
 rpg_data (2.lq.RPGActivityRrpgData1
@@ -101,7 +101,8 @@ bingo_data (2.lq.ActivityBingoDataR	bingoDataE
 snowball_data (2 .lq.ActivitySnowballValueChangesRsnowballDataL
 choose_group_up_data (2.lq.ActivityChooseGroupDataRchooseGroupUpData5
 mmo_data (2.lq.ActivityMMODataChangesRmmoDataY
-activity_buff (24.lq.AccountActivityUpdate.ActivityBuffDataArrayDirtyRactivityBuff^
+activity_buff (24.lq.AccountActivityUpdate.ActivityBuffDataArrayDirtyRactivityBuffD
+work_shop_data (2.lq.ActivityMajWorkshopChangesRworkShopData^
 ActivityBuffDataArrayDirty
 dirty (Rdirty*
 value (2.lq.ActivityBuffDataRvalue"Ú
@@ -691,7 +692,60 @@ characters&
 
 characters (2*.lq.ActivityMajClubCharacterDataArrayDirtyR
 characters7
-wait_zone_level (2.lq.UInt32DirtyRwaitZoneLevel"ž
+wait_zone_level (2.lq.UInt32DirtyRwaitZoneLevel"Ó
+ActivityMajWorkshopChanges:
+game (2&.lq.ActivityMajWorkshopGameDataChangesRgameX
+illustrated_book (2-.lq.ActivityMajWorkshopIllustratedBookChangesRillustratedBook
+activity_id (R
+activityId"@
+ActivityMajWorkshopCraft
+id (Rid
+count (Rcount"n
+"ActivityMajWorkshopCraftArrayDirty
+dirty (Rdirty2
+value (2.lq.ActivityMajWorkshopCraftRvalue"Â
+ActivityMajWorkshopData
+activity_id (R
+activityId3
+game (2.lq.ActivityMajWorkshopGameDataRgameQ
+illustrated_book (2&.lq.ActivityMajWorkshopIllustratedBookRillustratedBook"‘
+ActivityMajWorkshopGameData
+level (Rlevel(
+sell_bouns_count (RsellBounsCount4
+crafts (2.lq.ActivityMajWorkshopCraftRcrafts7
+gardens (2.lq.ActivityMajWorkshopGardenRgardens4
+orders (2.lq.ActivityMajWorkshopOrderRorders/
+last_sell_bouns_time (RlastSellBounsTime0
+understood_order_ids (RunderstoodOrderIds*
+selected_order_id	 (RselectedOrderId"†
+"ActivityMajWorkshopGameDataChanges%
+level (2.lq.UInt32DirtyRlevel9
+sell_bouns_count (2.lq.UInt32DirtyRsellBounsCount>
+crafts (2&.lq.ActivityMajWorkshopCraftArrayDirtyRcraftsA
+gardens (2'.lq.ActivityMajWorkshopGardenArrayDirtyRgardens>
+orders (2&.lq.ActivityMajWorkshopOrderArrayDirtyRorders;
+selected_order_id (2.lq.UInt32DirtyRselectedOrderId"[
+ActivityMajWorkshopGarden
+id (Rid.
+last_collected_time (RlastCollectedTime"p
+#ActivityMajWorkshopGardenArrayDirty
+dirty (Rdirty3
+value (2.lq.ActivityMajWorkshopGardenRvalue"}
+"ActivityMajWorkshopIllustratedBook*
+unlocked_craft_id (RunlockedCraftId+
+have_read_craft_id (RhaveReadCraftId"°
+)ActivityMajWorkshopIllustratedBookChanges@
+unlocked_craft_id (2.lq.UInt32ArrayDirtyRunlockedCraftIdA
+have_read_craft_id (2.lq.UInt32ArrayDirtyRhaveReadCraftId"e
+ActivityMajWorkshopOrder
+order_id (RorderId
+id (Rid
+
+understood (R
+understood"n
+"ActivityMajWorkshopOrderArrayDirty
+dirty (Rdirty2
+value (2.lq.ActivityMajWorkshopOrderRvalue"ž
 ActivityMarathonCheckData
 round (Rround
 item (Ritem
@@ -1044,7 +1098,7 @@ sortWeight"R
 ChangeNicknameRecord
 from (	Rfrom
 to (	Rto
-time (Rtime"ì
+time (Rtime"‘
 	Character
 charid (Rcharid
 level (Rlevel
@@ -1055,7 +1109,8 @@ sortWeight"R
 isUpgraded
 extra_emoji (R
 extraEmoji%
-rewarded_level (RrewardedLevel"Ÿ
+rewarded_level (RrewardedLevel#
+enabled_emoji	 (RenabledEmoji"Ÿ
 	ChestData
 chest_id (RchestId(
 total_open_count (RtotalOpenCount#
@@ -1722,17 +1777,18 @@ WechatData%
 
 AlipayData%
 disable_create (RdisableCreate6
-payment_source_platform (RpaymentSourcePlatform"Ã
+payment_source_platform (RpaymentSourcePlatform"
 PaymentSettingV2!
 open_payment (RopenPaymentT
-payment_platforms (2'.lq.PaymentSettingV2.PaymentSettingUnitRpaymentPlatformsÌ
+payment_platforms (2'.lq.PaymentSettingV2.PaymentSettingUnitRpaymentPlatformsù
 PaymentMaintain
 
 start_time (R	startTime
 end_time (RendTime,
 goods_click_action (RgoodsClickAction(
 goods_click_text (	RgoodsClickText'
-enabled_channel (	RenabledChannelæ
+enabled_channel (	RenabledChannel+
+disabled_platform (	RdisabledPlatform“
 PaymentSettingUnit
 platform (	Rplatform
 is_show (RisShow,
@@ -1742,7 +1798,8 @@ start_time (R	startTime
 enable_for_frozen_account (RenableForFrozenAccount
 
 extra_data (	R	extraData'
-enabled_channel (	RenabledChannel"¬
+enabled_channel (	RenabledChannel+
+disabled_platform	 (	RdisabledPlatform"¬
 PlayerBaseView
 
 account_id (R	accountId
@@ -3064,7 +3121,7 @@ node_event
 highest_level (RhighestLevel#
 highest_score (	RhighestScore,
 highest_level_node (RhighestLevelNodebproto3
-¥Ž
+Ä
 liqi_struct.protolq"
 ActionAnGangAddGang
 seat (Rseat
@@ -3363,11 +3420,12 @@ tileStates
 from (Rfrom"7
 GameUserEvent
 seat (Rseat
-type (Rtype"Î
+type (Rtype"å
 GameUserInput
 seat (Rseat
 type (Rtype
-emo (Remo3
+emo (Remo
+emo_id (RemoId3
 	operation
  (2.lq.GameSelfOperationR	operation%
 cpg (2.lq.GameChiPengGangRcpg'
@@ -3724,7 +3782,7 @@ submitSeat'
 TingPaiDiscardInfo
 tile (	Rtile
 zhenting (Rzhenting%
-infos (2.lq.TingPaiInfoRinfos"ô
+infos (2.lq.TingPaiInfoRinfos"ü
 TingPaiInfo
 tile (	Rtile
 haveyi (Rhaveyi
@@ -3736,7 +3794,14 @@ submitSeat'
 yiman_zimo (R	yimanZimo
 
 count_zimo (R	countZimo
-fu_zimo	 (RfuZimo"?
+fu_zimo	 (RfuZimo
+
+dora_count
+ (R	doraCount"
+li_dora_count (RliDoraCount$
+red_dora_count (RredDoraCount
+
+ying_count (R	yingCount"?
 XiaKeShangInfo-
 score_coefficients (RscoreCoefficients"¯
 YongchangInfo
@@ -3906,7 +3971,7 @@ state_list (2.lq.GamePlayerStateR	stateList"d
 is_end (RisEnd
 step (Rstep2
 game_restore (2.lq.GameRestoreRgameRestorebproto3
-Òª
+òÇ
 cli_lobby.protolqamulet_struct.protocom_struct.proto"ì
 ContestSetting>
 level_limit (2.lq.ContestSetting.LevelLimitR
@@ -4776,10 +4841,26 @@ random_key (	R	randomKey<
 tag (	Rtag"*
 ReqLoginBeat
 contract (	Rcontract"
-	ReqLogout"@
-ReqLogReport
-success (Rsuccess
-failed (Rfailed">
+	ReqLogout"Å
+ReqLogReport0
+emoji (2.lq.ReqLogReport.EmojiStatRemoji
+m (Rm
+d (Rd
+e (Re
+f (Rf
+t (Rt
+g	 (Rg
+uuid
+ (	Ruuid
+x (Rx
+y (Ry
+z (Rz
+a (Ra"
+c (2.lq.ClientDeviceInfoRc
+v (Rv1
+	EmojiStat
+id (Rid
+count (Rcount">
 ReqMajClubActivityFetchData
 activity_id (R
 activityId"š
@@ -4823,7 +4904,65 @@ activityId
 room_id (RroomId"C
  ReqMajClubActivityUpgradeWaiting
 activity_id (R
-activityId"Å
+activityId"]
+ReqMajWorkshopActivityCollect
+activity_id (R
+activityId
+	garden_id (RgardenId"V
+ReqMajWorkshopActivityCraft
+activity_id (R
+activityId
+crafts (Rcrafts"B
+ReqMajWorkshopActivityFetchData
+activity_id (R
+activityId"c
+#ReqMajWorkshopActivityGardenRestore
+activity_id (R
+activityId
+	garden_id (RgardenId"m
+-ReqMajWorkshopActivityGardenRestoreAndCollect
+activity_id (R
+activityId
+	garden_id (RgardenId"‹
+ ReqMajWorkshopActivityQuickCraft
+activity_id (R
+activityId&
+target_craft_id (RtargetCraftIdn
+garden_collects (2E.lq.ReqMajWorkshopActivityQuickCraft.ActivityMajWorkshopGardenCollectRgardenCollectsb
+craft_steps (2A.lq.ReqMajWorkshopActivityQuickCraft.ActivityMajWorkshopCraftStepR
+craftSteps}
+ ActivityMajWorkshopGardenCollect
+	garden_id (RgardenId(
+use_free_collect (RuseFreeCollect
+cost (Rcost;
+
+CraftInput
+craft_id (RcraftId
+from (Rfrom
+ActivityMajWorkshopCraftStepE
+input (2/.lq.ReqMajWorkshopActivityQuickCraft.CraftInputRinput&
+output_craft_id (RoutputCraftId"a
+ReqMajWorkshopActivityRead
+activity_id (R
+activityId"
+craft_id_list (RcraftIdList"\
+ReqMajWorkshopActivityRecovery
+activity_id (R
+activityId
+craft_id (RcraftId"Y
+&ReqMajWorkshopActivitySetSelectedOrder
+activity_id (R
+activityId
+id (Rid"z
+!ReqMajWorkshopActivitySubmitOrder
+activity_id (R
+activityId
+order_id (RorderId
+craft_id (RcraftId"c
+%ReqMajWorkshopActivityUnderstandOrder
+activity_id (R
+activityId
+order_id (RorderId"Å
 ReqMarathonActivityFinishRace
 activity_id (R
 activityId:
@@ -5166,7 +5305,9 @@ activityId9
 disable_random_char (RdisableRandomChar"6
 ReqSetHiddenCharacter
 
-chara_list (R	charaList",
+chara_list (R	charaList"C
+ReqSetHiddenHandsView*
+hidden_hands_view (RhiddenHandsView",
 ReqSetLoadingImage
 images (Rimages"?
 ReqSetVerifiedHidden'
@@ -5603,7 +5744,7 @@ start_time (R	startTime
 end_time (RendTime
 state (Rstate"F
 #ResChangeCollectedGameRecordRemarks
-error (2	.lq.ErrorRerror"Ð
+error (2	.lq.ErrorRerror"ü
 ResCharacterInfo
 error (2	.lq.ErrorRerror-
 
@@ -5618,7 +5759,8 @@ characters
 character_sort	 (RcharacterSort+
 hidden_characters
  (RhiddenCharacters0
-other_character_sort (RotherCharacterSort"»
+other_character_sort (RotherCharacterSort*
+hidden_hands_view (RhiddenHandsView"»
 ResClientValue.
 datas (2.lq.ResClientValue.ValueRdatas'
 recharged_count (RrechargedCount
@@ -6147,7 +6289,7 @@ vip_reward (2.lq.ResVipRewardR	vipRewardB
 version (	Rversion"e
 ResFetchMaintainNotice
 error (2	.lq.ErrorRerror*
-notice (2.lq.MaintainNoticeRnotice"Æ
+notice (2.lq.MaintainNoticeRnotice"à
  ResFetchManagerCustomizedContest
 error (2	.lq.ErrorRerror
 name (	Rname
@@ -6167,7 +6309,8 @@ checkState#
 	rank_type (RrankTypeG
 season (2/.lq.ResFetchManagerCustomizedContest.SeasonInfoRseason(
 match_start_time (RmatchStartTime$
-match_end_time (RmatchEndTimeg
+match_end_time (RmatchEndTime
+version (Rversiong
 
 SeasonInfo
 create_time (R
@@ -6477,7 +6620,45 @@ signupTime)
 ResMajClubActivityStartDay
 error (2	.lq.ErrorRerror4
 changes (2.lq.ActivityMajClubChangesRchanges=
-	customers (2.lq.ActivityMajClubCustomerDataR	customers"¬
+	customers (2.lq.ActivityMajClubCustomerDataR	customers"z
+ResMajWorkshopActivityCollect
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges"ù
+ResMajWorkshopActivityCraft
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges&
+greate_craft_id (RgreateCraftId%
+greate_success (RgreateSuccess0
+greate_success_craft (RgreateSuccessCraft"s
+ResMajWorkshopActivityFetchData
+error (2	.lq.ErrorRerror/
+data (2.lq.ActivityMajWorkshopDataRdata"€
+#ResMajWorkshopActivityGardenRestore
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges"Š
+-ResMajWorkshopActivityGardenRestoreAndCollect
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges"}
+ ResMajWorkshopActivityQuickCraft
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges"w
+ResMajWorkshopActivityRead
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges"±
+ResMajWorkshopActivityRecovery
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges4
+extra_reward (2.lq.ExecuteRewardRextraReward"ƒ
+&ResMajWorkshopActivitySetSelectedOrder
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges"˜
+!ResMajWorkshopActivitySubmitOrder
+error (2	.lq.ErrorRerror
+success (Rsuccess8
+changes (2.lq.ActivityMajWorkshopChangesRchanges"‚
+%ResMajWorkshopActivityUnderstandOrder
+error (2	.lq.ErrorRerror8
+changes (2.lq.ActivityMajWorkshopChangesRchanges"¬
 ResMarathonActivityFinishRace
 error (2	.lq.ErrorRerror=
 highest_record (2.lq.MarathonGameRecordRhighestRecord+
@@ -6832,7 +7013,10 @@ serverTime
 error (2	.lq.ErrorRerror"e
 ResSetHiddenCharacter
 error (2	.lq.ErrorRerror+
-hidden_characters (RhiddenCharacters"Œ
+hidden_characters (RhiddenCharacters"d
+ResSetHiddenHandsView
+error (2	.lq.ErrorRerror*
+hidden_hands_view (RhiddenHandsView"Œ
 ResSetVillageWorker
 error (2	.lq.ErrorRerror3
 building (2.lq.VillageBuildingDataRbuilding
@@ -10163,7 +10347,7 @@ gift_limit (R	giftLimit(
 buddy_bonus (R
 buddyBonus0
 record_collect_limit (RrecordCollectLimitbproto3
-Ñú
+î„
 services.protolqcli_game.protocli_lobby.protocli_route.protocom_struct.proto2õ
 FastTest,
 authGame.lq.ReqAuthGame.lq.ResAuthGame0
@@ -10182,7 +10366,7 @@ buddyBonus0
 stopObserve.lq.ReqCommon.lq.ResCommon,
 syncGame.lq.ReqSyncGame.lq.ResSyncGame-
 terminateGame.lq.ReqCommon.lq.ResCommon5
-voteGameEnd.lq.ReqVoteGameEnd.lq.ResGameEndVote2¥ñ
+voteGameEnd.lq.ReqVoteGameEnd.lq.ResGameEndVote2Âû
 LobbyV
 addCollectedGameRecord.lq.ReqAddCollectedGameRecord.lq.ResAddCollectedGameRecord9
 addFinishedEnding.lq.ReqFinishedEnding.lq.ResCommon2
@@ -10455,6 +10639,17 @@ $majClubActivityUpgradeCharacterPower+.lq.ReqMajClubActivityUpgradeCharacterPow
 "majClubActivityUpgradeCharacterTag).lq.ReqMajClubActivityUpgradeCharacterTag.lq.ResMajClubActivityCommonc
 majClubActivityUpgradeRoomFee$.lq.ReqMajClubActivityUpgradeRoomFee.lq.ResMajClubActivityCommonc
 majClubActivityUpgradeWaiting$.lq.ReqMajClubActivityUpgradeWaiting.lq.ResMajClubActivityCommonb
+majWorkshopActivityCollect!.lq.ReqMajWorkshopActivityCollect!.lq.ResMajWorkshopActivityCollect\
+majWorkshopActivityCraft.lq.ReqMajWorkshopActivityCraft.lq.ResMajWorkshopActivityCrafth
+majWorkshopActivityFetchData#.lq.ReqMajWorkshopActivityFetchData#.lq.ResMajWorkshopActivityFetchDatat
+ majWorkshopActivityGardenRestore'.lq.ReqMajWorkshopActivityGardenRestore'.lq.ResMajWorkshopActivityGardenRestore’
+*majWorkshopActivityGardenRestoreAndCollect1.lq.ReqMajWorkshopActivityGardenRestoreAndCollect1.lq.ResMajWorkshopActivityGardenRestoreAndCollectk
+majWorkshopActivityQuickCraft$.lq.ReqMajWorkshopActivityQuickCraft$.lq.ResMajWorkshopActivityQuickCraftY
+majWorkshopActivityRead.lq.ReqMajWorkshopActivityRead.lq.ResMajWorkshopActivityReade
+majWorkshopActivityRecovery".lq.ReqMajWorkshopActivityRecovery".lq.ResMajWorkshopActivityRecovery}
+#majWorkshopActivitySetSelectedOrder*.lq.ReqMajWorkshopActivitySetSelectedOrder*.lq.ResMajWorkshopActivitySetSelectedOrdern
+majWorkshopActivitySubmitOrder%.lq.ReqMajWorkshopActivitySubmitOrder%.lq.ResMajWorkshopActivitySubmitOrderz
+"majWorkshopActivityUnderstandOrder).lq.ReqMajWorkshopActivityUnderstandOrder).lq.ResMajWorkshopActivityUnderstandOrderb
 marathonActivityFinishRace!.lq.ReqMarathonActivityFinishRace!.lq.ResMarathonActivityFinishRace_
 marathonActivityStartRace .lq.ReqMarathonActivityStartRace .lq.ResMarathonActivityStartRace1
 	matchGame.lq.ReqJoinMatchQueue.lq.ResCommon,
@@ -10549,7 +10744,8 @@ oauth2Auth.lq.ReqOauth2Auth.lq.ResOauth2Auth5
 setAccountFavoriteHu.lq.ReqSetAccountFavoriteHu.lq.ResCommon>
 setActivityBuff.lq.ReqSetActivityBuff.lq.ResActivityBuffN
 setFriendRoomRandomBotChar!.lq.ReqSetFriendRoomRandomBotChar.lq.ResCommonJ
-setHiddenCharacter.lq.ReqSetHiddenCharacter.lq.ResSetHiddenCharacter8
+setHiddenCharacter.lq.ReqSetHiddenCharacter.lq.ResSetHiddenCharacterJ
+setHiddenHandsView.lq.ReqSetHiddenHandsView.lq.ResSetHiddenHandsView8
 setLoadingImage.lq.ReqSetLoadingImage.lq.ResCommon;
 setRandomCharacter.lq.ReqRandomCharacter.lq.ResCommon<
 setVerifiedHidden.lq.ReqSetVerifiedHidden.lq.ResCommonD
